@@ -1,0 +1,31 @@
+@use "../../scss/partials/branding" as branding;
+
+.select{
+    appearance: none;
+    color: branding.$brand_color_six;
+    background: transparent;
+    background-image: url('../icons/down-arrow.svg');
+    background-size: 0.8rem;
+    background-repeat: no-repeat;
+    background-position: 80% 55%;
+    height: 1.9rem;
+    width: 3rem;
+
+    &--pagination{
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        border-right-width: 0px;
+        border-color: branding.$brand_color_six;
+        padding: 0.28rem 0.6rem;
+        cursor: pointer;
+    }
+
+    &::-ms-expand{
+        display: none;
+    }
+}
+
+.option{
+    color: rgba(0,0,0,0.9);
+    background-color: branding.$brand_color_six;
+}

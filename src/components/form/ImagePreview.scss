@@ -1,0 +1,8 @@
+@use "../../scss/partials/animations" as animations;
+
+.imagePreview{
+    animation: fade-in 0.15s ease-in;
+    background-repeat: no-repeat;
+    max-height: 250px;
+    height: 300px;
+}

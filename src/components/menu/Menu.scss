@@ -1,0 +1,174 @@
+@use "../../scss/partials/responsive" as responsive;
+@use "../../scss/partials/animations" as animations;
+@use "../../scss/partials/mixins" as mixins;
+@use "../../scss/partials/branding" as branding;
+
+nav{    
+    width: 100%;    
+}
+
+.header{
+    display: flex;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    height: 55px;
+    box-shadow: 0px 0px 15px 0px branding.$brand_color_six;
+    align-items: center;
+    z-index: 2;
+    overflow: hidden;
+    transition: animations.$standard_transition;
+
+    @include responsive.breakpoint(tablet){
+        height: 110px;
+    }
+
+    @include mixins.backgroundGradientEffect(){
+        background: branding.$gradient_color_three;
+    }
+
+    &__logged-in{
+
+        @include responsive.breakpoint(tablet){
+            height: 233px;
+        }
+    }
+
+    &__logged-out{
+
+        @include responsive.breakpoint(tablet){
+            height: 100px;
+        }
+    }
+}
+
+.menu{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    margin: auto;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    height: 55px;
+    box-shadow: 0px 0px 15px 0px branding.$brand_color_six;
+    align-items: center;
+    z-index: 3;
+    overflow: hidden;
+    transition: animations.$standard_transition;
+    animation: fade-in 0.15s linear;
+
+    @include mixins.backgroundGradientEffect(){
+        background: branding.$gradient_color_three;
+    }
+
+    @include responsive.breakpoint(tablet){
+        height: 137px;
+    }
+
+    @include responsive.breakpoint(tablet){
+        flex-direction: column;
+    }
+
+    &__link{
+
+        font-size: 15px;
+        transition: animations.$standard-transition;
+        border-radius: 4px;
+        padding : 0.4rem 0.85rem 0.45rem 0.85rem;
+        color : rgba(0, 0, 0, 0.9);
+        text-decoration: none;
+        border: none;
+
+        @include mixins.state(){
+            background-color: branding.$brand_color_three__alt_1;
+            color : rgba(0, 0, 0, 0.9);
+            border-bottom: 0;
+        }
+    }
+
+    &__item{
+        width: 100%;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @include responsive.breakpoint(tablet){
+            width: 100%;
+            border-bottom: 1px solid black;
+        }
+    }
+
+    &__form{
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    &__logout-text{
+
+        background-color: transparent;
+        border: none;
+        height: 100%;
+        cursor: pointer;
+        font-size: 15px;
+        width: max-content;
+        margin: auto;
+        border-radius: 4px;
+        padding : 0.4rem 0.85rem 0.45rem 0.85rem;
+        transition: animations.$standard-transition;
+
+        @include mixins.state(){
+            background-color: branding.$brand_color_three__alt_1;  
+        }
+    }
+}
+
+.toggle-menu-button{
+    position: fixed;
+    z-index: 3;
+    animation: fade-in 0.2s linear;
+    cursor: pointer;
+
+    @include responsive.breakpoint(tablet){
+        display: block;
+    }
+}
+
+#show_menu{
+    top: 20px;
+    right: 20px;
+
+    svg{
+        @include mixins.state(){
+            rect{
+                transition: animations.$standard-transition;
+                fill : branding.$brand_color_three;
+            }
+        }
+    }
+
+    @include responsive.breakpoint-min(tablet){
+        display: none !important;
+    }
+}
+
+#hide_menu{
+    top: 3px;
+    right: 3px;
+
+    @include responsive.breakpoint-min(tablet){
+        display: none;
+    }
+
+    svg{
+
+        transition: animations.$standard-transition;
+
+        @include mixins.state(){
+            fill : white;
+        }
+    }
+}

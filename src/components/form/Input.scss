@@ -1,0 +1,71 @@
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/animations" as animations;
+@use "../../scss/partials/mixins" as mixins;
+
+.input{
+    border-radius: 4px;
+    padding: 0.4rem 0.25rem;
+    font-size: 1rem;
+    box-shadow: branding.$box_shadow;
+    border: 0px solid white;
+    border-right: 1px solid branding.$brand_color_six;
+    transition : animations.$standard_transition;
+    outline-offset: -1px;
+    outline: 1px solid white;
+    color : rgba(0, 0, 0, 0.9);
+
+    @include mixins.visible(){
+        outline: 1px solid branding.$brand_color_six;
+        border: 0px;
+    }
+
+    &[type='file']{
+        color: white;
+        padding: 0;
+        border: 0px solid transparent;
+        box-shadow: none;
+
+        &::file-selector-button{
+            border-radius: 3px;
+            border: 0px solid white;
+            padding: 0.4rem 0.5rem;
+            margin-right: 0.5rem;
+            box-shadow: branding.$button_shadow;
+            cursor: pointer;
+            transition: animations.$standard_transition;
+
+            @include mixins.state(){
+                background: branding.$brand_color_six;
+            }
+        }
+    }
+
+    &__error{
+        border-color: red;
+        background-color:pink;
+
+        @include mixins.visible(){
+            outline-color: red;
+        }
+
+        &[type='file']{
+            color: pink;
+            background-color: transparent;
+
+            &::file-selector-button{
+                background: pink;
+                
+                @include mixins.state(){
+                    background: pink;
+                }
+            }
+        }
+    }
+
+    &__square{
+        border-radius: 0px;
+        height: 30px;
+        width: 100%;
+        transition : none;
+    }
+}

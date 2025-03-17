@@ -1,0 +1,77 @@
+@use "../../scss/partials/responsive" as responsive;
+@use "../../scss/partials/animations" as animations;
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/mixins" as mixins;
+
+.article{
+    display: flex;
+    flex-direction: row;
+    border-radius: 4px;
+    animation: fade-in 0.2s linear;
+    box-shadow: branding.$card_box_shadow;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    max-width: 800px;
+    width: 100%;
+
+    h2,p{
+        color: rgba(0, 0, 0, 0.9);
+        margin: 0;
+    }
+
+    &__buttons{
+        display: flex;
+        grid-gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    @include mixins.backgroundGradientEffect(){
+        background: branding.$gradient_color_three;
+    }
+
+    @include responsive.breakpoint(mobile){
+        flex-direction: column;
+    }
+
+    &__content{
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        grid-row-gap: 0.25rem;
+        justify-content: space-between;
+    }
+
+    &__title{
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    &__description{
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    &__image{
+        width: 100%;
+        object-fit: cover;
+        max-height: 225px;
+        transition: animations.$standard_transition;
+
+        @include responsive.breakpoint(mobile){
+            max-width: 478px;
+        }
+
+        @include responsive.breakpoint-min(mobile){
+            max-width: 150px;
+        }
+
+        @include responsive.breakpoint-min(desktop){
+            width: 250px;
+        }
+    }
+}

@@ -1,0 +1,141 @@
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/mixins" as mixins;
+@use "../../scss/partials/animations" as animations;
+
+.button{
+    overflow : hidden;
+    position : relative;
+    z-index : 1;
+    padding : 0.45rem 1rem 0.4rem 1rem;
+    border-radius: 4px;
+    border: 0;
+    color: branding.$brand_color_three;
+    width: max-content;
+    font-size: 1rem;
+    border: 2px solid branding.$brand_color_three;
+    transition: animations.$standard_transition;
+    background: transparent;
+    filter: contrast(90%);
+    display: flex;
+    cursor: pointer;
+
+    &__primary{
+        @include mixins.state(){
+            cursor: pointer;
+            filter: contrast(150%);
+            box-shadow: branding.$box_shadow_blue;
+        }
+    }
+
+    &__square{
+        border: 0;
+        border-radius: 0px;
+        z-index: 3;
+        overflow: hidden;
+        transition: animations.$standard_transition;
+        padding : 0.4rem 1rem;
+        color: rgba(0,0,0,0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        @include mixins.state(){
+            filter: contrast(150%);
+        }
+
+        @include mixins.backgroundGradientEffect(){
+            background: branding.$gradient_color_six;   
+        }
+    }
+
+    &__delete{
+        background: branding.$brand_color_seven;
+        border-color: branding.$brand_color_seven;
+        color: white;
+        box-shadow: branding.$button-shadow;
+        margin: 0;
+
+        @include mixins.state(){
+            filter: constrast(90%);
+            background: branding.$brand_color_seven__alt_3;
+            border-color: branding.$brand_color_seven__alt_3;
+        }
+    }
+
+    &__back{
+        z-index: 2;
+        overflow: hidden;
+        margin-left: 0;
+        margin-right: auto;
+        border: 0;
+        color: rgba(0,0,0,0.9);
+        grid-gap: 0.5rem;
+
+        svg{
+            width: 1rem;
+            height: 1rem;
+            fill: rgba(0,0,0,0.9);
+        }
+
+        @include mixins.state(){
+            filter: contrast(150%);
+        }
+
+        @include mixins.backgroundGradientEffect(){
+            background: branding.$gradient_color_six;
+        }
+    }
+
+    &__menu{
+        color: rgba(0, 0, 0, 0.9);
+        border: 0;
+        font-size: 15px;
+        margin: auto 0;
+
+        @include mixins.state(){
+            filter: contrast(100%);
+            background-color: branding.$brand_color_three__alt_1;
+        }
+    }
+
+    &--yellow{
+        @include mixins.backgroundGradientEffect(){
+            background : branding.$gradient_color_one;
+        }
+    }
+
+    &--center{
+        margin: auto;
+    }
+}
+
+.link{
+
+    &__read-more{
+        background: branding.$brand_color_five__alt_1;
+        color: white;
+        width: max-content;
+        padding : 0.35rem 1rem 0.4rem 1rem;
+        border: none;
+        border-radius: 4px;
+        box-shadow: branding.$box-shadow;
+
+        @include mixins.state(){
+            background: branding.$brand_color_five__alt_4;
+        }
+    }
+
+    &__edit{
+        background: branding.$brand_color_one;
+        color: white;
+        width: max-content;
+        padding : 0.35rem 1rem 0.4rem 1rem;
+        border: none;
+        border-radius: 4px;
+        box-shadow: branding.$box-shadow;
+
+        @include mixins.state(){
+            background: branding.$brand_color_one__alt_1;
+        }
+    }
+}

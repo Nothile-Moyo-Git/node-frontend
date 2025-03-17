@@ -1,0 +1,9 @@
+@use "../../scss/partials/animations" as animations;
+
+.signup{
+    animation: fade-in 0.15s linear;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

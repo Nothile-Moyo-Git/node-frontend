@@ -1,0 +1,85 @@
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/animations" as animations;
+@use "../../scss/partials/responsive" as responsive;
+@use "../../scss/partials/mixins" as mixins;
+
+.paginator{
+
+    display: flex;
+
+    &__button{
+
+        background-color: transparent;
+        padding: 0.15rem 0.6rem 0.25rem 0.6rem;
+        border: 1px solid branding.$brand_color_three;
+        color: branding.$brand_color_three;
+        transition: animations.$standard_transition;
+        border-radius: 3px;
+        cursor: pointer;
+        margin: 0 0.4rem;
+        position: relative;
+        z-index: 2;
+        overflow: hidden;
+
+        &:hover{
+            color : rgba(0, 0, 0, 0.9);
+            box-shadow: branding.$box_shadow_blue;
+            border-bottom-color: branding.$brand_color_three;
+
+            @include mixins.backgroundGradientEffect(){
+                background: branding.$gradient_color_three;
+            }
+        }
+
+        &--current-select{
+            color: rgba(0, 0, 0, 0.9);
+            padding: 0.35rem 0.9rem 0.25rem;
+            margin: 0;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+            color: branding.$brand_color_three;
+
+            &::hover{
+                box-shadow: none;
+                box-shadow: branding.$box_shadow_blue;
+
+                @include mixins.backgroundGradientEffect(){
+                    background: branding.$gradient_color_three;
+                }
+            }
+        }
+
+        &--current-normal{
+            cursor: no-drop;
+            padding-top: 0.4rem;
+            color: rgba(0,0,0,0.9);
+
+            @include mixins.backgroundGradientEffect(){
+                background: branding.$gradient_color_three;
+            }
+
+            &:hover{
+                box-shadow: none;
+            }
+        }
+    }
+
+    &__min-max-wrapper{
+        display: flex;
+        animation: fade-in 0.2s linear;
+
+        @include responsive.breakpoint(mobile){
+            display: none;
+        }
+    }
+
+    &__min-max-text{
+        color: branding.$brand_color_six;
+        margin: 0;
+    }
+
+    &__select-wrapper{
+        display: flex;
+        margin: 0 0.35rem;
+    }
+}

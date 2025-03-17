@@ -1,0 +1,16 @@
+.form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: calc(100% - 2rem);
+    max-width: 500px;
+    margin: 0 auto;
+    grid-row-gap: 1rem;
+    z-index: 1;
+    position: relative;
+
+    &__full{
+        max-width: 100%;
+        width: 100%;
+    }
+}

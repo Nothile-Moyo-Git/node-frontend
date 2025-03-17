@@ -1,0 +1,40 @@
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/mixins" as mixins;
+
+.textarea{
+    width: 100%;
+    border-radius: 4px;
+    padding: 0.1rem 0.25rem;
+    max-width: calc(100% - 0.5rem);
+    color : rgba(0, 0, 0, 0.9);
+    border-right: 1px solid branding.$brand_color_six;
+    outline-offset : -2px;
+
+    @include mixins.visible(){
+        outline: 2px solid branding.$brand_color_six;
+    }
+
+    &__error{
+        background-color: pink;
+
+        @include mixins.visible(){
+            outline-color: red;
+        }
+    }
+
+    &__square {
+        border-radius: 0px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: branding.$brand_color_six;
+    }
+
+    /* Corner */
+    &::-webkit-scrollbar-corner{
+        background: transparent;
+        border-bottom-right-radius: 3px;
+        border: none;
+    }
+}

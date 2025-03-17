@@ -1,0 +1,35 @@
+@use "../../scss/partials/animations" as animations;
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/mixins" as mixins;
+
+.viewPosts {
+    animation: fade-in 0.2s linear;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    width: calc(100% - 2rem);
+    grid-row-gap: 1rem;
+
+    &__title{
+        margin: 0;
+    }
+
+    &__posts-list{
+        display: flex;
+        flex-direction: column;
+        grid-row-gap: 2rem;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    &__modal-link{
+        display: flex;
+        color: branding.$brand_color_two;
+        border-bottom: 2px solid transparent;
+
+        @include mixins.state(){
+            border-color: branding.$brand_color_two;
+        }
+    }
+}

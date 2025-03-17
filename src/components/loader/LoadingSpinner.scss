@@ -1,0 +1,38 @@
+@use "../../scss/partials/animations" as animations;
+@use "../../scss/partials/branding" as branding;
+
+.loadingWrapper {
+    display: flex;
+    flex-direction: column;
+    color: branding.$brand_color_six;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2rem;
+    animation: fade-in 0.2s linear;
+}
+
+.loadingSpinner {
+
+    display: inline-block;
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+
+    &:after{
+        content: " ";
+        display: block;
+        border-radius: 50%;
+        width: 0;
+        height: 0;
+        margin: 0.5rem;
+        box-sizing: border-box;
+        border: 2rem solid branding.$brand_color_six;
+        border-color: branding.$brand_color_six transparent branding.$brand_color_six transparent;
+        animation: hourglass 2.5s linear infinite;
+    }
+}
+
+.loadingText{
+    font-size: 1.2rem;
+    color: branding.$brand_color_six;
+}

@@ -1,0 +1,60 @@
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/mixins" as mixins;
+
+.errorModal{
+
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    box-shadow: branding.$card-box-shadow;
+    max-width: 500px;
+    margin: 2rem auto;
+    width: calc(100% - 2rem);
+
+    &__button{
+        background: branding.$brand_color_seven;
+        border-radius: 4px;
+        border: none;
+        width: max-content;
+        margin: auto;
+        padding: 0.1rem 0.75rem 0.3rem 0.75rem;
+        color: white;
+        box-shadow: branding.$button-shadow;
+
+        @include mixins.state(){
+            background: branding.$brand_color_seven__alt_3;
+        }
+    }
+
+    &__content-wrapper{
+        display: flex;
+        flex-direction: column;
+        grid-row-gap: 1rem;
+        background: white;
+        padding: 1rem;
+        text-align: center;
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+
+        h2, p{
+            color: rgba(0,0,0,0.9);
+            margin: 0;
+        }
+    }
+
+    &__icon{
+        margin: auto;
+        width: 100%;
+    }
+
+    &__icon-wrapper{
+        background: branding.$brand_color_seven;
+        padding: 1rem;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+    }
+
+    &__icon-path{
+        fill: white;
+    }
+}

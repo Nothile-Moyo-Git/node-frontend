@@ -1,0 +1,11 @@
+@use "../../scss/partials/animations" as animations;
+
+.label{
+    color: white;
+    font-size: 1.1rem;
+    transition: animations.$standard_transition;
+
+    &__error{
+        color: pink;
+    }
+}

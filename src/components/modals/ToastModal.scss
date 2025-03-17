@@ -1,0 +1,70 @@
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/mixins" as mixins;
+@use "../../scss/partials/animations" as animations;
+
+.toast{
+    
+    position: fixed;
+    bottom: 5rem;
+    right: 1rem;
+    z-index: 3;
+    overflow: hidden;
+    animation: fade-in animations.$standard_animation;
+    font-size: 1.1rem;
+    padding: 0;
+
+    svg{
+        height: 1.3rem;
+        width: 1.3rem;
+    }
+
+    path{ 
+        color: white; 
+    }
+
+    &__message{
+        display: flex;
+        grid-column-gap: 0.5rem;
+        align-items: center;
+    }
+    
+    &__modal{
+        gap: 0.5rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__bar{
+        display: block;
+        background: white;
+        position: relative;
+        height: 0rem;
+        width: 100%;
+        bottom: 0;
+        right: 100%;
+        animation: slide-out 5s linear;
+    }
+
+    &--info{
+
+        @include mixins.backgroundGradientEffect(){
+            background: branding.$gradient_color_three;
+        }
+    }
+
+    &--success{
+        background: branding.$brand_color_five__alt_1;
+    }
+
+    &--error{
+        background: branding.$brand_color_seven;
+    }
+
+    &--warning{
+        background: branding.$brand_color_four__alt_2;
+    }
+
+}

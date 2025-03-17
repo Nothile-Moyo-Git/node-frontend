@@ -1,0 +1,72 @@
+@use "../../scss/partials/mixins" as mixins;
+@use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/responsive" as responsive;
+@use "../../scss/partials/animations" as animations;
+
+@use "../../scss/partials/scrollbars";
+
+main{
+    animation: fade-in 0.2s linear;    
+    min-height: calc(100% - 55px);
+    padding-top: 55px;
+    background: branding.$backdrop_color_one;
+}
+
+.page{
+    background: branding.$backdrop_color_one;
+}
+
+.menu-open{
+
+    @include responsive.breakpoint(tablet){
+        &__logged-in{
+            min-height: calc(100% - 137px);
+            padding-top: 137px;
+
+            .menu{
+                height: 137px;
+            }
+        }
+
+        &__logged-out{
+            min-height: calc(100% - 105px);
+            padding-top: 105px;
+
+            ul{
+                height: 105px;
+            }
+        }
+    }
+}
+
+.menu-closed{
+
+    @include responsive.breakpoint(tablet){
+        min-height: 100vh;
+        margin-top: 0px;
+        padding-top: 0px; 
+        nav{
+            display: none;
+        }
+    }
+}
+
+.footer{
+    position: fixed;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    border: 0;
+
+    svg{
+        @include mixins.state(){
+            path{
+                stroke: branding.$brand_color_six;
+            }
+        }
+    }
+
+    path{
+        stroke : white;
+        transition: animations.$standard_transition;
+    }
+}
