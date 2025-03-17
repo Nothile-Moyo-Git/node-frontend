@@ -53,7 +53,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "/typescript-fullstack",
+  "homepage": "/node-react-frontend",
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "eslint": "^8.57.1",
