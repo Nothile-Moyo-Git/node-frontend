@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/typescript-fullstack/static/css/main.05149227.css",
+    "main.js": "/typescript-fullstack/static/js/main.c77ed06c.js",
+    "static/media/2024-04-20_21-20-06_2B.png": "/typescript-fullstack/static/media/2024-04-20_21-20-06_2B.cad4141264a163fb85ab.png",
+    "static/media/2025-03-14_23-33-03_axe-lass.png": "/typescript-fullstack/static/media/2025-03-14_23-33-03_axe-lass.aea15af6c52d0e69d926.png",
+    "static/media/2025-03-14_23-06-55_tiefling.jpg": "/typescript-fullstack/static/media/2025-03-14_23-06-55_tiefling.ef86c907d362bdf42125.jpg",
+    "static/media/2024-04-28_17-39-41_2592031-025587.jpg": "/typescript-fullstack/static/media/2024-04-28_17-39-41_2592031-025587.7441ab69f7df61c67412.jpg",
+    "static/media/2024-04-20_21-20-24_450px-Alfira-face.jpg": "/typescript-fullstack/static/media/2024-04-20_21-20-24_450px-Alfira-face.cec5821b790a15d9b273.jpg",
+    "index.html": "/typescript-fullstack/index.html",
+    "static/media/down-arrow.svg": "/typescript-fullstack/static/media/down-arrow.749b89f3a721a35b0461.svg",
+    "main.05149227.css.map": "/typescript-fullstack/static/css/main.05149227.css.map",
+    "main.c77ed06c.js.map": "/typescript-fullstack/static/js/main.c77ed06c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.05149227.css",
+    "static/js/main.c77ed06c.js"
+  ]
+}
