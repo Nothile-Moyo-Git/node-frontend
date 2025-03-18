@@ -33,35 +33,35 @@ export const nestedRouter = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "/chat",
+        path: "chat",
         element: <LiveChat />,
       },
       {
-        path: "/login",
+        path: "login",
         element: <LoginPage />,
       },
       {
-        path: "/signup",
+        path: "signup",
         element: <SignupPage />,
       },
       {
-        path: "/posts/:page?",
+        path: "posts/:page?",
         element: <ViewPosts />,
       },
       {
-        path: "/post/:postId?",
+        path: "post/:postId?",
         element: <PostScreen />,
       },
       {
-        path: "/edit-post/:postId?",
+        path: "edit-post/:postId?",
         element: <EditPost />,
       },
       {
-        path: "/graphql",
+        path: "graphql",
         element: <GraphQLInterface />,
       },
       {
-        path: "/post/create",
+        path: "post/create",
         element: <CreatePostComponent />,
       },
     ],
