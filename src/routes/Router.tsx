@@ -24,44 +24,44 @@ import GraphQLInterface from "../pages/GraphQL/GraphQLInterface";
 
 export const nestedRouter = createBrowserRouter([
   {
-    path: "/",
+    path: BASENAME,
     element: <PageWrapper />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: BASENAME,
+        index: true,
         element: <App />,
       },
       {
-        path: BASENAME + "/chat",
+        path: "/chat",
         element: <LiveChat />,
       },
       {
-        path: BASENAME + "/login",
+        path: "/login",
         element: <LoginPage />,
       },
       {
-        path: BASENAME + "/signup",
+        path: "/signup",
         element: <SignupPage />,
       },
       {
-        path: BASENAME + "/posts/:page?",
+        path: "/posts/:page?",
         element: <ViewPosts />,
       },
       {
-        path: BASENAME + "/post/:postId?",
+        path: "/post/:postId?",
         element: <PostScreen />,
       },
       {
-        path: BASENAME + "/edit-post/:postId?",
+        path: "/edit-post/:postId?",
         element: <EditPost />,
       },
       {
-        path: BASENAME + "/graphql",
+        path: "/graphql",
         element: <GraphQLInterface />,
       },
       {
-        path: BASENAME + "/post/create",
+        path: "/post/create",
         element: <CreatePostComponent />,
       },
     ],
