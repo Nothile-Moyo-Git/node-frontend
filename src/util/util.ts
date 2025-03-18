@@ -107,4 +107,4 @@ export const checkSessionValidation = async (userId: string, token: string) => {
   }
 };
 
-export const BASENAME = "/typescript-fullstack";
+export const BASENAME = "/node-frontend";
