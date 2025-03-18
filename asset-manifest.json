@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/node-react-frontend/static/css/main.32630403.css",
-    "main.js": "/node-react-frontend/static/js/main.057b1de5.js",
-    "static/media/2024-04-20_21-20-06_2B.png": "/node-react-frontend/static/media/2024-04-20_21-20-06_2B.cad4141264a163fb85ab.png",
-    "static/media/2025-03-14_23-33-03_axe-lass.png": "/node-react-frontend/static/media/2025-03-14_23-33-03_axe-lass.aea15af6c52d0e69d926.png",
-    "static/media/2025-03-14_23-06-55_tiefling.jpg": "/node-react-frontend/static/media/2025-03-14_23-06-55_tiefling.ef86c907d362bdf42125.jpg",
-    "static/media/2024-04-28_17-39-41_2592031-025587.jpg": "/node-react-frontend/static/media/2024-04-28_17-39-41_2592031-025587.7441ab69f7df61c67412.jpg",
-    "static/media/2024-04-20_21-20-24_450px-Alfira-face.jpg": "/node-react-frontend/static/media/2024-04-20_21-20-24_450px-Alfira-face.cec5821b790a15d9b273.jpg",
-    "index.html": "/node-react-frontend/index.html",
-    "static/media/down-arrow.svg": "/node-react-frontend/static/media/down-arrow.749b89f3a721a35b0461.svg",
-    "main.32630403.css.map": "/node-react-frontend/static/css/main.32630403.css.map",
-    "main.057b1de5.js.map": "/node-react-frontend/static/js/main.057b1de5.js.map"
+    "main.css": "/node-frontend/static/css/main.560cad0b.css",
+    "main.js": "/node-frontend/static/js/main.23f6feba.js",
+    "static/media/2024-04-20_21-20-06_2B.png": "/node-frontend/static/media/2024-04-20_21-20-06_2B.cad4141264a163fb85ab.png",
+    "static/media/2025-03-14_23-33-03_axe-lass.png": "/node-frontend/static/media/2025-03-14_23-33-03_axe-lass.aea15af6c52d0e69d926.png",
+    "static/media/2025-03-14_23-06-55_tiefling.jpg": "/node-frontend/static/media/2025-03-14_23-06-55_tiefling.ef86c907d362bdf42125.jpg",
+    "static/media/2024-04-28_17-39-41_2592031-025587.jpg": "/node-frontend/static/media/2024-04-28_17-39-41_2592031-025587.7441ab69f7df61c67412.jpg",
+    "static/media/2024-04-20_21-20-24_450px-Alfira-face.jpg": "/node-frontend/static/media/2024-04-20_21-20-24_450px-Alfira-face.cec5821b790a15d9b273.jpg",
+    "index.html": "/node-frontend/index.html",
+    "static/media/down-arrow.svg": "/node-frontend/static/media/down-arrow.749b89f3a721a35b0461.svg",
+    "main.560cad0b.css.map": "/node-frontend/static/css/main.560cad0b.css.map",
+    "main.23f6feba.js.map": "/node-frontend/static/js/main.23f6feba.js.map"
   },
   "entrypoints": [
-    "static/css/main.32630403.css",
-    "static/js/main.057b1de5.js"
+    "static/css/main.560cad0b.css",
+    "static/js/main.23f6feba.js"
   ]
 }
