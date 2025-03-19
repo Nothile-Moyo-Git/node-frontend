@@ -17,7 +17,6 @@ import Input from "../../components/form/Input";
 import Button from "../../components/button/Button";
 import Title from "../../components/form/Title";
 import { useNavigate } from "react-router-dom";
-import { BASENAME } from "../../util/util";
 
 export const LoginPage: FC = () => {
   // redirect using the navigate hook and not redirect
@@ -87,6 +86,9 @@ export const LoginPage: FC = () => {
 
       const data = response.data.loginResponse;
 
+      console.log("Data\n");
+      console.log(data);
+
       // Set the states at the end of the request
       setIsEmailValid(data.emailValid);
       setEmailErrorText(data.emailErrorText);
@@ -103,7 +105,7 @@ export const LoginPage: FC = () => {
         localStorage.setItem("expiresIn", remainingTime.toISOString());
 
         // Redirect to the main page
-        navigate(BASENAME);
+        navigate("/");
       }
     } catch (error) {
       console.log("There was an error loading this page");
