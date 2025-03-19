@@ -1,6 +1,5 @@
 {
   "name": "node-frontend",
-  "homepage": "/node-frontend",
   "version": "0.2.0",
   "private": true,
   "dependencies": {
