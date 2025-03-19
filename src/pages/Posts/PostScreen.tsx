@@ -114,7 +114,7 @@ const PostScreen: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [appContextInstance, postId]);
+  }, [appContextInstance, postId, navigate]);
 
   useEffect(() => {
     const getImage = async () => {

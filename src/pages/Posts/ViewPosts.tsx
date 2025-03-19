@@ -238,7 +238,7 @@ export const ViewPosts: FC = () => {
       // Remove unncessary event handlers
       client.removeAllListeners();
     };
-  }, [fetchPosts, refreshPosts]);
+  }, [fetchPosts, refreshPosts, liveChatEndpoint]);
 
   useEffect(() => {
     // Toggle the loading spinner util the request ends
@@ -261,7 +261,13 @@ export const ViewPosts: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [appContextInstance?.userAuthenticated, page]);
+  }, [
+    appContextInstance?.userAuthenticated,
+    page,
+    appContextInstance,
+    fetchPosts,
+    navigate,
+  ]);
 
   return (
     <section className="viewPosts">

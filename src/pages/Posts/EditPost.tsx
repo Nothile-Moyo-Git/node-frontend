@@ -12,6 +12,7 @@
 import React, {
   FC,
   FormEvent,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -71,20 +72,21 @@ export const EditPost: FC = () => {
   const imageUrlRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
-  const getPostData = async (userId: string) => {
-    // Create the fields
-    const fields = new FormData();
-    fields.append("userId", userId);
+  const getPostData = useCallback(
+    async (userId: string) => {
+      // Create the fields
+      const fields = new FormData();
+      fields.append("userId", userId);
 
-    // Query to GraphQL
-    const response = await fetch(`/graphql/posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query: `
+      // Query to GraphQL
+      const response = await fetch(`/graphql/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                     query GetAndValidatePostResponse($postId : String!, $userId : String!){
                         GetAndValidatePostResponse(postId : $postId, userId : $userId){
                             success
@@ -104,30 +106,32 @@ export const EditPost: FC = () => {
                         }
                     }
                 `,
-        variables: {
-          postId: postId,
-          userId: userId,
-        },
-      }),
-    });
+          variables: {
+            postId: postId,
+            userId: userId,
+          },
+        }),
+      });
 
-    // Get the json from the backend
-    const dataResponse = await response.json();
+      // Get the json from the backend
+      const dataResponse = await response.json();
 
-    // Get the data from the json
-    const data = dataResponse.data.GetAndValidatePostResponse;
+      // Get the data from the json
+      const data = dataResponse.data.GetAndValidatePostResponse;
 
-    // Show the error modal if the request fails
-    if (!dataResponse.errors) {
-      setShowErrorText(false);
-    }
+      // Show the error modal if the request fails
+      if (!dataResponse.errors) {
+        setShowErrorText(false);
+      }
 
-    if (dataResponse.errors) {
-      setShowErrorText(true);
-    }
+      if (dataResponse.errors) {
+        setShowErrorText(true);
+      }
 
-    return data;
-  };
+      return data;
+    },
+    [postId],
+  );
 
   // Set the preview of the file when the api request concludes so we can view it on the page immediately
   const formatPreviousPostImage = async (post: Post) => {
@@ -149,21 +153,23 @@ export const EditPost: FC = () => {
   };
 
   // This method runs the get method and then formats the results
-  const handlePostDataQuery = async (userId: string) => {
-    // Perform the api request
-    const data = await getPostData(userId);
+  const handlePostDataQuery = useCallback(
+    async (userId: string) => {
+      const data = await getPostData(userId);
 
-    if (data.isUserValidated === false) {
-      navigate(`${BASENAME}/posts`);
-    }
+      if (data.isUserValidated === false) {
+        navigate(`${BASENAME}/posts`);
+      }
 
-    const success = data.success ? data.success : false;
+      const success = data.success ? data.success : false;
 
-    if (success === true) {
-      setPostData(data.post);
-      formatPreviousPostImage(data.post);
-    }
-  };
+      if (success === true) {
+        setPostData(data.post);
+        formatPreviousPostImage(data.post);
+      }
+    },
+    [getPostData, navigate],
+  );
 
   // Back handler
   const backToPreviousPage = (event: React.MouseEvent) => {
@@ -199,7 +205,13 @@ export const EditPost: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [postId, appContextInstance, isPostCreatorValid]);
+  }, [
+    postId,
+    appContextInstance,
+    isPostCreatorValid,
+    handlePostDataQuery,
+    navigate,
+  ]);
 
   // Update the post data, and return an error if required
   const submitHandler = async (event: FormEvent) => {
