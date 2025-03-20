@@ -35,6 +35,9 @@ export const LoginPage: FC = () => {
   // Check if the user is authenticated, if they are, then redirect to the previous page
   const appContextInstance = useContext(AppContext);
 
+  console.log("App context instance\n");
+  console.log(appContextInstance);
+
   const submitHandler = async (event: FormEvent) => {
     // Don't reload the page
     event.preventDefault();
