@@ -29,14 +29,16 @@ const App: FC = () => {
     const getUserDetails = async (userId: string) => {
       // Perform the fetch request using GraphQL in order to get the user details on the main app page
       // Note: Please convert your id to an objectId in the backend
-      const response = await fetch(`/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
             query PostUserDetailsResponse($_id : String!, $token : String!){
               PostUserDetailsResponse(_id : $_id, token : $token){
                 user {
@@ -54,12 +56,13 @@ const App: FC = () => {
                 }
               }
             `,
-          variables: {
-            _id: userId,
-            token: appContextInstance?.token ?? "",
-          },
-        }),
-      });
+            variables: {
+              _id: userId,
+              token: appContextInstance?.token ?? "",
+            },
+          }),
+        },
+      );
 
       // Get the result from the endpoint
       const {
@@ -99,6 +102,7 @@ const App: FC = () => {
           checkSessionValidation(
             appContextInstance.userId,
             appContextInstance.token,
+            appContextInstance.baseUrl,
           );
         }
       } catch (error) {

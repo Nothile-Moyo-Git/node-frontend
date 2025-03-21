@@ -70,14 +70,16 @@ export const SignupPage: FC = () => {
     // Perform the signup request to the backend
     try {
       // Perform the signup request
-      const result = await fetch(`/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const result = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                         mutation signupUserResponse($name : String!, $email : String!, $password : String!, $confirmPassword : String!){
                             signupUserResponse(name : $name, email : $email, password : $password, confirmPassword : $confirmPassword){
                                 isNameValid,
@@ -89,19 +91,15 @@ export const SignupPage: FC = () => {
                             }
                         }
                     `,
-          variables: {
-            name: name,
-            email: emailAddress,
-            password: password,
-            confirmPassword: confirmPassword,
-          },
-        }),
-      });
-
-      console.clear();
-      console.log("result");
-      console.log(result);
-      console.log("\n");
+            variables: {
+              name: name,
+              email: emailAddress,
+              password: password,
+              confirmPassword: confirmPassword,
+            },
+          }),
+        },
+      );
 
       const response = await result.json();
 

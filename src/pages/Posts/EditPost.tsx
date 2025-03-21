@@ -79,14 +79,16 @@ export const EditPost: FC = () => {
       fields.append("userId", userId);
 
       // Query to GraphQL
-      const response = await fetch(`/graphql/posts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                     query GetAndValidatePostResponse($postId : String!, $userId : String!){
                         GetAndValidatePostResponse(postId : $postId, userId : $userId){
                             success
@@ -106,12 +108,13 @@ export const EditPost: FC = () => {
                         }
                     }
                 `,
-          variables: {
-            postId: postId,
-            userId: userId,
-          },
-        }),
-      });
+            variables: {
+              postId: postId,
+              userId: userId,
+            },
+          }),
+        },
+      );
 
       // Get the json from the backend
       const dataResponse = await response.json();
@@ -225,18 +228,23 @@ export const EditPost: FC = () => {
 
       let fileData = {};
       if (uploadFile) {
-        fileData = await fileUploadHandler(uploadFile);
+        fileData = await fileUploadHandler(
+          uploadFile,
+          appContextInstance?.baseUrl ? appContextInstance.baseUrl : "",
+        );
       }
 
       // Perform the API request to the backend
-      const editPostResponse = await fetch("/graphql/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const editPostResponse = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                         mutation PostEditPostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput, $postId : String!){
                             PostEditPostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData, postId : $postId){
                                 post {
@@ -268,15 +276,16 @@ export const EditPost: FC = () => {
                             }
                         }
                     `,
-          variables: {
-            title: title,
-            content: content,
-            userId: userId,
-            fileData: fileData,
-            postId: postId,
-          },
-        }),
-      });
+            variables: {
+              title: title,
+              content: content,
+              userId: userId,
+              fileData: fileData,
+              postId: postId,
+            },
+          }),
+        },
+      );
 
       // Get the result of the API request
       const data = await editPostResponse.json();

@@ -47,14 +47,16 @@ export const ViewPosts: FC = () => {
   // Get posts method, we define it here so we can call it asynchronously
   const getPosts = useCallback(async () => {
     // Perform the signup request
-    const response = await fetch(`/graphql/posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query: `
+    const response = await fetch(
+      `${appContextInstance?.baseUrl}/graphql/posts`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                     query GetPostsResponse($currentPage : Int!){
                         GetPostsResponse(currentPage : $currentPage){
                             message
@@ -74,11 +76,12 @@ export const ViewPosts: FC = () => {
                         }
                     }
                 `,
-        variables: {
-          currentPage: params.page ? Number(params.page) : 1,
-        },
-      }),
-    });
+          variables: {
+            currentPage: params.page ? Number(params.page) : 1,
+          },
+        }),
+      },
+    );
 
     // Show the error if the request failed
     if (response.status === 200) {
@@ -144,14 +147,16 @@ export const ViewPosts: FC = () => {
 
     try {
       // Perform the signup request
-      const response = await fetch(`/graphql/posts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                         mutation PostDeletePostResponse($postId : String!, $userId : String!){
                             PostDeletePostResponse(postId : $postId, userId : $userId){
                                 success
@@ -161,12 +166,13 @@ export const ViewPosts: FC = () => {
                             }
                         }
                     `,
-          variables: {
-            postId: postId,
-            userId: userId,
-          },
-        }),
-      });
+            variables: {
+              postId: postId,
+              userId: userId,
+            },
+          }),
+        },
+      );
 
       // Get the result from the endpoint
       const {
@@ -179,10 +185,13 @@ export const ViewPosts: FC = () => {
       fields.append("highestPageNumber", result.highestPageNumber);
 
       // Trigger a modal which informs users that the post has been deleted
-      await fetch("/rest/socket/emit/post-deleted", {
-        method: "POST",
-        body: fields,
-      });
+      await fetch(
+        `${appContextInstance?.baseUrl}/rest/socket/emit/post-deleted`,
+        {
+          method: "POST",
+          body: fields,
+        },
+      );
 
       fetchPosts();
       setShowConfirmationModal(false);

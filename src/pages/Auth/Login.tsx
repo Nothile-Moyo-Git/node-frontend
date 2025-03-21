@@ -35,9 +35,6 @@ export const LoginPage: FC = () => {
   // Check if the user is authenticated, if they are, then redirect to the previous page
   const appContextInstance = useContext(AppContext);
 
-  console.log("App context instance\n");
-  console.log(appContextInstance);
-
   const submitHandler = async (event: FormEvent) => {
     // Don't reload the page
     event.preventDefault();
@@ -56,14 +53,16 @@ export const LoginPage: FC = () => {
     // Perform the login request to the backend
     try {
       // Perform the signup request
-      const result = await fetch(`/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const result = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                         mutation loginResponse($emailAddress : String!, $password : String!){
                             loginResponse(emailAddress : $emailAddress, password : $password){
                                 userExists
@@ -77,12 +76,13 @@ export const LoginPage: FC = () => {
                             }
                         }
                     `,
-          variables: {
-            emailAddress: emailAddress,
-            password: password,
-          },
-        }),
-      });
+            variables: {
+              emailAddress: emailAddress,
+              password: password,
+            },
+          }),
+        },
+      );
 
       // Get the data from the response
       const response = await result.json();

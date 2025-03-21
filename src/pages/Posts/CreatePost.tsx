@@ -82,7 +82,10 @@ export const CreatePostComponent: FC = () => {
       let fileData = {};
 
       if (uploadFile) {
-        fileData = await fileUploadHandler(uploadFile);
+        fileData = await fileUploadHandler(
+          uploadFile,
+          appContextInstance?.baseUrl ? appContextInstance?.baseUrl : "",
+        );
       }
 
       // Perform the API request to the backend

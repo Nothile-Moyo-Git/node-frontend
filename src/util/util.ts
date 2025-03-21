@@ -76,10 +76,14 @@ export const generateUploadDate = (date: string | number) => {
  *
  * @returns sessionValid : boolean
  */
-export const checkSessionValidation = async (userId: string, token: string) => {
+export const checkSessionValidation = async (
+  userId: string,
+  token: string,
+  baseUrl: string,
+) => {
   try {
     // Perform the signup request
-    await fetch(`/graphql/auth`, {
+    await fetch(`${baseUrl}/graphql/auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

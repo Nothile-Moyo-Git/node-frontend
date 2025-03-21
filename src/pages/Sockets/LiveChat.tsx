@@ -74,14 +74,16 @@ const LiveChat: FC = () => {
   // Get user details if the user is authenticated from the backend
   const getUserDetails = useCallback(
     async (userId: string) => {
-      const response = await fetch(`/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                 query PostUserDetailsResponse($_id : String!, $token : String!){
                     PostUserDetailsResponse(_id : $_id, token : $token){
                         user {
@@ -95,12 +97,13 @@ const LiveChat: FC = () => {
                         }
                     }
                 }`,
-          variables: {
-            _id: userId,
-            token: appContextInstance?.token ?? "",
-          },
-        }),
-      });
+            variables: {
+              _id: userId,
+              token: appContextInstance?.token ?? "",
+            },
+          }),
+        },
+      );
 
       // Get the result from the endpoint
       const {
@@ -116,14 +119,16 @@ const LiveChat: FC = () => {
   // Get the chat messages async since we can't do it in our useEffect hook
   const getChatMessages = async (userId: string, recipientId: string) => {
     // Perform the signup request
-    const response = await fetch(`/graphql/chat`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query: `
+    const response = await fetch(
+      `${appContextInstance?.baseUrl}/graphql/chat`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                     query chatMessagesResponse($_id : String!, $recipientId : String){
                         chatMessagesResponse(_id : $_id, recipientId : $recipientId){
                             success
@@ -141,12 +146,13 @@ const LiveChat: FC = () => {
                         }
                     }
                 `,
-        variables: {
-          _id: userId,
-          recipientId: recipientId,
-        },
-      }),
-    });
+          variables: {
+            _id: userId,
+            recipientId: recipientId,
+          },
+        }),
+      },
+    );
 
     const {
       data: {
@@ -224,10 +230,13 @@ const LiveChat: FC = () => {
       console.log(userDetails);
       console.log("\n\n");
 
-      const result = await fetch(`/chat/send-message/${userId}`, {
-        method: "POST",
-        body: fields,
-      });
+      const result = await fetch(
+        `${appContextInstance?.baseUrl}/chat/send-message/${userId}`,
+        {
+          method: "POST",
+          body: fields,
+        },
+      );
 
       console.log("Result");
       console.log(result);
