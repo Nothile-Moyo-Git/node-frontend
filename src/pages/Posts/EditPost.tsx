@@ -133,7 +133,7 @@ export const EditPost: FC = () => {
 
       return data;
     },
-    [postId],
+    [postId, appContextInstance?.baseUrl],
   );
 
   // Set the preview of the file when the api request concludes so we can view it on the page immediately

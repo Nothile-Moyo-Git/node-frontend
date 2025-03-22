@@ -113,22 +113,23 @@ const LiveChat: FC = () => {
       // Set the user details so
       setUserDetails(user.user);
     },
-    [appContextInstance?.token],
+    [appContextInstance],
   );
 
   // Get the chat messages async since we can't do it in our useEffect hook
-  const getChatMessages = async (userId: string, recipientId: string) => {
-    // Perform the signup request
-    const response = await fetch(
-      `${appContextInstance?.baseUrl}/graphql/chat`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+  const getChatMessages = useCallback(
+    async (userId: string, recipientId: string) => {
+      // Perform the signup request
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                     query chatMessagesResponse($_id : String!, $recipientId : String){
                         chatMessagesResponse(_id : $_id, recipientId : $recipientId){
                             success
@@ -146,26 +147,28 @@ const LiveChat: FC = () => {
                         }
                     }
                 `,
-          variables: {
-            _id: userId,
-            recipientId: recipientId,
-          },
-        }),
-      },
-    );
+            variables: {
+              _id: userId,
+              recipientId: recipientId,
+            },
+          }),
+        },
+      );
 
-    const {
-      data: {
-        chatMessagesResponse: { success, messages },
-      },
-    } = await response.json();
+      const {
+        data: {
+          chatMessagesResponse: { success, messages },
+        },
+      } = await response.json();
 
-    // Set the messages from the backend if we have them
-    if (messages.length !== 0 && success) {
-      // Here we set it to the messages object in messages since we have properties like userId etc...
-      setChatMessages(messages.messages);
-    }
-  };
+      // Set the messages from the backend if we have them
+      if (messages.length !== 0 && success) {
+        // Here we set it to the messages object in messages since we have properties like userId etc...
+        setChatMessages(messages.messages);
+      }
+    },
+    [appContextInstance],
+  );
   // Get the user details from the backend for the chat
   useEffect(() => {
     appContextInstance?.validateAuthentication();
@@ -189,7 +192,7 @@ const LiveChat: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [appContextInstance, getUserDetails, navigate]);
+  }, [appContextInstance, getChatMessages, getUserDetails, navigate]);
 
   // Submit handler, this allows messages to be sent between clients
   const onSubmit = async (event: FormEvent) => {

@@ -91,7 +91,7 @@ export const ViewPosts: FC = () => {
     }
 
     return response;
-  }, [params.page]);
+  }, [params.page, appContextInstance]);
 
   // Method defined here to allow async calls in a useEffect hook
   const fetchPosts = useCallback(async () => {
@@ -270,13 +270,7 @@ export const ViewPosts: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [
-    appContextInstance?.userAuthenticated,
-    page,
-    appContextInstance,
-    fetchPosts,
-    navigate,
-  ]);
+  }, [page, appContextInstance, fetchPosts, navigate]);
 
   return (
     <section className="viewPosts">
