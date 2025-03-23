@@ -229,10 +229,6 @@ const LiveChat: FC = () => {
       fields.append("messages", JSON.stringify(chatMessages));
       fields.append("newMessage", contentRef.current.value);
 
-      console.log("\n\n", "Sender");
-      console.log(userDetails);
-      console.log("\n\n");
-
       const result = await fetch(
         `${appContextInstance?.baseUrl}/chat/send-message/${userId}`,
         {
