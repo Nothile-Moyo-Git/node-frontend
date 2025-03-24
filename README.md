@@ -34,12 +34,13 @@ The current technology stack for the front end is:
 -----
 
 ### Request handling
-The backend uses [multer](https://www.npmjs.com/package/multer) to parse requests. 
+The backend uses [multer](https://www.npmjs.com/package/multer) to parse file uploads in the local development environment. These use the type of "file" from the input found on forms.
 
-In order to get this to work with React forms, you must use _"multipart/form-data"_ for requests.
+For most requests, you'll be using GraphQL which will require you to write your query or mutation request on the front end, feel free to look at _"src/App.tsx"_ as an example.
 
-You can copy the value here, this should be your _"Content-Type"_ value.
-> "multipart/form-data"
+Some features (such as **livechats**) use [Rest](https://www.codecademy.com/article/what-is-rest) because it would cause more dependencies than necessary in order to replicate similar functionality, and assuming that the requests aren't over or under fetching, REST is used where appropriate.
+
+**Note: Use the _"baseUrl"_ property from the application context in order to get the baseUrl for all requests based on environments. This will ensure that you query the correct backend**
 
 ------
 
@@ -70,7 +71,7 @@ If the user isn't authenticated, then you will be redirected to the login page.
 
 > You can read more about useContext [here](https://react.dev/reference/react/useContext)
 
-**Note: You should use the "useEffect" hook in order to handle this validation**
+**Note: You should use the "useEffect" hook in order to handle this validation.**
 
 ------
 
@@ -115,6 +116,8 @@ If the image exists, it is converted and rendered on the page. All image preview
 Functional tests for this app are done using Jest and MSW. These tests will perform mock requests, and also handle functionality such as form and button submissions.
 
 You can find these tests with the extension ".tsx".
+
+The tests haven't been written yet but will be implemented, for the front end, these will be unit tests.
 
 - Jest
 > [Learn about Jest](https://jestjs.io/)
@@ -177,7 +180,12 @@ _Prettier and ESLint share the same config file_, so if you wish to edit your pr
 ------
 
 ### Deployments 
-TBI
+
+The production environment for live can be found [Here](https://lively-hotteok-99e04d.netlify.app/).
+
+Netlify handles CICD for us in this case, so all you need to do is create a PR, merge into master, and then a deployment automatically runs for you.
+
+**Note: Creating manual builds isn't necessary since the CICD process does that for you, but deployments will fail if there are any errors in the console**
 
 ------
 
