@@ -4,7 +4,7 @@
  *
  * Author : Nothile Moyo
  *
- * Description: GraphQLInterface, will be used to create a way of handling graphql queries for testing
+ * Description: Sandbox, used for experimental functionality
  *
  */
 
@@ -18,7 +18,7 @@ import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
 
-const GraphQLInterface = () => {
+const Sandbox = () => {
   // Dummy refs and states
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>();
@@ -157,11 +157,16 @@ const GraphQLInterface = () => {
     console.log(data);
   };
 
+  // Render images
+  const generateImageCarousel = () => {};
+
+  generateImageCarousel();
+
   return (
     <div>
       <br />
 
-      <h1>This is a testing page for endpoints, nothing fancy here</h1>
+      <h1>This is the sandbox page, any functionality here is experimental</h1>
 
       <Button variant="primary" onClick={signupResolver}>
         Create new user
@@ -212,4 +217,4 @@ const GraphQLInterface = () => {
   );
 };
 
-export default GraphQLInterface;
+export default Sandbox;
