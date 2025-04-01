@@ -66,7 +66,7 @@ const protectedRoutes = [
   },
 ];
 
-// Generate the final route
+// Generate the final route tree
 const routes =
   process.env.NODE_ENV.trim() === "development"
     ? [...childRoutes, ...protectedRoutes]
