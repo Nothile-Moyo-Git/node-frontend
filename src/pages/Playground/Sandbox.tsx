@@ -158,10 +158,7 @@ const Sandbox = () => {
   };
 
   // Render images
-  const generateImageCarousel = () => {
-
-    
-  };
+  const generateImageCarousel = () => {};
 
   generateImageCarousel();
 
