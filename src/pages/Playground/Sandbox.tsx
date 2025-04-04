@@ -158,7 +158,38 @@ const Sandbox = () => {
   };
 
   // Render images
-  const generateImageCarousel = () => {};
+  const generateImageCarousel = async () => {
+    // Get a list of files
+    const result = await fetch(`${appContextInstance?.baseUrl}/graphql/files`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+                    query GetFilePathsResponse{
+                        GetFilePathsResponse{
+                            status
+                            files {
+                              fileName
+                              filePath
+                            }
+                        }
+                    }
+                `,
+      }),
+    });
+
+    console.clear();
+    console.log("Result");
+    console.log(result);
+
+    const data = await result.json();
+
+    console.log("Data");
+    console.log(data);
+  };
 
   generateImageCarousel();
 
