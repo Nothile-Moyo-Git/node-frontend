@@ -8,7 +8,13 @@
  *
  */
 
-import React, { FormEvent, useContext, useRef, useState } from "react";
+import React, {
+  FormEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Button from "../../components/button/Button";
 import Form from "../../components/form/Form";
 import Field from "../../components/form/Field";
@@ -23,6 +29,8 @@ const Sandbox = () => {
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>();
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
+  const [files, setFiles] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>();
 
   // Check if the user is authenticated, if they are, then redirect to the previous page
   const appContextInstance = useContext(AppContext);
@@ -181,23 +189,41 @@ const Sandbox = () => {
       }),
     });
 
-    console.clear();
-    console.log("Result");
+    console.log("Result\n");
     console.log(result);
 
-    const data = await result.json();
+    if (result.status === 200) {
+      const {
+        data: {
+          GetFilePathsResponse: { files: files },
+        },
+      } = await result.json();
 
-    console.log("Data");
-    console.log(data);
+      setFiles(files);
+    }
   };
 
-  generateImageCarousel();
+  // generateImageCarousel();
+
+  useEffect(() => {
+    try {
+
+    } catch (error) {
+
+    }
+  }, [images]);
 
   return (
     <div>
       <br />
 
       <h1>This is the sandbox page, any functionality here is experimental</h1>
+
+      <Button variant="primary" onClick={generateImageCarousel}>
+        Get images
+      </Button>
+
+      <br />
 
       <Button variant="primary" onClick={signupResolver}>
         Create new user
