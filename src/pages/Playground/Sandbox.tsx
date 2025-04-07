@@ -23,14 +23,15 @@ import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
+import { FileData } from "../../@types";
 
 const Sandbox = () => {
   // Dummy refs and states
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>();
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
-  const [files, setFiles] = useState<string[]>([]);
-  const [images, setImages] = useState<string[]>();
+  const [files, setFiles] = useState<FileData[]>([]);
+  const [images, setImages] = useState<string[]>([]);
 
   // Check if the user is authenticated, if they are, then redirect to the previous page
   const appContextInstance = useContext(AppContext);
@@ -189,9 +190,6 @@ const Sandbox = () => {
       }),
     });
 
-    console.log("Result\n");
-    console.log(result);
-
     if (result.status === 200) {
       const {
         data: {
@@ -203,15 +201,29 @@ const Sandbox = () => {
     }
   };
 
-  // generateImageCarousel();
-
   useEffect(() => {
-    try {
+    const retrieveImages = async () => {
+      try {
+        if (files.length > 0) {
+          const renderableImages = files.map(async (file) => {
+            return await require(`../../images/${file.fileName}`);
+          });
 
-    } catch (error) {
+          console.log("Renderable images\n");
+          console.log(renderableImages);
+          setImages(renderableImages as unknown as string[]);
+        }
+      } catch (error) {
+        console.log("Error assigning your files, please read below\n");
+        console.log(error);
+      }
+    };
 
-    }
-  }, [images]);
+    retrieveImages();
+  }, [files]);
+
+  console.log("Images");
+  console.log(images);
 
   return (
     <div>
@@ -222,6 +234,14 @@ const Sandbox = () => {
       <Button variant="primary" onClick={generateImageCarousel}>
         Get images
       </Button>
+
+      <ul>
+        {images.map((image) => (
+          <li key={image}>
+            <img alt="carousel image" src={image} />
+          </li>
+        ))}
+      </ul>
 
       <br />
 
