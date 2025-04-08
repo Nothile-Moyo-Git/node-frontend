@@ -205,13 +205,15 @@ const Sandbox = () => {
     const retrieveImages = async () => {
       try {
         if (files.length > 0) {
-          const renderableImages = files.map(async (file) => {
-            return await require(`../../images/${file.fileName}`);
-          });
+          const renderableImages = await Promise.all(
+            files.map(async (file: FileData) => {
+              return await require(`../../images/${file.fileName}`);
+            }),
+          );
 
           console.log("Renderable images\n");
           console.log(renderableImages);
-          setImages(renderableImages as unknown as string[]);
+          setImages(renderableImages);
         }
       } catch (error) {
         console.log("Error assigning your files, please read below\n");
@@ -236,8 +238,8 @@ const Sandbox = () => {
       </Button>
 
       <ul>
-        {images.map((image) => (
-          <li key={image}>
+        {images.map((image, index) => (
+          <li key={files[index].fileName}>
             <img alt="carousel image" src={image} />
           </li>
         ))}
