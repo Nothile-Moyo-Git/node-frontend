@@ -23,7 +23,9 @@ import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
+import { Carousel } from "react-responsive-carousel";
 import { FileData } from "../../@types";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Sandbox = () => {
   // Dummy refs and states
@@ -193,7 +195,7 @@ const Sandbox = () => {
     if (result.status === 200) {
       const {
         data: {
-          GetFilePathsResponse: { files: files },
+          GetFilePathsResponse: { files },
         },
       } = await result.json();
 
@@ -211,8 +213,6 @@ const Sandbox = () => {
             }),
           );
 
-          console.log("Renderable images\n");
-          console.log(renderableImages);
           setImages(renderableImages);
         }
       } catch (error) {
@@ -237,13 +237,13 @@ const Sandbox = () => {
         Get images
       </Button>
 
-      <ul>
+      <Carousel autoPlay={true} centerMode={true} swipeable={true}>
         {images.map((image, index) => (
-          <li key={files[index].fileName}>
-            <img alt="carousel image" src={image} />
-          </li>
+          <div key={files[index].fileName}>
+            <img alt={files[index].fileName} src={image} />
+          </div>
         ))}
-      </ul>
+      </Carousel>
 
       <br />
 
