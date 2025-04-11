@@ -234,10 +234,10 @@ const Sandbox = () => {
       <h1>This is the sandbox page, any functionality here is experimental</h1>
 
       <Button variant="primary" onClick={generateImageCarousel}>
-        Get images
+        Generate Carousel
       </Button>
 
-      <Carousel autoPlay={true} centerMode={true} swipeable={true}>
+      <Carousel autoPlay={true} centerMode={true}>
         {images.map((image, index) => (
           <div key={files[index].fileName}>
             <img alt={files[index].fileName} src={image} />
