@@ -8,13 +8,7 @@
  *
  */
 
-import React, {
-  FormEvent,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { FormEvent, useContext, useRef, useState } from "react";
 import Button from "../../components/button/Button";
 import Form from "../../components/form/Form";
 import Field from "../../components/form/Field";
@@ -23,17 +17,13 @@ import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
-import { Carousel } from "react-responsive-carousel";
-import { FileData } from "../../@types";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import CarouselWrapper from "../../components/carousel/Carousel";
 
 const Sandbox = () => {
   // Dummy refs and states
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>();
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
-  const [files, setFiles] = useState<FileData[]>([]);
-  const [images, setImages] = useState<string[]>([]);
 
   // Check if the user is authenticated, if they are, then redirect to the previous page
   const appContextInstance = useContext(AppContext);
@@ -168,82 +158,13 @@ const Sandbox = () => {
     console.log(data);
   };
 
-  // Render images
-  const generateImageCarousel = async () => {
-    // Get a list of files
-    const result = await fetch(`${appContextInstance?.baseUrl}/graphql/files`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query: `
-                    query GetFilePathsResponse{
-                        GetFilePathsResponse{
-                            status
-                            files {
-                              fileName
-                              filePath
-                            }
-                        }
-                    }
-                `,
-      }),
-    });
-
-    if (result.status === 200) {
-      const {
-        data: {
-          GetFilePathsResponse: { files },
-        },
-      } = await result.json();
-
-      setFiles(files);
-    }
-  };
-
-  useEffect(() => {
-    const retrieveImages = async () => {
-      try {
-        if (files.length > 0) {
-          const renderableImages = await Promise.all(
-            files.map(async (file: FileData) => {
-              return await require(`../../images/${file.fileName}`);
-            }),
-          );
-
-          setImages(renderableImages);
-        }
-      } catch (error) {
-        console.log("Error assigning your files, please read below\n");
-        console.log(error);
-      }
-    };
-
-    retrieveImages();
-  }, [files]);
-
-  console.log("Images");
-  console.log(images);
-
   return (
     <div>
       <br />
 
       <h1>This is the sandbox page, any functionality here is experimental</h1>
 
-      <Button variant="primary" onClick={generateImageCarousel}>
-        Generate Carousel
-      </Button>
-
-      <Carousel autoPlay={true} centerMode={true}>
-        {images.map((image, index) => (
-          <div key={files[index].fileName}>
-            <img alt={files[index].fileName} src={image} />
-          </div>
-        ))}
-      </Carousel>
+      <CarouselWrapper />
 
       <br />
 
