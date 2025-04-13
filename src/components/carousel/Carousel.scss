@@ -1,11 +1,38 @@
+@use "../../scss/partials/branding" as branding;
+
 .carousel {
 
-    &-root{
+    &-root {
         max-width: 600px;
         margin: 0 auto;
+        width: calc(100% - 2rem);
     }
 
-    img{
-        max-width: 300px;
+    .carousel-status {
+        color: branding.$brand_color_three__alt_2;
+    }
+
+    img {
+        object-fit: cover;
+        max-height: 500px;
+        height: 100%;
+    }
+
+    .thumb {
+        width: 80px;
+        height: 100px;
+    }
+
+    .control-dots {
+        bottom: -0.85rem;
+
+        .dot {
+            background-color: branding.$brand_color_three;
+            border: 1px solid branding.$brand_color_three__alt_2;
+        }
+    }
+
+    .slider-wrapper {
+        height: 100%;
     }
 }

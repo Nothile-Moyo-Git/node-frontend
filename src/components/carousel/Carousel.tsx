@@ -60,7 +60,7 @@ const CarouselWrapper: FC = () => {
     };
 
     generateImageSources();
-  }, []);
+  }, [appContextInstance]);
 
   useEffect(() => {
     const retrieveImages = async () => {
@@ -87,6 +87,7 @@ const CarouselWrapper: FC = () => {
     <Carousel
       autoPlay={true}
       centerMode={true}
+      dynamicHeight={false}
       infiniteLoop={true}
       interval={5000}
       useKeyboardArrows={true}
@@ -100,6 +101,7 @@ const CarouselWrapper: FC = () => {
       {images.map((image, index) => (
         <div key={files[index].fileName}>
           <img alt={files[index].fileName} src={image} />
+          <p></p>
         </div>
       ))}
     </Carousel>
