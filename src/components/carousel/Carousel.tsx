@@ -93,15 +93,16 @@ const CarouselWrapper: FC = () => {
       useKeyboardArrows={true}
       showArrows={true}
       swipeable={true}
-      swipeScrollTolerance={5}
+      swipeScrollTolerance={15}
       stopOnHover={true}
       emulateTouch={true}
       centerSlidePercentage={100}
+      autoFocus={false}
     >
       {images.map((image, index) => (
         <div key={files[index].fileName}>
           <img alt={files[index].fileName} src={image} />
-          <p></p>
+          <p className="legend">{files[index].fileName}</p>
         </div>
       ))}
     </Carousel>
