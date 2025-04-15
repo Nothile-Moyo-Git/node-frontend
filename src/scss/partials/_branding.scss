@@ -13,6 +13,7 @@ $brand_color_three__alt_1: #3A94C5;
 $brand_color_three__alt_2: #54AEDE;
 $brand_color_three__alt_3: #66B7E2;
 $brand_color_three__alt_4: #3484AF;
+$brand_color_three__alt_5: #41A5DB66;
 
 $brand_color_four: #db5d41;
 $brand_color_four__alt_1: #C5533A;
@@ -54,6 +55,7 @@ $box_shadow_purple: ( 0px 0px 10px 0px $brand_color_two );
 $box_shadow_green: ( 0px 0px 10px 0px $brand_color_five );
 $box_shadow_cyan: ( 0px 0px 10px 0px $brand_color_six );
 $box_shadow_blue: ( 0px 0px 8px 0px $brand_color_three );
+$box_shadow_blue__alt_1: ( 0px 0px 4px 0px $brand_color_three__alt_5 );
 
 // Backdrops
 $backdrop_color_one: rgba( 30, 32, 42, 0.97 );

@@ -1,4 +1,5 @@
 @use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/animations" as animations;
 
 .carousel {
 
@@ -55,8 +56,14 @@
             height: 100%;
 
             .legend {
-                opacity: 0.75;
-                box-shadow: branding.$toggle_shadow;
+                opacity: 1;
+                transition: animations.$standard_transition;
+                background: branding.$brand_color_three__alt_5;
+                box-shadow: branding.$box_shadow_blue__alt_1;
+
+                &:hover{
+                    background: branding.$brand_color_three;
+                }
             }
         }
     }
