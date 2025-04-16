@@ -25,7 +25,35 @@
     }
 
     &.carousel-slider {
+
+        &:hover {
+
+            .legend{
+                opacity: 1;
+            }
+        }
+
+        .slide {
+            cursor: grab;
+        }
+        
         .control{
+
+            &-prev {
+                &.control-arrow {
+                    &:before {
+                        border-right: 8px solid branding.$brand_color_three;
+                    }
+                }
+            }
+
+            &-next {
+                &.control-arrow {
+                    &:before {
+                        border-left: 8px solid branding.$brand_color_three;
+                    }
+                }
+            }
 
             &-arrow {
                 color: red;
@@ -56,14 +84,10 @@
             height: 100%;
 
             .legend {
-                opacity: 1;
                 transition: animations.$standard_transition;
                 background: branding.$brand_color_three__alt_5;
                 box-shadow: branding.$box_shadow_blue__alt_1;
-
-                &:hover{
-                    background: branding.$brand_color_three;
-                }
+                opacity: 0.65;
             }
         }
     }
