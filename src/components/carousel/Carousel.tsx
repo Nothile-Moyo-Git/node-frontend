@@ -85,19 +85,24 @@ const CarouselWrapper: FC = () => {
 
   return (
     <Carousel
-      autoPlay={true}
+      autoFocus={false}
+      autoPlay={false}
       centerMode={true}
+      centerSlidePercentage={100}
       dynamicHeight={false}
+      emulateTouch={true}
       infiniteLoop={true}
       interval={5000}
-      useKeyboardArrows={true}
+      preventMovementUntilSwipeScrollTolerance={true}
       showArrows={true}
+      showIndicators={true}
+      showStatus={true}
+      showThumbs={true}
       swipeable={true}
-      swipeScrollTolerance={15}
+      swipeScrollTolerance={5}
       stopOnHover={true}
-      emulateTouch={true}
-      centerSlidePercentage={100}
-      autoFocus={false}
+      transitionTime={500}
+      useKeyboardArrows={true}
     >
       {images.map((image, index) => (
         <div key={files[index].fileName}>
