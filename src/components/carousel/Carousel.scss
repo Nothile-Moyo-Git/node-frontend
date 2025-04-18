@@ -3,6 +3,8 @@
 
 .carousel {
 
+    overflow: hidden;
+
     &-root {
         max-width: 600px;
         margin: 0 auto;
@@ -17,6 +19,7 @@
         object-fit: cover;
         max-height: 500px;
         height: 100%;
+        user-select: none;
     }
 
     .thumb {
@@ -34,7 +37,7 @@
         }
 
         .slide {
-            cursor: grab;
+            cursor: pointer;
         }
         
         .control{
@@ -88,6 +91,7 @@
                 background: branding.$brand_color_three__alt_5;
                 box-shadow: branding.$box_shadow_blue__alt_1;
                 opacity: 0.65;
+                user-select: none;
             }
         }
     }

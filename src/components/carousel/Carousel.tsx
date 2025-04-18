@@ -20,6 +20,7 @@ const CarouselWrapper: FC = () => {
 
   const appContextInstance = useContext(AppContext);
 
+  // Get a list of our files from the backend with an API request
   useEffect(() => {
     // Render images
     const generateImageSources = async () => {
@@ -62,6 +63,7 @@ const CarouselWrapper: FC = () => {
     generateImageSources();
   }, [appContextInstance]);
 
+  // Generate our images so we can render them in the carousel, we do this here because we need the files state to be updated
   useEffect(() => {
     const retrieveImages = async () => {
       try {
@@ -83,10 +85,11 @@ const CarouselWrapper: FC = () => {
     retrieveImages();
   }, [files]);
 
-  return (
+  return images.length > 0 ? (
     <Carousel
+      axis={"horizontal"}
       autoFocus={false}
-      autoPlay={false}
+      autoPlay={true}
       centerMode={true}
       centerSlidePercentage={100}
       dynamicHeight={false}
@@ -99,18 +102,25 @@ const CarouselWrapper: FC = () => {
       showStatus={true}
       showThumbs={true}
       swipeable={true}
-      swipeScrollTolerance={5}
+      swipeScrollTolerance={0}
       stopOnHover={true}
       transitionTime={500}
       useKeyboardArrows={true}
     >
       {images.map((image, index) => (
         <div key={files[index].fileName}>
-          <img alt={files[index].fileName} src={image} />
+          <img
+            alt={files[index].fileName}
+            onDragStart={(e) => e.preventDefault()}
+            onMouseDown={(e) => e.preventDefault()}
+            src={image}
+          />
           <p className="legend">{files[index].fileName}</p>
         </div>
       ))}
     </Carousel>
+  ) : (
+    <div></div>
   );
 };
 
