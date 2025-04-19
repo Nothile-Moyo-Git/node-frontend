@@ -13,6 +13,7 @@ import { Carousel } from "react-responsive-carousel";
 import { AppContext } from "../../context/AppContext";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./Carousel.scss";
+import LoadingSpinner from "../loader/LoadingSpinner";
 
 const CarouselWrapper: FC = () => {
   const [files, setFiles] = useState<FileData[]>([]);
@@ -89,28 +90,29 @@ const CarouselWrapper: FC = () => {
     <Carousel
       axis={"horizontal"}
       autoFocus={false}
-      autoPlay={true}
-      centerMode={true}
+      autoPlay
+      centerMode
       centerSlidePercentage={100}
       dynamicHeight={false}
-      emulateTouch={true}
-      infiniteLoop={true}
+      emulateTouch
+      infiniteLoop
       interval={5000}
-      preventMovementUntilSwipeScrollTolerance={true}
-      showArrows={true}
-      showIndicators={true}
-      showStatus={true}
-      showThumbs={true}
-      swipeable={true}
-      swipeScrollTolerance={0}
-      stopOnHover={true}
+      preventMovementUntilSwipeScrollTolerance
+      showArrows
+      showIndicators
+      showStatus
+      showThumbs
+      swipeable
+      swipeScrollTolerance={5}
+      stopOnHover
       transitionTime={500}
-      useKeyboardArrows={true}
+      useKeyboardArrows
     >
       {images.map((image, index) => (
-        <div key={files[index].fileName}>
+        <div tabIndex={-1} key={files[index].fileName} draggable={false}>
           <img
             alt={files[index].fileName}
+            draggable={false}
             onDragStart={(e) => e.preventDefault()}
             onMouseDown={(e) => e.preventDefault()}
             src={image}
@@ -120,7 +122,7 @@ const CarouselWrapper: FC = () => {
       ))}
     </Carousel>
   ) : (
-    <div></div>
+    <LoadingSpinner />
   );
 };
 
