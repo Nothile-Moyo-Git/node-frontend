@@ -4,6 +4,7 @@
 .carousel {
 
     overflow: hidden;
+    touch-action: pan-y;
 
     &-root {
         max-width: 600px;
@@ -20,6 +21,7 @@
         max-height: 500px;
         height: 100%;
         user-select: none;
+        -webkit-user-drag: none;
     }
 
     .thumb {

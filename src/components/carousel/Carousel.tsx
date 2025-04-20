@@ -88,16 +88,18 @@ const CarouselWrapper: FC = () => {
 
   return images.length > 0 ? (
     <Carousel
-      axis={"horizontal"}
+      animationHandler="slide"
+      axis="horizontal"
       autoFocus={false}
-      autoPlay
       centerMode
       centerSlidePercentage={100}
-      dynamicHeight={false}
+      dynamicHeight={true}
       emulateTouch
       infiniteLoop
       interval={5000}
-      preventMovementUntilSwipeScrollTolerance
+      onChange={() => {}}
+      preventMovementUntilSwipeScrollTolerance={false}
+      selectedItem={0}
       showArrows
       showIndicators
       showStatus
@@ -107,6 +109,8 @@ const CarouselWrapper: FC = () => {
       stopOnHover
       transitionTime={500}
       useKeyboardArrows
+      verticalSwipe="standard"
+      width="100%"
     >
       {images.map((image, index) => (
         <div tabIndex={-1} key={files[index].fileName} draggable={false}>
