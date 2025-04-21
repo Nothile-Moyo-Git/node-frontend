@@ -97,16 +97,15 @@ const CarouselWrapper: FC = () => {
       emulateTouch
       infiniteLoop
       interval={5000}
-      onChange={() => {}}
       preventMovementUntilSwipeScrollTolerance={false}
       selectedItem={0}
       showArrows
       showIndicators
       showStatus
       showThumbs
+      stopOnHover
       swipeable
       swipeScrollTolerance={5}
-      stopOnHover
       transitionTime={500}
       useKeyboardArrows
       verticalSwipe="standard"

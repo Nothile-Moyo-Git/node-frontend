@@ -14,6 +14,7 @@
 
     .carousel-status {
         color: branding.$brand_color_three__alt_2;
+        font-size: 14px;
     }
 
     img {
@@ -62,7 +63,6 @@
             }
 
             &-arrow {
-                color: red;
     
                 &:hover {
                     background: none;
@@ -93,6 +93,7 @@
                 transition: animations.$standard_transition;
                 background: branding.$brand_color_three__alt_5;
                 box-shadow: branding.$box_shadow_blue__alt_1;
+                font-size: 14px;
                 opacity: 0.65;
                 user-select: none;
             }

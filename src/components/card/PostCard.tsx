@@ -67,7 +67,12 @@ export const PostCard: FC<ComponentProps> = ({
 
   return (
     <article className="article">
-      <img src={image} alt={post?.title} className="article__image" />
+      <img
+        src={image}
+        alt={post?.title}
+        className="article__image"
+        draggable={false}
+      />
 
       <div className="article__content">
         <h2 className="article__title">{post?.title}</h2>
