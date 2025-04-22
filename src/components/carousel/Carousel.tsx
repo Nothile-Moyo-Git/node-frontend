@@ -113,13 +113,7 @@ const CarouselWrapper: FC = () => {
     >
       {images.map((image, index) => (
         <div tabIndex={-1} key={files[index].fileName} draggable={false}>
-          <img
-            alt={files[index].fileName}
-            draggable={false}
-            onDragStart={(e) => e.preventDefault()}
-            onMouseDown={(e) => e.preventDefault()}
-            src={image}
-          />
+          <img alt={files[index].fileName} draggable={false} src={image} />
           <p className="legend">{files[index].fileName}</p>
         </div>
       ))}
