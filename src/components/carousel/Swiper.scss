@@ -1,0 +1,14 @@
+.swiper {
+    display: flex;
+    max-width: 600px;
+    width: calc(100% - 2rem);
+    margin: auto;
+
+    img {
+        max-width: 600px;
+        max-height: 500px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}

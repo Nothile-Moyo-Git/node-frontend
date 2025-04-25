@@ -8,14 +8,20 @@
  */
 
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { FC, useContext, useState, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
-
-import "swiper/scss";
-import "swiper/scss/navigation";
-import "swiper/scss/pagination";
 import { FileData } from "../../@types";
 import LoadingSpinner from "../loader/LoadingSpinner";
+
+// Default swiper styles
+import "swiper/scss";
+import "swiper/scss/pagination";
+import "swiper/scss/navigation";
+
+// My styles, these override the swiper styles since they're defined later
+// Make sure that these are scoped more than the default styling if the override doesn't work
+import "./Swiper.scss";
 
 const Carousel: FC = () => {
   const [files, setFiles] = useState<FileData[]>([]);
@@ -87,8 +93,18 @@ const Carousel: FC = () => {
 
     retrieveImages();
   }, [files]);
+
   return images.length > 0 ? (
-    <Swiper slidesPerView={1}>
+    <Swiper
+      autoplay={{
+        delay: 5000,
+        pauseOnMouseEnter: true,
+      }}
+      centeredSlides={true}
+      modules={[Pagination, Navigation, Autoplay]}
+      navigation={true}
+      slidesPerView={1}
+    >
       {images.map((image, index) => (
         <SwiperSlide key={files[index].fileName}>
           <img alt={files[index].fileName} draggable={false} src={image} />
