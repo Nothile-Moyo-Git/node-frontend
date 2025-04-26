@@ -7,7 +7,7 @@
  * Wraps an article in a card component in order to be rendered in a list
  */
 
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { FC, useContext, useState, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
@@ -75,6 +75,7 @@ const Carousel: FC = () => {
   // Generate our images so we can render them in the carousel, we do this here because we need the files state to be updated
   useEffect(() => {
     const retrieveImages = async () => {
+      // Import the static images in node
       try {
         if (files.length > 0) {
           const renderableImages = await Promise.all(
@@ -94,15 +95,26 @@ const Carousel: FC = () => {
     retrieveImages();
   }, [files]);
 
+  // We update our index in state so we can keep our button to choose a slide in place instead of rendering multiple buttons
+  const updateSwiperIndexHandler = (swiper: SwiperClass) => {
+    console.log("Index :" + swiper.realIndex + "\n");
+  };
+
   return images.length > 0 ? (
     <Swiper
       autoplay={{
         delay: 5000,
         pauseOnMouseEnter: true,
       }}
-      centeredSlides={true}
+      centeredSlides
+      loop={true}
       modules={[Pagination, Navigation, Autoplay]}
-      navigation={true}
+      navigation
+      onRealIndexChange={updateSwiperIndexHandler}
+      pagination={{
+        type: "bullets",
+        clickable: true,
+      }}
       slidesPerView={1}
     >
       {images.map((image, index) => (
