@@ -1,5 +1,5 @@
 /**
- * Date Created : 12/04/2025
+ * Date Created : 24/04/2025
  *
  * Author : Nothile Moyo
  *
@@ -7,17 +7,30 @@
  * Wraps an article in a card component in order to be rendered in a list
  */
 
-import { FC, useContext, useEffect, useState } from "react";
-import { FileData } from "../../@types";
-import { Carousel } from "react-responsive-carousel";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import React, { FC, useContext, useState, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import "./Carousel.scss";
+import { FileData } from "../../@types";
 import LoadingSpinner from "../loader/LoadingSpinner";
+import Button from "../button/Button";
 
-const CarouselWrapper: FC = () => {
+// Default swiper styles
+import "swiper/scss";
+import "swiper/scss/pagination";
+import "swiper/scss/navigation";
+
+// My styles, these override the swiper styles since they're defined later
+// Make sure that these are scoped more than the default styling if the override doesn't work
+import "./Carousel.scss";
+
+const Carousel: FC = () => {
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
+
+  // We store the index in state since we want our button to be outside of the swiper carousel
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [chosenImageIndex, setChosenImageIndex] = useState<number | null>(null);
 
   const appContextInstance = useContext(AppContext);
 
@@ -36,16 +49,16 @@ const CarouselWrapper: FC = () => {
           },
           body: JSON.stringify({
             query: `
-                            query GetFilePathsResponse{
-                                GetFilePathsResponse{
-                                    status
-                                    files {
-                                    fileName
-                                    filePath
-                                    }
-                                }
-                            }
-                        `,
+                              query GetFilePathsResponse{
+                                  GetFilePathsResponse{
+                                      status
+                                      files {
+                                      fileName
+                                      filePath
+                                      }
+                                  }
+                              }
+                          `,
           }),
         },
       );
@@ -67,6 +80,7 @@ const CarouselWrapper: FC = () => {
   // Generate our images so we can render them in the carousel, we do this here because we need the files state to be updated
   useEffect(() => {
     const retrieveImages = async () => {
+      // Import the static images in node
       try {
         if (files.length > 0) {
           const renderableImages = await Promise.all(
@@ -86,41 +100,53 @@ const CarouselWrapper: FC = () => {
     retrieveImages();
   }, [files]);
 
+  // We update our index in state so we can keep our button to choose a slide in place instead of rendering multiple buttons
+  const updateSwiperIndexHandler = (swiper: SwiperClass) => {
+    setCurrentIndex(swiper.realIndex);
+  };
+
+  const setChosenImageHandler = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setChosenImageIndex(currentIndex);
+  };
+
   return images.length > 0 ? (
-    <Carousel
-      animationHandler="slide"
-      axis="horizontal"
-      autoFocus={false}
-      centerMode
-      centerSlidePercentage={100}
-      dynamicHeight={true}
-      emulateTouch
-      infiniteLoop
-      interval={5000}
-      preventMovementUntilSwipeScrollTolerance={false}
-      selectedItem={0}
-      showArrows
-      showIndicators
-      showStatus
-      showThumbs
-      stopOnHover
-      swipeable
-      swipeScrollTolerance={5}
-      transitionTime={500}
-      useKeyboardArrows
-      verticalSwipe="standard"
-      width="100%"
-    >
-      {images.map((image, index) => (
-        <div tabIndex={-1} key={files[index].fileName} draggable={false}>
-          <img alt={files[index].fileName} draggable={false} src={image} />
-          <p className="legend">{files[index].fileName}</p>
-        </div>
-      ))}
-    </Carousel>
+    <section className="carousel">
+      <div className="carousel__chosen-image">
+        <Button variant="primary" onClick={setChosenImageHandler}>
+          Choose this image
+        </Button>
+        <p>
+          Chosen image:
+          {chosenImageIndex ? ` ${files[chosenImageIndex].fileName}` : " None"}
+        </p>
+      </div>
+      <Swiper
+        autoplay={{
+          delay: 5000,
+          pauseOnMouseEnter: true,
+        }}
+        centeredSlides
+        loop={true}
+        modules={[Pagination, Navigation, Autoplay]}
+        navigation
+        onRealIndexChange={updateSwiperIndexHandler}
+        pagination={{
+          type: "bullets",
+          clickable: true,
+        }}
+        slidesPerView={1}
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={files[index].fileName}>
+            <img alt={files[index].fileName} draggable={false} src={image} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </section>
   ) : (
     <LoadingSpinner />
   );
 };
 
-export default CarouselWrapper;
+export default Carousel;

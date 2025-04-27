@@ -17,7 +17,7 @@ import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
-import Carousel from "../../components/carousel/Swiper";
+import Carousel from "../../components/carousel/Carousel";
 
 const Sandbox = () => {
   // Dummy refs and states
