@@ -30,7 +30,7 @@ const Carousel: FC = () => {
 
   // We store the index in state since we want our button to be outside of the swiper carousel
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [chosenImageIndex, setChosenImageIndex] = useState<number | null>(null);
+  const [chosenImageIndex, setChosenImageIndex] = useState<number | null>();
 
   const appContextInstance = useContext(AppContext);
 
@@ -118,7 +118,9 @@ const Carousel: FC = () => {
         </Button>
         <p>
           Chosen image:
-          {chosenImageIndex ? ` ${files[chosenImageIndex].fileName}` : " None"}
+          {chosenImageIndex || chosenImageIndex === 0
+            ? ` ${files[chosenImageIndex].fileName}`
+            : " None"}
         </p>
       </div>
       <Swiper
@@ -139,7 +141,14 @@ const Carousel: FC = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={files[index].fileName}>
-            <img alt={files[index].fileName} draggable={false} src={image} />
+            <img
+              alt={files[index].fileName}
+              className={
+                (chosenImageIndex && chosenImageIndex === index) ?? "chosen"
+              }
+              draggable={false}
+              src={image}
+            />
           </SwiperSlide>
         ))}
       </Swiper>
