@@ -8,7 +8,7 @@
  */
 
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import { Pagination, Navigation, Autoplay, Thumbs } from "swiper/modules";
 import React, { FC, useContext, useState, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
 import { FileData } from "../../@types";
@@ -19,14 +19,17 @@ import Button from "../button/Button";
 import "swiper/scss";
 import "swiper/scss/pagination";
 import "swiper/scss/navigation";
+import "swiper/scss/thumbs";
 
 // My styles, these override the swiper styles since they're defined later
 // Make sure that these are scoped more than the default styling if the override doesn't work
 import "./Carousel.scss";
 
 const Carousel: FC = () => {
+  // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // We store the index in state since we want our button to be outside of the swiper carousel
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -130,21 +133,30 @@ const Carousel: FC = () => {
         }}
         centeredSlides
         loop={true}
-        modules={[Pagination, Navigation, Autoplay]}
+        modules={[Pagination, Navigation, Autoplay, Thumbs]}
         navigation
         onRealIndexChange={updateSwiperIndexHandler}
+        onSwiper={setThumbsSwiper}
         pagination={{
           type: "bullets",
           clickable: true,
         }}
         slidesPerView={1}
+        thumbs={{
+          multipleActiveThumbs: false,
+          autoScrollOffset: 0,
+          swiper: thumbsSwiper,
+        }}
+        watchSlidesProgress
       >
         {images.map((image, index) => (
           <SwiperSlide key={files[index].fileName}>
             <img
               alt={files[index].fileName}
               className={
-                (chosenImageIndex && chosenImageIndex === index) ?? "chosen"
+                chosenImageIndex && chosenImageIndex === index
+                  ? "swiper__image swiper__image--chosen"
+                  : "swiper__image"
               }
               draggable={false}
               src={image}
