@@ -15,6 +15,9 @@ import { FileData } from "../../@types";
 import LoadingSpinner from "../loader/LoadingSpinner";
 import Button from "../button/Button";
 
+// Types
+import type { Swiper as SwiperI } from "swiper/types";
+
 // Default swiper styles
 import "swiper/scss";
 import "swiper/scss/pagination";
@@ -29,7 +32,9 @@ const Carousel: FC = () => {
   // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperI | string | null>(
+    null,
+  );
 
   // We store the index in state since we want our button to be outside of the swiper carousel
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -142,11 +147,6 @@ const Carousel: FC = () => {
           clickable: true,
         }}
         slidesPerView={1}
-        thumbs={{
-          multipleActiveThumbs: false,
-          autoScrollOffset: 0,
-          swiper: thumbsSwiper,
-        }}
         watchSlidesProgress
       >
         {images.map((image, index) => (
