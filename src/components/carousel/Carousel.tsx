@@ -8,7 +8,13 @@
  */
 
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, Autoplay, Thumbs } from "swiper/modules";
+import {
+  Pagination,
+  Navigation,
+  Autoplay,
+  Thumbs,
+  FreeMode,
+} from "swiper/modules";
 import React, { FC, useContext, useState, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
 import { FileData } from "../../@types";
@@ -131,6 +137,7 @@ const Carousel: FC = () => {
             : " None"}
         </p>
       </div>
+      {/* Main carousel */}
       <Swiper
         autoplay={{
           delay: 5000,
@@ -141,12 +148,36 @@ const Carousel: FC = () => {
         modules={[Pagination, Navigation, Autoplay, Thumbs]}
         navigation
         onRealIndexChange={updateSwiperIndexHandler}
-        onSwiper={setThumbsSwiper}
         pagination={{
           type: "bullets",
           clickable: true,
         }}
         slidesPerView={1}
+        thumbs={{ swiper: thumbsSwiper }}
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={files[index].fileName}>
+            {chosenImageIndex}
+            {index}
+            <img
+              alt={files[index].fileName}
+              className={
+                chosenImageIndex && chosenImageIndex == index
+                  ? "swiper__image swiper__image--chosen"
+                  : "swiper__image"
+              }
+              draggable={false}
+              src={image}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      {/* Carousel thumbnails */}
+      <Swiper
+        modules={[Thumbs, FreeMode, Navigation]}
+        onSwiper={setThumbsSwiper}
+        spaceBetween={10}
+        slidesPerView={5}
         watchSlidesProgress
       >
         {images.map((image, index) => (
@@ -155,8 +186,8 @@ const Carousel: FC = () => {
               alt={files[index].fileName}
               className={
                 chosenImageIndex && chosenImageIndex === index
-                  ? "swiper__image swiper__image--chosen"
-                  : "swiper__image"
+                  ? "swiper__thumbnail swiper__thumbnail--chosen"
+                  : "swiper__thumbnail"
               }
               draggable={false}
               src={image}
