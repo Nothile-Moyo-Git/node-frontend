@@ -48,3 +48,8 @@
         @content;
     }
 }
+
+@mixin elementOutline(){
+    outline: 2px solid branding.$brand_color_three;
+    outline-offset: -3px;
+}

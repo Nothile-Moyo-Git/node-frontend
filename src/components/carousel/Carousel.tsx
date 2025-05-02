@@ -157,12 +157,10 @@ const Carousel: FC = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={files[index].fileName}>
-            {chosenImageIndex}
-            {index}
             <img
               alt={files[index].fileName}
               className={
-                chosenImageIndex && chosenImageIndex == index
+                chosenImageIndex === index
                   ? "swiper__image swiper__image--chosen"
                   : "swiper__image"
               }
@@ -185,7 +183,7 @@ const Carousel: FC = () => {
             <img
               alt={files[index].fileName}
               className={
-                chosenImageIndex && chosenImageIndex === index
+                chosenImageIndex === index
                   ? "swiper__thumbnail swiper__thumbnail--chosen"
                   : "swiper__thumbnail"
               }

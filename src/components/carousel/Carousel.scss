@@ -29,13 +29,18 @@
 
         &--chosen {
             outline: 2px solid branding.$brand_color_three;
-            outline-offset: -2px;
+            outline-offset: -3px;
         }
     }
 
     &__thumbnail {
         width: 100%;
         object-fit: cover;
-        max-height: 100px; 
+        max-height: 100px;
+
+        &--chosen {
+            outline: 2px solid branding.$brand_color_three;
+            outline-offset: -3px;
+        }
     }
 }
