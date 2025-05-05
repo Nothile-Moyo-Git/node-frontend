@@ -1,4 +1,5 @@
 @use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/animations" as animations;
 
 .carousel {
     display: flex;
@@ -21,11 +22,14 @@
     width: 100%;
     margin: auto;
 
-    &__image {
+    &__image { 
         max-height: 500px;
         width: 100%;
         height: 100%; 
         object-fit: cover;
+        cursor: pointer;
+        user-select: none;
+        transition: animations.$quick_transition;
 
         &--chosen {
             outline: 2px solid branding.$brand_color_three;
@@ -37,10 +41,27 @@
         width: 100%;
         object-fit: cover;
         max-height: 100px;
+        cursor: pointer;
+        transition: animations.$quick_transition;
+        user-select: none;
 
         &--chosen {
             outline: 2px solid branding.$brand_color_three;
             outline-offset: -3px;
+        }
+    }
+
+    &-button-next, &-button-prev {
+        color: branding.$brand_color_three;
+        opacity: 0.8;
+
+        &:after {
+            font-size: 30px;
+        }
+
+        &:hover {
+            color: branding.$brand_color_three__alt_2;
+            opacity: 1;
         }
     }
 }
