@@ -30,10 +30,13 @@ import ImagePreview from "../../components/form/ImagePreview";
 import { fileUploadHandler, generateBase64FromImage } from "../../util/file";
 
 import "./CreatePost.scss";
+import Carousel from "../../components/carousel/Carousel";
 
 export const CreatePostComponent: FC = () => {
   // Check if the user is authenticated, if they are, then redirect to the previous page
   const appContextInstance = useContext(AppContext);
+
+  const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
   // Instantiate the navigation object
   const navigate = useNavigate();
@@ -218,25 +221,31 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        <Field>
-          <Label
-            htmlFor="imageUrl"
-            id="imageUrlLabel"
-            error={!isFileValid}
-            errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
-          >
-            Image*
-          </Label>
-          <Input
-            ariaLabelledBy="imageUrlLabel"
-            error={!isFileValid}
-            name="image"
-            onChange={fileUploadEvent}
-            ref={imageUrlRef}
-            required={true}
-            type="file"
-          />
-        </Field>
+        {isDevelopment ? (
+          <Field>
+            <Label
+              htmlFor="imageUrl"
+              id="imageUrlLabel"
+              error={!isFileValid}
+              errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
+            >
+              Image*
+            </Label>
+            <Input
+              ariaLabelledBy="imageUrlLabel"
+              error={!isFileValid}
+              name="image"
+              onChange={fileUploadEvent}
+              ref={imageUrlRef}
+              required={true}
+              type="file"
+            />
+          </Field>
+        ) : (
+          <Field>
+            <Carousel />
+          </Field>
+        )}
 
         {showImagePreview && (
           <Field>
