@@ -31,6 +31,7 @@ import { fileUploadHandler, generateBase64FromImage } from "../../util/file";
 
 import "./CreatePost.scss";
 import Carousel from "../../components/carousel/Carousel";
+import { FileData } from "../../@types";
 
 export const CreatePostComponent: FC = () => {
   // Check if the user is authenticated, if they are, then redirect to the previous page
@@ -53,6 +54,9 @@ export const CreatePostComponent: FC = () => {
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>(null);
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
+
+  // The carousel image data is for production, and we use it as an optional prop
+  const [carouselImage, setCarouselImage] = useState<FileData>();
 
   // Check authentication when component mounts
   useEffect(() => {
@@ -90,6 +94,8 @@ export const CreatePostComponent: FC = () => {
           appContextInstance?.baseUrl ? appContextInstance?.baseUrl : "",
         );
       }
+
+      
 
       // Perform the API request to the backend
       const createPostResponse = await fetch("/graphql/posts", {

@@ -34,7 +34,13 @@ import "swiper/scss/thumbs";
 // Make sure that these are scoped more than the default styling if the override doesn't work
 import "./Carousel.scss";
 
-const Carousel: FC = () => {
+interface ComponentProps {
+  setCarouselImage: React.SetStateAction<FileData>;
+}
+
+const Carousel: FC<ComponentProps> = ({
+  setCarouselImage
+}) => {
   // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
