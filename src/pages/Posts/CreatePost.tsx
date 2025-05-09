@@ -95,7 +95,33 @@ export const CreatePostComponent: FC = () => {
         );
       }
 
-      
+      // Writing our mutations for both production and development, we choose based on the feature flag
+      const createPostProductionMutation = `
+                    mutation PostCreatePostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput!){
+                        PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
+                            post {
+                                _id
+                                fileLastUpdated
+                                fileName
+                                title
+                                imageUrl
+                                content
+                                creator
+                                createdAt
+                                updatedAt
+                            }
+                            user
+                            status
+                            success
+                            message
+                            isContentValid
+                            isTitleValid
+                            isFileValid
+                            isFileTypeValid
+                            isFileSizeValid
+                        }
+                    }
+                    `;
 
       // Perform the API request to the backend
       const createPostResponse = await fetch("/graphql/posts", {
@@ -249,7 +275,7 @@ export const CreatePostComponent: FC = () => {
           </Field>
         ) : (
           <Field>
-            <Carousel />
+            <Carousel setCarouselImage={setCarouselImage} />
           </Field>
         )}
 

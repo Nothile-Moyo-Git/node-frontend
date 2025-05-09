@@ -15,7 +15,14 @@ import {
   Thumbs,
   FreeMode,
 } from "swiper/modules";
-import React, { FC, useContext, useState, useEffect } from "react";
+import {
+  FC,
+  useContext,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { AppContext } from "../../context/AppContext";
 import { FileData } from "../../@types";
 import LoadingSpinner from "../loader/LoadingSpinner";
@@ -35,12 +42,10 @@ import "swiper/scss/thumbs";
 import "./Carousel.scss";
 
 interface ComponentProps {
-  setCarouselImage: React.SetStateAction<FileData>;
+  setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>;
 }
 
-const Carousel: FC<ComponentProps> = ({
-  setCarouselImage
-}) => {
+const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
@@ -125,8 +130,8 @@ const Carousel: FC<ComponentProps> = ({
     setCurrentIndex(swiper.realIndex);
   };
 
-  const setChosenImageHandler = (event: React.MouseEvent) => {
-    event.preventDefault();
+  const setChosenImageHandler = () => {
+    setCarouselImage(files[currentIndex]);
     setChosenImageIndex(currentIndex);
   };
 

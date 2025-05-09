@@ -17,7 +17,6 @@ import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
-import Carousel from "../../components/carousel/Carousel";
 
 const Sandbox = () => {
   // Dummy refs and states
@@ -163,8 +162,6 @@ const Sandbox = () => {
       <br />
 
       <h1>This is the sandbox page, any functionality here is experimental</h1>
-
-      <Carousel />
 
       <br />
 
