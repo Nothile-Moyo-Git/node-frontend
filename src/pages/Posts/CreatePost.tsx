@@ -123,6 +123,8 @@ export const CreatePostComponent: FC = () => {
                     }
                     `;
 
+      const createPostDevelopmentMutation = ``;
+
       // Perform the API request to the backend
       const createPostResponse = await fetch("/graphql/posts", {
         method: "POST",
