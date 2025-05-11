@@ -15,7 +15,7 @@ import {
   Thumbs,
   FreeMode,
 } from "swiper/modules";
-import {
+import React, {
   FC,
   useContext,
   useState,
@@ -130,7 +130,8 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
     setCurrentIndex(swiper.realIndex);
   };
 
-  const setChosenImageHandler = () => {
+  const setChosenImageHandler = (event: React.MouseEvent) => {
+    event.preventDefault();
     setCarouselImage(files[currentIndex]);
     setChosenImageIndex(currentIndex);
   };

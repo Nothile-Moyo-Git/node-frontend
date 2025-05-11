@@ -58,6 +58,10 @@ export const CreatePostComponent: FC = () => {
   // The carousel image data is for production, and we use it as an optional prop
   const [carouselImage, setCarouselImage] = useState<FileData>();
 
+  console.log("Carousel image");
+  console.log(carouselImage);
+  console.log("\n\n");
+
   // Check authentication when component mounts
   useEffect(() => {
     appContextInstance?.validateAuthentication();
@@ -97,7 +101,7 @@ export const CreatePostComponent: FC = () => {
 
       // Writing our mutations for both production and development, we choose based on the feature flag
       const createPostProductionMutation = `
-                    mutation PostCreatePostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput!){
+                    mutation PostCreatePostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput){
                         PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
                             post {
                                 _id
@@ -123,18 +127,8 @@ export const CreatePostComponent: FC = () => {
                     }
                     `;
 
-      const createPostDevelopmentMutation = ``;
-
-      // Perform the API request to the backend
-      const createPostResponse = await fetch("/graphql/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-                    mutation PostCreatePostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput!){
+      const createPostDevelopmentMutation = `
+                    mutation PostCreatePostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput){
                         PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
                             post {
                                 _id
@@ -158,7 +152,17 @@ export const CreatePostComponent: FC = () => {
                             isFileSizeValid
                         }
                     }
-                    `,
+                    `;
+
+      // Perform the API request to the backend
+      const createPostResponse = await fetch("/graphql/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: createPostProductionMutation,
           variables: {
             title: title,
             content: content,
@@ -280,6 +284,8 @@ export const CreatePostComponent: FC = () => {
             <Carousel setCarouselImage={setCarouselImage} />
           </Field>
         )}
+
+        <Carousel setCarouselImage={setCarouselImage} />
 
         {showImagePreview && (
           <Field>
