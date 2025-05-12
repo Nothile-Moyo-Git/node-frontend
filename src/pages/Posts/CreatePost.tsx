@@ -101,7 +101,12 @@ export const CreatePostComponent: FC = () => {
 
       // Writing our mutations for both production and development, we choose based on the feature flag
       const createPostProductionMutation = `
-                    mutation PostCreatePostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput){
+                    mutation PostCreatePostResponse(
+                      $title : String!, 
+                      $content : String!, 
+                      $userId : String!, 
+                      $fileData : FileInput
+                    ){
                         PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
                             post {
                                 _id
@@ -128,7 +133,12 @@ export const CreatePostComponent: FC = () => {
                     `;
 
       const createPostDevelopmentMutation = `
-                    mutation PostCreatePostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput){
+                    mutation PostCreatePostResponse(
+                      $title : String!, 
+                      $content : String!, 
+                      $userId : String!, 
+                      $fileData : FileInput
+                    ){
                         PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
                             post {
                                 _id
@@ -168,12 +178,16 @@ export const CreatePostComponent: FC = () => {
             content: content,
             userId: userId,
             fileData: fileData,
+            carouselFileData: carouselImage ? carouselImage : null,
           },
         }),
       });
 
       // Extract the data from the stream
       const createPostData = await createPostResponse.json();
+
+      console.log("Response");
+      console.log(createPostData);
 
       // Get the GraphQL request response
       const data = createPostData.data.PostCreatePostResponse;
