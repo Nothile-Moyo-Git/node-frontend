@@ -99,45 +99,17 @@ export const CreatePostComponent: FC = () => {
         );
       }
 
-      // Writing our mutations for both production and development, we choose based on the feature flag
-      const createPostProductionMutation = `
-                    mutation PostCreatePostResponse(
-                      $title : String!, 
-                      $content : String!, 
-                      $userId : String!, 
-                      $fileData : FileInput
-                    ){
-                        PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
-                            post {
-                                _id
-                                fileLastUpdated
-                                fileName
-                                title
-                                imageUrl
-                                content
-                                creator
-                                createdAt
-                                updatedAt
-                            }
-                            user
-                            status
-                            success
-                            message
-                            isContentValid
-                            isTitleValid
-                            isFileValid
-                            isFileTypeValid
-                            isFileSizeValid
-                        }
-                    }
-                    `;
+      console.log("Carousel file data");
+      console.log(carouselImage ? carouselImage : null);
 
-      const createPostDevelopmentMutation = `
+      // Writing our mutations for both production and development, we choose based on the feature flag
+      const createPostMutation = `
                     mutation PostCreatePostResponse(
                       $title : String!, 
                       $content : String!, 
                       $userId : String!, 
-                      $fileData : FileInput
+                      $fileData : FileInput,
+                      $carouselFileData : CarouselFileDataType
                     ){
                         PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
                             post {
@@ -172,7 +144,7 @@ export const CreatePostComponent: FC = () => {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          query: createPostProductionMutation,
+          query: createPostMutation,
           variables: {
             title: title,
             content: content,
