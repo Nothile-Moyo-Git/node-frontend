@@ -105,13 +105,19 @@ export const CreatePostComponent: FC = () => {
       // Writing our mutations for both production and development, we choose based on the feature flag
       const createPostMutation = `
                     mutation PostCreatePostResponse(
-                      $title : String!, 
-                      $content : String!, 
-                      $userId : String!, 
-                      $fileData : FileInput,
-                      $carouselFileData : CarouselFileDataType
+                      $title: String!, 
+                      $content: String!, 
+                      $userId: String!, 
+                      $fileData: FileInput,
+                      $carouselFileData: CarouselFileData
                     ){
-                        PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
+                        PostCreatePostResponse(
+                          title: $title, 
+                          content: $content, 
+                          userId: $userId, 
+                          fileData: $fileData,
+                          carouselFileData: $carouselFileData
+                        ){
                             post {
                                 _id
                                 fileLastUpdated

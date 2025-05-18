@@ -51,8 +51,8 @@ export interface User {
 }
 
 export interface FileData {
-  filePath: string;
   fileName: string;
+  imageUrl: string;
 }
 
 export type ButtonType = "button" | "submit" | "reset" | undefined;
