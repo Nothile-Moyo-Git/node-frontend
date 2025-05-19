@@ -79,7 +79,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
                                       status
                                       files {
                                       fileName
-                                      filePath
+                                      imageUrl
                                       }
                                   }
                               }
