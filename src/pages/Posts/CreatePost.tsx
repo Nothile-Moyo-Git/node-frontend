@@ -60,6 +60,8 @@ export const CreatePostComponent: FC = () => {
 
   console.log("Carousel image");
   console.log(carouselImage);
+  console.log("Is development");
+  console.log(isDevelopment);
   console.log("\n\n");
 
   // Check authentication when component mounts
@@ -92,15 +94,14 @@ export const CreatePostComponent: FC = () => {
 
       let fileData = {};
 
-      if (uploadFile) {
-        fileData = await fileUploadHandler(
-          uploadFile,
-          appContextInstance?.baseUrl ? appContextInstance?.baseUrl : "",
-        );
+      if (!isDevelopment) {
+        if (uploadFile) {
+          fileData = await fileUploadHandler(
+            uploadFile,
+            appContextInstance?.baseUrl ? appContextInstance?.baseUrl : "",
+          );
+        }
       }
-
-      console.log("Carousel file data");
-      console.log(carouselImage ? carouselImage : null);
 
       // Writing our mutations for both production and development, we choose based on the feature flag
       const createPostMutation = `
