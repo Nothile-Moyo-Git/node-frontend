@@ -47,7 +47,7 @@ export const PostCard: FC<ComponentProps> = ({
           // Fetch the image, if it fails, reload the component
           setImage(
             await require(
-              `../../uploads${post?.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post?.fileName}`,
+              `../../images${post?.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post?.fileName}`,
             ),
           );
         }
