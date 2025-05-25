@@ -58,12 +58,6 @@ export const CreatePostComponent: FC = () => {
   // The carousel image data is for production, and we use it as an optional prop
   const [carouselImage, setCarouselImage] = useState<FileData>();
 
-  console.log("Carousel image");
-  console.log(carouselImage);
-  console.log("Is development");
-  console.log(isDevelopment);
-  console.log("\n\n");
-
   // Check authentication when component mounts
   useEffect(() => {
     appContextInstance?.validateAuthentication();
@@ -252,7 +246,7 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        {isDevelopment ? (
+        {!isDevelopment ? (
           <Field>
             <Label
               htmlFor="imageUrl"
@@ -277,8 +271,6 @@ export const CreatePostComponent: FC = () => {
             <Carousel setCarouselImage={setCarouselImage} />
           </Field>
         )}
-
-        <Carousel setCarouselImage={setCarouselImage} />
 
         {showImagePreview && (
           <Field>

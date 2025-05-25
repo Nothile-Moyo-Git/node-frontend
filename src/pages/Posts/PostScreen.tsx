@@ -122,11 +122,11 @@ const PostScreen: FC = () => {
   useEffect(() => {
     const getImage = async () => {
       try {
-        if (postData?.fileName && postData?.fileLastUpdated) {
+        if (postData?.fileName) {
           // Fetch the image, if it fails, reload the component
           setImage(
             await require(
-              `../../uploads/${postData.fileLastUpdated}/${postData?.fileName}`,
+              `../../images${postData?.fileLastUpdated !== "" ? `/${postData.fileLastUpdated}` : ""}/${postData?.fileName}`,
             ),
           );
         }
@@ -138,10 +138,6 @@ const PostScreen: FC = () => {
 
     getImage();
   }, [postData]);
-
-  console.log("\n\n");
-  console.log("Test date");
-  console.log(new Date(postData?.createdAt ? postData?.createdAt : ""));
 
   // Get an upload date so we can show when the post was uploaded
   const uploadDate = generateUploadDate(
