@@ -20,7 +20,7 @@ import React, {
 } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./EditPost.scss";
-import { Post } from "../../@types";
+import { FileData, Post } from "../../@types";
 import { AppContext } from "../../context/AppContext";
 import { BASENAME } from "../../util/util";
 import LoadingSpinner from "../../components/loader/LoadingSpinner";
@@ -35,6 +35,7 @@ import { fileUploadHandler, generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import TextArea from "../../components/form/TextArea";
 import { MdKeyboardBackspace } from "react-icons/md";
+import Carousel from "../../components/carousel/Carousel";
 
 /**
  * @Name EditPost
@@ -66,11 +67,15 @@ export const EditPost: FC = () => {
   const [imagePreview, setImagePreview] = useState<unknown | null>(null);
   const [showImagePreview, setShowImagePreview] = useState<boolean>();
   const [previousImageUrl, setPreviousImageUrl] = useState<string>();
+  const [carouselImage, setCarouselImage] = useState<FileData>();
 
   // States and refs for our objects
   const titleRef = useRef<HTMLInputElement>(null);
   const imageUrlRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  // Check which environment we're on for feature flag purposes
+  const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
   const getPostData = useCallback(
     async (userId: string) => {
@@ -245,8 +250,20 @@ export const EditPost: FC = () => {
           },
           body: JSON.stringify({
             query: `
-                        mutation PostEditPostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput, $postId : String!){
-                            PostEditPostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData, postId : $postId){
+                        mutation PostEditPostResponse(
+                          $title : String!, 
+                          $content : String!, 
+                          $userId : String!, 
+                          $fileData : FileInput, 
+                          $postId : String!
+                        ){
+                            PostEditPostResponse(
+                              title : $title, 
+                              content : $content, 
+                              userId : $userId, 
+                              fileData : $fileData, 
+                              postId : $postId
+                            ){
                                 post {
                                     _id
                                     fileLastUpdated
@@ -387,26 +404,31 @@ export const EditPost: FC = () => {
               type="string"
             />
           </Field>
-
-          <Field>
-            <Label
-              id="imageUrlLabel"
-              htmlFor="imageUrl"
-              error={!isFileValid}
-              errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
-            >
-              Image
-            </Label>
-            <Input
-              ariaLabelledBy="imageUrlLabel"
-              error={!isFileValid}
-              name="image"
-              onChange={fileUploadChangeEvent}
-              ref={imageUrlRef}
-              required={false}
-              type="file"
-            />
-          </Field>
+          {!isDevelopment ? (
+            <Field>
+              <Label
+                id="imageUrlLabel"
+                htmlFor="imageUrl"
+                error={!isFileValid}
+                errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
+              >
+                Image
+              </Label>
+              <Input
+                ariaLabelledBy="imageUrlLabel"
+                error={!isFileValid}
+                name="image"
+                onChange={fileUploadChangeEvent}
+                ref={imageUrlRef}
+                required={false}
+                type="file"
+              />
+            </Field>
+          ) : (
+            <Field>
+              <Carousel setCarouselImage={setCarouselImage} />
+            </Field>
+          )}
 
           {(showImagePreview || previousImageUrl) && (
             <Field>

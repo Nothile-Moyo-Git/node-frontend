@@ -159,9 +159,6 @@ export const CreatePostComponent: FC = () => {
       // Extract the data from the stream
       const createPostData = await createPostResponse.json();
 
-      console.log("Response");
-      console.log(createPostData);
-
       // Get the GraphQL request response
       const data = createPostData.data.PostCreatePostResponse;
 
