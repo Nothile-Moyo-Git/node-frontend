@@ -298,6 +298,7 @@ export const EditPost: FC = () => {
               content: content,
               userId: userId,
               fileData: fileData,
+              carouselFileData: carouselImage ? carouselImage : null,
               postId: postId,
             },
           }),
