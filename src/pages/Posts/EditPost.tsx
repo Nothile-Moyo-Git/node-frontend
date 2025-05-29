@@ -232,7 +232,7 @@ export const EditPost: FC = () => {
       const content = contentRef.current?.value || "";
 
       let fileData = {};
-      if (uploadFile) {
+      if (!isDevelopment && uploadFile) {
         fileData = await fileUploadHandler(
           uploadFile,
           appContextInstance?.baseUrl ? appContextInstance.baseUrl : "",
@@ -255,14 +255,16 @@ export const EditPost: FC = () => {
                           $content : String!, 
                           $userId : String!, 
                           $fileData : FileInput, 
-                          $postId : String!
+                          $postId : String!,
+                          $carouselFileData: CarouselFileData
                         ){
                             PostEditPostResponse(
                               title : $title, 
                               content : $content, 
                               userId : $userId, 
                               fileData : $fileData, 
-                              postId : $postId
+                              postId : $postId,
+                              carouselFileData : $carouselFileData
                             ){
                                 post {
                                     _id
@@ -308,6 +310,10 @@ export const EditPost: FC = () => {
       // Get the result of the API request
       const data = await editPostResponse.json();
       const response = data.data.PostEditPostResponse;
+
+      console.log("Response");
+      console.log(response);
+
       const isFileValid =
         response.fileValidProps.isFileSizeValid &&
         response.fileValidProps.isFileTypeValid &&
