@@ -311,9 +311,6 @@ export const EditPost: FC = () => {
       const data = await editPostResponse.json();
       const response = data.data.PostEditPostResponse;
 
-      console.log("Response");
-      console.log(response);
-
       const isFileValid =
         response.fileValidProps.isFileSizeValid &&
         response.fileValidProps.isFileTypeValid &&

@@ -76,9 +76,9 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
   }, [appContextInstance]);
 
   return (
-    <header>
+    <header className="menu">
       <nav>
-        <ul className="menu">
+        <ul className="menu__list">
           <li className="menu__item">
             <Link to={BASENAME} className="menu__link">
               Home

@@ -6,8 +6,7 @@
 @use "../../scss/partials/scrollbars";
 
 main{
-    animation: fade-in 0.2s linear;    
-    min-height: calc(100% - 55px);
+    animation: fade-in 0.2s linear;
     padding-top: 55px;
     background: branding.$backdrop_color_one;
 }
