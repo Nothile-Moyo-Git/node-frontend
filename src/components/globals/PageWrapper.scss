@@ -7,8 +7,9 @@
 
 main{
     animation: fade-in 0.2s linear;
-    padding-top: 55px;
-    background: branding.$backdrop_color_one;
+    height: 100%;
+    margin-top: 55px;
+    overflow-y: auto;
 }
 
 .page{

@@ -55,7 +55,8 @@ nav{
     overflow: hidden;
     transition: animations.$standard_transition;
     animation: fade-in 0.15s linear;
-
+    display: flex;
+    
     &__list{
         margin: 0;
         padding: 0;
