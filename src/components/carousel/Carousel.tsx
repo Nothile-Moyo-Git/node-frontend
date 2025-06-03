@@ -184,10 +184,15 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
       </Swiper>
       {/* Carousel thumbnails */}
       <Swiper
+        breakpoints={
+          320: {
+            slidesPerView: 1
+          }
+        }
         modules={[Thumbs, FreeMode, Navigation]}
         onSwiper={setThumbsSwiper}
         spaceBetween={10}
-        slidesPerView={5}
+        slidesPerView={1}
         watchSlidesProgress
       >
         {images.map((image, index) => (
