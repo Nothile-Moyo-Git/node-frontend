@@ -22,8 +22,6 @@ main{
 
     @include responsive.breakpoint(tablet){
         &__logged-in{
-            min-height: calc(100% - 137px);
-            padding-top: 137px;
 
             .menu{
                 height: 137px;
@@ -31,8 +29,6 @@ main{
         }
 
         &__logged-out{
-            min-height: calc(100% - 105px);
-            padding-top: 105px;
 
             ul{
                 height: 105px;

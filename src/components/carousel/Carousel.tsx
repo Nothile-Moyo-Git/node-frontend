@@ -184,11 +184,20 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
       </Swiper>
       {/* Carousel thumbnails */}
       <Swiper
-        breakpoints={
-          320: {
-            slidesPerView: 1
-          }
-        }
+        breakpoints={{
+          480: {
+            slidesPerView: 3,
+            spaceBetween: 5,
+          },
+          768: {
+            slidesPerView: 4,
+            spaceBetween: 10,
+          },
+          1024: {
+            slidesPerView: 5,
+            spaceBetween: 10,
+          },
+        }}
         modules={[Thumbs, FreeMode, Navigation]}
         onSwiper={setThumbsSwiper}
         spaceBetween={10}

@@ -247,23 +247,7 @@ const LiveChat: FC = () => {
 
   return (
     <section className="liveChat">
-      <Form size="full" onSubmit={onSubmit}>
-        <Title>Live Chat</Title>
-
-        <Field position="bottom">
-          <TextArea
-            ariaLabelledBy="contentLabel"
-            error={false}
-            name="content"
-            placeholder="Please post your message in the chat"
-            square={true}
-            startingRows={3}
-            ref={contentRef}
-            required={true}
-          />
-          <Button variant="square">Send</Button>
-        </Field>
-      </Form>
+      <h1 className="liveChat__title">Live Chat</h1>
 
       {chatMessages.map((message: chatMessage, index: number) => {
         return (
@@ -283,6 +267,21 @@ const LiveChat: FC = () => {
           </div>
         );
       })}
+      <Form size="full" onSubmit={onSubmit}>
+        <Field position="bottom">
+          <TextArea
+            ariaLabelledBy="contentLabel"
+            error={false}
+            name="content"
+            placeholder="Please post your message in the chat"
+            square={true}
+            startingRows={3}
+            ref={contentRef}
+            required={true}
+          />
+          <Button variant="square">Send</Button>
+        </Field>
+      </Form>
     </section>
   );
 };
