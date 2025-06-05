@@ -56,6 +56,14 @@ nav{
     transition: animations.$standard_transition;
     animation: fade-in 0.15s linear;
     display: flex;
+
+    &__open{
+
+    }
+
+    &__closed{
+        height: 0px;
+    }
     
     &__list{
         margin: 0;

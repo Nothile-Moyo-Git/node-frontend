@@ -76,54 +76,56 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
   }, [appContextInstance]);
 
   return (
-    <header className="menu">
-      <nav>
-        <ul className="menu__list">
-          <li className="menu__item">
-            <Link to={BASENAME} className="menu__link">
-              Home
-            </Link>
-          </li>
+    <header className={`menu ${isMenuOpen ? "menu__open" : "menu__closed"}`}>
+      {isMenuOpen && (
+        <nav>
+          <ul className="menu__list">
+            <li className="menu__item">
+              <Link to={BASENAME} className="menu__link">
+                Home
+              </Link>
+            </li>
 
-          {appContextInstance?.userAuthenticated === false && (
-            <>
-              <li className="menu__item">
-                <Link to={BASENAME + "/login"} className="menu__link">
-                  Login
-                </Link>
-              </li>
+            {appContextInstance?.userAuthenticated === false && (
+              <>
+                <li className="menu__item">
+                  <Link to={BASENAME + "/login"} className="menu__link">
+                    Login
+                  </Link>
+                </li>
 
-              <li className="menu__item">
-                <Link to={BASENAME + "/signup"} className="menu__link">
-                  Signup
-                </Link>
-              </li>
-            </>
-          )}
+                <li className="menu__item">
+                  <Link to={BASENAME + "/signup"} className="menu__link">
+                    Signup
+                  </Link>
+                </li>
+              </>
+            )}
 
-          {appContextInstance?.userAuthenticated === true && (
-            <>
-              <li className="menu__item">
-                <Link to={BASENAME + "/posts"} className="menu__link">
-                  Posts
-                </Link>
-              </li>
+            {appContextInstance?.userAuthenticated === true && (
+              <>
+                <li className="menu__item">
+                  <Link to={BASENAME + "/posts"} className="menu__link">
+                    Posts
+                  </Link>
+                </li>
 
-              <li className="menu__item">
-                <Link to={BASENAME + "/post/create"} className="menu__link">
-                  Create Post
-                </Link>
-              </li>
+                <li className="menu__item">
+                  <Link to={BASENAME + "/post/create"} className="menu__link">
+                    Create Post
+                  </Link>
+                </li>
 
-              <li className="menu__item">
-                <Button variant="menu" onClick={handleLogoutUser}>
-                  Logout
-                </Button>
-              </li>
-            </>
-          )}
-        </ul>
-      </nav>
+                <li className="menu__item">
+                  <Button variant="menu" onClick={handleLogoutUser}>
+                    Logout
+                  </Button>
+                </li>
+              </>
+            )}
+          </ul>
+        </nav>
+      )}
 
       {!isMenuOpen && (
         <div
