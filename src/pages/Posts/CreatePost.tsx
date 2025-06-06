@@ -88,7 +88,7 @@ export const CreatePostComponent: FC = () => {
 
       let fileData = {};
 
-      if (!isDevelopment) {
+      if (isDevelopment) {
         if (uploadFile) {
           fileData = await fileUploadHandler(
             uploadFile,
@@ -243,7 +243,7 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        {!isDevelopment ? (
+        {isDevelopment ? (
           <Field>
             <Label
               htmlFor="imageUrl"

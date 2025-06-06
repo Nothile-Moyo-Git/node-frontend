@@ -232,7 +232,7 @@ export const EditPost: FC = () => {
       const content = contentRef.current?.value || "";
 
       let fileData = {};
-      if (!isDevelopment && uploadFile) {
+      if (isDevelopment && uploadFile) {
         fileData = await fileUploadHandler(
           uploadFile,
           appContextInstance?.baseUrl ? appContextInstance.baseUrl : "",
@@ -408,7 +408,7 @@ export const EditPost: FC = () => {
               type="string"
             />
           </Field>
-          {!isDevelopment ? (
+          {isDevelopment ? (
             <Field>
               <Label
                 id="imageUrlLabel"

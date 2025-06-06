@@ -58,7 +58,10 @@ nav{
     display: flex;
 
     &__open{
-
+        @include responsive.breakpoint(tablet){
+            height: 100vh;
+            align-items: flex-start;
+        }
     }
 
     &__closed{
@@ -71,18 +74,14 @@ nav{
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
+
+        @include responsive.breakpoint(tablet){
+            flex-direction: column;
+        }
     }
 
     @include mixins.backgroundGradientEffect(){
         background: branding.$gradient_color_three;
-    }
-
-    @include responsive.breakpoint(tablet){
-        height: 137px;
-    }
-
-    @include responsive.breakpoint(tablet){
-        flex-direction: column;
     }
 
     &__link{

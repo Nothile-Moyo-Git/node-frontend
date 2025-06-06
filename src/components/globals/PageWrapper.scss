@@ -12,6 +12,10 @@ main{
     overflow-y: auto;
     display: flex;
     justify-content: center;
+
+    @include responsive.breakpoint(tablet){
+        margin-top: 0;
+    }
 }
 
 .page{
