@@ -65,7 +65,9 @@ nav{
     }
 
     &__closed{
-        height: 0px;
+        @include responsive.breakpoint(tablet){
+            height: 0px;
+        }
     }
     
     &__list{
