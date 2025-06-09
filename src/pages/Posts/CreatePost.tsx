@@ -138,23 +138,26 @@ export const CreatePostComponent: FC = () => {
                     `;
 
       // Perform the API request to the backend
-      const createPostResponse = await fetch("/graphql/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: createPostMutation,
-          variables: {
-            title: title,
-            content: content,
-            userId: userId,
-            fileData: fileData,
-            carouselFileData: carouselImage ? carouselImage : null,
+      const createPostResponse = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            query: createPostMutation,
+            variables: {
+              title: title,
+              content: content,
+              userId: userId,
+              fileData: fileData,
+              carouselFileData: carouselImage ? carouselImage : null,
+            },
+          }),
+        },
+      );
 
       // Extract the data from the stream
       const createPostData = await createPostResponse.json();
