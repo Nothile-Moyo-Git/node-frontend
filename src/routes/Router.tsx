@@ -29,7 +29,7 @@ const childRoutes = [
     element: <App />,
   },
   {
-    path: "chat",
+    path: "livechat",
     element: <LiveChat />,
   },
   {

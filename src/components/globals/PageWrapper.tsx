@@ -75,8 +75,8 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
       <main className={menuStyle}>
         {children}
         <Outlet />
-        {location.pathname !== `${BASENAME}/chat` && (
-          <Link to={`${BASENAME}/chat`} className="footer">
+        {location.pathname !== `${BASENAME}/livechat` && (
+          <Link to={`${BASENAME}/livechat`} className="footer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="50px"

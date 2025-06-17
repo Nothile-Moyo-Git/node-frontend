@@ -32,7 +32,6 @@ module.exports = function (app) {
     createProxyMiddleware({
       target: `${target}/chat`,
       changeOrigin: true,
-      method: "POST"
     }),
   )
 };
