@@ -57,13 +57,10 @@ const LiveChat: FC = () => {
 
   // Connect to our backend using our websocket using the correct port so it works on both dev and production
   useEffect(() => {
-    const client = io(String(liveChatEndpoint), { port });
+    const client = io(String(liveChatEndpoint), { port: port });
 
     console.log("Connection");
     console.log(client);
-
-    console.log("Port");
-    console.log(port);
 
     // Add a message to the chat
     client.on("message sent", (message) => {

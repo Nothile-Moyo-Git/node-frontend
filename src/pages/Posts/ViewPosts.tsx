@@ -217,7 +217,7 @@ export const ViewPosts: FC = () => {
       : process.env.REACT_APP_API_PROD_PORT;
 
   useEffect(() => {
-    const client = io(String(liveChatEndpoint), { port });
+    const client = io(String(liveChatEndpoint), { port: port });
 
     // Trigger a toastmodal render
     client.on("post added", (postData) => {
