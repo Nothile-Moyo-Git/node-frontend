@@ -56,6 +56,9 @@ const LiveChat: FC = () => {
     console.log("Connection");
     console.log(client);
 
+    console.log("Port");
+    console.log(process.env.PORT);
+
     // Add a message to the chat
     client.on("message sent", (message) => {
       setChatMessages((previousMessages) => {
