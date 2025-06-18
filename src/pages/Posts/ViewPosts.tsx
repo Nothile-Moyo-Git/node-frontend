@@ -253,7 +253,7 @@ export const ViewPosts: FC = () => {
       // Remove unncessary event handlers
       client.removeAllListeners();
     };
-  }, [fetchPosts, refreshPosts, liveChatEndpoint]);
+  }, [fetchPosts, refreshPosts, liveChatEndpoint, port]);
 
   useEffect(() => {
     // Toggle the loading spinner util the request ends

@@ -78,7 +78,7 @@ const LiveChat: FC = () => {
       // Remove unncessary event handlers
       client.removeAllListeners();
     };
-  }, [liveChatEndpoint]);
+  }, [liveChatEndpoint, port]);
 
   // Get user details if the user is authenticated from the backend
   const getUserDetails = useCallback(
