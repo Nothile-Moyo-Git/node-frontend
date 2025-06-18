@@ -211,7 +211,7 @@ export const ViewPosts: FC = () => {
       : process.env.API_URL_PROD;
 
   useEffect(() => {
-    const client = io(String(liveChatEndpoint));
+    const client = io(String(liveChatEndpoint), { port: process.env.PORT });
 
     // Trigger a toastmodal render
     client.on("post added", (postData) => {
