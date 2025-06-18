@@ -52,6 +52,9 @@ const LiveChat: FC = () => {
   useEffect(() => {
     const client = io(String(liveChatEndpoint));
 
+    console.log("Connection");
+    console.log(client);
+
     // Add a message to the chat
     client.on("message sent", (message) => {
       setChatMessages((previousMessages) => {
