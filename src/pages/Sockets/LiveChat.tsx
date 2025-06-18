@@ -49,15 +49,21 @@ const LiveChat: FC = () => {
       ? process.env.REACT_APP_API_DEV
       : process.env.REACT_APP_API_PROD;
 
+  // Get the correct port based on the environment
+  const port =
+    process.env.NODE_ENV.trim() === "development"
+      ? process.env.REACT_APP_API_DEV_PORT
+      : process.env.REACT_APP_API_PROD_PORT;
+
   // Connect to our backend using our websocket using the correct port so it works on both dev and production
   useEffect(() => {
-    const client = io(String(liveChatEndpoint), { port: process.env.PORT });
+    const client = io(String(liveChatEndpoint), { port });
 
     console.log("Connection");
     console.log(client);
 
     console.log("Port");
-    console.log(process.env.PORT);
+    console.log(port);
 
     // Add a message to the chat
     client.on("message sent", (message) => {

@@ -210,8 +210,14 @@ export const ViewPosts: FC = () => {
       ? process.env.API_URL_DEV
       : process.env.API_URL_PROD;
 
+  // Get the correct port based on the environment
+  const port =
+    process.env.NODE_ENV.trim() === "development"
+      ? process.env.REACT_APP_API_DEV_PORT
+      : process.env.REACT_APP_API_PROD_PORT;
+
   useEffect(() => {
-    const client = io(String(liveChatEndpoint), { port: process.env.PORT });
+    const client = io(String(liveChatEndpoint), { port });
 
     // Trigger a toastmodal render
     client.on("post added", (postData) => {
