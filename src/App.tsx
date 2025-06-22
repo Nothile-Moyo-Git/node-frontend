@@ -75,7 +75,6 @@ const App: FC = () => {
           },
         },
       } = await response.json();
-
       // Set the user details so we can render session data
       setLoadingError(!success);
       setUser(user);
