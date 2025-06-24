@@ -111,4 +111,15 @@ export const checkSessionValidation = async (
   }
 };
 
+/**
+ * @name doesUserExist
+ *
+ * @description This function makes sure that the user exists, this is in order to logout a user who no longer exists
+ *
+ * @param userId: string
+ *
+ * @returns userExists: boolean
+ */
+export const doesUserExist = async () => {};
+
 export const BASENAME = "";

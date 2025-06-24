@@ -33,6 +33,39 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
       try {
         appContextInstance?.validateAuthentication();
         setIsLoggedIn(appContextInstance?.token !== "");
+
+        
+
+        /*
+          // Check if there is no user but the request was successful
+          if (!user && success) {
+            // Perform the logout request
+            await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+              body: JSON.stringify({
+                query: `
+                            mutation deleteSessionResponse($_id : String!){
+                                deleteSessionResponse(_id : $_id){
+                                    success,
+                                    message
+                                }
+                            }
+                        `,
+                variables: {
+                  _id: appContextInstance?.userId,
+                },
+              }),
+            });
+
+            appContextInstance?.logoutUser();
+
+            // Redirect to the login page
+            navigate(`${BASENAME}/login`);
+        */
       } catch (error) {
         console.log("Request failed");
         console.log(error);
@@ -41,37 +74,6 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
 
     fetchAuthentication();
   }, [appContextInstance]);
-
-  /*
-    // Check if there is no user but the request was successful
-    if (!user && success) {
-      // Perform the logout request
-      await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-                      mutation deleteSessionResponse($_id : String!){
-                          deleteSessionResponse(_id : $_id){
-                              success,
-                              message
-                          }
-                      }
-                  `,
-          variables: {
-            _id: appContextInstance?.userId,
-          },
-        }),
-      });
-
-      appContextInstance?.logoutUser();
-
-      // Redirect to the login page
-      navigate(`${BASENAME}/login`);
-  */
 
   // Set our menuInfo object, we don't need state here as we don't need this to trigger a re-render
   const menuInfo = { isMenuOpen: isMenuOpen, isLoggedIn: isLoggedIn };
