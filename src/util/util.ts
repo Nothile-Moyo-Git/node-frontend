@@ -117,9 +117,83 @@ export const checkSessionValidation = async (
  * @description This function makes sure that the user exists, this is in order to logout a user who no longer exists
  *
  * @param userId: string
+ * @param baseUrl: string
+ * @param token: string
  *
  * @returns userExists: boolean
  */
-export const doesUserExist = async () => {};
+export const doesUserExist = async (
+  userId: string,
+  baseUrl: string,
+  token?: string,
+) => {
+  const response = await fetch(`${baseUrl}/graphql/auth`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      query: `
+        query PostUserDetailsResponse($_id : String!, $token : String!){
+          PostUserDetailsResponse(_id : $_id, token : $token){
+            user {
+              _id
+              name
+              email
+              password
+              confirmPassword
+              status
+              posts
+            }
+            sessionCreated
+            sessionExpires
+            success
+            }
+          }
+        `,
+      variables: {
+        _id: userId,
+        token: token ?? "",
+      },
+    }),
+  });
+
+  // Get the result from the endpoint
+  const {
+    data: {
+      PostUserDetailsResponse: { user },
+    },
+  } = await response.json();
+
+  // Check if there is no user but the request was successful
+  if (!user) {
+    // Perform the logout request
+    await fetch(`${baseUrl}/graphql/auth`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+                    mutation deleteSessionResponse($_id : String!){
+                        deleteSessionResponse(_id : $_id){
+                            success,
+                            message
+                        }
+                    }
+                `,
+        variables: {
+          _id: userId,
+        },
+      }),
+    });
+  }
+
+  const userExists = user !== null;
+
+  return userExists;
+};
 
 export const BASENAME = "";
