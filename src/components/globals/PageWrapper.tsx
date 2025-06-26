@@ -11,15 +11,17 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { FC, useState, ReactNode, useEffect, useContext } from "react";
 import { AppContext } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 import Menu from "../menu/Menu";
 import "./PageWrapper.scss";
-import { BASENAME } from "../../util/util";
+import { BASENAME, doesUserExist } from "../../util/util";
 
 interface ComponentProps {
   children?: ReactNode;
 }
 
 const PageWrapper: FC<ComponentProps> = ({ children }) => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
@@ -33,6 +35,29 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
       try {
         appContextInstance?.validateAuthentication();
         setIsLoggedIn(appContextInstance?.token !== "");
+
+        // If we've validated that a user is logged in, then we check if the user exists, if not, we log them out and end their session
+        if (
+          appContextInstance?.userId &&
+          appContextInstance.baseUrl &&
+          appContextInstance.token
+        ) {
+          const userExists = await doesUserExist(
+            appContextInstance.userId,
+            appContextInstance.baseUrl,
+            appContextInstance.token,
+          );
+
+          // If we're logged in but the user doesn't exist, get rid of them
+          if (!userExists) {
+            appContextInstance?.logoutUser();
+            // Redirect to the login page
+            navigate(`${BASENAME}/login`);
+          }
+
+          console.log("Does the user exist?");
+          console.log(userExists);
+        }
       } catch (error) {
         console.log("Request failed");
         console.log(error);
