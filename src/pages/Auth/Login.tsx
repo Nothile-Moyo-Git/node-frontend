@@ -85,26 +85,33 @@ export const LoginPage: FC = () => {
       );
 
       // Get the data from the response
-      const response = await result.json();
-
-      const data = response.data.loginResponse;
-
-      console.log("Data\n");
-      console.log(data);
+      const {
+        data: {
+          loginResponse: {
+            success,
+            emailValid,
+            emailErrorText,
+            passwordValid,
+            passwordErrorText,
+            token,
+            userId,
+          },
+        },
+      } = await result.json();
 
       // Set the states at the end of the request
-      setIsEmailValid(data.emailValid);
-      setEmailErrorText(data.emailErrorText);
-      setIsPasswordValid(data.passwordValid);
-      setPasswordErrorText(data.passwordErrorText);
+      setIsEmailValid(emailValid);
+      setEmailErrorText(emailErrorText);
+      setIsPasswordValid(passwordValid);
+      setPasswordErrorText(passwordErrorText);
 
       // Save our local storage results
-      if (data.success === true) {
+      if (success === true) {
         const remainingTime = new Date();
         remainingTime.setDate(remainingTime.getDate() + 14);
 
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
         localStorage.setItem("expiresIn", remainingTime.toISOString());
 
         // Redirect to the main page

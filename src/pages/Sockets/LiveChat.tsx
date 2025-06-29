@@ -40,6 +40,8 @@ const LiveChat: FC = () => {
   const appContextInstance = useContext(AppContext);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const [chatMessages, setChatMessages] = useState<chatMessage[]>([]);
+  const [userIds, setUserIds] = useState<string[]>([]);
+  const [chatStyles, setChatStyles] = useState<string[]>([]);
   const [userDetails, setUserDetails] = useState<User>();
   const socketClientRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
 
@@ -173,6 +175,7 @@ const LiveChat: FC = () => {
       // Set the messages from the backend if we have them
       if (messages.length !== 0 && success) {
         // Here we set it to the messages object in messages since we have properties like userId etc...
+        setUserIds(messages.userIds);
         setChatMessages(messages.messages);
       }
     },
@@ -252,6 +255,11 @@ const LiveChat: FC = () => {
       // Reset our input after we've posted a new message to the chat and backend
       contentRef.current.value = "";
     }
+  };
+
+  // Generate the styles for the chat so that they go either way
+  const generateChatStyles = () => {
+
   };
 
   return (

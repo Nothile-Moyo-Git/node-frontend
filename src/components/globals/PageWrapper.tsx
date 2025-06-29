@@ -65,7 +65,7 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
     };
 
     fetchAuthentication();
-  }, [appContextInstance]);
+  }, [appContextInstance, navigate]);
 
   // Set our menuInfo object, we don't need state here as we don't need this to trigger a re-render
   const menuInfo = { isMenuOpen: isMenuOpen, isLoggedIn: isLoggedIn };
