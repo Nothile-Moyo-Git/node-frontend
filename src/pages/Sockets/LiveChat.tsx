@@ -172,11 +172,28 @@ const LiveChat: FC = () => {
         },
       } = await response.json();
 
+      // Generate the styles for the chat so that they go either way
+      const generateChatStyles = () => {
+        // Iterate through the messages and set the styling based on the user
+        const generatedStyles = messages.messages.map(
+          (message: chatMessage) => {
+            if (message.senderId === userIds[1]) {
+              return "livechat__align-left";
+            }
+
+            return "livechat__align-right";
+          },
+        );
+
+        setChatStyles(generatedStyles);
+      };
+
       // Set the messages from the backend if we have them
       if (messages.length !== 0 && success) {
         // Here we set it to the messages object in messages since we have properties like userId etc...
         setUserIds(messages.userIds);
         setChatMessages(messages.messages);
+        generateChatStyles();
       }
     },
     [appContextInstance],
@@ -241,25 +258,16 @@ const LiveChat: FC = () => {
       fields.append("messages", JSON.stringify(chatMessages));
       fields.append("newMessage", contentRef.current.value);
 
-      const result = await fetch(
+      await fetch(
         `${appContextInstance?.baseUrl}/chat/send-message/${userId}`,
         {
           method: "POST",
           body: fields,
         },
       );
-
-      console.log("Result");
-      console.log(result);
-
       // Reset our input after we've posted a new message to the chat and backend
       contentRef.current.value = "";
     }
-  };
-
-  // Generate the styles for the chat so that they go either way
-  const generateChatStyles = () => {
-
   };
 
   return (
