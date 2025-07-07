@@ -1,4 +1,5 @@
 @use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/mixins" as mixins;
 
 .liveChat {
     width: 100%;
@@ -9,6 +10,22 @@
 
     &__message{
         padding: 0 1rem;
+
+        &--align-left{
+            text-align: left;
+            width: max-content;
+            overflow: hidden;
+            z-index: 1;
+            position: relative;
+
+            @include mixins.backgroundGradientEffect(){
+                background: branding.$gradient_color_six;   
+            }
+        }
+
+        &--align-right{
+            text-align: right;
+        }
     }
 
     &__date{

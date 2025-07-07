@@ -178,10 +178,10 @@ const LiveChat: FC = () => {
         const generatedStyles = messages.messages.map(
           (message: chatMessage) => {
             if (message.senderId === userIds[1]) {
-              return "livechat__align-left";
+              return "liveChat__message--align-right";
             }
 
-            return "livechat__align-right";
+            return "liveChat__message--align-left";
           },
         );
 
@@ -196,7 +196,7 @@ const LiveChat: FC = () => {
         generateChatStyles();
       }
     },
-    [appContextInstance],
+    [appContextInstance, userIds],
   );
   // Get the user details from the backend for the chat
   useEffect(() => {
@@ -276,7 +276,10 @@ const LiveChat: FC = () => {
 
       {chatMessages.map((message: chatMessage, index: number) => {
         return (
-          <div className={`liveChat__message`} key={`message-${index}`}>
+          <div
+            className={`liveChat__message ${chatStyles[index]}`}
+            key={`message-${index}`}
+          >
             {(index === 0 ||
               (index > 0 &&
                 chatMessages[index].senderId !==
