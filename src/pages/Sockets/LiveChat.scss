@@ -10,6 +10,35 @@
 
     &__message{
         padding: 0 1rem;
+        margin: 0.75rem 1rem;
+        border-radius: 0.35rem;
+    }
+
+    &__date{
+        font-size: 0.8rem;
+        color: branding.$brand_color_six;
+    }
+
+    &__description{
+        margin: 0;
+        padding-top: 1rem;
+        padding-bottom: 0.25rem;
+
+        span{
+            color: rgba(0, 0, 0, 0.9);
+        }
+    }
+
+    &__icon{
+        padding: 0.1rem 0.45rem 0.2rem;
+        border-radius: 50%;
+        border: 2px solid rgba(0, 0, 0, 0.9);
+        margin-right: 0.5rem;
+    }
+
+    &__content{
+        color: rgba(0, 0, 0, 0.9);
+        margin: 0;
 
         &--align-left{
             text-align: left;
@@ -26,31 +55,5 @@
         &--align-right{
             text-align: right;
         }
-    }
-
-    &__date{
-        font-size: 0.8rem;
-        color: branding.$brand_color_six;
-    }
-
-    &__description{
-        margin: 0;
-        padding-top: 1rem;
-        padding-bottom: 0.25rem;
-
-        span{
-            color: branding.$brand_color_six;
-        }
-    }
-
-    &__icon{
-        padding: 0.1rem 0.45rem 0.2rem;
-        border-radius: 50%;
-        border: 2px solid branding.$brand_color_six;
-        margin-right: 0.5rem;
-    }
-
-    &__content{
-        margin: 0 0 0 2.4rem;
     }
 }

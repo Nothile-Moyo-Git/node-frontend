@@ -178,10 +178,10 @@ const LiveChat: FC = () => {
         const generatedStyles = messages.messages.map(
           (message: chatMessage) => {
             if (message.senderId === userIds[1]) {
-              return "liveChat__message--align-right";
+              return "liveChat__content--align-right";
             }
 
-            return "liveChat__message--align-left";
+            return "liveChat__content--align-left";
           },
         );
 
@@ -276,10 +276,7 @@ const LiveChat: FC = () => {
 
       {chatMessages.map((message: chatMessage, index: number) => {
         return (
-          <div
-            className={`liveChat__message ${chatStyles[index]}`}
-            key={`message-${index}`}
-          >
+          <div className="liveChat__message" key={`message-${index}`}>
             {(index === 0 ||
               (index > 0 &&
                 chatMessages[index].senderId !==
@@ -291,7 +288,9 @@ const LiveChat: FC = () => {
               </p>
             )}
 
-            <p className="liveChat__content">{message.message}</p>
+            <p className={`liveChat__content ${chatStyles[index]}`}>
+              {message.message}
+            </p>
           </div>
         );
       })}
