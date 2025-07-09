@@ -82,6 +82,11 @@ const LiveChat: FC = () => {
     };
   }, [liveChatEndpoint, port]);
 
+  // Determine if the current user is the sender or recipient
+  const isSender = (currentUser: string, messageSender: string) => {
+    return currentUser === messageSender;
+  };
+
   // Get user details if the user is authenticated from the backend
   const getUserDetails = useCallback(
     async (userId: string) => {
@@ -281,7 +286,9 @@ const LiveChat: FC = () => {
               (index > 0 &&
                 chatMessages[index].senderId !==
                   chatMessages[index - 1].senderId)) && (
-              <p className={`liveChat__description`}>
+              <p
+                className={`liveChat__description ${!isSender(userDetails?._id ?? "", message.senderId) && "liveChat__description--align-right"}`}
+              >
                 <span className="liveChat__icon">{message.sender[0]}</span>
                 <span>{message.sender}</span>
                 <span className="liveChat__date">{` ${message.dateSent}`}</span>
