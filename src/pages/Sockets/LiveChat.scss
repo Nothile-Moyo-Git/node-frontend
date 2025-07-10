@@ -20,29 +20,33 @@
     }
 
     &__description{
-        margin: 0;
+        margin: 0 0 0.75rem;
         padding-top: 1rem;
         padding-bottom: 0.25rem;
+        color: branding.$brand_color_six;
+
+        span{
+            color: branding.$brand_color_six; 
+        }
 
         &--align-right{
             text-align: right;
         }
-
-        span{
-            color: rgba(0, 0, 0, 0.9);
-        }
     }
 
     &__icon{
+        color: branding.$brand_color_six;
         padding: 0.1rem 0.45rem 0.2rem;
         border-radius: 50%;
-        border: 2px solid rgba(0, 0, 0, 0.9);
+        border: 2px solid branding.$brand_color_six;
         margin-right: 0.5rem;
     }
 
     &__content{
         color: rgba(0, 0, 0, 0.9);
-        margin: 0;
+        margin: 0 0 0.25rem;
+        padding: 0.1rem 0.8rem 0.35rem 0.8rem;
+        border-radius: 5px;
 
         &--align-left{
             text-align: left;
