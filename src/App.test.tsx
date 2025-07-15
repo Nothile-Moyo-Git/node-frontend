@@ -1,15 +1,10 @@
 import { expect } from "@jest/globals";
-import React from "react";
 import App from "./App";
 import { act } from "react-dom/test-utils";
 import { render, screen } from "@testing-library/react";
 
-// Mock useNavigate so it works with jest
-export const mockUsedNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockUsedNavigate,
-}));
+// Importing mocks to be used for testing
+import "./mocks/methods.test";
 
 // Setup mocks and environment
 beforeEach(() => {});
@@ -27,3 +22,4 @@ it("Renders the app successfully", () => {
   const appComponent = screen.getByTestId("testid-app-component");
   expect(appComponent).toBeDefined();
 });
+
