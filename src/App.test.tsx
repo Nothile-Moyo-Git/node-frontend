@@ -24,4 +24,7 @@ it("Renders the app successfully", () => {
   // Check if the app component is rendered and we navigate to it successfully
   const appComponent = screen.getByTestId("testid-app-component");
   expect(appComponent).toBeDefined();
+
+  // Make sure that the app matches the snapshot
+  expect(appComponent).toMatchSnapshot();
 });
