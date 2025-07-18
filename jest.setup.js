@@ -1,6 +1,5 @@
-import "@testing-library/jest-dom";
-
-import { fetch, Headers, Request, Response } from "undici";
+require("@testing-library/jest-dom");
+const { fetch, Headers, Request, Response } = require("undici");
 
 globalThis.fetch = fetch;
 globalThis.Headers = Headers;

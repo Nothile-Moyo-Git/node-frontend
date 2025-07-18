@@ -6,5 +6,4 @@ module.exports = {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
   modulePathIgnorePatterns: ["./src/mocks"],
-  setupFiles: ["./jest.setup.js"],
 };
