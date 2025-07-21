@@ -6,4 +6,7 @@ module.exports = {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
   modulePathIgnorePatterns: ["./src/mocks"],
+  transformIgnorePatterns: [
+    "/node_modules/(?!@bundled-es-modules/tough-cookie)",
+  ],
 };

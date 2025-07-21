@@ -1,33 +1,26 @@
 require("@testing-library/jest-dom");
-const { TextEncoder, TextDecoder } = require("util");
+const { TextEncoder, TextDecoder } = require("node:util");
+const { ReadableStream, TransformStream } = require("node:stream/web");
+const { MessagePort } = require("worker_threads");
 
 // Setting global values for Jest testing
 
 // Set globals before undici so we can use TextEncoder and TextDecoder, otherwise they're not defined
 // These values need to be defined at require time
-if (typeof global.TextEncoder === "undefined") {
-  global.TextEncoder = TextEncoder;
-}
-
-if (typeof global.TextDecoder === "undefined") {
-  global.TextDecoder = TextDecoder;
-}
+Object.defineProperties(global, {
+  MessagePort: { value: MessagePort },
+  TextDecoder: { value: TextDecoder },
+  TextEncoder: { value: TextEncoder },
+  ReadableStream: { value: ReadableStream },
+  TransformStream: { value: TransformStream },
+});
 
 const { fetch, Headers, Request, Response } = require("undici");
 
 // Set the globalThis values for API requests
-if (typeof globalThis.fetch === "undefined") {
-  globalThis.fetch = fetch;
-}
-
-if (typeof globalThis.Headers === "undefined") {
-  globalThis.Headers = Headers;
-}
-
-if (typeof globalThis.Request === "undefined") {
-  globalThis.Request = Request;
-}
-
-if (typeof globalThis.Response === "undefined") {
-  globalThis.Response = Response;
-}
+Object.defineProperties(globalThis, {
+  fetch: { value: fetch, writable: true },
+  Headers: { value: Headers },
+  Request: { value: Request },
+  Response: { value: Response },
+});
