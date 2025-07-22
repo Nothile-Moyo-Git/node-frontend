@@ -1,5 +1,5 @@
 module.exports = {
-  preset: "ts-jest",
+  preset: "ts-jest/presets/default-esm", // use ESM preset
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["./jest.setup.js"],
   moduleNameMapper: {
@@ -7,6 +7,11 @@ module.exports = {
   },
   modulePathIgnorePatterns: ["./src/mocks"],
   transformIgnorePatterns: [
-    "/node_modules/(?!@bundled-es-modules/tough-cookie)",
+    "/node_modules/(?!(?:@bundled-es-modules|tough-cookie)/)",
   ],
+  globals: {
+    "ts-jest": {
+      useESM: true,
+    },
+  },
 };
