@@ -2,7 +2,6 @@
   "name": "node-frontend",
   "version": "0.2.0",
   "private": true,
-  "type": "module",
   "dependencies": {
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -56,14 +55,12 @@
     ]
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.28.0",
-    "@babel/preset-react": "^7.27.1",
-    "@babel/preset-typescript": "^7.27.1",
+    "@babel/preset-env": "^7.24.5",
     "@eslint/js": "^9.18.0",
-    "@jest/globals": "^30.0.4",
+    "@jest/globals": "^27.5.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/jest": "^27.5.2",
-    "babel-jest": "^30.0.5",
+    "babel-jest": "^27.5.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
