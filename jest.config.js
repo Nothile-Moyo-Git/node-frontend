@@ -1,6 +1,6 @@
 module.exports = {
   preset: "ts-jest/presets/default-esm", // use ESM preset with ts-jest v27
-  testEnvironment: "jsdom",
+  testEnvironment: "node",
   setupFilesAfterEnv: ["./jest.setup.js"],
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
