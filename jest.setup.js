@@ -2,6 +2,7 @@ require("@testing-library/jest-dom");
 const { TextEncoder, TextDecoder } = require("node:util");
 const { ReadableStream, TransformStream } = require("node:stream/web");
 const { MessagePort } = require("worker_threads");
+const Blob = require("fetch-blob/index.cjs");
 
 // Setting global values for Jest testing
 
@@ -13,6 +14,7 @@ Object.defineProperties(global, {
   TextEncoder: { value: TextEncoder },
   ReadableStream: { value: ReadableStream },
   TransformStream: { value: TransformStream },
+  Blob: { value: Blob },
 });
 
 const { fetch, Headers, Request, Response } = require("undici");
