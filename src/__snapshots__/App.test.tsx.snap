@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders the app successfully 1`] = `
+<div
+  class="app"
+  data-testid="testid-app-component"
+/>
+`;
