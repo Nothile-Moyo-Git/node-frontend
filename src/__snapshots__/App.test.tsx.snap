@@ -4,5 +4,18 @@ exports[`Renders the app successfully 1`] = `
 <div
   class="app"
   data-testid="testid-app-component"
-/>
+>
+  <div
+    class="loadingWrapper"
+  >
+    <span
+      class="loadingSpinner"
+    />
+    <p
+      class="loadingText"
+    >
+      Loading, please wait...
+    </p>
+  </div>
+</div>
 `;

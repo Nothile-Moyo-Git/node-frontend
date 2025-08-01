@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import { server } from "./mocks/Server";
 
 // Importing mocks to be used for testing
-import "./mocks/Methods.test.tsx";
+import "./mocks/SetupMocks.test";
 import { RoutedAppComponent } from "./mocks/Router";
 import { RouterProvider } from "react-router-dom";
 
