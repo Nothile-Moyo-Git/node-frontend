@@ -1,5 +1,3 @@
-/// <reference types="jest" />
-
 /**
  * Date created: 30/07/2025
  *

@@ -30,6 +30,12 @@ export default [
     },
   },
   {
+    files: ["**/setup*.ts", "**/jest.setup.ts"],
+    languageOptions: {
+      globals: globals.jest,
+    },
+  },
+  {
     languageOptions: {
       globals: {
         global: 'readonly',
