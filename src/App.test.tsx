@@ -1,11 +1,11 @@
 import { expect } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { render, screen } from "@testing-library/react";
-import { server } from "./mocks/Server";
+import { server } from "./test-utils/mockServer";
 
 // Importing mocks to be used for testing
-import "./mocks/SetupMocks.test";
-import { RoutedAppComponent } from "./mocks/Router";
+import "./test-utils/setupTestMocks";
+import { RoutedAppComponent } from "./test-utils/testRouter";
 import { RouterProvider } from "react-router-dom";
 
 // Setup mocks and environment
