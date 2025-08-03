@@ -7,6 +7,7 @@ import { server } from "./test-utils/mockServer";
 import "./test-utils/setupTestMocks";
 import { RoutedAppComponent } from "./test-utils/testRouter";
 import { RouterProvider } from "react-router-dom";
+import { setIsLoadingMock } from "./test-utils/setupTestMocks";
 
 // Setup mocks and environment
 beforeEach(() => server.listen());
@@ -16,14 +17,25 @@ afterEach(() => server.resetHandlers());
 
 afterAll(() => server.close());
 
-// Handle the main authentication of the app
-it("Renders the app successfully", () => {
-  act(() => {
-    render(<RouterProvider router={RoutedAppComponent} />);
+describe("App Component Tests", () => {
+  // Handle the main authentication of the app
+  it("Renders the app successfully", () => {
+    act(() => {
+      render(<RouterProvider router={RoutedAppComponent} />);
+    });
+
+    // Check if the app component is rendered and we navigate to it successfully
+    const appComponent = screen.getByTestId("testid-app-component");
+    expect(appComponent).toBeDefined();
+    expect(appComponent).toMatchSnapshot();
   });
 
-  // Check if the app component is rendered and we navigate to it successfully
-  const appComponent = screen.getByTestId("testid-app-component");
-  expect(appComponent).toBeDefined();
-  expect(appComponent).toMatchSnapshot();
+  it("Should show loading state", () => {
+    render(<RouterProvider router={RoutedAppComponent} />);
+
+    setIsLoadingMock(false);
+
+    const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
+    expect(loadingIndicator).toBeDefined();
+  });
 });

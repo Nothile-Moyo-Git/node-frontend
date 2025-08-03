@@ -1,12 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Renders the app successfully 1`] = `
+exports[`App Component Tests Renders the app successfully 1`] = `
 <div
   class="app"
   data-testid="testid-app-component"
 >
   <div
     class="loadingWrapper"
+    data-testid="test-id-loading-spinner"
   >
     <span
       class="loadingSpinner"
