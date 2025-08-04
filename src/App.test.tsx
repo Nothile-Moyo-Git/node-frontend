@@ -1,13 +1,17 @@
-import { expect } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { render, screen } from "@testing-library/react";
 import { server } from "./test-utils/mockServer";
+import "@testing-library/jest-dom";
 
 // Importing mocks to be used for testing
 import "./test-utils/setupTestMocks";
+import { setIsLoadingMock } from "./test-utils/setupTestMocks";
+
+// Component imports, we do this here
 import { RoutedAppComponent } from "./test-utils/testRouter";
 import { RouterProvider } from "react-router-dom";
-import { setIsLoadingMock } from "./test-utils/setupTestMocks";
+
+// Define a user here which should have their details rendered on the main App page
 
 // Setup mocks and environment
 beforeEach(() => server.listen());
@@ -31,11 +35,30 @@ describe("App Component Tests", () => {
   });
 
   it("Should show loading state", () => {
+    setIsLoadingMock(true);
+
     render(<RouterProvider router={RoutedAppComponent} />);
 
+    const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
+    expect(loadingIndicator).toBeVisible();
+  });
+
+  it("Should show loading state", () => {
     setIsLoadingMock(false);
 
-    const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
-    expect(loadingIndicator).toBeDefined();
+    render(<RouterProvider router={RoutedAppComponent} />);
+
+    const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
+    expect(loadingIndicator).not.toBeInTheDocument();
+  });
+
+  it("Show user details", () => {
+    setIsLoadingMock(false);
+
+    render(<RouterProvider router={RoutedAppComponent} />);
+
+    const welcomeText = screen.getByText("Welcome");
+
+    expect(welcomeText).toBeInTheDocument();
   });
 });
