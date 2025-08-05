@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 // Importing mocks to be used for testing
 import "./test-utils/setupTestMocks";
 import { setIsLoadingMock } from "./test-utils/setupTestMocks";
+import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 
 // Component imports, we do this here
 import { RoutedAppComponent } from "./test-utils/testRouter";
@@ -14,10 +15,16 @@ import { RouterProvider } from "react-router-dom";
 // Define a user here which should have their details rendered on the main App page
 
 // Setup mocks and environment
-beforeEach(() => server.listen());
+beforeEach(() => {
+  server.listen();
+  setMockAuthStorage();
+});
 
 // Cleanup mocks and environment
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+  server.resetHandlers();
+  clearAuthStorage();
+});
 
 afterAll(() => server.close());
 
@@ -35,15 +42,13 @@ describe("App Component Tests", () => {
   });
 
   it("Should show loading state", () => {
-    setIsLoadingMock(true);
-
     render(<RouterProvider router={RoutedAppComponent} />);
 
     const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
   });
 
-  it("Should show loading state", () => {
+  it("Should not show loading spinner is app loaded successfully", () => {
     setIsLoadingMock(false);
 
     render(<RouterProvider router={RoutedAppComponent} />);
