@@ -11,8 +11,23 @@ import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 // Component imports, we do this here
 import { RoutedAppComponent } from "./test-utils/testRouter";
 import { RouterProvider } from "react-router-dom";
+import { User } from "./@types";
 
 // Define a user here which should have their details rendered on the main App page
+const mockUser: User = {
+  _id: "Nothile Moyo",
+  name: "",
+  email: "nothile1@gmail.com",
+  password: "test",
+  status: "active",
+  posts: [
+    "662423764e8c8b1633534be8",
+    "662423884e8c8b1633534bf0",
+    "662e7bcdd94fde36bf4bb554",
+    "662e7c6ad94fde36bf4bb55c",
+    "67843561d02db477bac4843b",
+  ],
+};
 
 // Setup mocks and environment
 beforeEach(() => {
@@ -59,8 +74,12 @@ describe("App Component Tests", () => {
 
   it("Show user details", () => {
     setIsLoadingMock(false);
+    setIsLoadingMock(mockUser);
 
     render(<RouterProvider router={RoutedAppComponent} />);
+
+    const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
+    expect(loadingIndicator).not.toBeInTheDocument();
 
     const welcomeText = screen.getByText("Welcome");
 

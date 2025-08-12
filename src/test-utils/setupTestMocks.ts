@@ -9,6 +9,7 @@
  */
 
 import { useState } from "react";
+import { User } from "../@types";
 
 // Mock useNavigate so it works with jest
 export const mockUsedNavigate = jest.fn();
@@ -26,23 +27,28 @@ jest.mock("react", () => ({
 // Cast since we're using a ts file and we want to manipulate this
 const mockedUseState = useState as jest.Mock;
 
-// Track the amount of times we use useState
-let callCount = 0;
-
 const setMockState = jest.fn();
 
 // Default mock implementation of usestate
 mockedUseState.mockImplementation((init) => [init, setMockState]);
 
 // Utility function to update mocked isLoading in tests
-export const setIsLoadingMock = (value: boolean) => {
-  callCount = 0;
+export const setAppStateMock = (
+  loadingValue: boolean,
+  loadingError: boolean,
+  user: User | undefined,
+  sessionExpiryDate: string | undefined,
+  sessionCreationDate: string | undefined,
+) => {
+  // Track the amount of times we use useState
+  let callCount = 0;
 
   mockedUseState.mockImplementation((init) => {
     if (typeof init === "boolean" && callCount === 0) {
       callCount++;
-      return [value, setMockState]; // Custom isLoading value
+      return [loadingValue, setMockState]; // Custom isLoading value
     }
+
     return [init, setMockState];
   });
 };
