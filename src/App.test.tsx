@@ -5,13 +5,14 @@ import "@testing-library/jest-dom";
 
 // Importing mocks to be used for testing
 import "./test-utils/setupTestMocks";
-import { setIsLoadingMock } from "./test-utils/setupTestMocks";
+import { setAppStateMock } from "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 
 // Component imports, we do this here
 import { RoutedAppComponent } from "./test-utils/testRouter";
 import { RouterProvider } from "react-router-dom";
 import { User } from "./@types";
+import { generateUploadDate } from "./util/util";
 
 // Define a user here which should have their details rendered on the main App page
 const mockUser: User = {
@@ -28,6 +29,13 @@ const mockUser: User = {
     "67843561d02db477bac4843b",
   ],
 };
+
+// Two weeks after original expiry date
+const mockExpiryDate = generateUploadDate(
+  new Date(Date.now() + 12096e5).toISOString(),
+);
+
+const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 
 // Setup mocks and environment
 beforeEach(() => {
@@ -64,7 +72,7 @@ describe("App Component Tests", () => {
   });
 
   it("Should not show loading spinner is app loaded successfully", () => {
-    setIsLoadingMock(false);
+    setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
 
     render(<RouterProvider router={RoutedAppComponent} />);
 
@@ -73,8 +81,7 @@ describe("App Component Tests", () => {
   });
 
   it("Show user details", () => {
-    setIsLoadingMock(false);
-    setIsLoadingMock(mockUser);
+    setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
 
     render(<RouterProvider router={RoutedAppComponent} />);
 

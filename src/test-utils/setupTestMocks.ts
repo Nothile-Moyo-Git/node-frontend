@@ -34,21 +34,40 @@ mockedUseState.mockImplementation((init) => [init, setMockState]);
 
 // Utility function to update mocked isLoading in tests
 export const setAppStateMock = (
-  loadingValue: boolean,
+  isLoading: boolean,
   loadingError: boolean,
   user: User | undefined,
   sessionExpiryDate: string | undefined,
   sessionCreationDate: string | undefined,
 ) => {
-  // Track the amount of times we use useState
+  // Track the amount of times we use useState, this is because the order has to match the state in App
   let callCount = 0;
 
   mockedUseState.mockImplementation((init) => {
-    if (typeof init === "boolean" && callCount === 0) {
-      callCount++;
-      return [loadingValue, setMockState]; // Custom isLoading value
+    switch (callCount) {
+      case 0:
+        callCount++;
+        return [isLoading, setMockState];
+      case 1:
+        callCount++;
+        return [loadingError, setMockState];
+      case 2:
+        callCount++;
+        return [user, setMockState];
+      case 3:
+        callCount++;
+        return [sessionExpiryDate, setMockState];
+      case 4:
+        callCount++;
+        return [sessionCreationDate, setMockState];
+      default:
+        callCount++;
+        return [init, setMockState];
     }
-
-    return [init, setMockState];
+    /* if (typeof init === "boolean" && callCount === 0) {
+      callCount++;
+      return [isLoading, setMockState];
+    }
+    return [init, setMockState]; */
   });
 };

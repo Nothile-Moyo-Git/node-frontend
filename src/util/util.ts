@@ -40,11 +40,13 @@ export const generateUploadDate = (date: string | number) => {
   const D = dateObject.getDate();
   const H = dateObject.getHours();
   const I = dateObject.getMinutes();
+  const S = dateObject.getSeconds();
 
   let MM = M.toString();
   let DD = D.toString();
   let HH = H.toString();
   let II = I.toString();
+  let SS = S.toString();
 
   // Formatting the date values to include 0 if it's less than 10
   if (M < 10) {
@@ -59,8 +61,11 @@ export const generateUploadDate = (date: string | number) => {
   if (I < 10) {
     II = "0" + I.toString();
   }
+  if (S < 10) {
+    SS = "0" + S.toString();
+  }
 
-  const uploadDate = `${YYYY}/${MM}/${DD} ${HH}:${II}`;
+  const uploadDate = `${YYYY}/${MM}/${DD} ${HH}:${II}:${SS}`;
 
   return uploadDate;
 };
