@@ -40,34 +40,28 @@ export const setAppStateMock = (
   sessionExpiryDate: string | undefined,
   sessionCreationDate: string | undefined,
 ) => {
-  // Track the amount of times we use useState, this is because the order has to match the state in App
-  let callCount = 0;
+  // Call the state in the same order but ensure that our initial values aren't set multiple times
+  let hasSetLoading = false;
+  let hasSetExpiry = false;
 
   mockedUseState.mockImplementation((init) => {
-    switch (callCount) {
-      case 0:
-        callCount++;
-        return [isLoading, setMockState];
-      case 1:
-        callCount++;
-        return [loadingError, setMockState];
-      case 2:
-        callCount++;
-        return [user, setMockState];
-      case 3:
-        callCount++;
-        return [sessionExpiryDate, setMockState];
-      case 4:
-        callCount++;
-        return [sessionCreationDate, setMockState];
-      default:
-        callCount++;
-        return [init, setMockState];
-    }
-    /* if (typeof init === "boolean" && callCount === 0) {
-      callCount++;
+    if (typeof init === "boolean" && !hasSetLoading) {
+      hasSetLoading = true;
       return [isLoading, setMockState];
     }
-    return [init, setMockState]; */
+    if (typeof init === "boolean") {
+      return [loadingError, setMockState];
+    }
+    /* if (typeof init === "object") {
+      return [user, setMockState];
+    }
+    if (typeof init === "string" && !hasSetExpiry) {
+      hasSetExpiry = true;
+      return [sessionExpiryDate, setMockState];
+    }
+    if (typeof init === "string") {
+      return [sessionCreationDate, setMockState];
+    } */
+    return [init, setMockState];
   });
 };
