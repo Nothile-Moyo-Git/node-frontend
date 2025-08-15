@@ -121,7 +121,7 @@ const App: FC = () => {
   }, [appContextInstance, navigate]);
 
   return (
-    <div className="app" data-testid="testid-app-component">
+    <div className="app" data-testid="test-id-app-component">
       {isLoading && <LoadingSpinner />}
 
       {!isLoading && loadingError && <ErrorModal />}

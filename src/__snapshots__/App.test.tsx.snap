@@ -3,7 +3,7 @@
 exports[`App Component Tests Renders the app successfully 1`] = `
 <div
   class="app"
-  data-testid="testid-app-component"
+  data-testid="test-id-app-component"
 >
   <div
     class="loadingWrapper"

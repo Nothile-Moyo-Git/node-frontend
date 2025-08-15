@@ -59,7 +59,7 @@ describe("App Component Tests", () => {
     });
 
     // Check if the app component is rendered and we navigate to it successfully
-    const appComponent = screen.getByTestId("testid-app-component");
+    const appComponent = screen.getByTestId("test-id-app-component");
     expect(appComponent).toBeDefined();
     expect(appComponent).toMatchSnapshot();
   });
@@ -80,6 +80,15 @@ describe("App Component Tests", () => {
     expect(loadingIndicator).not.toBeInTheDocument();
   });
 
+  it("Should show error modal if app isn't loaded successfully", async () => {
+    setAppStateMock(false, true, mockUser, mockExpiryDate, mockCreationDate);
+
+    render(<RouterProvider router={RoutedAppComponent} />);
+
+    const loadingIndicator = await screen.findByTestId("test-id-error-modal");
+    expect(loadingIndicator).toBeVisible();
+  });
+
   it("Show user details", () => {
     setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
 
@@ -88,7 +97,7 @@ describe("App Component Tests", () => {
     const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
     expect(loadingIndicator).not.toBeInTheDocument();
 
-    const welcomeText = screen.getByText("Welcome");
+    const welcomeText = screen.queryByTestId("test-id-user-exists");
 
     expect(welcomeText).toBeInTheDocument();
   });
