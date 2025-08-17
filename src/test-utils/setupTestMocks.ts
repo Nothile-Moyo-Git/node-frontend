@@ -42,8 +42,7 @@ export const setAppStateMock = (
 ) => {
   // Call the state in the same order but ensure that our initial values aren't set multiple times
   let hasSetLoading = false;
-  let hasSetExpiry = false;
-  let hasUserBeenSet = false;
+  const hasSetExpiry = false;
 
   mockedUseState.mockImplementation((init) => {
     if (typeof init === "boolean" && !hasSetLoading) {
@@ -53,10 +52,9 @@ export const setAppStateMock = (
     if (typeof init === "boolean") {
       return [loadingError, setMockState];
     }
-    if (typeof init === "object" && !hasUserBeenSet) {
-      hasUserBeenSet = true;
+    /* if (init === undefined) {
       return [user, setMockState];
-    }
+    } */
     /* if (typeof init === "string" && !hasSetExpiry) {
       hasSetExpiry = true;
       return [sessionExpiryDate, setMockState];
