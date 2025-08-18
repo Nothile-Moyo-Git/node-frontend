@@ -6,14 +6,20 @@
  * We use this to be able to render our components
  *
  */
-import { createMemoryRouter } from "react-router-dom";
+import { ReactNode } from "react";
+import { render } from "@testing-library/react";
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
 
-// Component imports
-import App from "../App";
+export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
+  const router = createMemoryRouter(
+    [
+      {
+        path: "/",
+        element: ui,
+      },
+    ],
+    { initialEntries: [route] },
+  );
 
-export const RoutedAppComponent = createMemoryRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-]);
+  return render(<RouterProvider router={router} />);
+}

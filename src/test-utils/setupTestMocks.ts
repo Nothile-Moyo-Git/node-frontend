@@ -52,9 +52,9 @@ export const setAppStateMock = (
     if (typeof init === "boolean") {
       return [loadingError, setMockState];
     }
-    /* if (init === undefined) {
+    if (init === undefined) {
       return [user, setMockState];
-    } */
+    }
     /* if (typeof init === "string" && !hasSetExpiry) {
       hasSetExpiry = true;
       return [sessionExpiryDate, setMockState];

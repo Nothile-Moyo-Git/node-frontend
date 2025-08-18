@@ -31,13 +31,20 @@ Object.defineProperties(globalThis, {
 
 // Mock the View Transitions API so React Router won't crash
 Object.defineProperty(document, "startViewTransition", {
-  value: (callback) => {
-    // just run the callback immediately in tests
-    callback();
+  value: (callback = () => {}) => {
+    try {
+      callback();
+    } catch (error) {
+      console.log("Callback not called");
+      console.log(error);
+    }
+
     return {
       finished: Promise.resolve(),
       ready: Promise.resolve(),
       updateCallbackDone: Promise.resolve(),
+      skipTransition: () => {},
+      key: "mock-transition-key",
     };
   },
   writable: true,

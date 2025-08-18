@@ -1,5 +1,5 @@
 import { act } from "react-dom/test-utils";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { server } from "./test-utils/mockServer";
 import "@testing-library/jest-dom";
 
@@ -9,10 +9,10 @@ import { setAppStateMock } from "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 
 // Component imports, we do this here
-import { RoutedAppComponent } from "./test-utils/testRouter";
-import { RouterProvider } from "react-router-dom";
+import { renderWithRouter } from "./test-utils/testRouter";
 import { User } from "./@types";
 import { generateUploadDate } from "./util/util";
+import App from "./App";
 
 // Define a user here which should have their details rendered on the main App page
 const mockUser: User = {
@@ -55,7 +55,7 @@ describe("App Component Tests", () => {
   // Handle the main authentication of the app
   it("Renders the app successfully", () => {
     act(() => {
-      render(<RouterProvider router={RoutedAppComponent} />);
+      renderWithRouter(<App />);
     });
 
     // Check if the app component is rendered and we navigate to it successfully
@@ -65,7 +65,7 @@ describe("App Component Tests", () => {
   });
 
   it("Should show loading state", () => {
-    render(<RouterProvider router={RoutedAppComponent} />);
+    renderWithRouter(<App />);
 
     const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
@@ -74,7 +74,7 @@ describe("App Component Tests", () => {
   it("Should not show loading spinner is app loaded successfully", () => {
     setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
 
-    render(<RouterProvider router={RoutedAppComponent} />);
+    renderWithRouter(<App />);
 
     const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
     expect(loadingIndicator).not.toBeInTheDocument();
@@ -83,7 +83,7 @@ describe("App Component Tests", () => {
   it("Should show error modal if app isn't loaded successfully", async () => {
     setAppStateMock(false, true, mockUser, mockExpiryDate, mockCreationDate);
 
-    render(<RouterProvider router={RoutedAppComponent} />);
+    renderWithRouter(<App />);
 
     const loadingIndicator = await screen.findByTestId("test-id-error-modal");
     expect(loadingIndicator).toBeVisible();
@@ -92,7 +92,7 @@ describe("App Component Tests", () => {
   it("Show user details", () => {
     setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
 
-    render(<RouterProvider router={RoutedAppComponent} />);
+    renderWithRouter(<App />);
 
     const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
     expect(loadingIndicator).not.toBeInTheDocument();
