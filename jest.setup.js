@@ -31,14 +31,8 @@ Object.defineProperties(globalThis, {
 
 // Mock the View Transitions API so React Router won't crash
 Object.defineProperty(document, "startViewTransition", {
-  value: (callback = () => {}) => {
-    try {
-      callback();
-    } catch (error) {
-      console.log("Callback not called");
-      console.log(error);
-    }
-
+  value: (callback) => {
+    callback();
     return {
       finished: Promise.resolve(),
       ready: Promise.resolve(),
