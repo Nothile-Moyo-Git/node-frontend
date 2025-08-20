@@ -10,7 +10,7 @@ import { ReactNode } from "react";
 import { render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 
-export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
+export function renderWithRouter(ui: ReactNode, { route = "/" } = {}, context) {
   const router = createMemoryRouter(
     [
       {

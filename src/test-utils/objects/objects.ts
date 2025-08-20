@@ -21,10 +21,10 @@ export const mockUser: User = {
   ],
 };
 
-/* export const mockContext = {
+export const mockContext = {
   baseUrl: endpoint,
   token: "fake-token",
   userId: "123",
   userAuthenticated: true,
-  validateAuthentication: jest.fn(),
-}; */
+  validateAuthentication: () => {},
+};
