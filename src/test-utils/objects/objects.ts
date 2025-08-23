@@ -1,4 +1,5 @@
 import { User } from "../../@types";
+import { ContextProps } from "../../context/AppContext";
 
 const endpoint =
   process.env.NODE_ENV.trim() === "development"
@@ -21,8 +22,9 @@ export const mockUser: User = {
   ],
 };
 
-export const mockContext = {
-  baseUrl: endpoint,
+export const mockContext: ContextProps = {
+  baseUrl: endpoint ? endpoint : "",
+  checkAuthentication: () => true,
   token: "fake-token",
   userId: "123",
   userAuthenticated: true,

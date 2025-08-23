@@ -14,7 +14,7 @@
 import React, { useState, ReactNode } from "react";
 
 // Typing for everything related to state management
-interface ContextProps {
+export interface ContextProps {
   token?: string;
   userId?: string;
   expiresIn?: string;

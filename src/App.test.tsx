@@ -13,7 +13,6 @@ import { mockContext } from "./test-utils/objects/objects";
 import { renderWithRouter } from "./test-utils/testRouter";
 import { generateUploadDate } from "./util/util";
 import { mockUser } from "./test-utils/objects/objects";
-import { AppContext } from "./context/AppContext";
 import App from "./App";
 
 // Two weeks after original expiry date
@@ -41,7 +40,7 @@ describe("App Component Tests", () => {
   // Handle the main authentication of the app
   it("Renders the app successfully", () => {
     act(() => {
-      renderWithRouter(<App />, { route: "/" }, mockContext);
+      renderWithRouter(<App />);
     });
 
     // Check if the app component is rendered and we navigate to it successfully
@@ -51,7 +50,7 @@ describe("App Component Tests", () => {
   });
 
   it("Should show loading state", () => {
-    renderWithRouter(<App />, { route: "/" }, mockContext);
+    renderWithRouter(<App />);
 
     const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
@@ -60,7 +59,7 @@ describe("App Component Tests", () => {
   it("Should not show loading spinner is app loaded successfully", () => {
     setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
 
-    renderWithRouter(<App />, { route: "/" }, mockContext);
+    renderWithRouter(<App />);
 
     const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
     expect(loadingIndicator).not.toBeInTheDocument();
@@ -69,7 +68,7 @@ describe("App Component Tests", () => {
   it("Should show error modal if app isn't loaded successfully", async () => {
     setAppStateMock(false, true, mockUser, mockExpiryDate, mockCreationDate);
 
-    renderWithRouter(<App />, { route: "/" }, mockContext);
+    renderWithRouter(<App />);
 
     const loadingIndicator = await screen.findByTestId("test-id-error-modal");
     expect(loadingIndicator).toBeVisible();
@@ -95,7 +94,7 @@ describe("App Component Tests", () => {
         }),
     });
 
-    renderWithRouter(<App />, { route: "/" }, mockContext);
+    renderWithRouter(<App />);
 
     const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
     expect(loadingIndicator).not.toBeInTheDocument();
