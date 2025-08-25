@@ -1,5 +1,5 @@
 import { act } from "react-dom/test-utils";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { server } from "./test-utils/mockServer";
 import "@testing-library/jest-dom";
 
@@ -10,7 +10,7 @@ import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 import { mockContext } from "./test-utils/objects/objects";
 
 // Component imports, we do this here
-import { renderWithRouter } from "./test-utils/testRouter";
+import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 import { generateUploadDate } from "./util/util";
 import { mockUser } from "./test-utils/objects/objects";
 import App from "./App";
@@ -51,7 +51,6 @@ describe("App Component Tests", () => {
 
   it("Should show loading state", () => {
     renderWithRouter(<App />);
-
     const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
   });
@@ -75,8 +74,6 @@ describe("App Component Tests", () => {
   });
 
   it("Show user details", async () => {
-    setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
-
     // Mock context state and mock the fetch request
     mockContext.validateAuthentication = jest.fn();
 
@@ -94,10 +91,16 @@ describe("App Component Tests", () => {
         }),
     });
 
-    renderWithRouter(<App />);
+    setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
 
-    const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
-    expect(loadingIndicator).not.toBeInTheDocument();
+    renderWithContext(<App />, { route: "/" }, mockContext);
+
+    // Wait for loading spinner to disappear
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId("test-id-loading-spinner"),
+      ).not.toBeInTheDocument();
+    });
 
     const welcomeText = await screen.findByTestId("test-id-user-exists");
 
