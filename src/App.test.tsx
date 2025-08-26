@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 
 // Importing mocks to be used for testing
 import "./test-utils/setupTestMocks";
-import { setAppStateMock } from "./test-utils/setupTestMocks";
+// import { setAppStateMock } from "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 import { mockContext } from "./test-utils/objects/objects";
 
@@ -23,8 +23,9 @@ const mockExpiryDate = generateUploadDate(
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 
 // Setup mocks and environment
+beforeAll(() => server.listen());
+
 beforeEach(() => {
-  server.listen();
   setMockAuthStorage();
 });
 
@@ -56,7 +57,21 @@ describe("App Component Tests", () => {
   });
 
   it("Should not show loading spinner is app loaded successfully", () => {
-    setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
+    // setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
+
+    global.fetch = jest.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          data: {
+            PostUserDetailsResponse: {
+              sessionCreated: mockCreationDate,
+              sessionExpires: mockExpiryDate,
+              user: mockUser,
+              success: true,
+            },
+          },
+        }),
+    });
 
     renderWithRouter(<App />);
 
@@ -65,7 +80,21 @@ describe("App Component Tests", () => {
   });
 
   it("Should show error modal if app isn't loaded successfully", async () => {
-    setAppStateMock(false, true, mockUser, mockExpiryDate, mockCreationDate);
+    // setAppStateMock(false, true, mockUser, mockExpiryDate, mockCreationDate);
+
+    global.fetch = jest.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          data: {
+            PostUserDetailsResponse: {
+              sessionCreated: mockCreationDate,
+              sessionExpires: mockExpiryDate,
+              user: mockUser,
+              success: false,
+            },
+          },
+        }),
+    });
 
     renderWithRouter(<App />);
 
@@ -75,10 +104,7 @@ describe("App Component Tests", () => {
 
   it("Show user details", async () => {
     // Mock context state and mock the fetch request
-    mockContext.validateAuthentication = jest.fn();
-
-    // Base state
-    setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
+    // mockContext.validateAuthentication = jest.fn();
 
     global.fetch = jest.fn().mockResolvedValue({
       json: () =>
@@ -96,12 +122,14 @@ describe("App Component Tests", () => {
 
     renderWithContext(<App />, { route: "/" }, mockContext);
 
-    // Wait for loading spinner to disappear
+    // Wait for loading spinner to disappear and user details to render
+    // We have to use a waitFor here since we're mocking the api reques
     await waitFor(() => {
-      expect(
-        screen.queryByTestId("test-id-loading-spinner"),
-      ).not.toBeInTheDocument();
-      // expect(screen.getByTestId("test-id-user-exists")).toBeInTheDocument();
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      const userText = screen.getByText(/Welcome Nothile Moyo/);
+
+      expect(loadingSpinner).not.toBeInTheDocument();
+      expect(userText).toBeInTheDocument();
     });
   });
 });

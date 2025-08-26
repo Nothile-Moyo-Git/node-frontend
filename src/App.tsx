@@ -126,10 +126,6 @@ const App: FC = () => {
 
       {!isLoading && loadingError && <ErrorModal />}
 
-      {!isLoading && user && (
-        <p data-testid="test-id-user-exists">User loaded</p>
-      )}
-
       {!isLoading && appContextInstance?.userAuthenticated && user && (
         <div className="app__content">
           <h1 className="app__title">{`Welcome ${user?.name}`}</h1>

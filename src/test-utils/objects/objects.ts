@@ -1,11 +1,6 @@
 import { User } from "../../@types";
 import { ContextProps } from "../../context/AppContext";
 
-const endpoint =
-  process.env.NODE_ENV.trim() === "development"
-    ? process.env.API_URL_DEV
-    : process.env.API_URL_PROD;
-
 // Define a user here which should have their details rendered on the main App page
 export const mockUser: User = {
   _id: "6624158268f8cf47bea31396",
@@ -23,7 +18,7 @@ export const mockUser: User = {
 };
 
 export const mockContext: ContextProps = {
-  baseUrl: endpoint ? endpoint : "",
+  baseUrl: process.env.API_URL_DEV ?? "http://localhost:4000",
   checkAuthentication: () => true,
   logoutUser: () => {},
   token: "fake-token",

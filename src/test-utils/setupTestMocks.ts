@@ -20,7 +20,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 // This allows us to be able to mock hooks in Jest otherwise we use the actual hook which triggers errors
-jest.mock("react", () => ({
+/* jest.mock("react", () => ({
   ...jest.requireActual("react"),
   useState: jest.fn(),
 }));
@@ -58,13 +58,13 @@ export const setAppStateMock = (
       hasSetUser = true;
       return [user, setMockState];
     }
-    /* if (typeof init === "string" && !hasSetExpiry) {
+    if (typeof init === "string" && !hasSetExpiry) {
       hasSetExpiry = true;
       return [sessionExpiryDate, setMockState];
     }
     if (typeof init === "string") {
       return [sessionCreationDate, setMockState];
-    } */
+    }
     return [init, setMockState];
   });
-};
+}; */

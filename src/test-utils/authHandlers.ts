@@ -1,21 +1,22 @@
-import { rest } from "msw";
+// handlers.ts
+import { graphql } from "msw";
 
 export const handlers = [
-  rest.get("http://localhost:4000/graphql/auth", (req, res, ctx) => {
+  graphql.query("PostUserDetailsResponse", (req, res, ctx) => {
     return res(
-      ctx.status(200),
-      ctx.json({
-        data: {
-          PostUserDetailsResponse: {
-            sessionCreated: "2025-07-16 19:19:34",
-            sessionExpires: "2025-07-30 19:19:34",
-            user: {
-              name: "Nothile Moyo",
-              email: "nothile1@gmail.com",
-              password: "...",
-              status: "active",
-            },
-            success: true,
+      ctx.data({
+        PostUserDetailsResponse: {
+          sessionCreated: "2024-01-01",
+          sessionExpires: "2024-12-31",
+          success: true,
+          user: {
+            _id: "1",
+            name: "Nothile Moyo",
+            email: "nothile@example.com",
+            password: "secret",
+            confirmPassword: "secret",
+            status: "active",
+            posts: [],
           },
         },
       }),
