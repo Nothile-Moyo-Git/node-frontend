@@ -1,6 +1,7 @@
 import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 import { server } from "./test-utils/mockServer";
+import { graphql } from "msw";
 import "@testing-library/jest-dom";
 
 // Importing mocks to be used for testing
@@ -50,38 +51,43 @@ describe("App Component Tests", () => {
     expect(appComponent).toMatchSnapshot();
   });
 
-  it("Should show loading state", () => {
+  it("Should show loading spinner", () => {
+    server.use(
+      graphql.query("PostUserDetailsResponse", (req, res, ctx) => {
+        return res(
+          ctx.delay(200), // <-- delay response
+          ctx.data({
+            PostUserDetailsResponse: {
+              sessionCreated: "2024-01-01",
+              sessionExpires: "2024-12-31",
+              success: true,
+              user: {
+                _id: "1",
+                name: "Nothile Moyo",
+                email: "nothile@example.com",
+              },
+            },
+          }),
+        );
+      }),
+    );
+
     renderWithRouter(<App />);
+
     const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
   });
 
-  it("Should not show loading spinner is app loaded successfully", () => {
-    // setAppStateMock(false, false, mockUser, mockExpiryDate, mockCreationDate);
-
-    global.fetch = jest.fn().mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          data: {
-            PostUserDetailsResponse: {
-              sessionCreated: mockCreationDate,
-              sessionExpires: mockExpiryDate,
-              user: mockUser,
-              success: true,
-            },
-          },
-        }),
-    });
-
+  it("Should not show loading spinner is app loaded successfully", async () => {
     renderWithRouter(<App />);
 
-    const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
-    expect(loadingIndicator).not.toBeInTheDocument();
+    await waitFor(() => {
+      const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingIndicator).not.toBeInTheDocument();
+    });
   });
 
   it("Should show error modal if app isn't loaded successfully", async () => {
-    // setAppStateMock(false, true, mockUser, mockExpiryDate, mockCreationDate);
-
     global.fetch = jest.fn().mockResolvedValue({
       json: () =>
         Promise.resolve({
@@ -96,30 +102,18 @@ describe("App Component Tests", () => {
         }),
     });
 
-    renderWithRouter(<App />);
+    renderWithContext(<App />, { route: "/" }, mockContext);
 
-    const loadingIndicator = await screen.findByTestId("test-id-error-modal");
-    expect(loadingIndicator).toBeVisible();
+    await waitFor(() => {
+      const errorModal = screen.getByTestId("test-id-error-modal");
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+
+      expect(errorModal).toBeVisible();
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
   });
 
   it("Show user details", async () => {
-    // Mock context state and mock the fetch request
-    // mockContext.validateAuthentication = jest.fn();
-
-    global.fetch = jest.fn().mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          data: {
-            PostUserDetailsResponse: {
-              sessionCreated: mockCreationDate,
-              sessionExpires: mockExpiryDate,
-              user: mockUser,
-              success: true,
-            },
-          },
-        }),
-    });
-
     renderWithContext(<App />, { route: "/" }, mockContext);
 
     // Wait for loading spinner to disappear and user details to render
