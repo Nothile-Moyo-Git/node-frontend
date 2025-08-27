@@ -80,6 +80,7 @@ const App: FC = () => {
       setUser(user);
       setSessionExpiryDate(sessionExpires);
       setSessionCreationDate(sessionCreated);
+      setIsLoading(false);
     };
 
     const fetchAuthentication = async () => {
@@ -107,14 +108,13 @@ const App: FC = () => {
       } catch (error) {
         console.log("Error: User could not be validated");
         console.error(error);
+        // We have a response so we're not loading data anymore
+        setIsLoading(false);
       }
 
       if (!appContextInstance?.userAuthenticated) {
         navigate(`${BASENAME}/login`);
       }
-
-      // We have a response so we're not loading data anymore
-      setIsLoading(false);
     };
 
     fetchAuthentication();

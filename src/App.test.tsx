@@ -1,12 +1,17 @@
+/**
+ * Author: Nothile Moyo
+ * Date created: 27/08/2025
+ *
+ * @description: This is the test file for the App file, it handles the basic authentication and handling the user request
+ */
+
 import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 import { server } from "./test-utils/mockServer";
-import { graphql } from "msw";
 import "@testing-library/jest-dom";
 
 // Importing mocks to be used for testing
 import "./test-utils/setupTestMocks";
-// import { setAppStateMock } from "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 import { mockContext } from "./test-utils/objects/objects";
 
@@ -51,27 +56,7 @@ describe("App Component Tests", () => {
     expect(appComponent).toMatchSnapshot();
   });
 
-  it("Should show loading spinner", () => {
-    server.use(
-      graphql.query("PostUserDetailsResponse", (req, res, ctx) => {
-        return res(
-          ctx.delay(200), // <-- delay response
-          ctx.data({
-            PostUserDetailsResponse: {
-              sessionCreated: "2024-01-01",
-              sessionExpires: "2024-12-31",
-              success: true,
-              user: {
-                _id: "1",
-                name: "Nothile Moyo",
-                email: "nothile@example.com",
-              },
-            },
-          }),
-        );
-      }),
-    );
-
+  it("Should show loading spinner", async () => {
     renderWithRouter(<App />);
 
     const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
@@ -79,7 +64,21 @@ describe("App Component Tests", () => {
   });
 
   it("Should not show loading spinner is app loaded successfully", async () => {
-    renderWithRouter(<App />);
+    global.fetch = jest.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          data: {
+            PostUserDetailsResponse: {
+              sessionCreated: mockCreationDate,
+              sessionExpires: mockExpiryDate,
+              user: mockUser,
+              success: true,
+            },
+          },
+        }),
+    });
+
+    renderWithContext(<App />, { route: "/" }, mockContext);
 
     await waitFor(() => {
       const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
