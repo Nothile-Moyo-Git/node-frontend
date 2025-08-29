@@ -279,7 +279,7 @@ export const ViewPosts: FC = () => {
   }, [page, appContextInstance, fetchPosts, navigate]);
 
   return (
-    <section className="viewPosts">
+    <section className="viewPosts" data-testid="test-id-view-posts">
       <h1 className="viewPosts__title">Posts</h1>
 
       {isLoading && <LoadingSpinner />}

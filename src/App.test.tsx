@@ -64,6 +64,7 @@ describe("App Component Tests", () => {
   });
 
   it("Should not show loading spinner is app loaded successfully", async () => {
+    // Mock a successful request to fetch user data which hides the loading spinner
     global.fetch = jest.fn().mockResolvedValue({
       json: () =>
         Promise.resolve({
@@ -87,6 +88,7 @@ describe("App Component Tests", () => {
   });
 
   it("Should show error modal if app isn't loaded successfully", async () => {
+    // Mock a successful request which fails to show user data and isntead shows the error modal
     global.fetch = jest.fn().mockResolvedValue({
       json: () =>
         Promise.resolve({
