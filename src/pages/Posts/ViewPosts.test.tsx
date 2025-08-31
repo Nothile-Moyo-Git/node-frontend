@@ -6,6 +6,7 @@
  * We authenticate the user, and if valid, we then show a list of all posts on the page
  */
 
+import "@testing-library/jest-dom";
 import {
   clearAuthStorage,
   setMockAuthStorage,
@@ -32,10 +33,24 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe("View Posts component", () => {
+  global.fetch = jest.fn().mockResolvedValue({
+    json: () =>
+      Promise.resolve({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: true,
+          },
+        },
+      }),
+  });
+
   renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
 
   // Check if the view posts component is rendered and we navigate to it successfully
   const appComponent = screen.getByTestId("test-id-view-posts");
-  expect(appComponent).toBeDefined();
+  expect(appComponent).toBeInTheDocument();
   expect(appComponent).toMatchSnapshot();
 });

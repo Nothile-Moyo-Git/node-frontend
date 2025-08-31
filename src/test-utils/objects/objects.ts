@@ -1,5 +1,6 @@
 import { User } from "../../@types";
 import { ContextProps } from "../../context/AppContext";
+import { Post } from "../../@types";
 
 // Define a user here which should have their details rendered on the main App page
 export const mockUser: User = {
@@ -26,3 +27,43 @@ export const mockContext: ContextProps = {
   userAuthenticated: true,
   validateAuthentication: () => {},
 };
+
+// Mocking our posts
+export const mockPosts: Post[] = [
+  {
+    _id: "662423764e8c8b1633534be8",
+    fileLastUpdated: "",
+    fileName: "2B.png",
+    title: "2B",
+    imageUrl: "..\frontend\x02src\x02images\x022B.png",
+    content:
+      "YoRHa No. 2 Type B,[a] commonly known as 2B,[b] is a fictional android from the 2017 video game Nier: Automata, a spin-off of the Drakengard series developed by PlatinumGames and published by Square Enix. One of the game's three protagonists, 2B is a soldier for YoRHa, an android task force fighting a proxy war with alien-created Machine Lifeforms. Her story arc focuses on her backstory within YoRHa, and her relationship with her partner 9S, a reconnaissance android. She is also featured in related media, such as the anime Nier: Automata Ver1.1a.",
+    creator: "6624158268f8cf47bea31396",
+    createdAt: "2024-04-20T20:20:07.010+00:00",
+    updatedAt: "2024-04-20T20:20:07.010+00:00",
+  },
+  {
+    _id: "662423884e8c8b1633534bf0",
+    fileLastUpdated: "",
+    fileName: "Alfira-face.jpg",
+    title: "Alfira",
+    imageUrl: "..\x02frontend\x02src\x02images\x02Alfira-face.jpg",
+    content:
+      "Alfira is part of the group of tiefling refugees who were exiled from Elturel, and Bardic apprentice to a woman named Lihala. On the journey to the Emerald Grove, they were attacked by gnolls, and Lihala was killed. Alfira has since been trying to compose a eulogy for her.",
+    creator: "6624158268f8cf47bea31396",
+    createdAt: "2024-04-20T20:20:24.070+00:00",
+    updatedAt: "2024-04-20T20:20:24.070+00:00",
+  },
+  {
+    _id: "662e7bcdd94fde36bf4bb554",
+    fileLastUpdated: "",
+    fileName: "Shanalotte.jpg",
+    title: "Emerald Herald",
+    imageUrl: "..\x02frontend\x02src\x02images\x02Shanalotte.jpg",
+    content:
+      "The Emerald Herald is first encountered in the town of Majula, where she sits beside the cliff overlooking the ocean. Her true nature and purpose are shrouded in mystery, but she plays a crucial role in the player's quest by providing them with the means to level up and upgrade their Estus Flask.",
+    creator: "6624158268f8cf47bea31396",
+    createdAt: "2024-04-28T16:39:41.968+00:00",
+    updatedAt: "2024-04-28T16:39:41.968+00:00",
+  },
+];

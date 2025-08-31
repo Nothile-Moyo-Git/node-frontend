@@ -6,6 +6,11 @@ const { Blob } = require("buffer");
 const DOMException = require("domexception");
 
 // Setting global values for Jest testing
+if (!String.prototype.toWellFormed) {
+  String.prototype.toWellFormed = function () {
+    return this.toString();
+  };
+}
 
 // Set globals before undici so we can use TextEncoder and TextDecoder, otherwise they're not defined
 // These values need to be defined at require time
