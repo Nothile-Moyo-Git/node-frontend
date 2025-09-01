@@ -13,9 +13,9 @@ import {
 } from "../../test-utils/authStorage";
 import { server } from "../../test-utils/mockServer";
 import { renderWithContext } from "../../test-utils/testRouter";
-import { screen } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
 import { ViewPosts } from "./ViewPosts";
-import { mockContext } from "../../test-utils/objects/objects";
+import { mockContext, mockPosts } from "../../test-utils/objects/objects";
 
 // Setup mocks and environment
 beforeAll(() => server.listen());
@@ -33,24 +33,29 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe("View Posts component", () => {
-  global.fetch = jest.fn().mockResolvedValue({
-    json: () =>
-      Promise.resolve({
-        data: {
-          PostUserDetailsResponse: {
-            sessionCreated: mockCreationDate,
-            sessionExpires: mockExpiryDate,
-            user: mockUser,
-            success: true,
+  it("Renders the View Posts component successfully", () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      status: 200,
+      json: () =>
+        Promise.resolve({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 1,
+              posts: mockPosts,
+              message: "200 : Request was successful",
+            },
           },
-        },
-      }),
+        }),
+    });
+
+    act(() => {
+      renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
+    });
+
+    // Check if the view posts component is rendered and we navigate to it successfully
+    const appComponent = screen.getByTestId("test-id-view-posts");
+    expect(appComponent).toBeInTheDocument();
+    expect(appComponent).toMatchSnapshot();
   });
-
-  renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
-
-  // Check if the view posts component is rendered and we navigate to it successfully
-  const appComponent = screen.getByTestId("test-id-view-posts");
-  expect(appComponent).toBeInTheDocument();
-  expect(appComponent).toMatchSnapshot();
 });
