@@ -95,18 +95,27 @@ export const ViewPosts: FC = () => {
 
   // Method defined here to allow async calls in a useEffect hook
   const fetchPosts = useCallback(async () => {
-    const result = await getPosts();
+    setIsLoading(true);
 
-    const dataJSON = await result.json();
+    try {
+      const result = await getPosts();
+      const dataJSON = await result.json();
 
-    // Convert the response to JSON based on the response received from GraphQL
-    const data = dataJSON.data.GetPostsResponse;
+      // Convert the response to JSON based on the response received from GraphQL
+      const data = dataJSON.data.GetPostsResponse;
+      const success = data.success ? data.success : false;
 
-    const success = data.success ? data.success : false;
-
-    if (success === true) {
-      setPosts(data.posts);
-      setNumberOfPages(data.numberOfPages);
+      if (success === true) {
+        setPosts(data.posts);
+        setNumberOfPages(data.numberOfPages);
+      } else {
+        setShowErrorText(true);
+      }
+    } catch (error) {
+      console.error("Fetch posts error", error);
+      setShowErrorText(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [getPosts]);
 
@@ -257,7 +266,6 @@ export const ViewPosts: FC = () => {
 
   useEffect(() => {
     // Toggle the loading spinner util the request ends
-    setIsLoading(true);
     appContextInstance?.validateAuthentication();
 
     try {
@@ -266,8 +274,6 @@ export const ViewPosts: FC = () => {
           fetchPosts();
         }
       }
-
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
