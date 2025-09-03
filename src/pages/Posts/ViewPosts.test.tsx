@@ -13,23 +13,27 @@ import {
 } from "../../test-utils/authStorage";
 import { server } from "../../test-utils/mockServer";
 import { renderWithContext } from "../../test-utils/testRouter";
-import { act, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { ViewPosts } from "./ViewPosts";
 import { mockContext, mockPosts } from "../../test-utils/objects/objects";
 
+// Mocking socket.io jest
+jest.mock("socket.io-client", () => {
+  return {
+    io: () => ({
+      on: jest.fn(),
+      emit: jest.fn(),
+      removeAllListeners: jest.fn(),
+    }),
+  };
+});
+
 // Setup mocks and environment
-beforeAll(() => server.listen());
+beforeAll(() => {
+  server.listen();
+});
 
 beforeEach(() => {
-  jest.mock("socket.io-client", () => {
-    return {
-      io: jest.fn(() => ({
-        on: jest.fn(),
-        removeAllListeners: jest.fn(),
-      })),
-    };
-  });
-
   setMockAuthStorage();
 });
 
@@ -42,10 +46,41 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe("View Posts component", () => {
-  it("Should show loading spinner on initial render", async () => {
-    await act(async () => {
-      renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
+  it("Should match snapshot", () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      status: 200,
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts,
+              message: "200 : Request was successful",
+            },
+          },
+        }),
     });
+
+    renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
+
+    // Check if the view posts component is rendered and we navigate to it successfully
+    const appComponent = screen.getByTestId("test-id-view-posts");
+    expect(appComponent).toBeInTheDocument();
+    expect(appComponent).toMatchSnapshot();
+  });
+
+  it("Should show loading spinner on initial render", async () => {
+    // Make the request never resolve so the loading spinner keeps spinning
+    global.fetch = jest.fn().mockImplementation(
+      () =>
+        new Promise(() => {
+          // Never resolves → keeps isLoading=true
+        }),
+    ) as jest.Mock;
+
+    renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
 
     const loadingIndicator = await screen.findByTestId(
       "test-id-loading-spinner",
@@ -69,9 +104,7 @@ describe("View Posts component", () => {
         }),
     });
 
-    act(() => {
-      renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
-    });
+    renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
 
     // Check if the view posts component is rendered and we navigate to it successfully
     const appComponent = screen.getByTestId("test-id-view-posts");

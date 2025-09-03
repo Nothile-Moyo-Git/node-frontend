@@ -35,3 +35,39 @@ exports[`View Posts component Renders the View Posts component successfully 1`] 
   </div>
 </section>
 `;
+
+exports[`View Posts component Should match snapshot 1`] = `
+<section
+  class="viewPosts"
+  data-testid="test-id-view-posts"
+>
+  <h1
+    class="viewPosts__title"
+  >
+    Posts
+  </h1>
+  <div
+    class="loadingWrapper"
+    data-testid="test-id-loading-spinner"
+  >
+    <span
+      class="loadingSpinner"
+    />
+    <p
+      class="loadingText"
+    >
+      Loading, please wait...
+    </p>
+  </div>
+  <div
+    class="paginator"
+  >
+    <button
+      class="paginator__button paginator__button--current-normal"
+      disabled=""
+    >
+      1
+    </button>
+  </div>
+</section>
+`;
