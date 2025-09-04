@@ -13,7 +13,7 @@ import {
 } from "../../test-utils/authStorage";
 import { server } from "../../test-utils/mockServer";
 import { renderWithContext } from "../../test-utils/testRouter";
-import { screen } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
 import { ViewPosts } from "./ViewPosts";
 import { mockContext, mockPosts } from "../../test-utils/objects/objects";
 
@@ -43,10 +43,12 @@ afterEach(() => {
   clearAuthStorage();
 });
 
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});
 
 describe("View Posts component", () => {
-  it("Should match snapshot", () => {
+  it("Should match snapshot", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       status: 200,
       ok: true,
@@ -63,10 +65,12 @@ describe("View Posts component", () => {
         }),
     });
 
-    renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
+    await act(async () => {
+      renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
+    });
 
     // Check if the view posts component is rendered and we navigate to it successfully
-    const appComponent = screen.getByTestId("test-id-view-posts");
+    const appComponent = await screen.findByTestId("test-id-view-posts");
     expect(appComponent).toBeInTheDocument();
     expect(appComponent).toMatchSnapshot();
   });

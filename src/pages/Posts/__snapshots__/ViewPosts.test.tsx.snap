@@ -1,41 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`View Posts component Renders the View Posts component successfully 1`] = `
-<section
-  class="viewPosts"
-  data-testid="test-id-view-posts"
->
-  <h1
-    class="viewPosts__title"
-  >
-    Posts
-  </h1>
-  <div
-    class="loadingWrapper"
-    data-testid="test-id-loading-spinner"
-  >
-    <span
-      class="loadingSpinner"
-    />
-    <p
-      class="loadingText"
-    >
-      Loading, please wait...
-    </p>
-  </div>
-  <div
-    class="paginator"
-  >
-    <button
-      class="paginator__button paginator__button--current-normal"
-      disabled=""
-    >
-      1
-    </button>
-  </div>
-</section>
-`;
-
 exports[`View Posts component Should match snapshot 1`] = `
 <section
   class="viewPosts"
@@ -46,19 +10,238 @@ exports[`View Posts component Should match snapshot 1`] = `
   >
     Posts
   </h1>
-  <div
-    class="loadingWrapper"
-    data-testid="test-id-loading-spinner"
+  <ul
+    class="viewPosts__posts-list"
   >
-    <span
-      class="loadingSpinner"
-    />
-    <p
-      class="loadingText"
-    >
-      Loading, please wait...
-    </p>
-  </div>
+    <li>
+      <article
+        class="article"
+      >
+        <img
+          alt="2B"
+          class="article__image"
+          draggable="false"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            2B
+          </h2>
+          <p
+            class="article__description"
+          >
+            YoRHa No. 2 Type B,[a] commonly known as 2B,[b] is a fictional android from the 2017 video game Nier: Automata, a spin-off of the Drakengard series developed by PlatinumGames and published by Square Enix. One of the game's three protagonists, 2B is a soldier for YoRHa, an android task force fighting a proxy war with alien-created Machine Lifeforms. Her story arc focuses on her backstory within YoRHa, and her relationship with her partner 9S, a reconnaissance android. She is also featured in related media, such as the anime Nier: Automata Ver1.1a.
+          </p>
+          <p>
+            Uploaded: NaN/NaN/NaN NaN:NaN:NaN
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662423764e8c8b1633534be8"
+            >
+              Read more
+            </a>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+      >
+        <img
+          alt="Alfira"
+          class="article__image"
+          draggable="false"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Alfira
+          </h2>
+          <p
+            class="article__description"
+          >
+            Alfira is part of the group of tiefling refugees who were exiled from Elturel, and Bardic apprentice to a woman named Lihala. On the journey to the Emerald Grove, they were attacked by gnolls, and Lihala was killed. Alfira has since been trying to compose a eulogy for her.
+          </p>
+          <p>
+            Uploaded: NaN/NaN/NaN NaN:NaN:NaN
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662423884e8c8b1633534bf0"
+            >
+              Read more
+            </a>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+      >
+        <img
+          alt="Emerald Herald"
+          class="article__image"
+          draggable="false"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Emerald Herald
+          </h2>
+          <p
+            class="article__description"
+          >
+            The Emerald Herald is first encountered in the town of Majula, where she sits beside the cliff overlooking the ocean. Her true nature and purpose are shrouded in mystery, but she plays a crucial role in the player's quest by providing them with the means to level up and upgrade their Estus Flask.
+          </p>
+          <p>
+            Uploaded: NaN/NaN/NaN NaN:NaN:NaN
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662e7bcdd94fde36bf4bb554"
+            >
+              Read more
+            </a>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+      >
+        <img
+          alt="Tieflings"
+          class="article__image"
+          draggable="false"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Tieflings
+          </h2>
+          <p
+            class="article__description"
+          >
+            But you do see the way people look at you, devil’s child? Those black eyes, cold as a winter storm, were staring right into her heart and the sudden seriousness in his voice jolted her.
+          </p>
+          <p>
+            Uploaded: NaN/NaN/NaN NaN:NaN:NaN
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662e7c6ad94fde36bf4bb55c"
+            >
+              Read more
+            </a>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+      >
+        <img
+          alt="The Sixth Post"
+          class="article__image"
+          draggable="false"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            The Sixth Post
+          </h2>
+          <p
+            class="article__description"
+          >
+            Descriptions are a useful thing when you have them!
+          </p>
+          <p>
+            Uploaded: NaN/NaN/NaN NaN:NaN:NaN
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/67843561d02db477bac4843b"
+            >
+              Read more
+            </a>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+      >
+        <img
+          alt="Testing post number 6"
+          class="article__image"
+          draggable="false"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Testing post number 6
+          </h2>
+          <p
+            class="article__description"
+          >
+            Testing post number 6 for functionality
+          </p>
+          <p>
+            Uploaded: NaN/NaN/NaN NaN:NaN:NaN
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/68b0aac75d6f6df6ef698e7e"
+            >
+              Read more
+            </a>
+          </div>
+        </div>
+      </article>
+    </li>
+  </ul>
   <div
     class="paginator"
   >
@@ -68,6 +251,12 @@ exports[`View Posts component Should match snapshot 1`] = `
     >
       1
     </button>
+    <a
+      class="paginator__button"
+      href="/posts/2"
+    >
+      2
+    </a>
   </div>
 </section>
 `;
