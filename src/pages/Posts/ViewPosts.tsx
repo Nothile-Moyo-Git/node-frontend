@@ -315,11 +315,13 @@ export const ViewPosts: FC = () => {
         </>
       )}
 
-      <Paginator
-        currentPage={page}
-        numberOfPages={numberOfPages}
-        setPage={setPage}
-      />
+      {!isLoading && (
+        <Paginator
+          currentPage={page}
+          numberOfPages={numberOfPages}
+          setPage={setPage}
+        />
+      )}
 
       {socketModal}
 
