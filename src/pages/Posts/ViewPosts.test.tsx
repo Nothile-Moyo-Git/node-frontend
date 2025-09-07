@@ -17,7 +17,7 @@ import { act, screen } from "@testing-library/react";
 import { ViewPosts } from "./ViewPosts";
 import { mockContext, mockPosts } from "../../test-utils/objects/objects";
 
-// Mocking socket.io jest
+// Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
   return {
     io: () => ({
@@ -65,6 +65,7 @@ describe("View Posts component", () => {
         }),
     });
 
+    // Render the component with our posts and the images being mocked
     await act(async () => {
       renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
     });
@@ -92,9 +93,10 @@ describe("View Posts component", () => {
     expect(loadingIndicator).toBeVisible();
   });
 
-  /* it("Renders the View Posts component successfully", () => {
+  it("Renders the View Posts component successfully", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       status: 200,
+      ok: true,
       json: () =>
         Promise.resolve({
           data: {
@@ -108,11 +110,23 @@ describe("View Posts component", () => {
         }),
     });
 
-    renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
+    await act(async () => {
+      renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
+    });
 
     // Check if the view posts component is rendered and we navigate to it successfully
     const appComponent = screen.getByTestId("test-id-view-posts");
     expect(appComponent).toBeInTheDocument();
-    expect(appComponent).toMatchSnapshot();
-  }); */
+
+    // Check to see if our posts exist
+    // We're checking with different identifiers
+    const post2B = screen.getByTestId(`test-id-post-${mockPosts[0]._id}`);
+    expect(post2B).toBeVisible();
+
+    const postAlfira = screen.getByText(mockPosts[1].title);
+    expect(postAlfira).toBeVisible();
+
+    const emeraldHerald = screen.getByText(mockPosts[2].title);
+    expect(emeraldHerald).toBeVisible();
+  });
 });

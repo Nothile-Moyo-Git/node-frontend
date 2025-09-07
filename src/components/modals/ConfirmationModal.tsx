@@ -45,10 +45,18 @@ const ConfirmationModal: FC<ComponentProps> = ({
           Please know that this action is NOT REVERSIBLE.
         </p>
         <div className="confirmationModal__buttons">
-          <Button variant="primary" onClick={performAction}>
+          <Button
+            variant="primary"
+            onClick={performAction}
+            testId="test-id-confirmation-modal-confirm-button"
+          >
             Confirm
           </Button>
-          <Button variant="delete" onClick={() => toggleConfirmationModal(id)}>
+          <Button
+            variant="delete"
+            onClick={() => toggleConfirmationModal(id)}
+            testId="test-id-confirmation-modal-cancel-button"
+          >
             Cancel
           </Button>
         </div>

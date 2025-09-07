@@ -66,7 +66,7 @@ export const PostCard: FC<ComponentProps> = ({
   );
 
   return (
-    <article className="article">
+    <article className="article" data-testid={`test-id-post-${post._id}`}>
       <img
         src={image}
         alt={post?.title}
@@ -97,6 +97,7 @@ export const PostCard: FC<ComponentProps> = ({
 
           {isPostCreator && (
             <Button
+              testId={`test-id-delete-${post._id}`}
               variant="delete"
               onClick={() => toggleConfirmationModal(post._id)}
             >
