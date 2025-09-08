@@ -265,6 +265,7 @@ exports[`View Posts component Should match snapshot 1`] = `
     </button>
     <a
       class="paginator__button"
+      data-testid="test-id-pagination-page-2"
       href="/posts/2"
     >
       2

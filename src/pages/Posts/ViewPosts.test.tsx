@@ -129,4 +129,39 @@ describe("View Posts component", () => {
     const emeraldHerald = screen.getByText(mockPosts[2].title);
     expect(emeraldHerald).toBeVisible();
   });
+
+  it("Renders the page with pagination and goes to the next page", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      status: 200,
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts,
+              message: "200 : Request was successful",
+            },
+          },
+        }),
+    });
+
+    await act(async () => {
+      renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
+    });
+
+    // Go to page 2 as we have 6 posts which allows us to use pagination
+    const paginationPage2 = screen.getByTestId("test-id-pagination-page-2");
+    paginationPage2.click();
+
+    const post2B = screen.getByTestId(`test-id-post-${mockPosts[3]._id}`);
+    expect(post2B).toBeVisible();
+
+    const postAlfira = screen.getByText(mockPosts[4].title);
+    expect(postAlfira).toBeVisible();
+
+    const emeraldHerald = screen.getByText(mockPosts[5].title);
+    expect(emeraldHerald).toBeVisible();
+  });
 });

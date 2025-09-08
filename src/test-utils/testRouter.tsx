@@ -15,7 +15,15 @@ export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
   const router = createMemoryRouter(
     [
       {
-        path: route,
+        path: "/",
+        element: ui,
+      },
+      {
+        path: "/posts",
+        element: ui,
+      },
+      {
+        path: "/posts/:page",
         element: ui,
       },
     ],
@@ -33,7 +41,15 @@ export const renderWithContext = (
   const router = createMemoryRouter(
     [
       {
-        path: route,
+        path: "/",
+        element: ui,
+      },
+      {
+        path: "/posts",
+        element: ui,
+      },
+      {
+        path: "/posts/:page",
         element: ui,
       },
     ],
