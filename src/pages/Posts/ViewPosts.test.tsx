@@ -12,10 +12,11 @@ import {
   setMockAuthStorage,
 } from "../../test-utils/authStorage";
 import { server } from "../../test-utils/mockServer";
-import { renderWithContext } from "../../test-utils/testRouter";
+import { renderWithAct, renderWithContext } from "../../test-utils/testRouter";
 import { act, screen } from "@testing-library/react";
 import { ViewPosts } from "./ViewPosts";
 import { mockContext, mockPosts } from "../../test-utils/objects/objects";
+import userEvent from "@testing-library/user-event";
 
 // Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
@@ -147,21 +148,46 @@ describe("View Posts component", () => {
         }),
     });
 
-    await act(async () => {
-      renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
-    });
+    await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
 
     // Go to page 2 as we have 6 posts which allows us to use pagination
-    const paginationPage2 = screen.getByTestId("test-id-pagination-page-2");
-    paginationPage2.click();
+    const paginationPage2 = await screen.findByTestId(
+      "test-id-pagination-page-2",
+    );
 
-    const post2B = screen.getByTestId(`test-id-post-${mockPosts[3]._id}`);
+    await act(async () => {
+      userEvent.click(paginationPage2);
+    });
+
+    const post2B = await screen.findByTestId(
+      `test-id-post-${mockPosts[3]._id}`,
+    );
     expect(post2B).toBeVisible();
 
-    const postAlfira = screen.getByText(mockPosts[4].title);
+    const postAlfira = await screen.findByText(mockPosts[4].title);
     expect(postAlfira).toBeVisible();
 
-    const emeraldHerald = screen.getByText(mockPosts[5].title);
+    const emeraldHerald = await screen.findByText(mockPosts[5].title);
     expect(emeraldHerald).toBeVisible();
+  });
+
+  it("Deletes a post on the posts page", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      status: 200,
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts,
+              message: "200 : Request was successful",
+            },
+          },
+        }),
+    });
+
+    await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
   });
 });

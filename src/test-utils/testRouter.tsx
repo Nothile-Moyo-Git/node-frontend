@@ -7,7 +7,7 @@
  *
  */
 import { ReactNode } from "react";
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { AppContext, ContextProps } from "../context/AppContext";
 
@@ -61,4 +61,15 @@ export const renderWithContext = (
       <RouterProvider router={router} />
     </AppContext.Provider>,
   );
+};
+
+// Render with act here so I don't constantly need to wrap it and save on duplication
+export const renderWithAct = async (
+  ui: ReactNode,
+  { route = "/" } = {},
+  context: ContextProps,
+) => {
+  await act(async () => {
+    renderWithContext(ui, { route }, context);
+  });
 };
