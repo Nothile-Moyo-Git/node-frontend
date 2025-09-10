@@ -189,5 +189,63 @@ describe("View Posts component", () => {
     });
 
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
+
+    // Go to page 2 as we have 6 posts which allows us to use pagination
+    const paginationPage2 = await screen.findByTestId(
+      "test-id-pagination-page-2",
+    );
+
+    await act(async () => {
+      userEvent.click(paginationPage2);
+    });
+
+    // Find the final post we're going to delete
+    const emeraldHerald = await screen.findByText(mockPosts[5].title);
+    expect(emeraldHerald).toBeVisible();
+
+    // Mock post deletions
+    global.fetch = jest.fn().mockResolvedValue({
+      status: 200,
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: {
+            DeletePostResponse: {
+              highestPageNumber: 2,
+              numberOfPosts: 5,
+              status: 200,
+              success: true,
+            },
+          },
+        }),
+    });
+
+    // Return the new posts without the final one so we can confirm the deletion
+    global.fetch = jest.fn().mockResolvedValue({
+      status: 200,
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(0, 5),
+              message: "200 : Request was successful",
+            },
+          },
+        }),
+    });
+
+    const deletePostbutton = await screen.findByTestId(
+      `test-id-delete-${mockPosts[5]._id}`,
+    );
+
+    // Open the deletion modal
+    await act(async () => {
+      userEvent.click(deletePostbutton);
+    });
+
+    // 
   });
 });
