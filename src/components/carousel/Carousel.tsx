@@ -139,7 +139,11 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   return images.length > 0 ? (
     <section className="carousel">
       <div className="carousel__chosen-image">
-        <Button variant="primary" onClick={setChosenImageHandler}>
+        <Button
+          variant="primary"
+          onClick={setChosenImageHandler}
+          testId="test-id-carousel-button"
+        >
           Choose this image
         </Button>
         <p>

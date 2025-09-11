@@ -246,6 +246,10 @@ describe("View Posts component", () => {
       userEvent.click(deletePostbutton);
     });
 
-    // 
+    // Get the confirmation button
+    const modalConfirmButton = await screen.findByTestId(
+      "test-id-confirmation-modal-confirm-button",
+    );
+    expect(modalConfirmButton).toBeVisible();
   });
 });

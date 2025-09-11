@@ -49,6 +49,19 @@ exports[`View Posts component Should match snapshot 1`] = `
             >
               Read more
             </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662423764e8c8b1633534be8"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662423764e8c8b1633534be8"
+              type="submit"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </article>
@@ -89,6 +102,19 @@ exports[`View Posts component Should match snapshot 1`] = `
             >
               Read more
             </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662423884e8c8b1633534bf0"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662423884e8c8b1633534bf0"
+              type="submit"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </article>
@@ -129,6 +155,19 @@ exports[`View Posts component Should match snapshot 1`] = `
             >
               Read more
             </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662e7bcdd94fde36bf4bb554"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662e7bcdd94fde36bf4bb554"
+              type="submit"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </article>
@@ -169,6 +208,19 @@ exports[`View Posts component Should match snapshot 1`] = `
             >
               Read more
             </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662e7c6ad94fde36bf4bb55c"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662e7c6ad94fde36bf4bb55c"
+              type="submit"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </article>
@@ -209,6 +261,19 @@ exports[`View Posts component Should match snapshot 1`] = `
             >
               Read more
             </a>
+            <a
+              class="link__edit"
+              href="/edit-post/67843561d02db477bac4843b"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-67843561d02db477bac4843b"
+              type="submit"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </article>
@@ -249,6 +314,19 @@ exports[`View Posts component Should match snapshot 1`] = `
             >
               Read more
             </a>
+            <a
+              class="link__edit"
+              href="/edit-post/68b0aac75d6f6df6ef698e7e"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-68b0aac75d6f6df6ef698e7e"
+              type="submit"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </article>

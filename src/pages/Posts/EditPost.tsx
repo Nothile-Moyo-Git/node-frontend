@@ -382,7 +382,12 @@ export const EditPost: FC = () => {
           </Title>
 
           {location.key !== "default" && (
-            <Button type="button" variant="back" onClick={backToPreviousPage}>
+            <Button
+              type="button"
+              variant="back"
+              onClick={backToPreviousPage}
+              testId="test-id-edit-post-back-button"
+            >
               <MdKeyboardBackspace />
               Go back
             </Button>
@@ -475,7 +480,9 @@ export const EditPost: FC = () => {
             />
           </Field>
 
-          <Button variant="primary">Submit</Button>
+          <Button variant="primary" testId="test-id-edit-post-submit-button">
+            Submit
+          </Button>
         </Form>
       )}
     </section>

@@ -109,7 +109,11 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
               </li>
 
               <li className="menu__item">
-                <Button variant="menu" onClick={handleLogoutUser}>
+                <Button
+                  variant="menu"
+                  onClick={handleLogoutUser}
+                  testId="test-id-logout-button"
+                >
                   Logout
                 </Button>
               </li>

@@ -160,7 +160,11 @@ const PostScreen: FC = () => {
         <>
           <h1 className="post__title">{postData?.title}</h1>
           {location.key !== "default" && (
-            <Button variant="back" onClick={backToPreviousPage}>
+            <Button
+              variant="back"
+              onClick={backToPreviousPage}
+              testId="test-id-post-back-button"
+            >
               <MdKeyboardBackspace />
               Go back
             </Button>

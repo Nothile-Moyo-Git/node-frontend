@@ -313,7 +313,9 @@ const LiveChat: FC = () => {
             ref={contentRef}
             required={true}
           />
-          <Button variant="square">Send</Button>
+          <Button variant="square" testId="test-id-send-message-button">
+            Send
+          </Button>
         </Field>
       </Form>
     </section>

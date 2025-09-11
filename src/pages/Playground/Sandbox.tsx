@@ -165,13 +165,21 @@ const Sandbox = () => {
 
       <br />
 
-      <Button variant="primary" onClick={signupResolver}>
+      <Button
+        variant="primary"
+        onClick={signupResolver}
+        testId="sandbox-create-user-button"
+      >
         Create new user
       </Button>
 
       <br />
 
-      <Button variant="primary" onClick={getUserStatusResolver}>
+      <Button
+        variant="primary"
+        onClick={getUserStatusResolver}
+        testId="sandbox-get-user-button"
+      >
         Get user status
       </Button>
 
@@ -208,7 +216,9 @@ const Sandbox = () => {
           </Field>
         )}
 
-        <Button variant="primary">Submit</Button>
+        <Button variant="primary" testId="sandbox-create-post-button">
+          Submit
+        </Button>
       </Form>
     </div>
   );

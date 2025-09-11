@@ -302,7 +302,9 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        <Button variant="primary">Submit</Button>
+        <Button variant="primary" testId="test-id-create-post-button">
+          Submit
+        </Button>
       </Form>
     </section>
   );

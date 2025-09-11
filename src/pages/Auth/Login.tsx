@@ -176,7 +176,9 @@ export const LoginPage: FC = () => {
           />
         </Field>
 
-        <Button variant="primary">Submit</Button>
+        <Button variant="primary" testId="test-id-login-button">
+          Submit
+        </Button>
       </Form>
     </section>
   );

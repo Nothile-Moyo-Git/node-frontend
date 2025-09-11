@@ -252,7 +252,9 @@ export const SignupPage: FC = () => {
           />
         </Field>
 
-        <Button variant="primary">Submit</Button>
+        <Button variant="primary" testId="test-id-signup-button">
+          Submit
+        </Button>
       </Form>
     </section>
   );
