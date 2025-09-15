@@ -35,6 +35,8 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
+  jest.resetAllMocks();
+  global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   setMockAuthStorage();
 });
 
@@ -172,21 +174,53 @@ describe("View Posts component", () => {
   });
 
   it("Deletes a post on the posts page", async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      status: 200,
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts,
-              message: "200 : Request was successful",
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        status: 200,
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            data: {
+              GetPostsResponse: {
+                success: true,
+                numberOfPages: 2,
+                posts: mockPosts,
+                message: "200 : Request was successful",
+              },
             },
-          },
-        }),
-    });
+          }),
+      })
+      .mockResolvedValueOnce({
+        status: 200,
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            data: {
+              PostDeletePostResponse: {
+                highestPageNumber: 2,
+                numberOfPosts: 5,
+                status: 200,
+                success: true,
+              },
+            },
+          }),
+      })
+      .mockResolvedValueOnce({
+        status: 200,
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            data: {
+              GetPostsResponse: {
+                success: true,
+                numberOfPages: 2,
+                posts: mockPosts.slice(0, 5),
+                message: "200 : Request was successful",
+              },
+            },
+          }),
+      });
 
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
 
@@ -194,7 +228,6 @@ describe("View Posts component", () => {
     const paginationPage2 = await screen.findByTestId(
       "test-id-pagination-page-2",
     );
-
     await act(async () => {
       userEvent.click(paginationPage2);
     });
@@ -203,47 +236,13 @@ describe("View Posts component", () => {
     const emeraldHerald = await screen.findByText(mockPosts[5].title);
     expect(emeraldHerald).toBeVisible();
 
-    // Mock post deletions
-    global.fetch = jest.fn().mockResolvedValue({
-      status: 200,
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          data: {
-            DeletePostResponse: {
-              highestPageNumber: 2,
-              numberOfPosts: 5,
-              status: 200,
-              success: true,
-            },
-          },
-        }),
-    });
-
-    // Return the new posts without the final one so we can confirm the deletion
-    global.fetch = jest.fn().mockResolvedValue({
-      status: 200,
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts.slice(0, 5),
-              message: "200 : Request was successful",
-            },
-          },
-        }),
-    });
-
-    const deletePostbutton = await screen.findByTestId(
+    const deleteBtn = await screen.findByTestId(
       `test-id-delete-${mockPosts[5]._id}`,
     );
-
+    expect(deleteBtn).toBeVisible();
     // Open the deletion modal
     await act(async () => {
-      userEvent.click(deletePostbutton);
+      userEvent.click(deleteBtn);
     });
 
     // Get the confirmation button
@@ -251,5 +250,12 @@ describe("View Posts component", () => {
       "test-id-confirmation-modal-confirm-button",
     );
     expect(modalConfirmButton).toBeVisible();
+
+    // Delete the post
+    await act(async () => {
+      userEvent.click(modalConfirmButton);
+    });
+    // Make sure out deleted post isn't returned anymore
+    // expect(screen.queryByText(mockPosts[5].title)).not.toBeInTheDocument();
   });
 });

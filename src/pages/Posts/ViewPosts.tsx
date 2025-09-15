@@ -140,10 +140,6 @@ export const ViewPosts: FC = () => {
 
   // Show the confirmation modal when attempting to delete a modal
   const toggleShowConfirmationModal = (id: string) => {
-    console.log("\n", "id");
-    console.log(id);
-    console.log("\n");
-
     setDeleteId(id);
     setShowConfirmationModal((previousState) => !previousState);
   };
@@ -283,6 +279,10 @@ export const ViewPosts: FC = () => {
       navigate(`${BASENAME}/login`);
     }
   }, [page, appContextInstance, fetchPosts, navigate]);
+
+  /* console.log("Posts");
+  console.log(posts);
+  console.log("\n\n\n"); */
 
   return (
     <section className="viewPosts" data-testid="test-id-view-posts">
