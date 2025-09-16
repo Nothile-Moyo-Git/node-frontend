@@ -18,6 +18,8 @@ import { ViewPosts } from "./ViewPosts";
 import { mockContext, mockPosts } from "../../test-utils/objects/objects";
 import userEvent from "@testing-library/user-event";
 
+let mockFetch: jest.MockedFunction<typeof fetch>;
+
 // Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
   return {
@@ -36,7 +38,8 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.resetAllMocks();
-  global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>;
+  mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
+  global.fetch = mockFetch;
   setMockAuthStorage();
 });
 
@@ -49,6 +52,15 @@ afterEach(() => {
 afterAll(() => {
   server.close();
 });
+
+// Mock our fetch functioality
+const createFetchResponse = (data: unknown, status = 200): Response => {
+  return {
+    ok: true,
+    status,
+    json: async () => data,
+  } as Response;
+};
 
 describe("View Posts component", () => {
   it("Should match snapshot", async () => {
@@ -174,88 +186,78 @@ describe("View Posts component", () => {
   });
 
   it("Deletes a post on the posts page", async () => {
-    global.fetch = jest
-      .fn()
-      .mockResolvedValueOnce({
-        status: 200,
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            data: {
-              GetPostsResponse: {
-                success: true,
-                numberOfPages: 2,
-                posts: mockPosts,
-                message: "200 : Request was successful",
-              },
+    mockFetch
+      // 1️⃣ initial page-1 load
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts,
+              message: "OK",
             },
-          }),
-      })
-      .mockResolvedValueOnce({
-        status: 200,
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            data: {
-              PostDeletePostResponse: {
-                highestPageNumber: 2,
-                numberOfPosts: 5,
-                status: 200,
-                success: true,
-              },
+          },
+        }),
+      )
+      // 2️⃣ fetch page-2
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts,
+              message: "OK",
             },
-          }),
-      })
-      .mockResolvedValueOnce({
-        status: 200,
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            data: {
-              GetPostsResponse: {
-                success: true,
-                numberOfPages: 2,
-                posts: mockPosts.slice(0, 5),
-                message: "200 : Request was successful",
-              },
+          },
+        }),
+      )
+      // 3️⃣ delete mutation
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostDeletePostResponse: {
+              highestPageNumber: 2,
+              numberOfPosts: 5,
+              status: 200,
+              success: true,
             },
-          }),
-      });
+          },
+        }),
+      )
+      // 4️⃣ final refresh (now only 5 posts)
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(0, 5),
+              message: "OK",
+            },
+          },
+        }),
+      );
 
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
 
-    // Go to page 2 as we have 6 posts which allows us to use pagination
     const paginationPage2 = await screen.findByTestId(
       "test-id-pagination-page-2",
     );
-    await act(async () => {
-      userEvent.click(paginationPage2);
-    });
-
-    // Find the final post we're going to delete
-    const emeraldHerald = await screen.findByText(mockPosts[5].title);
-    expect(emeraldHerald).toBeVisible();
+    await act(async () => userEvent.click(paginationPage2));
 
     const deleteBtn = await screen.findByTestId(
       `test-id-delete-${mockPosts[5]._id}`,
     );
-    expect(deleteBtn).toBeVisible();
-    // Open the deletion modal
-    await act(async () => {
-      userEvent.click(deleteBtn);
-    });
+    await act(async () => userEvent.click(deleteBtn));
 
-    // Get the confirmation button
-    const modalConfirmButton = await screen.findByTestId(
+    const confirm = await screen.findByTestId(
       "test-id-confirmation-modal-confirm-button",
     );
-    expect(modalConfirmButton).toBeVisible();
+    await act(async () => userEvent.click(confirm));
 
-    // Delete the post
-    await act(async () => {
-      userEvent.click(modalConfirmButton);
-    });
-    // Make sure out deleted post isn't returned anymore
-    // expect(screen.queryByText(mockPosts[5].title)).not.toBeInTheDocument();
+    // finally assert the post is gone
+    expect(screen.queryByText(mockPosts[5].title)).not.toBeInTheDocument();
   });
 });
