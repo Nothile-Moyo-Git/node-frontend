@@ -19,6 +19,7 @@ import { mockContext, mockPosts } from "../../test-utils/objects/objects";
 import userEvent from "@testing-library/user-event";
 
 let mockFetch: jest.MockedFunction<typeof fetch>;
+const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
 
 // Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
@@ -51,6 +52,7 @@ afterEach(() => {
 
 afterAll(() => {
   server.close();
+  alertSpy.mockRestore();
 });
 
 // Mock our fetch functioality
@@ -186,8 +188,8 @@ describe("View Posts component", () => {
   });
 
   it("Deletes a post on the posts page", async () => {
+    // First, we request page 1, then page 2, then we delete and we fetch our new posts after that
     mockFetch
-      // 1️⃣ initial page-1 load
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
@@ -200,7 +202,6 @@ describe("View Posts component", () => {
           },
         }),
       )
-      // 2️⃣ fetch page-2
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
@@ -213,7 +214,6 @@ describe("View Posts component", () => {
           },
         }),
       )
-      // 3️⃣ delete mutation
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
@@ -226,7 +226,6 @@ describe("View Posts component", () => {
           },
         }),
       )
-      // 4️⃣ final refresh (now only 5 posts)
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
