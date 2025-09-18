@@ -37,7 +37,9 @@ beforeAll(() => {
   server.listen();
 });
 
+// Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
+  jest.clearAllMocks();
   jest.resetAllMocks();
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
@@ -66,21 +68,18 @@ const createFetchResponse = (data: unknown, status = 200): Response => {
 
 describe("View Posts component", () => {
   it("Should match snapshot", async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      status: 200,
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts,
-              message: "200 : Request was successful",
-            },
+    mockFetch.mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostsResponse: {
+            success: true,
+            numberOfPages: 2,
+            posts: mockPosts,
+            message: "OK",
           },
-        }),
-    });
+        },
+      }),
+    );
 
     // Render the component with our posts and the images being mocked
     await act(async () => {
@@ -95,12 +94,7 @@ describe("View Posts component", () => {
 
   it("Should show loading spinner on initial render", async () => {
     // Make the request never resolve so the loading spinner keeps spinning
-    global.fetch = jest.fn().mockImplementation(
-      () =>
-        new Promise(() => {
-          // Never resolves → keeps isLoading=true
-        }),
-    ) as jest.Mock;
+    mockFetch.mockImplementation(() => new Promise(() => {}));
 
     renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
 
@@ -111,21 +105,18 @@ describe("View Posts component", () => {
   });
 
   it("Renders the View Posts component successfully", async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      status: 200,
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts,
-              message: "200 : Request was successful",
-            },
+    mockFetch.mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostsResponse: {
+            success: true,
+            numberOfPages: 2,
+            posts: mockPosts,
+            message: "OK",
           },
-        }),
-    });
+        },
+      }),
+    );
 
     await act(async () => {
       renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
@@ -148,21 +139,31 @@ describe("View Posts component", () => {
   });
 
   it("Renders the page with pagination and goes to the next page", async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      status: 200,
-      ok: true,
-      json: () =>
-        Promise.resolve({
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
           data: {
             GetPostsResponse: {
               success: true,
               numberOfPages: 2,
               posts: mockPosts,
-              message: "200 : Request was successful",
+              message: "OK",
             },
           },
         }),
-    });
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts,
+              message: "OK",
+            },
+          },
+        }),
+      );
 
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
 
