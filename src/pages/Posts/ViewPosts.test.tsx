@@ -189,7 +189,7 @@ describe("View Posts component", () => {
   });
 
   it("Deletes a post on the posts page", async () => {
-    // First, we request page 1, then page 2, then we delete and we fetch our new posts after that
+    // First, we request page 1, then page 2, then we delete, emit and we fetch our new posts after that
     mockFetch
       .mockResolvedValueOnce(
         createFetchResponse({
@@ -227,6 +227,7 @@ describe("View Posts component", () => {
           },
         }),
       )
+      .mockResolvedValueOnce(createFetchResponse({}, 200))
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
@@ -258,6 +259,7 @@ describe("View Posts component", () => {
     await act(async () => userEvent.click(confirm));
 
     // finally assert the post is gone
+    expect(screen.queryByText(mockPosts[4].title)).toBeInTheDocument();
     expect(screen.queryByText(mockPosts[5].title)).not.toBeInTheDocument();
   });
 });
