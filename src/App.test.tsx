@@ -13,12 +13,12 @@ import "@testing-library/jest-dom";
 // Importing mocks to be used for testing
 import "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
-import { mockContext } from "./test-utils/objects/objects";
+import { mockContext } from "./test-utils/mocks/objects";
 
 // Component imports, we do this here
 import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 import { generateUploadDate } from "./util/util";
-import { mockUser } from "./test-utils/objects/objects";
+import { mockUser } from "./test-utils/mocks/objects";
 import App from "./App";
 
 // Two weeks after original expiry date
