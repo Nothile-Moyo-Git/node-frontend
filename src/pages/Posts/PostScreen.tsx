@@ -38,6 +38,8 @@ const PostScreen: FC = () => {
   useEffect(() => {
     // Get posts method, we define it here so we can call it asynchronously
     const getPostData = async () => {
+      setIsQuerying(true);
+
       // Requesting the post from GraphQL using the postID, it's a post request
       const response = await fetch(
         `${appContextInstance?.baseUrl}/graphql/posts`,
@@ -85,7 +87,6 @@ const PostScreen: FC = () => {
     };
 
     // Toggle the loading spinner util the request ends
-    setIsQuerying(true);
     appContextInstance?.validateAuthentication();
 
     // Attempt to pull post data, returns an error if the request fails and renders the error modal
@@ -106,11 +107,12 @@ const PostScreen: FC = () => {
 
         if (appContextInstance?.token !== "") {
           fetchPostData();
-          setIsQuerying(false);
         }
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsQuerying(false);
     }
 
     // If the user isn't authenticated, redirect this route to the previous page
@@ -153,7 +155,7 @@ const PostScreen: FC = () => {
   };
 
   return (
-    <section className="post">
+    <section className="post" data-testid="test-id-post-screen">
       {isQuerying && <LoadingSpinner />}
 
       {!isQuerying && !showErrorModal && (

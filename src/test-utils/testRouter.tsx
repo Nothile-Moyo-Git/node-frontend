@@ -49,7 +49,7 @@ export const renderWithContext = (
         element: ui,
       },
       {
-        path: "/posts/:page",
+        path: "/post/:page",
         element: ui,
       },
     ],

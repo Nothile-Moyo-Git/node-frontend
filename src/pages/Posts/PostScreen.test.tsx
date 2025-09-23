@@ -11,7 +11,11 @@ import {
   clearAuthStorage,
   setMockAuthStorage,
 } from "../../test-utils/authStorage";
+import { act, screen } from "@testing-library/react";
 import { server } from "../../test-utils/mockServer";
+import { renderWithContext } from "../../test-utils/testRouter";
+import PostScreen from "./PostScreen";
+import { mockContext, mockPost } from "../../test-utils/mocks/objects";
 
 // Setup mocks and environment
 beforeAll(() => {
@@ -28,7 +32,58 @@ afterEach(() => {
   clearAuthStorage();
 });
 
-//
+// End server polling when tests finish
 afterAll(() => {
   server.close();
+});
+
+describe("Post Screen Component", () => {
+  it("Matches the screenshot", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () =>
+        Promise.resolve({
+          data: {
+            GetPostResponse: {
+              message: "Request successful",
+              post: mockPost,
+              success: true,
+            },
+          },
+        }),
+    });
+
+    // Render the post screen
+    await act(async () => {
+      renderWithContext(
+        <PostScreen />,
+        { route: `/post/${mockPost._id}` },
+        mockContext,
+      );
+    });
+
+    // Build and check the snapshot
+    const postScreenComponent = screen.getByTestId("test-id-post-screen");
+    expect(postScreenComponent).toBeDefined();
+    expect(postScreenComponent).toMatchSnapshot();
+  });
+
+  it("Shows the loading spinner", async () => {
+    // Mock the server request to never resolve so we see the loading spinner
+    global.fetch = jest.fn().mockImplementation(() => new Promise(() => {}));
+
+    // Render the post screen
+    renderWithContext(
+      <PostScreen />,
+      { route: `/post/${mockPost._id}` },
+      mockContext,
+    );
+
+    // Check to see if the loading spinner is visible
+    const loadingIndicator = await screen.findByTestId(
+      "test-id-loading-spinner",
+    );
+    expect(loadingIndicator).toBeVisible();
+  });
 });
