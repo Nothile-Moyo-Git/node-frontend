@@ -43,9 +43,6 @@ nav{
 }
 
 .menu{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
     width: 100%;
     margin: auto;
     padding: 0;
@@ -58,17 +55,35 @@ nav{
     overflow: hidden;
     transition: animations.$standard_transition;
     animation: fade-in 0.15s linear;
+    display: flex;
+
+    &__open{
+        @include responsive.breakpoint(tablet){
+            height: 100vh;
+            align-items: flex-start;
+        }
+    }
+
+    &__closed{
+        @include responsive.breakpoint(tablet){
+            height: 0px;
+        }
+    }
+    
+    &__list{
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        @include responsive.breakpoint(tablet){
+            flex-direction: column;
+        }
+    }
 
     @include mixins.backgroundGradientEffect(){
         background: branding.$gradient_color_three;
-    }
-
-    @include responsive.breakpoint(tablet){
-        height: 137px;
-    }
-
-    @include responsive.breakpoint(tablet){
-        flex-direction: column;
     }
 
     &__link{

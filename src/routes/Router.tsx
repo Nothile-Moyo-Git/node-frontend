@@ -20,50 +20,63 @@ import { ViewPosts } from "../pages/Posts/ViewPosts";
 import PostScreen from "../pages/Posts/PostScreen";
 import { EditPost } from "../pages/Posts/EditPost";
 import LiveChat from "../pages/Sockets/LiveChat";
-import GraphQLInterface from "../pages/GraphQL/GraphQLInterface";
+import Sandbox from "../pages/Playground/Sandbox";
+
+// General routes
+const childRoutes = [
+  {
+    index: true,
+    element: <App />,
+  },
+  {
+    path: "livechat",
+    element: <LiveChat />,
+  },
+  {
+    path: "login",
+    element: <LoginPage />,
+  },
+  {
+    path: "signup",
+    element: <SignupPage />,
+  },
+  {
+    path: "posts/:page?",
+    element: <ViewPosts />,
+  },
+  {
+    path: "post/:postId?",
+    element: <PostScreen />,
+  },
+  {
+    path: "edit-post/:postId?",
+    element: <EditPost />,
+  },
+  {
+    path: "post/create",
+    element: <CreatePostComponent />,
+  },
+];
+
+// Protected routes (only on dev)
+const protectedRoutes = [
+  {
+    path: "sandbox",
+    element: <Sandbox />,
+  },
+];
+
+// Generate the final route tree
+const routes =
+  process.env.NODE_ENV.trim() === "development"
+    ? [...childRoutes, ...protectedRoutes]
+    : [...childRoutes];
 
 export const nestedRouter = createBrowserRouter([
   {
-    path: "/",
+    path: BASENAME,
     element: <PageWrapper />,
     errorElement: <ErrorPage />,
-    children: [
-      {
-        path: BASENAME,
-        element: <App />,
-      },
-      {
-        path: BASENAME + "/chat",
-        element: <LiveChat />,
-      },
-      {
-        path: BASENAME + "/login",
-        element: <LoginPage />,
-      },
-      {
-        path: BASENAME + "/signup",
-        element: <SignupPage />,
-      },
-      {
-        path: BASENAME + "/posts/:page?",
-        element: <ViewPosts />,
-      },
-      {
-        path: BASENAME + "/post/:postId?",
-        element: <PostScreen />,
-      },
-      {
-        path: BASENAME + "/edit-post/:postId?",
-        element: <EditPost />,
-      },
-      {
-        path: BASENAME + "/graphql",
-        element: <GraphQLInterface />,
-      },
-      {
-        path: BASENAME + "/post/create",
-        element: <CreatePostComponent />,
-      },
-    ],
+    children: routes,
   },
 ]);

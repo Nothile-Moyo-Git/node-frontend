@@ -12,6 +12,7 @@
 import React, {
   FC,
   FormEvent,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -19,7 +20,7 @@ import React, {
 } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./EditPost.scss";
-import { Post } from "../../@types";
+import { FileData, Post } from "../../@types";
 import { AppContext } from "../../context/AppContext";
 import { BASENAME } from "../../util/util";
 import LoadingSpinner from "../../components/loader/LoadingSpinner";
@@ -34,6 +35,7 @@ import { fileUploadHandler, generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import TextArea from "../../components/form/TextArea";
 import { MdKeyboardBackspace } from "react-icons/md";
+import Carousel from "../../components/carousel/Carousel";
 
 /**
  * @Name EditPost
@@ -65,26 +67,33 @@ export const EditPost: FC = () => {
   const [imagePreview, setImagePreview] = useState<unknown | null>(null);
   const [showImagePreview, setShowImagePreview] = useState<boolean>();
   const [previousImageUrl, setPreviousImageUrl] = useState<string>();
+  const [carouselImage, setCarouselImage] = useState<FileData>();
 
   // States and refs for our objects
   const titleRef = useRef<HTMLInputElement>(null);
   const imageUrlRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
-  const getPostData = async (userId: string) => {
-    // Create the fields
-    const fields = new FormData();
-    fields.append("userId", userId);
+  // Check which environment we're on for feature flag purposes
+  const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
-    // Query to GraphQL
-    const response = await fetch(`/graphql/posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query: `
+  const getPostData = useCallback(
+    async (userId: string) => {
+      // Create the fields
+      const fields = new FormData();
+      fields.append("userId", userId);
+
+      // Query to GraphQL
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                     query GetAndValidatePostResponse($postId : String!, $userId : String!){
                         GetAndValidatePostResponse(postId : $postId, userId : $userId){
                             success
@@ -104,40 +113,43 @@ export const EditPost: FC = () => {
                         }
                     }
                 `,
-        variables: {
-          postId: postId,
-          userId: userId,
+            variables: {
+              postId: postId,
+              userId: userId,
+            },
+          }),
         },
-      }),
-    });
+      );
 
-    // Get the json from the backend
-    const dataResponse = await response.json();
+      // Get the json from the backend
+      const dataResponse = await response.json();
 
-    // Get the data from the json
-    const data = dataResponse.data.GetAndValidatePostResponse;
+      // Get the data from the json
+      const data = dataResponse.data.GetAndValidatePostResponse;
 
-    // Show the error modal if the request fails
-    if (!dataResponse.errors) {
-      setShowErrorText(false);
-    }
+      // Show the error modal if the request fails
+      if (!dataResponse.errors) {
+        setShowErrorText(false);
+      }
 
-    if (dataResponse.errors) {
-      setShowErrorText(true);
-    }
+      if (dataResponse.errors) {
+        setShowErrorText(true);
+      }
 
-    return data;
-  };
+      return data;
+    },
+    [postId, appContextInstance?.baseUrl],
+  );
 
   // Set the preview of the file when the api request concludes so we can view it on the page immediately
   const formatPreviousPostImage = async (post: Post) => {
     try {
       // Only fetch the file if we have a filename
-      if (post?.fileName && post?.fileLastUpdated) {
+      if (post?.fileName) {
         // Fetch the image, if it fails, reload the component
         setPreviousImageUrl(
           await require(
-            `../../uploads/${post?.fileLastUpdated}/${post?.fileName}`,
+            `../../images${post?.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post?.fileName}`,
           ),
         );
       }
@@ -149,21 +161,23 @@ export const EditPost: FC = () => {
   };
 
   // This method runs the get method and then formats the results
-  const handlePostDataQuery = async (userId: string) => {
-    // Perform the api request
-    const data = await getPostData(userId);
+  const handlePostDataQuery = useCallback(
+    async (userId: string) => {
+      const data = await getPostData(userId);
 
-    if (data.isUserValidated === false) {
-      navigate(`${BASENAME}/posts`);
-    }
+      if (data.isUserValidated === false) {
+        navigate(`${BASENAME}/posts`);
+      }
 
-    const success = data.success ? data.success : false;
+      const success = data.success ? data.success : false;
 
-    if (success === true) {
-      setPostData(data.post);
-      formatPreviousPostImage(data.post);
-    }
-  };
+      if (success === true) {
+        setPostData(data.post);
+        formatPreviousPostImage(data.post);
+      }
+    },
+    [getPostData, navigate],
+  );
 
   // Back handler
   const backToPreviousPage = (event: React.MouseEvent) => {
@@ -199,7 +213,13 @@ export const EditPost: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [postId, appContextInstance, isPostCreatorValid]);
+  }, [
+    postId,
+    appContextInstance,
+    isPostCreatorValid,
+    handlePostDataQuery,
+    navigate,
+  ]);
 
   // Update the post data, and return an error if required
   const submitHandler = async (event: FormEvent) => {
@@ -212,21 +232,40 @@ export const EditPost: FC = () => {
       const content = contentRef.current?.value || "";
 
       let fileData = {};
-      if (uploadFile) {
-        fileData = await fileUploadHandler(uploadFile);
+      if (isDevelopment && uploadFile) {
+        fileData = await fileUploadHandler(
+          uploadFile,
+          appContextInstance?.baseUrl ? appContextInstance.baseUrl : "",
+        );
       }
 
       // Perform the API request to the backend
-      const editPostResponse = await fetch("/graphql/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-                        mutation PostEditPostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput, $postId : String!){
-                            PostEditPostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData, postId : $postId){
+      const editPostResponse = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
+                        mutation PostEditPostResponse(
+                          $title : String!, 
+                          $content : String!, 
+                          $userId : String!, 
+                          $fileData : FileInput, 
+                          $postId : String!,
+                          $carouselFileData: CarouselFileData
+                        ){
+                            PostEditPostResponse(
+                              title : $title, 
+                              content : $content, 
+                              userId : $userId, 
+                              fileData : $fileData, 
+                              postId : $postId,
+                              carouselFileData : $carouselFileData
+                            ){
                                 post {
                                     _id
                                     fileLastUpdated
@@ -256,19 +295,22 @@ export const EditPost: FC = () => {
                             }
                         }
                     `,
-          variables: {
-            title: title,
-            content: content,
-            userId: userId,
-            fileData: fileData,
-            postId: postId,
-          },
-        }),
-      });
+            variables: {
+              title: title,
+              content: content,
+              userId: userId,
+              fileData: fileData,
+              carouselFileData: carouselImage ? carouselImage : null,
+              postId: postId,
+            },
+          }),
+        },
+      );
 
       // Get the result of the API request
       const data = await editPostResponse.json();
       const response = data.data.PostEditPostResponse;
+
       const isFileValid =
         response.fileValidProps.isFileSizeValid &&
         response.fileValidProps.isFileTypeValid &&
@@ -340,7 +382,12 @@ export const EditPost: FC = () => {
           </Title>
 
           {location.key !== "default" && (
-            <Button type="button" variant="back" onClick={backToPreviousPage}>
+            <Button
+              type="button"
+              variant="back"
+              onClick={backToPreviousPage}
+              testId="test-id-edit-post-back-button"
+            >
               <MdKeyboardBackspace />
               Go back
             </Button>
@@ -366,26 +413,31 @@ export const EditPost: FC = () => {
               type="string"
             />
           </Field>
-
-          <Field>
-            <Label
-              id="imageUrlLabel"
-              htmlFor="imageUrl"
-              error={!isFileValid}
-              errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
-            >
-              Image
-            </Label>
-            <Input
-              ariaLabelledBy="imageUrlLabel"
-              error={!isFileValid}
-              name="image"
-              onChange={fileUploadChangeEvent}
-              ref={imageUrlRef}
-              required={false}
-              type="file"
-            />
-          </Field>
+          {isDevelopment ? (
+            <Field>
+              <Label
+                id="imageUrlLabel"
+                htmlFor="imageUrl"
+                error={!isFileValid}
+                errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
+              >
+                Image
+              </Label>
+              <Input
+                ariaLabelledBy="imageUrlLabel"
+                error={!isFileValid}
+                name="image"
+                onChange={fileUploadChangeEvent}
+                ref={imageUrlRef}
+                required={false}
+                type="file"
+              />
+            </Field>
+          ) : (
+            <Field>
+              <Carousel setCarouselImage={setCarouselImage} />
+            </Field>
+          )}
 
           {(showImagePreview || previousImageUrl) && (
             <Field>
@@ -428,7 +480,9 @@ export const EditPost: FC = () => {
             />
           </Field>
 
-          <Button variant="primary">Submit</Button>
+          <Button variant="primary" testId="test-id-edit-post-submit-button">
+            Submit
+          </Button>
         </Form>
       )}
     </section>

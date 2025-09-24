@@ -14,7 +14,7 @@ import "./ErrorModal.scss";
 
 const ErrorModal: FC = () => {
   return (
-    <div className="errorModal">
+    <div className="errorModal" data-testid="test-id-error-modal">
       <div className="errorModal__icon-wrapper">
         <svg
           className="errorModal__icon"

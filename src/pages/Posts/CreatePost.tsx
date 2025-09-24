@@ -30,10 +30,14 @@ import ImagePreview from "../../components/form/ImagePreview";
 import { fileUploadHandler, generateBase64FromImage } from "../../util/file";
 
 import "./CreatePost.scss";
+import Carousel from "../../components/carousel/Carousel";
+import { FileData } from "../../@types";
 
 export const CreatePostComponent: FC = () => {
   // Check if the user is authenticated, if they are, then redirect to the previous page
   const appContextInstance = useContext(AppContext);
+
+  const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
   // Instantiate the navigation object
   const navigate = useNavigate();
@@ -50,6 +54,9 @@ export const CreatePostComponent: FC = () => {
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>(null);
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
+
+  // The carousel image data is for production, and we use it as an optional prop
+  const [carouselImage, setCarouselImage] = useState<FileData>();
 
   // Check authentication when component mounts
   useEffect(() => {
@@ -81,21 +88,31 @@ export const CreatePostComponent: FC = () => {
 
       let fileData = {};
 
-      if (uploadFile) {
-        fileData = await fileUploadHandler(uploadFile);
+      if (isDevelopment) {
+        if (uploadFile) {
+          fileData = await fileUploadHandler(
+            uploadFile,
+            appContextInstance?.baseUrl ? appContextInstance?.baseUrl : "",
+          );
+        }
       }
 
-      // Perform the API request to the backend
-      const createPostResponse = await fetch("/graphql/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-                    mutation PostCreatePostResponse($title : String!, $content : String!, $userId : String!, $fileData : FileInput!){
-                        PostCreatePostResponse(title : $title, content : $content, userId : $userId, fileData : $fileData) {
+      // Writing our mutations for both production and development, we choose based on the feature flag
+      const createPostMutation = `
+                    mutation PostCreatePostResponse(
+                      $title: String!, 
+                      $content: String!, 
+                      $userId: String!, 
+                      $fileData: FileInput,
+                      $carouselFileData: CarouselFileData
+                    ){
+                        PostCreatePostResponse(
+                          title: $title, 
+                          content: $content, 
+                          userId: $userId, 
+                          fileData: $fileData,
+                          carouselFileData: $carouselFileData
+                        ){
                             post {
                                 _id
                                 fileLastUpdated
@@ -118,15 +135,29 @@ export const CreatePostComponent: FC = () => {
                             isFileSizeValid
                         }
                     }
-                    `,
-          variables: {
-            title: title,
-            content: content,
-            userId: userId,
-            fileData: fileData,
+                    `;
+
+      // Perform the API request to the backend
+      const createPostResponse = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            query: createPostMutation,
+            variables: {
+              title: title,
+              content: content,
+              userId: userId,
+              fileData: fileData,
+              carouselFileData: carouselImage ? carouselImage : null,
+            },
+          }),
+        },
+      );
 
       // Extract the data from the stream
       const createPostData = await createPostResponse.json();
@@ -215,25 +246,31 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        <Field>
-          <Label
-            htmlFor="imageUrl"
-            id="imageUrlLabel"
-            error={!isFileValid}
-            errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
-          >
-            Image*
-          </Label>
-          <Input
-            ariaLabelledBy="imageUrlLabel"
-            error={!isFileValid}
-            name="image"
-            onChange={fileUploadEvent}
-            ref={imageUrlRef}
-            required={true}
-            type="file"
-          />
-        </Field>
+        {isDevelopment ? (
+          <Field>
+            <Label
+              htmlFor="imageUrl"
+              id="imageUrlLabel"
+              error={!isFileValid}
+              errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
+            >
+              Image*
+            </Label>
+            <Input
+              ariaLabelledBy="imageUrlLabel"
+              error={!isFileValid}
+              name="image"
+              onChange={fileUploadEvent}
+              ref={imageUrlRef}
+              required={true}
+              type="file"
+            />
+          </Field>
+        ) : (
+          <Field>
+            <Carousel setCarouselImage={setCarouselImage} />
+          </Field>
+        )}
 
         {showImagePreview && (
           <Field>
@@ -265,7 +302,9 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        <Button variant="primary">Submit</Button>
+        <Button variant="primary" testId="test-id-create-post-button">
+          Submit
+        </Button>
       </Form>
     </section>
   );

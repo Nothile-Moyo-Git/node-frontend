@@ -35,15 +35,8 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
   };
 
   const handleLogoutUser = async () => {
-    // Set the userId here so we can delete the session on the server side too
-    const fields = new FormData();
-    fields.append(
-      "userId",
-      appContextInstance?.userId ? appContextInstance.userId : "",
-    );
-
     // Perform the logout request
-    await fetch(`/graphql/auth`, {
+    await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,9 +69,9 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
   }, [appContextInstance]);
 
   return (
-    <header>
+    <header className={`menu ${isMenuOpen ? "menu__open" : "menu__closed"}`}>
       <nav>
-        <ul className="menu">
+        <ul className="menu__list">
           <li className="menu__item">
             <Link to={BASENAME} className="menu__link">
               Home
@@ -116,7 +109,11 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
               </li>
 
               <li className="menu__item">
-                <Button variant="menu" onClick={handleLogoutUser}>
+                <Button
+                  variant="menu"
+                  onClick={handleLogoutUser}
+                  testId="test-id-logout-button"
+                >
                   Logout
                 </Button>
               </li>

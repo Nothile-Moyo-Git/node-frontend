@@ -4,11 +4,11 @@
  *
  * Author : Nothile Moyo
  *
- * Description: GraphQLInterface, will be used to create a way of handling graphql queries for testing
+ * Description: Sandbox, used for experimental functionality
  *
  */
 
-import React, { FormEvent, useRef, useState } from "react";
+import React, { FormEvent, useContext, useRef, useState } from "react";
 import Button from "../../components/button/Button";
 import Form from "../../components/form/Form";
 import Field from "../../components/form/Field";
@@ -16,12 +16,16 @@ import Label from "../../components/form/Label";
 import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
+import { AppContext } from "../../context/AppContext";
 
-const GraphQLInterface = () => {
+const Sandbox = () => {
   // Dummy refs and states
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>();
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
+
+  // Check if the user is authenticated, if they are, then redirect to the previous page
+  const appContextInstance = useContext(AppContext);
 
   const imageUrlRef = useRef<HTMLInputElement>(null);
 
@@ -58,7 +62,7 @@ const GraphQLInterface = () => {
     }
 
     // Upload the file
-    await fetch(`/rest/post/file-upload`, {
+    await fetch(`${appContextInstance?.baseUrl}/rest/post/file-upload`, {
       method: "POST",
       body: fields,
     });
@@ -73,7 +77,7 @@ const GraphQLInterface = () => {
     const confirmPassword = "3rdFisherman";
 
     // Perform the signup request
-    const result = await fetch(`/graphql/auth`, {
+    const result = await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +122,7 @@ const GraphQLInterface = () => {
     const _id = "6656382efb54b1949e66bae2";
 
     // Perform the signup request
-    const result = await fetch(`/graphql/auth`, {
+    const result = await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -157,15 +161,25 @@ const GraphQLInterface = () => {
     <div>
       <br />
 
-      <h1>This is a testing page for endpoints, nothing fancy here</h1>
+      <h1>This is the sandbox page, any functionality here is experimental</h1>
 
-      <Button variant="primary" onClick={signupResolver}>
+      <br />
+
+      <Button
+        variant="primary"
+        onClick={signupResolver}
+        testId="sandbox-create-user-button"
+      >
         Create new user
       </Button>
 
       <br />
 
-      <Button variant="primary" onClick={getUserStatusResolver}>
+      <Button
+        variant="primary"
+        onClick={getUserStatusResolver}
+        testId="sandbox-get-user-button"
+      >
         Get user status
       </Button>
 
@@ -202,10 +216,12 @@ const GraphQLInterface = () => {
           </Field>
         )}
 
-        <Button variant="primary">Submit</Button>
+        <Button variant="primary" testId="sandbox-create-post-button">
+          Submit
+        </Button>
       </Form>
     </div>
   );
 };
 
-export default GraphQLInterface;
+export default Sandbox;

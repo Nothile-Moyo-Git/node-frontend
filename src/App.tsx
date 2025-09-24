@@ -29,14 +29,16 @@ const App: FC = () => {
     const getUserDetails = async (userId: string) => {
       // Perform the fetch request using GraphQL in order to get the user details on the main app page
       // Note: Please convert your id to an objectId in the backend
-      const response = await fetch(`/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
             query PostUserDetailsResponse($_id : String!, $token : String!){
               PostUserDetailsResponse(_id : $_id, token : $token){
                 user {
@@ -54,12 +56,13 @@ const App: FC = () => {
                 }
               }
             `,
-          variables: {
-            _id: userId,
-            token: appContextInstance?.token ?? "",
-          },
-        }),
-      });
+            variables: {
+              _id: userId,
+              token: appContextInstance?.token ?? "",
+            },
+          }),
+        },
+      );
 
       // Get the result from the endpoint
       const {
@@ -72,12 +75,12 @@ const App: FC = () => {
           },
         },
       } = await response.json();
-
       // Set the user details so we can render session data
       setLoadingError(!success);
       setUser(user);
       setSessionExpiryDate(sessionExpires);
       setSessionCreationDate(sessionCreated);
+      setIsLoading(false);
     };
 
     const fetchAuthentication = async () => {
@@ -99,26 +102,26 @@ const App: FC = () => {
           checkSessionValidation(
             appContextInstance.userId,
             appContextInstance.token,
+            appContextInstance.baseUrl,
           );
         }
       } catch (error) {
         console.log("Error: User could not be validated");
         console.error(error);
+        // We have a response so we're not loading data anymore
+        setIsLoading(false);
       }
 
       if (!appContextInstance?.userAuthenticated) {
         navigate(`${BASENAME}/login`);
       }
-
-      // We have a response so we're not loading data anymore
-      setIsLoading(false);
     };
 
     fetchAuthentication();
   }, [appContextInstance, navigate]);
 
   return (
-    <div className="app">
+    <div className="app" data-testid="test-id-app-component">
       {isLoading && <LoadingSpinner />}
 
       {!isLoading && loadingError && <ErrorModal />}

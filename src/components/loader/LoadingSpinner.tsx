@@ -11,7 +11,7 @@ import "./LoadingSpinner.scss";
 
 const LoadingSpinner = () => {
   return (
-    <div className="loadingWrapper">
+    <div className="loadingWrapper" data-testid="test-id-loading-spinner">
       <span className="loadingSpinner"></span>
       <p className="loadingText">Loading, please wait...</p>
     </div>

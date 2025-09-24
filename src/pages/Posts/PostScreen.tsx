@@ -39,14 +39,16 @@ const PostScreen: FC = () => {
     // Get posts method, we define it here so we can call it asynchronously
     const getPostData = async () => {
       // Requesting the post from GraphQL using the postID, it's a post request
-      const response = await fetch("/graphql/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                         query GetPostResponse($postId : String!){
                             GetPostResponse(postId : $postId){
                                 success
@@ -65,11 +67,12 @@ const PostScreen: FC = () => {
                             }
                         }
                     `,
-          variables: {
-            postId: postId ? postId : "",
-          },
-        }),
-      });
+            variables: {
+              postId: postId ? postId : "",
+            },
+          }),
+        },
+      );
 
       // Show the error if the request failed
       if (response.status === 200) {
@@ -81,15 +84,19 @@ const PostScreen: FC = () => {
       return response;
     };
 
-    // Toggle the loading spinner util the request ends
-    setIsQuerying(true);
-    appContextInstance?.validateAuthentication();
+    // Run our logic and query the post data from the backend
+    const loadContent = async () => {
+      // Toggle the loading spinner util the request ends
+      appContextInstance?.validateAuthentication();
+      setIsQuerying(true);
 
-    // Attempt to pull post data, returns an error if the request fails and renders the error modal
-    try {
-      if (appContextInstance?.userAuthenticated === true) {
-        // Method defined here to allow async calls in a useEffect hook
-        const fetchPostData = async () => {
+      // Attempt to pull post data, returns an error if the request fails and renders the error modal
+      try {
+        if (
+          appContextInstance?.userAuthenticated === true &&
+          appContextInstance?.token !== ""
+        ) {
+          // Method defined here to allow async calls in a useEffect hook
           const result = await getPostData();
 
           const json = await result.json();
@@ -99,31 +106,31 @@ const PostScreen: FC = () => {
           if (statusCode === 200) {
             setPostData(json.data.GetPostResponse.post);
           }
-        };
-
-        if (appContextInstance?.token !== "") {
-          fetchPostData();
-          setIsQuerying(false);
         }
+      } catch (error) {
+        console.error(error);
+        setShowErrorModal(true);
+      } finally {
+        setIsQuerying(false);
       }
-    } catch (error) {
-      console.error(error);
-    }
 
-    // If the user isn't authenticated, redirect this route to the previous page
-    if (!appContextInstance?.userAuthenticated) {
-      navigate(`${BASENAME}/login`);
-    }
-  }, [appContextInstance, postId]);
+      // If the user isn't authenticated, redirect this route to the previous page
+      if (!appContextInstance?.userAuthenticated) {
+        navigate(`${BASENAME}/login`);
+      }
+    };
+
+    loadContent();
+  }, [appContextInstance, postId, navigate]);
 
   useEffect(() => {
     const getImage = async () => {
       try {
-        if (postData?.fileName && postData?.fileLastUpdated) {
+        if (postData?.fileName) {
           // Fetch the image, if it fails, reload the component
           setImage(
             await require(
-              `../../uploads/${postData.fileLastUpdated}/${postData?.fileName}`,
+              `../../images${postData?.fileLastUpdated !== "" ? `/${postData.fileLastUpdated}` : ""}/${postData?.fileName}`,
             ),
           );
         }
@@ -135,10 +142,6 @@ const PostScreen: FC = () => {
 
     getImage();
   }, [postData]);
-
-  console.log("\n\n");
-  console.log("Test date");
-  console.log(new Date(postData?.createdAt ? postData?.createdAt : ""));
 
   // Get an upload date so we can show when the post was uploaded
   const uploadDate = generateUploadDate(
@@ -154,14 +157,18 @@ const PostScreen: FC = () => {
   };
 
   return (
-    <section className="post">
+    <section className="post" data-testid="test-id-post-screen">
       {isQuerying && <LoadingSpinner />}
 
       {!isQuerying && !showErrorModal && (
         <>
           <h1 className="post__title">{postData?.title}</h1>
           {location.key !== "default" && (
-            <Button variant="back" onClick={backToPreviousPage}>
+            <Button
+              variant="back"
+              onClick={backToPreviousPage}
+              testId="test-id-post-back-button"
+            >
               <MdKeyboardBackspace />
               Go back
             </Button>

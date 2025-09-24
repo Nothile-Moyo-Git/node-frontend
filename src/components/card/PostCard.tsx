@@ -43,11 +43,11 @@ export const PostCard: FC<ComponentProps> = ({
     const getImage = async () => {
       try {
         // Only fetch the file if we have a filename
-        if (post?.fileName && post?.fileLastUpdated) {
+        if (post?.fileName) {
           // Fetch the image, if it fails, reload the component
           setImage(
             await require(
-              `../../uploads/${post?.fileLastUpdated}/${post?.fileName}`,
+              `../../images${post?.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post?.fileName}`,
             ),
           );
         }
@@ -66,8 +66,13 @@ export const PostCard: FC<ComponentProps> = ({
   );
 
   return (
-    <article className="article">
-      <img src={image} alt={post?.title} className="article__image" />
+    <article className="article" data-testid={`test-id-post-${post._id}`}>
+      <img
+        src={image}
+        alt={post?.title}
+        className="article__image"
+        draggable={false}
+      />
 
       <div className="article__content">
         <h2 className="article__title">{post?.title}</h2>
@@ -92,6 +97,7 @@ export const PostCard: FC<ComponentProps> = ({
 
           {isPostCreator && (
             <Button
+              testId={`test-id-delete-${post._id}`}
               variant="delete"
               onClick={() => toggleConfirmationModal(post._id)}
             >

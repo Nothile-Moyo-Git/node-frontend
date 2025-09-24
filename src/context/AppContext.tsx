@@ -14,11 +14,12 @@
 import React, { useState, ReactNode } from "react";
 
 // Typing for everything related to state management
-interface ContextProps {
+export interface ContextProps {
   token?: string;
   userId?: string;
   expiresIn?: string;
   userAuthenticated?: boolean;
+  baseUrl: string;
   validateAuthentication: () => void;
   checkAuthentication: () => boolean;
   logoutUser: () => void;
@@ -31,6 +32,12 @@ interface ComponentProps {
 export const AppContext = React.createContext<ContextProps | null>(null);
 
 const AppContextProvider = ({ children }: ComponentProps) => {
+  // Get the current environment so that we can get the baseUrl for API requests for dev vs prod
+  const environment =
+    process.env.NODE_ENV.trim() === "development"
+      ? process.env.REACT_APP_API_DEV
+      : process.env.REACT_APP_API_PROD;
+
   // Set our token and expiration states
   const [token, setToken] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
@@ -114,6 +121,7 @@ const AppContextProvider = ({ children }: ComponentProps) => {
   return (
     <AppContext.Provider
       value={{
+        baseUrl: String(environment),
         token,
         userId,
         expiresIn,

@@ -2,6 +2,7 @@
   "compilerOptions": {
     "types" : [
       "node",
+      "jest"
     ],
     "noResolve": false,
     "target": "es5",

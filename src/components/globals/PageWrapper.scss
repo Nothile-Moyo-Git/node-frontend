@@ -6,10 +6,16 @@
 @use "../../scss/partials/scrollbars";
 
 main{
-    animation: fade-in 0.2s linear;    
-    min-height: calc(100% - 55px);
-    padding-top: 55px;
-    background: branding.$backdrop_color_one;
+    animation: fade-in 0.2s linear;
+    height: 100%;
+    margin-top: 55px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+
+    @include responsive.breakpoint(tablet){
+        margin-top: 0;
+    }
 }
 
 .page{
@@ -20,8 +26,6 @@ main{
 
     @include responsive.breakpoint(tablet){
         &__logged-in{
-            min-height: calc(100% - 137px);
-            padding-top: 137px;
 
             .menu{
                 height: 137px;
@@ -29,8 +33,6 @@ main{
         }
 
         &__logged-out{
-            min-height: calc(100% - 105px);
-            padding-top: 105px;
 
             ul{
                 height: 105px;
@@ -56,6 +58,7 @@ main{
     bottom: 0.75rem;
     right: 0.75rem;
     border: 0;
+    z-index: 2;
 
     svg{
         @include mixins.state(){

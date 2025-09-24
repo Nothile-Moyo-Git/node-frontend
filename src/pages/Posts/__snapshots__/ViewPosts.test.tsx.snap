@@ -1,0 +1,353 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`View Posts component Should match snapshot 1`] = `
+<section
+  class="viewPosts"
+  data-testid="test-id-view-posts"
+>
+  <h1
+    class="viewPosts__title"
+  >
+    Posts
+  </h1>
+  <ul
+    class="viewPosts__posts-list"
+  >
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-662423764e8c8b1633534be8"
+      >
+        <img
+          alt="2B"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            2B
+          </h2>
+          <p
+            class="article__description"
+          >
+            YoRHa No. 2 Type B,[a] commonly known as 2B,[b] is a fictional android from the 2017 video game Nier: Automata, a spin-off of the Drakengard series developed by PlatinumGames and published by Square Enix. One of the game's three protagonists, 2B is a soldier for YoRHa, an android task force fighting a proxy war with alien-created Machine Lifeforms. Her story arc focuses on her backstory within YoRHa, and her relationship with her partner 9S, a reconnaissance android. She is also featured in related media, such as the anime Nier: Automata Ver1.1a.
+          </p>
+          <p>
+            Uploaded: 2024/04/20 21:20:07
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662423764e8c8b1633534be8"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662423764e8c8b1633534be8"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662423764e8c8b1633534be8"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-662423884e8c8b1633534bf0"
+      >
+        <img
+          alt="Alfira"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Alfira
+          </h2>
+          <p
+            class="article__description"
+          >
+            Alfira is part of the group of tiefling refugees who were exiled from Elturel, and Bardic apprentice to a woman named Lihala. On the journey to the Emerald Grove, they were attacked by gnolls, and Lihala was killed. Alfira has since been trying to compose a eulogy for her.
+          </p>
+          <p>
+            Uploaded: 2024/04/20 21:20:24
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662423884e8c8b1633534bf0"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662423884e8c8b1633534bf0"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662423884e8c8b1633534bf0"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-662e7bcdd94fde36bf4bb554"
+      >
+        <img
+          alt="Emerald Herald"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Emerald Herald
+          </h2>
+          <p
+            class="article__description"
+          >
+            The Emerald Herald is first encountered in the town of Majula, where she sits beside the cliff overlooking the ocean. Her true nature and purpose are shrouded in mystery, but she plays a crucial role in the player's quest by providing them with the means to level up and upgrade their Estus Flask.
+          </p>
+          <p>
+            Uploaded: 2024/04/28 17:39:41
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662e7bcdd94fde36bf4bb554"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662e7bcdd94fde36bf4bb554"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662e7bcdd94fde36bf4bb554"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-662e7c6ad94fde36bf4bb55c"
+      >
+        <img
+          alt="Tieflings"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Tieflings
+          </h2>
+          <p
+            class="article__description"
+          >
+            But you do see the way people look at you, devil’s child? Those black eyes, cold as a winter storm, were staring right into her heart and the sudden seriousness in his voice jolted her.
+          </p>
+          <p>
+            Uploaded: 2024/04/28 17:42:18
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662e7c6ad94fde36bf4bb55c"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662e7c6ad94fde36bf4bb55c"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662e7c6ad94fde36bf4bb55c"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-67843561d02db477bac4843b"
+      >
+        <img
+          alt="The Sixth Post"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            The Sixth Post
+          </h2>
+          <p
+            class="article__description"
+          >
+            Descriptions are a useful thing when you have them!
+          </p>
+          <p>
+            Uploaded: 2025/01/12 21:34:25
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/67843561d02db477bac4843b"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/67843561d02db477bac4843b"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-67843561d02db477bac4843b"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-68b0aac75d6f6df6ef698e7e"
+      >
+        <img
+          alt="Testing post number 6"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Testing post number 6
+          </h2>
+          <p
+            class="article__description"
+          >
+            Testing post number 6 for functionality
+          </p>
+          <p>
+            Uploaded: 2025/08/28 20:15:19
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/68b0aac75d6f6df6ef698e7e"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/68b0aac75d6f6df6ef698e7e"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-68b0aac75d6f6df6ef698e7e"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+  </ul>
+  <div
+    class="paginator"
+  >
+    <button
+      class="paginator__button paginator__button--current-normal"
+      disabled=""
+    >
+      1
+    </button>
+    <a
+      class="paginator__button"
+      data-testid="test-id-pagination-page-2"
+      href="/posts/2"
+    >
+      2
+    </a>
+  </div>
+</section>
+`;

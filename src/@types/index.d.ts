@@ -50,4 +50,9 @@ export interface User {
   posts: string[];
 }
 
+export interface FileData {
+  fileName: string;
+  imageUrl: string;
+}
+
 export type ButtonType = "button" | "submit" | "reset" | undefined;

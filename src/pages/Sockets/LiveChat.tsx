@@ -19,7 +19,6 @@ import {
   useCallback,
 } from "react";
 import { io, Socket } from "socket.io-client";
-import Title from "../../components/form/Title";
 import Form from "../../components/form/Form";
 import Field from "../../components/form/Field";
 import Button from "../../components/button/Button";
@@ -41,6 +40,8 @@ const LiveChat: FC = () => {
   const appContextInstance = useContext(AppContext);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const [chatMessages, setChatMessages] = useState<chatMessage[]>([]);
+  const [userIds, setUserIds] = useState<string[]>([]);
+  const [chatStyles, setChatStyles] = useState<string[]>([]);
   const [userDetails, setUserDetails] = useState<User>();
   const socketClientRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
 
@@ -50,8 +51,18 @@ const LiveChat: FC = () => {
       ? process.env.REACT_APP_API_DEV
       : process.env.REACT_APP_API_PROD;
 
+  // Get the correct port based on the environment
+  const port =
+    process.env.NODE_ENV.trim() === "development"
+      ? process.env.REACT_APP_API_DEV_PORT
+      : process.env.REACT_APP_API_PROD_PORT;
+
+  // Connect to our backend using our websocket using the correct port so it works on both dev and production
   useEffect(() => {
-    const client = io(String(liveChatEndpoint));
+    const client = io(String(liveChatEndpoint), { port: port });
+
+    console.log("Connection");
+    console.log(client);
 
     // Add a message to the chat
     client.on("message sent", (message) => {
@@ -69,19 +80,26 @@ const LiveChat: FC = () => {
       // Remove unncessary event handlers
       client.removeAllListeners();
     };
-  }, [liveChatEndpoint]);
+  }, [liveChatEndpoint, port]);
+
+  // Determine if the current user is the sender or recipient
+  const isSender = (currentUser: string, messageSender: string) => {
+    return currentUser === messageSender;
+  };
 
   // Get user details if the user is authenticated from the backend
   const getUserDetails = useCallback(
     async (userId: string) => {
-      const response = await fetch(`/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                 query PostUserDetailsResponse($_id : String!, $token : String!){
                     PostUserDetailsResponse(_id : $_id, token : $token){
                         user {
@@ -95,12 +113,13 @@ const LiveChat: FC = () => {
                         }
                     }
                 }`,
-          variables: {
-            _id: userId,
-            token: appContextInstance?.token ?? "",
-          },
-        }),
-      });
+            variables: {
+              _id: userId,
+              token: appContextInstance?.token ?? "",
+            },
+          }),
+        },
+      );
 
       // Get the result from the endpoint
       const {
@@ -110,20 +129,23 @@ const LiveChat: FC = () => {
       // Set the user details so
       setUserDetails(user.user);
     },
-    [appContextInstance?.token],
+    [appContextInstance],
   );
 
   // Get the chat messages async since we can't do it in our useEffect hook
-  const getChatMessages = async (userId: string, recipientId: string) => {
-    // Perform the signup request
-    const response = await fetch(`/graphql/chat`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query: `
+  const getChatMessages = useCallback(
+    async (userId: string, recipientId: string) => {
+      // Perform the signup request
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                     query chatMessagesResponse($_id : String!, $recipientId : String){
                         chatMessagesResponse(_id : $_id, recipientId : $recipientId){
                             success
@@ -141,25 +163,46 @@ const LiveChat: FC = () => {
                         }
                     }
                 `,
-        variables: {
-          _id: userId,
-          recipientId: recipientId,
+            variables: {
+              _id: userId,
+              recipientId: recipientId,
+            },
+          }),
         },
-      }),
-    });
+      );
 
-    const {
-      data: {
-        chatMessagesResponse: { success, messages },
-      },
-    } = await response.json();
+      const {
+        data: {
+          chatMessagesResponse: { success, messages },
+        },
+      } = await response.json();
 
-    // Set the messages from the backend if we have them
-    if (messages.length !== 0 && success) {
-      // Here we set it to the messages object in messages since we have properties like userId etc...
-      setChatMessages(messages.messages);
-    }
-  };
+      // Generate the styles for the chat so that they go either way
+      const generateChatStyles = () => {
+        // Iterate through the messages and set the styling based on the user
+        const generatedStyles = messages.messages.map(
+          (message: chatMessage) => {
+            if (message.senderId === userIds[1]) {
+              return "liveChat__content--align-right";
+            }
+
+            return "liveChat__content--align-left";
+          },
+        );
+
+        setChatStyles(generatedStyles);
+      };
+
+      // Set the messages from the backend if we have them
+      if (messages.length !== 0 && success) {
+        // Here we set it to the messages object in messages since we have properties like userId etc...
+        setUserIds(messages.userIds);
+        setChatMessages(messages.messages);
+        generateChatStyles();
+      }
+    },
+    [appContextInstance, userIds],
+  );
   // Get the user details from the backend for the chat
   useEffect(() => {
     appContextInstance?.validateAuthentication();
@@ -183,7 +226,7 @@ const LiveChat: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [appContextInstance, getUserDetails, navigate]);
+  }, [appContextInstance, getChatMessages, getUserDetails, navigate]);
 
   // Submit handler, this allows messages to be sent between clients
   const onSubmit = async (event: FormEvent) => {
@@ -220,18 +263,13 @@ const LiveChat: FC = () => {
       fields.append("messages", JSON.stringify(chatMessages));
       fields.append("newMessage", contentRef.current.value);
 
-      console.log("\n\n", "Sender");
-      console.log(userDetails);
-      console.log("\n\n");
-
-      const result = await fetch(`/chat/send-message/${userId}`, {
-        method: "POST",
-        body: fields,
-      });
-
-      console.log("Result");
-      console.log(result);
-
+      await fetch(
+        `${appContextInstance?.baseUrl}/chat/send-message/${userId}`,
+        {
+          method: "POST",
+          body: fields,
+        },
+      );
       // Reset our input after we've posted a new message to the chat and backend
       contentRef.current.value = "";
     }
@@ -239,9 +277,31 @@ const LiveChat: FC = () => {
 
   return (
     <section className="liveChat">
-      <Form size="full" onSubmit={onSubmit}>
-        <Title>Live Chat</Title>
+      <h1 className="liveChat__title">Live Chat</h1>
 
+      {chatMessages.map((message: chatMessage, index: number) => {
+        return (
+          <div className="liveChat__message" key={`message-${index}`}>
+            {(index === 0 ||
+              (index > 0 &&
+                chatMessages[index].senderId !==
+                  chatMessages[index - 1].senderId)) && (
+              <p
+                className={`liveChat__description ${!isSender(userDetails?._id ?? "", message.senderId) && "liveChat__description--align-right"}`}
+              >
+                <span className="liveChat__icon">{message.sender[0]}</span>
+                <span>{message.sender}</span>
+                <span className="liveChat__date">{` ${message.dateSent}`}</span>
+              </p>
+            )}
+
+            <p className={`liveChat__content ${chatStyles[index]}`}>
+              {message.message}
+            </p>
+          </div>
+        );
+      })}
+      <Form size="full" onSubmit={onSubmit}>
         <Field position="bottom">
           <TextArea
             ariaLabelledBy="contentLabel"
@@ -253,28 +313,11 @@ const LiveChat: FC = () => {
             ref={contentRef}
             required={true}
           />
-          <Button variant="square">Send</Button>
+          <Button variant="square" testId="test-id-send-message-button">
+            Send
+          </Button>
         </Field>
       </Form>
-
-      {chatMessages.map((message: chatMessage, index: number) => {
-        return (
-          <div className={`liveChat__message`} key={`message-${index}`}>
-            {(index === 0 ||
-              (index > 0 &&
-                chatMessages[index].senderId !==
-                  chatMessages[index - 1].senderId)) && (
-              <p className={`liveChat__description`}>
-                <span className="liveChat__icon">{message.sender[0]}</span>
-                <span>{message.sender}</span>
-                <span className="liveChat__date">{` ${message.dateSent}`}</span>
-              </p>
-            )}
-
-            <p className="liveChat__content">{message.message}</p>
-          </div>
-        );
-      })}
     </section>
   );
 };

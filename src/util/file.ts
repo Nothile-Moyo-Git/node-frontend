@@ -78,12 +78,12 @@ export const getCurrentMonthAndYear = () => {
  *
  * @param uploadFile : File
  */
-export const fileUploadHandler = async (uploadFile: File) => {
+export const fileUploadHandler = async (uploadFile: File, baseUrl: string) => {
   const fields = new FormData();
   fields.append("image", uploadFile);
 
   // File upload response
-  const fileUploadResponse = await fetch(`/rest/post/file-upload`, {
+  const fileUploadResponse = await fetch(`${baseUrl}/rest/post/file-upload`, {
     method: "POST",
     body: fields,
   });

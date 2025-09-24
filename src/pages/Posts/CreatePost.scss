@@ -1,5 +1,6 @@
 @use "../../scss/partials/animations" as animations;
 
 .createPost{
-    animation: fade in 0.2s linear;
+    animation: fade-in 0.2s linear;
+    width: 100%;
 }

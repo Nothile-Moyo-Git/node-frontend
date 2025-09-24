@@ -17,7 +17,6 @@ import Input from "../../components/form/Input";
 import Button from "../../components/button/Button";
 import Title from "../../components/form/Title";
 import { useNavigate } from "react-router-dom";
-import { BASENAME } from "../../util/util";
 
 export const LoginPage: FC = () => {
   // redirect using the navigate hook and not redirect
@@ -54,14 +53,16 @@ export const LoginPage: FC = () => {
     // Perform the login request to the backend
     try {
       // Perform the signup request
-      const result = await fetch(`/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const result = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                         mutation loginResponse($emailAddress : String!, $password : String!){
                             loginResponse(emailAddress : $emailAddress, password : $password){
                                 userExists
@@ -75,35 +76,46 @@ export const LoginPage: FC = () => {
                             }
                         }
                     `,
-          variables: {
-            emailAddress: emailAddress,
-            password: password,
-          },
-        }),
-      });
+            variables: {
+              emailAddress: emailAddress,
+              password: password,
+            },
+          }),
+        },
+      );
 
       // Get the data from the response
-      const response = await result.json();
-
-      const data = response.data.loginResponse;
+      const {
+        data: {
+          loginResponse: {
+            success,
+            emailValid,
+            emailErrorText,
+            passwordValid,
+            passwordErrorText,
+            token,
+            userId,
+          },
+        },
+      } = await result.json();
 
       // Set the states at the end of the request
-      setIsEmailValid(data.emailValid);
-      setEmailErrorText(data.emailErrorText);
-      setIsPasswordValid(data.passwordValid);
-      setPasswordErrorText(data.passwordErrorText);
+      setIsEmailValid(emailValid);
+      setEmailErrorText(emailErrorText);
+      setIsPasswordValid(passwordValid);
+      setPasswordErrorText(passwordErrorText);
 
       // Save our local storage results
-      if (data.success === true) {
+      if (success === true) {
         const remainingTime = new Date();
         remainingTime.setDate(remainingTime.getDate() + 14);
 
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
         localStorage.setItem("expiresIn", remainingTime.toISOString());
 
         // Redirect to the main page
-        navigate(BASENAME);
+        navigate("/");
       }
     } catch (error) {
       console.log("There was an error loading this page");
@@ -164,7 +176,9 @@ export const LoginPage: FC = () => {
           />
         </Field>
 
-        <Button variant="primary">Submit</Button>
+        <Button variant="primary" testId="test-id-login-button">
+          Submit
+        </Button>
       </Form>
     </section>
   );

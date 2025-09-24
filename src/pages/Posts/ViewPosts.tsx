@@ -47,14 +47,16 @@ export const ViewPosts: FC = () => {
   // Get posts method, we define it here so we can call it asynchronously
   const getPosts = useCallback(async () => {
     // Perform the signup request
-    const response = await fetch(`/graphql/posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query: `
+    const response = await fetch(
+      `${appContextInstance?.baseUrl}/graphql/posts`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                     query GetPostsResponse($currentPage : Int!){
                         GetPostsResponse(currentPage : $currentPage){
                             message
@@ -74,11 +76,12 @@ export const ViewPosts: FC = () => {
                         }
                     }
                 `,
-        variables: {
-          currentPage: params.page ? Number(params.page) : 1,
-        },
-      }),
-    });
+          variables: {
+            currentPage: params.page ? Number(params.page) : 1,
+          },
+        }),
+      },
+    );
 
     // Show the error if the request failed
     if (response.status === 200) {
@@ -88,22 +91,31 @@ export const ViewPosts: FC = () => {
     }
 
     return response;
-  }, [params.page]);
+  }, [params.page, appContextInstance]);
 
   // Method defined here to allow async calls in a useEffect hook
   const fetchPosts = useCallback(async () => {
-    const result = await getPosts();
+    setIsLoading(true);
 
-    const dataJSON = await result.json();
+    try {
+      const result = await getPosts();
+      const dataJSON = await result.json();
 
-    // Convert the response to JSON based on the response received from GraphQL
-    const data = dataJSON.data.GetPostsResponse;
+      // Convert the response to JSON based on the response received from GraphQL
+      const data = dataJSON.data.GetPostsResponse;
+      const success = data.success ? data.success : false;
 
-    const success = data.success ? data.success : false;
-
-    if (success === true) {
-      setPosts(data.posts);
-      setNumberOfPages(data.numberOfPages);
+      if (success === true) {
+        setPosts(data.posts);
+        setNumberOfPages(data.numberOfPages);
+      } else {
+        setShowErrorText(true);
+      }
+    } catch (error) {
+      console.error("Fetch posts error", error);
+      setShowErrorText(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [getPosts]);
 
@@ -128,10 +140,6 @@ export const ViewPosts: FC = () => {
 
   // Show the confirmation modal when attempting to delete a modal
   const toggleShowConfirmationModal = (id: string) => {
-    console.log("\n", "id");
-    console.log(id);
-    console.log("\n");
-
     setDeleteId(id);
     setShowConfirmationModal((previousState) => !previousState);
   };
@@ -144,14 +152,16 @@ export const ViewPosts: FC = () => {
 
     try {
       // Perform the signup request
-      const response = await fetch(`/graphql/posts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `${appContextInstance?.baseUrl}/graphql/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                         mutation PostDeletePostResponse($postId : String!, $userId : String!){
                             PostDeletePostResponse(postId : $postId, userId : $userId){
                                 success
@@ -161,12 +171,13 @@ export const ViewPosts: FC = () => {
                             }
                         }
                     `,
-          variables: {
-            postId: postId,
-            userId: userId,
-          },
-        }),
-      });
+            variables: {
+              postId: postId,
+              userId: userId,
+            },
+          }),
+        },
+      );
 
       // Get the result from the endpoint
       const {
@@ -179,10 +190,13 @@ export const ViewPosts: FC = () => {
       fields.append("highestPageNumber", result.highestPageNumber);
 
       // Trigger a modal which informs users that the post has been deleted
-      await fetch("/rest/socket/emit/post-deleted", {
-        method: "POST",
-        body: fields,
-      });
+      await fetch(
+        `${appContextInstance?.baseUrl}/rest/socket/emit/post-deleted`,
+        {
+          method: "POST",
+          body: fields,
+        },
+      );
 
       fetchPosts();
       setShowConfirmationModal(false);
@@ -201,8 +215,14 @@ export const ViewPosts: FC = () => {
       ? process.env.API_URL_DEV
       : process.env.API_URL_PROD;
 
+  // Get the correct port based on the environment
+  const port =
+    process.env.NODE_ENV.trim() === "development"
+      ? process.env.REACT_APP_API_DEV_PORT
+      : process.env.REACT_APP_API_PROD_PORT;
+
   useEffect(() => {
-    const client = io(String(liveChatEndpoint));
+    const client = io(String(liveChatEndpoint), { port: port });
 
     // Trigger a toastmodal render
     client.on("post added", (postData) => {
@@ -238,11 +258,10 @@ export const ViewPosts: FC = () => {
       // Remove unncessary event handlers
       client.removeAllListeners();
     };
-  }, [fetchPosts, refreshPosts]);
+  }, [fetchPosts, refreshPosts, liveChatEndpoint, port]);
 
   useEffect(() => {
     // Toggle the loading spinner util the request ends
-    setIsLoading(true);
     appContextInstance?.validateAuthentication();
 
     try {
@@ -251,8 +270,6 @@ export const ViewPosts: FC = () => {
           fetchPosts();
         }
       }
-
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -261,10 +278,14 @@ export const ViewPosts: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [appContextInstance?.userAuthenticated, page]);
+  }, [page, appContextInstance, fetchPosts, navigate]);
+
+  /* console.log("Posts");
+  console.log(posts);
+  console.log("\n\n\n"); */
 
   return (
-    <section className="viewPosts">
+    <section className="viewPosts" data-testid="test-id-view-posts">
       <h1 className="viewPosts__title">Posts</h1>
 
       {isLoading && <LoadingSpinner />}
@@ -294,11 +315,13 @@ export const ViewPosts: FC = () => {
         </>
       )}
 
-      <Paginator
-        currentPage={page}
-        numberOfPages={numberOfPages}
-        setPage={setPage}
-      />
+      {!isLoading && (
+        <Paginator
+          currentPage={page}
+          numberOfPages={numberOfPages}
+          setPage={setPage}
+        />
+      )}
 
       {socketModal}
 

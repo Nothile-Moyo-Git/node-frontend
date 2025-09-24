@@ -40,11 +40,13 @@ export const generateUploadDate = (date: string | number) => {
   const D = dateObject.getDate();
   const H = dateObject.getHours();
   const I = dateObject.getMinutes();
+  const S = dateObject.getSeconds();
 
   let MM = M.toString();
   let DD = D.toString();
   let HH = H.toString();
   let II = I.toString();
+  let SS = S.toString();
 
   // Formatting the date values to include 0 if it's less than 10
   if (M < 10) {
@@ -59,8 +61,11 @@ export const generateUploadDate = (date: string | number) => {
   if (I < 10) {
     II = "0" + I.toString();
   }
+  if (S < 10) {
+    SS = "0" + S.toString();
+  }
 
-  const uploadDate = `${YYYY}/${MM}/${DD} ${HH}:${II}`;
+  const uploadDate = `${YYYY}/${MM}/${DD} ${HH}:${II}:${SS}`;
 
   return uploadDate;
 };
@@ -76,10 +81,14 @@ export const generateUploadDate = (date: string | number) => {
  *
  * @returns sessionValid : boolean
  */
-export const checkSessionValidation = async (userId: string, token: string) => {
+export const checkSessionValidation = async (
+  userId: string,
+  token: string,
+  baseUrl: string,
+) => {
   try {
     // Perform the signup request
-    await fetch(`/graphql/auth`, {
+    await fetch(`${baseUrl}/graphql/auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -107,4 +116,89 @@ export const checkSessionValidation = async (userId: string, token: string) => {
   }
 };
 
-export const BASENAME = "/typescript-fullstack";
+/**
+ * @name doesUserExist
+ *
+ * @description This function makes sure that the user exists, this is in order to logout a user who no longer exists
+ *
+ * @param userId: string
+ * @param baseUrl: string
+ * @param token: string
+ *
+ * @returns userExists: boolean
+ */
+export const doesUserExist = async (
+  userId: string,
+  baseUrl: string,
+  token?: string,
+) => {
+  const response = await fetch(`${baseUrl}/graphql/auth`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      query: `
+        query PostUserDetailsResponse($_id : String!, $token : String!){
+          PostUserDetailsResponse(_id : $_id, token : $token){
+            user {
+              _id
+              name
+              email
+              password
+              confirmPassword
+              status
+              posts
+            }
+            sessionCreated
+            sessionExpires
+            success
+            }
+          }
+        `,
+      variables: {
+        _id: userId,
+        token: token ?? "",
+      },
+    }),
+  });
+
+  // Get the result from the endpoint
+  const {
+    data: {
+      PostUserDetailsResponse: { user },
+    },
+  } = await response.json();
+
+  // Check if there is no user but the request was successful
+  if (!user) {
+    // Perform the logout request
+    await fetch(`${baseUrl}/graphql/auth`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+                    mutation deleteSessionResponse($_id : String!){
+                        deleteSessionResponse(_id : $_id){
+                            success,
+                            message
+                        }
+                    }
+                `,
+        variables: {
+          _id: userId,
+        },
+      }),
+    });
+  }
+
+  const userExists = user !== null;
+
+  return userExists;
+};
+
+export const BASENAME = "";

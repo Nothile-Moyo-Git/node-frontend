@@ -84,6 +84,7 @@ export const Paginator: FC<ComponentProps> = ({
         previousPages[0] > 1 && (
           <div className="paginator__min-max-wrapper">
             <Link
+              data-testid="test-id-pagination-page-1"
               to={`${BASENAME}/posts/1`}
               className="paginator__button"
               onClick={() => {
@@ -100,6 +101,7 @@ export const Paginator: FC<ComponentProps> = ({
       {previousPages.length > 0 &&
         previousPages.map((pageNumber: number) => (
           <Link
+            data-testid={`test-id-pagination-page-${pageNumber}`}
             to={`${BASENAME}/posts/${pageNumber}`}
             className="paginator__button"
             onClick={() => {
@@ -140,6 +142,7 @@ export const Paginator: FC<ComponentProps> = ({
       {upcomingPages.length > 0 &&
         upcomingPages.map((pageNumber: number) => (
           <Link
+            data-testid={`test-id-pagination-page-${pageNumber}`}
             to={`${BASENAME}/posts/${pageNumber}`}
             className="paginator__button"
             onClick={() => {
@@ -157,6 +160,7 @@ export const Paginator: FC<ComponentProps> = ({
           <div className="paginator__min-max-wrapper">
             <p className="paginator__min-max-text">...</p>
             <Link
+              data-testid={`test-id-pagination-page-${numberOfPages}`}
               to={`${BASENAME}/posts/${numberOfPages}`}
               className="paginator__button"
               onClick={() => {
