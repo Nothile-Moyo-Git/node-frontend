@@ -38,8 +38,6 @@ const PostScreen: FC = () => {
   useEffect(() => {
     // Get posts method, we define it here so we can call it asynchronously
     const getPostData = async () => {
-      setIsQuerying(true);
-
       // Requesting the post from GraphQL using the postID, it's a post request
       const response = await fetch(
         `${appContextInstance?.baseUrl}/graphql/posts`,
@@ -86,14 +84,19 @@ const PostScreen: FC = () => {
       return response;
     };
 
-    // Toggle the loading spinner util the request ends
-    appContextInstance?.validateAuthentication();
+    // Run our logic and query the post data from the backend
+    const loadContent = async () => {
+      // Toggle the loading spinner util the request ends
+      appContextInstance?.validateAuthentication();
+      setIsQuerying(true);
 
-    // Attempt to pull post data, returns an error if the request fails and renders the error modal
-    try {
-      if (appContextInstance?.userAuthenticated === true) {
-        // Method defined here to allow async calls in a useEffect hook
-        const fetchPostData = async () => {
+      // Attempt to pull post data, returns an error if the request fails and renders the error modal
+      try {
+        if (
+          appContextInstance?.userAuthenticated === true &&
+          appContextInstance?.token !== ""
+        ) {
+          // Method defined here to allow async calls in a useEffect hook
           const result = await getPostData();
 
           const json = await result.json();
@@ -103,22 +106,21 @@ const PostScreen: FC = () => {
           if (statusCode === 200) {
             setPostData(json.data.GetPostResponse.post);
           }
-        };
-
-        if (appContextInstance?.token !== "") {
-          fetchPostData();
         }
+      } catch (error) {
+        console.error(error);
+        setShowErrorModal(true);
+      } finally {
+        setIsQuerying(false);
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsQuerying(false);
-    }
 
-    // If the user isn't authenticated, redirect this route to the previous page
-    if (!appContextInstance?.userAuthenticated) {
-      navigate(`${BASENAME}/login`);
-    }
+      // If the user isn't authenticated, redirect this route to the previous page
+      if (!appContextInstance?.userAuthenticated) {
+        navigate(`${BASENAME}/login`);
+      }
+    };
+
+    loadContent();
   }, [appContextInstance, postId, navigate]);
 
   useEffect(() => {

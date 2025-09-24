@@ -65,7 +65,7 @@ describe("Post Screen Component", () => {
 
     // Build and check the snapshot
     const postScreenComponent = screen.getByTestId("test-id-post-screen");
-    expect(postScreenComponent).toBeDefined();
+    expect(postScreenComponent).toBeVisible();
     expect(postScreenComponent).toMatchSnapshot();
   });
 
@@ -85,5 +85,37 @@ describe("Post Screen Component", () => {
       "test-id-loading-spinner",
     );
     expect(loadingIndicator).toBeVisible();
+  });
+
+  it("Shows post information on the page", async () => {
+    // Mock the request so we can get post data
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () =>
+        Promise.resolve({
+          data: {
+            GetPostResponse: {
+              message: "Request successful",
+              post: mockPost,
+              success: true,
+            },
+          },
+        }),
+    });
+
+    // Render the post screen
+    renderWithContext(
+      <PostScreen />,
+      { route: `/post/${mockPost._id}` },
+      mockContext,
+    );
+
+    // Find post information
+    const postTitle = await screen.findByText(mockPost.title);
+    expect(postTitle).toBeVisible();
+
+    const postDescription = await screen.findByText(mockPost.content);
+    expect(postDescription).toBeVisible();
   });
 });
