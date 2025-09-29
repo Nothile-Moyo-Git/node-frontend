@@ -370,7 +370,7 @@ export const EditPost: FC = () => {
   };
 
   return (
-    <section className="editPost">
+    <section className="editPost" data-testid="test-id-edit-post">
       {isLoading && <LoadingSpinner />}
       {!isLoading && showErrorText && <ErrorModal />}
       {!isLoading && !showErrorText && (

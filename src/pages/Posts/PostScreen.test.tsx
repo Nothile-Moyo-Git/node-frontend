@@ -1,9 +1,9 @@
 /**
  * Author: Nothile Moyo
- * Date created: 29/08/2025
+ * Date created: 29/09/2025
  *
  * @description: This is the test file for the Post Screen component
- * We authenticate the user, and if valid, we then show a list of all posts on the page
+ * We authenticate the user, and if valid, we then show the individual post information
  */
 
 import "@testing-library/jest-dom";

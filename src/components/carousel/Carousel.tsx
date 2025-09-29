@@ -7,7 +7,10 @@
  * Wraps an article in a card component in order to be rendered in a list
  */
 
-import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
+// My styles, these override the swiper styles since they're defined later
+// Make sure that these are scoped more than the default styling if the override doesn't work
+import "./Carousel.scss";
+import { Swiper, SwiperSlide } from "swiper/react";
 import {
   Pagination,
   Navigation,
@@ -29,17 +32,7 @@ import LoadingSpinner from "../loader/LoadingSpinner";
 import Button from "../button/Button";
 
 // Types
-import type { Swiper as SwiperI } from "swiper/types";
-
-// Default swiper styles
-import "swiper/scss";
-import "swiper/scss/pagination";
-import "swiper/scss/navigation";
-import "swiper/scss/thumbs";
-
-// My styles, these override the swiper styles since they're defined later
-// Make sure that these are scoped more than the default styling if the override doesn't work
-import "./Carousel.scss";
+import type { Swiper as SwiperCore } from "swiper/types";
 
 interface ComponentProps {
   setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>;
@@ -49,7 +42,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperI | string | null>(
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | string | null>(
     null,
   );
 
@@ -126,7 +119,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   }, [files]);
 
   // We update our index in state so we can keep our button to choose a slide in place instead of rendering multiple buttons
-  const updateSwiperIndexHandler = (swiper: SwiperClass) => {
+  const updateSwiperIndexHandler = (swiper: SwiperCore) => {
     setCurrentIndex(swiper.realIndex);
   };
 

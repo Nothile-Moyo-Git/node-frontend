@@ -4,7 +4,7 @@ import { Post } from "../../@types";
 
 // Define a user here which should have their details rendered on the main App page
 export const mockUser: User = {
-  _id: "6624158268f8cf47bea31396",
+  _id: "12345-nothile-id",
   name: "Nothile Moyo",
   email: "nothile1@gmail.com",
   password: "test",
