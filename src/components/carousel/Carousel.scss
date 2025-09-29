@@ -1,5 +1,9 @@
 @use "../../scss/partials/branding" as branding;
 @use "../../scss/partials/animations" as animations;
+@use "swiper/scss";
+@use "swiper/scss/navigation";
+@use "swiper/scss/pagination";
+@use "swiper/scss/thumbs";
 
 .carousel {
     display: flex;
