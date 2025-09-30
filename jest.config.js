@@ -8,7 +8,7 @@ module.exports = {
   },
   modulePathIgnorePatterns: ["./src/mocks"],
   transformIgnorePatterns: [
-    "/node_modules/(?!(?:@bundled-es-modules|tough-cookie)/)", // transpile these ESM modules
+    "/node_modules/(?!(?:@bundled-es-modules|tough-cookie|swiper|ssr-window|dom7)/)", // transpile these ESM modules
   ],
   transform: {
     "^.+\\.tsx?$": ["ts-jest", { useESM: true }], // ts-jest for TS/TSX files
