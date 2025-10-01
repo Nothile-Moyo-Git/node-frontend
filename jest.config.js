@@ -13,6 +13,7 @@ module.exports = {
   transform: {
     "^.+\\.tsx?$": ["ts-jest", { useESM: true }], // ts-jest for TS/TSX files
     "^.+\\.js$": "babel-jest", // babel-jest for JS files including ESM modules
+    "^.+\\.mjs$": "babel-jest",
   },
   globals: {
     "ts-jest": {
@@ -20,4 +21,5 @@ module.exports = {
     },
   },
   extensionsToTreatAsEsm: [".ts", ".tsx"], // treat TypeScript files as ESM
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "mjs", "json", "node"],
 };
