@@ -32,7 +32,7 @@ import LoadingSpinner from "../loader/LoadingSpinner";
 import Button from "../button/Button";
 
 // Types
-import type { Swiper as SwiperCore } from "swiper/types";
+import type { Swiper as SwiperCore } from "swiper";
 
 interface ComponentProps {
   setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>;

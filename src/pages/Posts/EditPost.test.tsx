@@ -20,7 +20,7 @@ import {
 } from "../../test-utils/mocks/objects";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
-import { screen } from "@testing-library/react";
+import { screen, act } from "@testing-library/react";
 
 // Setup mocks and environment
 beforeAll(() => {
