@@ -7,17 +7,38 @@
  *
  */
 
-import { ReactElement } from "react";
+import { ReactNode } from "react";
 
-export const Swiper = (children: ReactElement) => (
-  <div data-testid="swiper">{children}</div>
-);
-
-export const SwiperSlide = (children: ReactElement) => {
-  <div data-testid="swiper-slide">{children}</div>;
+// Mock swiper and swiper slide
+export const Swiper = ({ children, ...props }: { children: ReactNode }) => {
+  <div data-testid="swiper" {...props}>
+    {children}
+  </div>;
 };
+
+export const SwiperSlide = ({
+  children,
+  ...props
+}: {
+  children: ReactNode;
+}) => {
+  <div data-testid="swiper-slide" {...props}>
+    {children}
+  </div>;
+};
+
+export const Pagination = {};
+export const Navigation = {};
+export const Autoplay = {};
+export const Thumbs = {};
+export const FreeMode = {};
 
 export default {
   Swiper,
   SwiperSlide,
+  Pagination,
+  Navigation,
+  Autoplay,
+  Thumbs,
+  FreeMode,
 };

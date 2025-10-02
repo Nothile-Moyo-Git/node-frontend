@@ -5,7 +5,6 @@
  * @description: This is the test file for the App file, it handles the basic authentication and handling the user request
  */
 
-import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 import { server } from "./test-utils/mockServer";
 import "@testing-library/jest-dom";
@@ -46,9 +45,7 @@ afterAll(() => server.close());
 describe("App Component Tests", () => {
   // Handle the main authentication of the app
   it("Renders the app successfully", () => {
-    act(() => {
-      renderWithRouter(<App />);
-    });
+    renderWithRouter(<App />);
 
     // Check if the app component is rendered and we navigate to it successfully
     const appComponent = screen.getByTestId("test-id-app-component");

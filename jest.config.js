@@ -3,6 +3,8 @@ module.exports = {
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["./jest.setup.js"],
   moduleNameMapper: {
+    "^swiper/react$": "<rootDir>/src/test-utils/mockSwiperReact.tsx",
+    "^swiper/modules$": "<rootDir>/src/test-utils/mockSwiperReact.tsx",
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/__mocks__/fileMock.js",
   },

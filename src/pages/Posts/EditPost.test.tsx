@@ -20,11 +20,7 @@ import {
 } from "../../test-utils/mocks/objects";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
-import { screen } from "@testing-library/react";
-
-// Mocking swiper
-import * as swiperReactMock from "../../test-utils/mockSwiperReact";
-jest.mock("swiper/react", () => swiperReactMock);
+import { screen, act } from "@testing-library/react";
 
 // Setup mocks and environment
 beforeAll(() => {

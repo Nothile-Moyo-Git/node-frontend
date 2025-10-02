@@ -6,8 +6,8 @@
  * We use this to be able to render our components
  *
  */
-import { ReactNode } from "react";
-import { act, render } from "@testing-library/react";
+import { act, ReactNode } from "react";
+import { render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { AppContext, ContextProps } from "../context/AppContext";
 
