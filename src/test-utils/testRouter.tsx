@@ -10,25 +10,10 @@ import { act, ReactNode } from "react";
 import { render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { AppContext, ContextProps } from "../context/AppContext";
+import { routes } from "../routes/Router";
 
 export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
-  const router = createMemoryRouter(
-    [
-      {
-        path: "/",
-        element: ui,
-      },
-      {
-        path: "/posts",
-        element: ui,
-      },
-      {
-        path: "/posts/:page",
-        element: ui,
-      },
-    ],
-    { initialEntries: [route] },
-  );
+  const router = createMemoryRouter(routes, { initialEntries: [route] });
 
   return render(<RouterProvider router={router} />);
 }
@@ -38,23 +23,7 @@ export const renderWithContext = (
   { route = "/" } = {},
   context: ContextProps,
 ) => {
-  const router = createMemoryRouter(
-    [
-      {
-        path: "/",
-        element: ui,
-      },
-      {
-        path: "/posts",
-        element: ui,
-      },
-      {
-        path: "/post/:page",
-        element: ui,
-      },
-    ],
-    { initialEntries: [route] },
-  );
+  const router = createMemoryRouter(routes, { initialEntries: [route] });
 
   return render(
     <AppContext.Provider value={context}>

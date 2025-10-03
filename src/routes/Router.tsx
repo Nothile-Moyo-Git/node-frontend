@@ -66,8 +66,8 @@ const protectedRoutes = [
   },
 ];
 
-// Generate the final route tree
-const routes =
+// Generate the final route tree, we export it for tests
+export const routes =
   process.env.NODE_ENV.trim() === "development"
     ? [...childRoutes, ...protectedRoutes]
     : [...childRoutes];
