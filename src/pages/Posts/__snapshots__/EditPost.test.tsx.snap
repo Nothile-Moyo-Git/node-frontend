@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Edit Post Component Matches the screenshot 1`] = `
+<section
+  class="editPost"
+  data-testid="test-id-edit-post"
+>
+  <form
+    class="form  false"
+  >
+    <h2
+      class="title false"
+    >
+      Edit Post : undefined
+    </h2>
+    <div
+      class="field "
+    >
+      <label
+        class="label false"
+        for="title"
+        id="titleLabel"
+      >
+        Title*
+      </label>
+      <input
+        aria-labelledby="titleLabel"
+        class="input  false"
+        name="title"
+        placeholder="Enter your title here"
+        required=""
+        type="string"
+        value=""
+      />
+    </div>
+    <div
+      class="field "
+    >
+      <div
+        class="loadingWrapper"
+        data-testid="test-id-loading-spinner"
+      >
+        <span
+          class="loadingSpinner"
+        />
+        <p
+          class="loadingText"
+        >
+          Loading, please wait...
+        </p>
+      </div>
+    </div>
+    <div
+      class="field "
+    >
+      <label
+        class="label false"
+        for="content"
+        id="contentLabel"
+      >
+        Content*
+      </label>
+      <textarea
+        aria-labelledby="contentLabel"
+        class="textarea  false"
+        name="content"
+        placeholder="Please enter your content"
+        required=""
+        rows="3"
+      />
+    </div>
+    <button
+      class="button button__primary"
+      data-testid="test-id-edit-post-submit-button"
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+</section>
+`;
