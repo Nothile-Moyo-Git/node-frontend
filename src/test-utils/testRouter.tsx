@@ -8,12 +8,21 @@
  */
 import { act, ReactNode } from "react";
 import { render } from "@testing-library/react";
-import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import {
+  createMemoryRouter,
+  RouterProvider,
+  FutureConfig,
+} from "react-router-dom";
 import { AppContext, ContextProps } from "../context/AppContext";
 import { routes } from "../routes/Router";
 
 export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
-  const router = createMemoryRouter(routes, { initialEntries: [route] });
+  const router = createMemoryRouter(routes, {
+    initialEntries: [route],
+    future: {
+      v7_startTransition: true,
+    } as FutureConfig,
+  });
 
   return render(<RouterProvider router={router} />);
 }
@@ -23,7 +32,12 @@ export const renderWithContext = (
   { route = "/" } = {},
   context: ContextProps,
 ) => {
-  const router = createMemoryRouter(routes, { initialEntries: [route] });
+  const router = createMemoryRouter(routes, {
+    initialEntries: [route],
+    future: {
+      v7_startTransition: true,
+    } as FutureConfig,
+  });
 
   return render(
     <AppContext.Provider value={context}>

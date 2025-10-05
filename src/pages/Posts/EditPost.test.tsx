@@ -18,7 +18,7 @@ import {
   mockPost,
   mockUser,
 } from "../../test-utils/mocks/objects";
-import { renderWithContext } from "../../test-utils/testRouter";
+import { renderWithAct } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
 import { screen } from "@testing-library/react";
 
@@ -84,7 +84,7 @@ describe("Edit Post Component", () => {
       );
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
+    renderWithAct(
       <EditPost />,
       { route: `/edit-post/${mockPost._id}` },
       mockContext,
