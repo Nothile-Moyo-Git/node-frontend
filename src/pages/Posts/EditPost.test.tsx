@@ -47,6 +47,16 @@ describe("Edit Post Component", () => {
   it("Matches the screenshot", async () => {
     global.fetch = jest
       .fn()
+      .mockResolvedValueOnce(createFetchResponse({
+        data: {
+          GetFilePathsResponse: {
+            status: 200,
+            files: [
+
+            ]
+          }
+        }
+      }))
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {

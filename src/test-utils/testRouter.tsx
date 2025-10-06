@@ -8,11 +8,7 @@
  */
 import { act, ReactNode } from "react";
 import { render } from "@testing-library/react";
-import {
-  createMemoryRouter,
-  RouterProvider,
-  FutureConfig,
-} from "react-router-dom";
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { AppContext, ContextProps } from "../context/AppContext";
 import { routes } from "../routes/Router";
 
@@ -20,11 +16,13 @@ export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
   const router = createMemoryRouter(routes, {
     initialEntries: [route],
     future: {
-      v7_startTransition: true,
-    } as FutureConfig,
+      v7_relativeSplatPath: true,
+    },
   });
 
-  return render(<RouterProvider router={router} />);
+  return render(
+    <RouterProvider router={router} future={{ v7_startTransition: true }} />,
+  );
 }
 
 export const renderWithContext = (
@@ -35,13 +33,13 @@ export const renderWithContext = (
   const router = createMemoryRouter(routes, {
     initialEntries: [route],
     future: {
-      v7_startTransition: true,
-    } as FutureConfig,
+      v7_relativeSplatPath: true,
+    },
   });
 
   return render(
     <AppContext.Provider value={context}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
     </AppContext.Provider>,
   );
 };
