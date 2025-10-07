@@ -17,6 +17,7 @@ import {
   mockContext,
   mockPost,
   mockUser,
+  mockFiles,
 } from "../../test-utils/mocks/objects";
 import { renderWithAct } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
@@ -47,16 +48,6 @@ describe("Edit Post Component", () => {
   it("Matches the screenshot", async () => {
     global.fetch = jest
       .fn()
-      .mockResolvedValueOnce(createFetchResponse({
-        data: {
-          GetFilePathsResponse: {
-            status: 200,
-            files: [
-
-            ]
-          }
-        }
-      }))
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
@@ -65,6 +56,16 @@ describe("Edit Post Component", () => {
               message: "200: Request successful",
               post: mockPost,
               isUserValidated: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
             },
           },
         }),
