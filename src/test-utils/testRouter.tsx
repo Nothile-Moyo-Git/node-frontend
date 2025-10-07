@@ -13,9 +13,16 @@ import { AppContext, ContextProps } from "../context/AppContext";
 import { routes } from "../routes/Router";
 
 export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
-  const router = createMemoryRouter(routes, { initialEntries: [route] });
+  const router = createMemoryRouter(routes, {
+    initialEntries: [route],
+    future: {
+      v7_relativeSplatPath: true,
+    },
+  });
 
-  return render(<RouterProvider router={router} />);
+  return render(
+    <RouterProvider router={router} future={{ v7_startTransition: true }} />,
+  );
 }
 
 export const renderWithContext = (
@@ -23,11 +30,16 @@ export const renderWithContext = (
   { route = "/" } = {},
   context: ContextProps,
 ) => {
-  const router = createMemoryRouter(routes, { initialEntries: [route] });
+  const router = createMemoryRouter(routes, {
+    initialEntries: [route],
+    future: {
+      v7_relativeSplatPath: true,
+    },
+  });
 
   return render(
     <AppContext.Provider value={context}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
     </AppContext.Provider>,
   );
 };

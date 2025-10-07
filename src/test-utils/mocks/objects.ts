@@ -1,4 +1,4 @@
-import { User } from "../../@types";
+import { FileData, User } from "../../@types";
 import { ContextProps } from "../../context/AppContext";
 import { Post } from "../../@types";
 
@@ -113,5 +113,29 @@ export const mockPosts: Post[] = [
     creator: "12345-nothile-id",
     createdAt: "1756408519264",
     updatedAt: "1756495750074",
+  },
+];
+
+// Mocking the file response we would receive from the api
+export const mockFiles: FileData[] = [
+  {
+    fileName: "Kratos.png",
+    imageUrl: "../frontend/src/images/Kratos.png",
+  },
+  {
+    fileName: "Alfira-face.jpg",
+    imageUrl: "../frontend/src/images/Alfira-face.jpg",
+  },
+  {
+    fileName: "Shanalotte.jpg",
+    imageUrl: "../frontend/src/images/Shanalotte.jpg",
+  },
+  {
+    fileName: "Edelgard.jpg",
+    imageUrl: "../frontend/src/images/Edelgard.jpg",
+  },
+  {
+    fileName: "Tiefling.jpg",
+    imageUrl: "../frontend/src/images/Tiefling.jpg",
   },
 ];
