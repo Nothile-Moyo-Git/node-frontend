@@ -19,7 +19,7 @@ import {
   mockUser,
   mockFiles,
 } from "../../test-utils/mocks/objects";
-import { renderWithAct } from "../../test-utils/testRouter";
+import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
 import { screen } from "@testing-library/react";
 
@@ -95,14 +95,14 @@ describe("Edit Post Component", () => {
       );
 
     // Render our component with routing and the context so we have authentication
-    renderWithAct(
+    renderWithContext(
       <EditPost />,
       { route: `/edit-post/${mockPost._id}` },
       mockContext,
     );
 
     // Make sure we have our edit post
-    const editPostComponent = screen.getByTestId("test-id-edit-post");
+    const editPostComponent = screen.findByTestId("test-id-edit-post");
     expect(editPostComponent).toBeVisible();
     expect(editPostComponent).toMatchSnapshot();
   });
