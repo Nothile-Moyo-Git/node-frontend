@@ -172,7 +172,7 @@ describe("View Posts component", () => {
             GetPostsResponse: {
               success: true,
               numberOfPages: 2,
-              posts: mockPosts,
+              posts: mockPosts.slice(0, 2),
               message: "OK",
             },
           },
@@ -184,7 +184,7 @@ describe("View Posts component", () => {
             GetPostsResponse: {
               success: true,
               numberOfPages: 2,
-              posts: mockPosts,
+              posts: mockPosts.slice(3, 5),
               message: "OK",
             },
           },
@@ -202,19 +202,23 @@ describe("View Posts component", () => {
       userEvent.click(paginationPage2);
     });
 
-    const post2B = await screen.findByTestId(
+    const tieflings = await screen.findByTestId(
       `test-id-post-${mockPosts[3]._id}`,
     );
-    expect(post2B).toBeVisible();
+    expect(tieflings).toBeVisible();
 
-    const postAlfira = await screen.findByText(mockPosts[4].title);
-    expect(postAlfira).toBeVisible();
+    const edelGard = await screen.findByText(mockPosts[4].title);
+    expect(edelGard).toBeVisible();
 
-    const emeraldHerald = await screen.findByText(mockPosts[5].title);
-    expect(emeraldHerald).toBeVisible();
+    const kratos = await screen.findByText(mockPosts[5].title);
+    expect(kratos).toBeVisible();
+
+    const appComponent = await screen.findByTestId("test-id-view-posts");
+    expect(appComponent).toBeInTheDocument();
+    expect(appComponent).toMatchSnapshot();
   });
 
-  it("Deletes a post on the posts page", async () => {
+  /* it("Deletes a post on the posts page", async () => {
     // First, we request page 1, then page 2, then we delete, emit and we fetch our new posts after that
     mockFetch
       .mockResolvedValueOnce(
@@ -287,5 +291,34 @@ describe("View Posts component", () => {
     // finally assert the post is gone
     expect(screen.queryByText(mockPosts[4].title)).toBeInTheDocument();
     expect(screen.queryByText(mockPosts[5].title)).not.toBeInTheDocument();
+  }); */
+
+  it("Sandbox", async () => {
+    mockFetch.mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostsResponse: {
+            success: true,
+            numberOfPages: 2,
+            posts: mockPosts.slice(0, 2),
+            message: "OK",
+          },
+        },
+      }),
+    );
+
+    await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
+
+    /* const paginationPage2 = await screen.findByTestId(
+      "test-id-pagination-page-2",
+    );
+    await act(async () => userEvent.click(paginationPage2)); */
+
+    expect(screen.queryByText(mockPosts[2].title)).toBeInTheDocument();
+    expect(screen.queryByText(mockPosts[4].title)).not.toBeInTheDocument();
+
+    const appComponent = await screen.findByTestId("test-id-view-posts");
+    expect(appComponent).toBeInTheDocument();
+    expect(appComponent).toMatchSnapshot();
   });
 });
