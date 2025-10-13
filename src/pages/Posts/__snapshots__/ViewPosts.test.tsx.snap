@@ -1,5 +1,338 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`View Posts component Deletes a post on the posts page 1`] = `
+<section
+  class="viewPosts"
+  data-testid="test-id-view-posts"
+>
+  <h1
+    class="viewPosts__title"
+  >
+    Posts
+  </h1>
+  <ul
+    class="viewPosts__posts-list"
+  >
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-662e7c6ad94fde36bf4bb55c"
+      >
+        <img
+          alt="Tieflings"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Tieflings
+          </h2>
+          <p
+            class="article__description"
+          >
+            But you do see the way people look at you, devil’s child? Those black eyes, cold as a winter storm, were staring right into her heart and the sudden seriousness in his voice jolted her.
+          </p>
+          <p>
+            Uploaded: 2024/04/28 17:42:18
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662e7c6ad94fde36bf4bb55c"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662e7c6ad94fde36bf4bb55c"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662e7c6ad94fde36bf4bb55c"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-67843561d02db477bac4843b"
+      >
+        <img
+          alt="The Sixth Post"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            The Sixth Post
+          </h2>
+          <p
+            class="article__description"
+          >
+            Descriptions are a useful thing when you have them!
+          </p>
+          <p>
+            Uploaded: 2025/01/12 21:34:25
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/67843561d02db477bac4843b"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/67843561d02db477bac4843b"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-67843561d02db477bac4843b"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+  </ul>
+  <div
+    class="paginator"
+  >
+    <a
+      class="paginator__button"
+      data-testid="test-id-pagination-page-1"
+      href="/posts/1"
+    >
+      1
+    </a>
+    <button
+      class="paginator__button paginator__button--current-normal"
+      disabled=""
+    >
+      2
+    </button>
+  </div>
+</section>
+`;
+
+exports[`View Posts component Renders the page with pagination and goes to the next page 1`] = `
+<section
+  class="viewPosts"
+  data-testid="test-id-view-posts"
+>
+  <h1
+    class="viewPosts__title"
+  >
+    Posts
+  </h1>
+  <ul
+    class="viewPosts__posts-list"
+  >
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-662e7c6ad94fde36bf4bb55c"
+      >
+        <img
+          alt="Tieflings"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Tieflings
+          </h2>
+          <p
+            class="article__description"
+          >
+            But you do see the way people look at you, devil’s child? Those black eyes, cold as a winter storm, were staring right into her heart and the sudden seriousness in his voice jolted her.
+          </p>
+          <p>
+            Uploaded: 2024/04/28 17:42:18
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/662e7c6ad94fde36bf4bb55c"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/662e7c6ad94fde36bf4bb55c"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-662e7c6ad94fde36bf4bb55c"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-67843561d02db477bac4843b"
+      >
+        <img
+          alt="The Sixth Post"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            The Sixth Post
+          </h2>
+          <p
+            class="article__description"
+          >
+            Descriptions are a useful thing when you have them!
+          </p>
+          <p>
+            Uploaded: 2025/01/12 21:34:25
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/67843561d02db477bac4843b"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/67843561d02db477bac4843b"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-67843561d02db477bac4843b"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+    <li>
+      <article
+        class="article"
+        data-testid="test-id-post-68b0aac75d6f6df6ef698e7e"
+      >
+        <img
+          alt="Testing post number 6"
+          class="article__image"
+          draggable="false"
+          src="test-file-stub"
+        />
+        <div
+          class="article__content"
+        >
+          <h2
+            class="article__title"
+          >
+            Testing post number 6
+          </h2>
+          <p
+            class="article__description"
+          >
+            Testing post number 6 for functionality
+          </p>
+          <p>
+            Uploaded: 2025/08/28 20:15:19
+          </p>
+          <div
+            class="article__buttons"
+          >
+            <a
+              class="link__read-more"
+              href="/post/68b0aac75d6f6df6ef698e7e"
+            >
+              Read more
+            </a>
+            <a
+              class="link__edit"
+              href="/edit-post/68b0aac75d6f6df6ef698e7e"
+            >
+              Edit
+            </a>
+            <button
+              class="button button__delete"
+              data-testid="test-id-delete-68b0aac75d6f6df6ef698e7e"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </li>
+  </ul>
+  <div
+    class="paginator"
+  >
+    <a
+      class="paginator__button"
+      data-testid="test-id-pagination-page-1"
+      href="/posts/1"
+    >
+      1
+    </a>
+    <button
+      class="paginator__button paginator__button--current-normal"
+      disabled=""
+    >
+      2
+    </button>
+  </div>
+</section>
+`;
+
 exports[`View Posts component Should match snapshot 1`] = `
 <section
   class="viewPosts"
@@ -164,165 +497,6 @@ exports[`View Posts component Should match snapshot 1`] = `
             <button
               class="button button__delete"
               data-testid="test-id-delete-662e7bcdd94fde36bf4bb554"
-              type="submit"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </article>
-    </li>
-    <li>
-      <article
-        class="article"
-        data-testid="test-id-post-662e7c6ad94fde36bf4bb55c"
-      >
-        <img
-          alt="Tieflings"
-          class="article__image"
-          draggable="false"
-          src="test-file-stub"
-        />
-        <div
-          class="article__content"
-        >
-          <h2
-            class="article__title"
-          >
-            Tieflings
-          </h2>
-          <p
-            class="article__description"
-          >
-            But you do see the way people look at you, devil’s child? Those black eyes, cold as a winter storm, were staring right into her heart and the sudden seriousness in his voice jolted her.
-          </p>
-          <p>
-            Uploaded: 2024/04/28 17:42:18
-          </p>
-          <div
-            class="article__buttons"
-          >
-            <a
-              class="link__read-more"
-              href="/post/662e7c6ad94fde36bf4bb55c"
-            >
-              Read more
-            </a>
-            <a
-              class="link__edit"
-              href="/edit-post/662e7c6ad94fde36bf4bb55c"
-            >
-              Edit
-            </a>
-            <button
-              class="button button__delete"
-              data-testid="test-id-delete-662e7c6ad94fde36bf4bb55c"
-              type="submit"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </article>
-    </li>
-    <li>
-      <article
-        class="article"
-        data-testid="test-id-post-67843561d02db477bac4843b"
-      >
-        <img
-          alt="The Sixth Post"
-          class="article__image"
-          draggable="false"
-          src="test-file-stub"
-        />
-        <div
-          class="article__content"
-        >
-          <h2
-            class="article__title"
-          >
-            The Sixth Post
-          </h2>
-          <p
-            class="article__description"
-          >
-            Descriptions are a useful thing when you have them!
-          </p>
-          <p>
-            Uploaded: 2025/01/12 21:34:25
-          </p>
-          <div
-            class="article__buttons"
-          >
-            <a
-              class="link__read-more"
-              href="/post/67843561d02db477bac4843b"
-            >
-              Read more
-            </a>
-            <a
-              class="link__edit"
-              href="/edit-post/67843561d02db477bac4843b"
-            >
-              Edit
-            </a>
-            <button
-              class="button button__delete"
-              data-testid="test-id-delete-67843561d02db477bac4843b"
-              type="submit"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </article>
-    </li>
-    <li>
-      <article
-        class="article"
-        data-testid="test-id-post-68b0aac75d6f6df6ef698e7e"
-      >
-        <img
-          alt="Testing post number 6"
-          class="article__image"
-          draggable="false"
-          src="test-file-stub"
-        />
-        <div
-          class="article__content"
-        >
-          <h2
-            class="article__title"
-          >
-            Testing post number 6
-          </h2>
-          <p
-            class="article__description"
-          >
-            Testing post number 6 for functionality
-          </p>
-          <p>
-            Uploaded: 2025/08/28 20:15:19
-          </p>
-          <div
-            class="article__buttons"
-          >
-            <a
-              class="link__read-more"
-              href="/post/68b0aac75d6f6df6ef698e7e"
-            >
-              Read more
-            </a>
-            <a
-              class="link__edit"
-              href="/edit-post/68b0aac75d6f6df6ef698e7e"
-            >
-              Edit
-            </a>
-            <button
-              class="button button__delete"
-              data-testid="test-id-delete-68b0aac75d6f6df6ef698e7e"
               type="submit"
             >
               Delete

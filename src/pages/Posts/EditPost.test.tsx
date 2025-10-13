@@ -102,7 +102,7 @@ describe("Edit Post Component", () => {
     );
 
     // Make sure we have our edit post
-    const editPostComponent = screen.findByTestId("test-id-edit-post");
+    const editPostComponent = await screen.findByTestId("test-id-edit-post");
     expect(editPostComponent).toBeVisible();
     expect(editPostComponent).toMatchSnapshot();
   });

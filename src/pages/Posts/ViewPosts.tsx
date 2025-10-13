@@ -280,10 +280,6 @@ export const ViewPosts: FC = () => {
     }
   }, [page, appContextInstance, fetchPosts, navigate]);
 
-  /* console.log("Posts");
-  console.log(posts);
-  console.log("\n\n\n"); */
-
   return (
     <section className="viewPosts" data-testid="test-id-view-posts">
       <h1 className="viewPosts__title">Posts</h1>

@@ -66,7 +66,7 @@ describe("View Posts component", () => {
           GetPostsResponse: {
             success: true,
             numberOfPages: 2,
-            posts: mockPosts,
+            posts: mockPosts.slice(0, 3),
             message: "OK",
           },
         },
@@ -137,10 +137,11 @@ describe("View Posts component", () => {
           GetPostsResponse: {
             success: true,
             numberOfPages: 2,
-            posts: mockPosts,
+            posts: mockPosts.slice(0, 3),
             message: "OK",
           },
         },
+        status: 200,
       }),
     );
 
@@ -172,7 +173,7 @@ describe("View Posts component", () => {
             GetPostsResponse: {
               success: true,
               numberOfPages: 2,
-              posts: mockPosts,
+              posts: mockPosts.slice(0, 3),
               message: "OK",
             },
           },
@@ -184,7 +185,19 @@ describe("View Posts component", () => {
             GetPostsResponse: {
               success: true,
               numberOfPages: 2,
-              posts: mockPosts,
+              posts: mockPosts.slice(3, 6),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 6),
               message: "OK",
             },
           },
@@ -202,20 +215,24 @@ describe("View Posts component", () => {
       userEvent.click(paginationPage2);
     });
 
-    const post2B = await screen.findByTestId(
+    const tieflings = await screen.findByTestId(
       `test-id-post-${mockPosts[3]._id}`,
     );
-    expect(post2B).toBeVisible();
+    expect(tieflings).toBeVisible();
 
-    const postAlfira = await screen.findByText(mockPosts[4].title);
-    expect(postAlfira).toBeVisible();
+    const edelGard = await screen.findByText(mockPosts[4].title);
+    expect(edelGard).toBeVisible();
 
-    const emeraldHerald = await screen.findByText(mockPosts[5].title);
-    expect(emeraldHerald).toBeVisible();
+    const kratos = await screen.findByText(mockPosts[5].title);
+    expect(kratos).toBeVisible();
+
+    const appComponent = await screen.findByTestId("test-id-view-posts");
+    expect(appComponent).toBeInTheDocument();
+    expect(appComponent).toMatchSnapshot();
   });
 
   it("Deletes a post on the posts page", async () => {
-    // First, we request page 1, then page 2, then we delete, emit and we fetch our new posts after that
+    // Mock the individual requests 1 by 1
     mockFetch
       .mockResolvedValueOnce(
         createFetchResponse({
@@ -223,7 +240,7 @@ describe("View Posts component", () => {
             GetPostsResponse: {
               success: true,
               numberOfPages: 2,
-              posts: mockPosts,
+              posts: mockPosts.slice(0, 3),
               message: "OK",
             },
           },
@@ -235,7 +252,19 @@ describe("View Posts component", () => {
             GetPostsResponse: {
               success: true,
               numberOfPages: 2,
-              posts: mockPosts,
+              posts: mockPosts.slice(3, 6),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 6),
               message: "OK",
             },
           },
@@ -253,14 +282,25 @@ describe("View Posts component", () => {
           },
         }),
       )
-      .mockResolvedValueOnce(createFetchResponse({}, 200))
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
             GetPostsResponse: {
               success: true,
               numberOfPages: 2,
-              posts: mockPosts.slice(0, 5),
+              posts: mockPosts.slice(3, 5),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 5),
               message: "OK",
             },
           },
@@ -269,23 +309,33 @@ describe("View Posts component", () => {
 
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
 
+    // Confirm the first page
+    expect(screen.queryByText(mockPosts[2].title)).toBeInTheDocument();
+    expect(screen.queryByText(mockPosts[4].title)).not.toBeInTheDocument();
+
+    // Navigate to the second page
     const paginationPage2 = await screen.findByTestId(
       "test-id-pagination-page-2",
     );
     await act(async () => userEvent.click(paginationPage2));
 
+    // Find the delete the last post on the page
     const deleteBtn = await screen.findByTestId(
       `test-id-delete-${mockPosts[5]._id}`,
     );
+    expect(deleteBtn).toBeVisible();
     await act(async () => userEvent.click(deleteBtn));
-
     const confirm = await screen.findByTestId(
       "test-id-confirmation-modal-confirm-button",
     );
     await act(async () => userEvent.click(confirm));
 
-    // finally assert the post is gone
+    // Find the remaining post
     expect(screen.queryByText(mockPosts[4].title)).toBeInTheDocument();
     expect(screen.queryByText(mockPosts[5].title)).not.toBeInTheDocument();
+
+    const appComponent = await screen.findByTestId("test-id-view-posts");
+    expect(appComponent).toBeInTheDocument();
+    expect(appComponent).toMatchSnapshot();
   });
 });
