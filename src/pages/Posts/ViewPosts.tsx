@@ -179,11 +179,6 @@ export const ViewPosts: FC = () => {
         },
       );
 
-      // Testing response output
-      console.log("Response");
-      console.log(response);
-      console.log("\n\n");
-
       // Get the result from the endpoint
       const {
         data: { PostDeletePostResponse: result },

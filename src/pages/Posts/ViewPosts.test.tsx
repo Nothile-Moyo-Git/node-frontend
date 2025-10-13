@@ -84,7 +84,7 @@ describe("View Posts component", () => {
     expect(appComponent).toMatchSnapshot();
   });
 
-  /* it("Should show loading spinner on initial render", async () => {
+  it("Should show loading spinner on initial render", async () => {
     // Make the request never resolve so the loading spinner keeps spinning
     mockFetch.mockImplementation(() => new Promise(() => {}));
 
@@ -94,9 +94,9 @@ describe("View Posts component", () => {
       "test-id-loading-spinner",
     );
     expect(loadingIndicator).toBeVisible();
-  }); */
+  });
 
-  /* it("Renders the error modal as the API request fails", async () => {
+  it("Renders the error modal as the API request fails", async () => {
     // We're ignoring the console in this test as we don't need the output here, but is useful for dev / prod
     const consoleErrorSpy = jest
       .spyOn(console, "error")
@@ -128,16 +128,16 @@ describe("View Posts component", () => {
     });
 
     consoleErrorSpy.mockRestore();
-  }); */
+  });
 
-  /* it("Renders the View Posts component successfully", async () => {
+  it("Renders the View Posts component successfully", async () => {
     mockFetch.mockResolvedValueOnce(
       createFetchResponse({
         data: {
           GetPostsResponse: {
             success: true,
             numberOfPages: 2,
-            posts: mockPosts,
+            posts: mockPosts.slice(0, 3),
             message: "OK",
           },
         },
@@ -163,9 +163,9 @@ describe("View Posts component", () => {
 
     const emeraldHerald = screen.getByText(mockPosts[2].title);
     expect(emeraldHerald).toBeVisible();
-  }); */
+  });
 
-  /* it("Renders the page with pagination and goes to the next page", async () => {
+  it("Renders the page with pagination and goes to the next page", async () => {
     mockFetch
       .mockResolvedValueOnce(
         createFetchResponse({
@@ -174,6 +174,18 @@ describe("View Posts component", () => {
               success: true,
               numberOfPages: 2,
               posts: mockPosts.slice(0, 3),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 6),
               message: "OK",
             },
           },
@@ -217,84 +229,10 @@ describe("View Posts component", () => {
     const appComponent = await screen.findByTestId("test-id-view-posts");
     expect(appComponent).toBeInTheDocument();
     expect(appComponent).toMatchSnapshot();
-  }); */
+  });
 
-  /* it("Deletes a post on the posts page", async () => {
-    // First, we request page 1, then page 2, then we delete, emit and we fetch our new posts after that
-    mockFetch
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts,
-              message: "OK",
-            },
-          },
-        }),
-      )
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts,
-              message: "OK",
-            },
-          },
-        }),
-      )
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            PostDeletePostResponse: {
-              highestPageNumber: 2,
-              numberOfPosts: 5,
-              status: 200,
-              success: true,
-            },
-          },
-        }),
-      )
-      .mockResolvedValueOnce(createFetchResponse({}, 200))
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts.slice(0, 5),
-              message: "OK",
-            },
-          },
-        }),
-      );
-
-    await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
-
-    const paginationPage2 = await screen.findByTestId(
-      "test-id-pagination-page-2",
-    );
-    await act(async () => userEvent.click(paginationPage2));
-
-    const deleteBtn = await screen.findByTestId(
-      `test-id-delete-${mockPosts[5]._id}`,
-    );
-    await act(async () => userEvent.click(deleteBtn));
-
-    const confirm = await screen.findByTestId(
-      "test-id-confirmation-modal-confirm-button",
-    );
-    await act(async () => userEvent.click(confirm));
-
-    // finally assert the post is gone
-    expect(screen.queryByText(mockPosts[4].title)).toBeInTheDocument();
-    expect(screen.queryByText(mockPosts[5].title)).not.toBeInTheDocument();
-  }); */
-
-  it("Sandbox", async () => {
+  it("Deletes a post on the posts page", async () => {
+    // Mock the individual requests 1 by 1
     mockFetch
       .mockResolvedValueOnce(
         createFetchResponse({
@@ -319,6 +257,54 @@ describe("View Posts component", () => {
             },
           },
         }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 6),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostDeletePostResponse: {
+              highestPageNumber: 2,
+              numberOfPosts: 5,
+              status: 200,
+              success: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 5),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 5),
+              message: "OK",
+            },
+          },
+        }),
       );
 
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
@@ -327,10 +313,26 @@ describe("View Posts component", () => {
     expect(screen.queryByText(mockPosts[2].title)).toBeInTheDocument();
     expect(screen.queryByText(mockPosts[4].title)).not.toBeInTheDocument();
 
+    // Navigate to the second page
     const paginationPage2 = await screen.findByTestId(
       "test-id-pagination-page-2",
     );
     await act(async () => userEvent.click(paginationPage2));
+
+    // Find the delete the last post on the page
+    const deleteBtn = await screen.findByTestId(
+      `test-id-delete-${mockPosts[5]._id}`,
+    );
+    expect(deleteBtn).toBeVisible();
+    await act(async () => userEvent.click(deleteBtn));
+    const confirm = await screen.findByTestId(
+      "test-id-confirmation-modal-confirm-button",
+    );
+    await act(async () => userEvent.click(confirm));
+
+    // Find the remaining post
+    expect(screen.queryByText(mockPosts[4].title)).toBeInTheDocument();
+    expect(screen.queryByText(mockPosts[5].title)).not.toBeInTheDocument();
 
     const appComponent = await screen.findByTestId("test-id-view-posts");
     expect(appComponent).toBeInTheDocument();
