@@ -205,9 +205,9 @@ export const EditPost: FC = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
 
     // If the user isn't authenticated, redirect this route to the previous page
     if (!appContextInstance?.userAuthenticated) {
