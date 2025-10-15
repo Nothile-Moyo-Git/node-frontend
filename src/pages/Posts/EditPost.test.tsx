@@ -27,6 +27,17 @@ import { screen, waitFor } from "@testing-library/react";
 let mockFetch: jest.MockedFunction<typeof fetch>;
 const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
 
+// Mocking socket.io jest so we don't make a real connection
+jest.mock("socket.io-client", () => {
+  return {
+    io: () => ({
+      on: jest.fn(),
+      emit: jest.fn(),
+      removeAllListeners: jest.fn(),
+    }),
+  };
+});
+
 // Setup mocks and environment
 beforeAll(() => {
   server.listen();
@@ -74,20 +85,29 @@ describe("Edit Post Component", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    mockFetch.mockRejectedValueOnce(
-      createFetchResponse({
-        data: {
-          GetPostsResponse: {
-            success: false,
-            numberOfPages: 2,
-            posts: [],
-            message: "Error 500 : Request failed, please view the server logs",
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: false,
+              message: "500: Request unsuccessful",
+              post: null,
+              isUserValidated: false,
+            },
           },
-        },
-        status: 500,
-        ok: false,
-      }),
-    );
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 500,
+              files: [],
+            },
+          },
+        }),
+      );
 
     // Render our component with routing and the context so we have authentication
     renderWithContext(

@@ -128,11 +128,11 @@ export const EditPost: FC = () => {
       const data = dataResponse.data.GetAndValidatePostResponse;
 
       // Show the error modal if the request fails
-      if (!dataResponse.errors) {
+      if (data.success === true) {
         setShowErrorText(false);
       }
 
-      if (dataResponse.errors) {
+      if (data.success === false) {
         setShowErrorText(true);
       }
 
