@@ -128,11 +128,11 @@ export const EditPost: FC = () => {
       const data = dataResponse.data.GetAndValidatePostResponse;
 
       // Show the error modal if the request fails
-      if (!dataResponse.errors) {
+      if (data.success === true) {
         setShowErrorText(false);
       }
 
-      if (dataResponse.errors) {
+      if (data.success === false) {
         setShowErrorText(true);
       }
 
@@ -205,9 +205,9 @@ export const EditPost: FC = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
 
     // If the user isn't authenticated, redirect this route to the previous page
     if (!appContextInstance?.userAuthenticated) {

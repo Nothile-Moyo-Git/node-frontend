@@ -40,8 +40,6 @@ beforeAll(() => {
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
-  jest.clearAllMocks();
-  jest.resetAllMocks();
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
   setMockAuthStorage();
@@ -119,6 +117,7 @@ describe("View Posts component", () => {
 
     renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
 
+    // Wait for the API request to complete, and then find the error modal on the page
     await waitFor(() => {
       const errorModal = screen.getByTestId("test-id-error-modal");
       const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
