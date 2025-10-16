@@ -68,6 +68,7 @@ export const EditPost: FC = () => {
   const [showImagePreview, setShowImagePreview] = useState<boolean>();
   const [previousImageUrl, setPreviousImageUrl] = useState<string>();
   const [carouselImage, setCarouselImage] = useState<FileData>();
+  const [renderErrorModal, setRenderErrorModal] = useState<boolean>(false);
 
   // States and refs for our objects
   const titleRef = useRef<HTMLInputElement>(null);
@@ -110,6 +111,7 @@ export const EditPost: FC = () => {
                                 updatedAt
                             }
                             isUserValidated
+                            status
                         }
                     }
                 `,
@@ -128,12 +130,12 @@ export const EditPost: FC = () => {
       const data = dataResponse.data.GetAndValidatePostResponse;
 
       // Show the error modal if the request fails
-      if (data.success === true) {
-        setShowErrorText(false);
+      if (data.status === 400) {
+        setShowErrorText(true);
       }
 
-      if (data.success === false) {
-        setShowErrorText(true);
+      if (data.status === 500) {
+        setRenderErrorModal(true);
       }
 
       return data;
@@ -369,11 +371,29 @@ export const EditPost: FC = () => {
     }
   };
 
+  const unauthorisedRequestSection = (
+    <div>
+      <p>Sorry, but you are not authorised to edit this post</p>
+      {location.key !== "default" && (
+        <Button
+          type="button"
+          variant="back"
+          onClick={backToPreviousPage}
+          testId="test-id-edit-post-back-button"
+        >
+          <MdKeyboardBackspace />
+          Go back
+        </Button>
+      )}
+    </div>
+  );
+
   return (
     <section className="editPost" data-testid="test-id-edit-post">
       {isLoading && <LoadingSpinner />}
-      {!isLoading && showErrorText && <ErrorModal />}
-      {!isLoading && !showErrorText && (
+      {!isLoading && showErrorText && unauthorisedRequestSection}
+      {!isLoading && renderErrorModal && <ErrorModal />}
+      {!isLoading && !showErrorText && !renderErrorModal && (
         <Form onSubmit={submitHandler}>
           <Title isFormValid={isFormValid}>
             {isFormValid
