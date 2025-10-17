@@ -18,10 +18,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { BASENAME } from "../../util/util";
 import { Paginator } from "../../components/pagination/Paginator";
 import LoadingSpinner from "../../components/loader/LoadingSpinner";
-import ErrorModal from "../../components/modals/ErrorModal";
-import ConfirmationModal from "../../components/modals/ConfirmationModal";
+import ErrorModal from "../../components/modals/variants/ErrorModal";
+import ConfirmationModal from "../../components/modals/variants/ConfirmationModal";
 import { io } from "socket.io-client";
-import ToastModal from "../../components/modals/ToastModal";
+import ToastModal from "../../components/modals/variants/ToastModal";
 import ExpiryWrapper from "../../components/expiry/ExpiryWrapper";
 
 export const ViewPosts: FC = () => {

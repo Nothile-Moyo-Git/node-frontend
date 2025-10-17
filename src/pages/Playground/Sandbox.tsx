@@ -17,6 +17,7 @@ import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
+import ErrorModal from "../../components/modals/variants/ErrorModal";
 
 const Sandbox = () => {
   // Dummy refs and states
@@ -105,14 +106,7 @@ const Sandbox = () => {
       }),
     });
 
-    console.clear();
-    console.log("result");
-    console.log(result);
-    console.log("\n");
-
     const data = await result.json();
-
-    console.log("data");
     console.log(data);
   };
 
@@ -145,11 +139,6 @@ const Sandbox = () => {
         },
       }),
     });
-
-    console.clear();
-    console.log("result");
-    console.log(result);
-    console.log("\n");
 
     const data = await result.json();
 
@@ -220,6 +209,8 @@ const Sandbox = () => {
           Submit
         </Button>
       </Form>
+
+      <ErrorModal />
     </div>
   );
 };
