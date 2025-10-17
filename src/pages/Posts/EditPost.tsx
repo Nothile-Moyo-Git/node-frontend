@@ -24,7 +24,7 @@ import { FileData, Post } from "../../@types";
 import { AppContext } from "../../context/AppContext";
 import { BASENAME } from "../../util/util";
 import LoadingSpinner from "../../components/loader/LoadingSpinner";
-import ErrorModal from "../../components/modals/ErrorModal";
+import ErrorModal from "../../components/modals/variants/ErrorModal";
 import Form from "../../components/form/Form";
 import Title from "../../components/form/Title";
 import Field from "../../components/form/Field";

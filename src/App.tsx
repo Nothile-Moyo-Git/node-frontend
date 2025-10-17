@@ -10,7 +10,7 @@ import { BASENAME, checkSessionValidation } from "./util/util";
 import "./App.scss";
 import { User } from "./@types";
 import { useNavigate } from "react-router-dom";
-import ErrorModal from "./components/modals/ErrorModal";
+import ErrorModal from "./components/modals/variants/ErrorModal";
 
 const App: FC = () => {
   const navigate = useNavigate();
