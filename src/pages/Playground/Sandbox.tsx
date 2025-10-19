@@ -17,7 +17,10 @@ import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
-import ErrorModal from "../../components/modals/variants/ErrorModal";
+import Modal from "../../components/modals/Modal";
+/* import ErrorModal from "../../components/modals/variants/ErrorModal";
+import ConfirmationModal from "../../components/modals/variants/ConfirmationModal";
+import ToastModal from "../../components/modals/variants/ToastModal"; */
 
 const Sandbox = () => {
   // Dummy refs and states
@@ -146,6 +149,13 @@ const Sandbox = () => {
     console.log(data);
   };
 
+  // Any logic needed to test modals
+  const toggleShowConfirmationModal = (id: string) => {
+    console.log("Confirmatation modal: ", id);
+  };
+
+  const deleteId = "delete-id-12345";
+
   return (
     <div>
       <br />
@@ -210,7 +220,17 @@ const Sandbox = () => {
         </Button>
       </Form>
 
-      <ErrorModal />
+      {/* <ErrorModal /> */}
+      {/* <ConfirmationModal
+        toggleConfirmationModal={toggleShowConfirmationModal}
+        id={deleteId}
+      /> */}
+      {/* <ToastModal variant="info" customMessage="This is the sandbox modal">
+        <div>Toast Modal</div>
+      </ToastModal> */}
+      <Modal variant="confirmation">
+        <>New Modal for sandbox</>
+      </Modal>
     </div>
   );
 };
