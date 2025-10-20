@@ -13,10 +13,31 @@ import "./Modal.scss";
 
 type ModalProps = {
   children: ReactNode;
+  variant: string;
+  backdrop: boolean;
 };
 
-const Modal: FC<ModalProps> = ({ children }) => {
-  return <section className="modal">{children}</section>;
+/**
+ * @name Modal
+ *
+ * @description - The usable Modal component, it uses variants and other properties to make it modular
+ *
+ * @param variant: string
+ * @param backdrop: boolean
+ */
+const Modal: FC<ModalProps> = ({
+  children,
+  variant = "confirmation",
+  backdrop = false,
+}) => {
+  return (
+    <section className={`modal ${backdrop && "modal__backdrop"}`}>
+      <div className="modal__component">
+        {variant === "error" && <p>Error icon goes here</p>}
+        {children}
+      </div>
+    </section>
+  );
 };
 
 export default Modal;
