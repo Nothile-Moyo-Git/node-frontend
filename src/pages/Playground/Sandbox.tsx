@@ -18,6 +18,7 @@ import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
 import Modal from "../../components/modals/Modal";
+import ConfirmationModal from "../../components/modals/variants/ConfirmationModal";
 /* import ErrorModal from "../../components/modals/variants/ErrorModal";
 import ConfirmationModal from "../../components/modals/variants/ConfirmationModal";
 import ToastModal from "../../components/modals/variants/ToastModal"; */
@@ -27,6 +28,8 @@ const Sandbox = () => {
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>();
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
+  const [showConfirmationModal, setShowConfirmationModal] =
+    useState<boolean>(true);
 
   // Check if the user is authenticated, if they are, then redirect to the previous page
   const appContextInstance = useContext(AppContext);
@@ -152,6 +155,7 @@ const Sandbox = () => {
   // Any logic needed to test modals
   const toggleShowConfirmationModal = (id: string) => {
     console.log("Confirmatation modal: ", id);
+    setShowConfirmationModal(false);
   };
 
   const deleteId = "delete-id-12345";
@@ -221,14 +225,16 @@ const Sandbox = () => {
       </Form>
 
       {/* <ErrorModal /> */}
-      {/* <ConfirmationModal
-        toggleConfirmationModal={toggleShowConfirmationModal}
-        id={deleteId}
-      /> */}
+      {showConfirmationModal && (
+        <ConfirmationModal
+          toggleConfirmationModal={toggleShowConfirmationModal}
+          id={deleteId}
+        />
+      )}
       {/* <ToastModal variant="info" customMessage="This is the sandbox modal">
         <div>Toast Modal</div>
       </ToastModal> */}
-      <Modal variant="confirmation">
+      <Modal variant="error" backdrop={false}>
         <>New Modal for sandbox</>
       </Modal>
     </div>

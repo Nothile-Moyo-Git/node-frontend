@@ -2,10 +2,40 @@
 
 .modal {
     display: flex;
-    flex-direction: column;
-    border-radius: 0.5rem;
-    box-shadow: branding.$card-box-shadow;
-    max-width: 500px;
-    margin: 2rem auto;
+    align-items: center;
     width: calc(100% - 2rem);
+    padding: 1rem;
+
+    &__confirmation {
+        display: flex;
+        flex-direction: column;
+        border-radius: 0.5rem;
+        max-width: 500px;
+        margin: 2rem auto;
+    }
+
+    &__error {
+
+    }
+
+    &__component {
+        max-width: 500px;
+        margin: auto;
+        box-shadow: branding.$card-box-shadow;
+        background: white;
+        color: black;
+        width: calc(100% - 2rem);
+        padding: 1rem;
+        border-radius: 4px;
+    }
+
+    &__backdrop {
+        background: rgba(0, 0, 0, 0.5);
+        position: fixed;
+        z-index: 3;
+        height: 100vh;
+        width: calc(100% - 2rem);
+        top: 0;
+        left: 0;
+    }
 }

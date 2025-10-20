@@ -8,38 +8,35 @@
  * This is supposed to wrap it so we don't need to reuse our styling in multiple components
  */
 
-import { FC, ReactNode, useState, useEffect } from "react";
+import { FC, ReactNode } from "react";
 import "./Modal.scss";
 
 type ModalProps = {
   children: ReactNode;
   variant: string;
+  backdrop: boolean;
 };
 
-const Modal: FC<ModalProps> = ({ children, variant = "confirmation" }) => {
-  const [chosenVariant, setChosenVariant] = useState<string>(variant);
-  const [variantStylingClasses, setVariantStylingClasses] = useState<string>();
-
-  // We're going to determine how we're going to style our modal and what content we pass through here
-  useEffect(() => {
-    switch (variant) {
-      case "confirmation":
-        setChosenVariant(variant);
-        setVariantStylingClasses("modal__confirmation");
-        break;
-      case "error":
-        setChosenVariant(variant);
-        setVariantStylingClasses("modal__error");
-        break;
-      default:
-        setChosenVariant("confirmation");
-        setVariantStylingClasses("modal__confirmation");
-        break;
-    }
-  }, [variant]);
-
+/**
+ * @name Modal
+ *
+ * @description - The usable Modal component, it uses variants and other properties to make it modular
+ *
+ * @param variant: string
+ * @param backdrop: boolean
+ */
+const Modal: FC<ModalProps> = ({
+  children,
+  variant = "confirmation",
+  backdrop = false,
+}) => {
   return (
-    <section className={`modal ${variantStylingClasses}`}>{children}</section>
+    <section className={`modal ${backdrop && "modal__backdrop"}`}>
+      <div className="modal__component">
+        {variant === "error" && <p>Error icon goes here</p>}
+        {children}
+      </div>
+    </section>
   );
 };
 
