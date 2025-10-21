@@ -9,6 +9,9 @@
 # production
 /build
 
+# sandbox content - should be used for dev only
+src/pages/Playground
+
 # misc
 .DS_Store
 .env

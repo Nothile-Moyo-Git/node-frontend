@@ -9,10 +9,11 @@
  */
 
 import { FC, ReactNode } from "react";
+import ErrorIcon from "../icons/ErrorIcon";
 import "./Modal.scss";
 
 type ModalProps = {
-  children: ReactNode;
+  children?: ReactNode;
   variant: string;
   backdrop: boolean;
 };
@@ -22,18 +23,34 @@ type ModalProps = {
  *
  * @description - The usable Modal component, it uses variants and other properties to make it modular
  *
- * @param variant: string
- * @param backdrop: boolean
+ * @param variant: string: "confirmation | error": Defines the variant for content and styling
+ * @param backdrop: boolean: Defined whether our modal sticks out or not
  */
 const Modal: FC<ModalProps> = ({
   children,
   variant = "confirmation",
   backdrop = false,
 }) => {
+  // Error component that we can inject into our component
+  const errorSection = (
+    <div className="modal__error">
+      <ErrorIcon />
+      <h2>Oops!</h2>
+      <p>Something went wrong and your request was not completed.</p>
+      <p>Please reload the page or email me using the button below.</p>
+      <a
+        className="errorModal__button"
+        href="mailto:@nottsthrowaway1@gmail.com"
+      >
+        Email me
+      </a>
+    </div>
+  );
+
   return (
     <section className={`modal ${backdrop && "modal__backdrop"}`}>
       <div className="modal__component">
-        {variant === "error" && <p>Error icon goes here</p>}
+        {variant === "error" && errorSection}
         {children}
       </div>
     </section>
