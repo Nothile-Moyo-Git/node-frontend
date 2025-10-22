@@ -1,8 +1,7 @@
 /**
+ * Date created: 22/10/2025
  *
- * Date created : 11/05/2024
- *
- * Author : Nothile Moyo
+ * Author: Nothile Moyo
  *
  * Confirmation Modal component
  * This component is a confirmation modal which renders in the middle of the page
@@ -11,8 +10,8 @@
  */
 
 import { FC } from "react";
+import Modal from "../Modal";
 import Button from "../../button/Button";
-import "./ConfirmationModal.scss";
 
 interface ComponentProps {
   toggleConfirmationModal: (_id: string) => void;
@@ -20,22 +19,14 @@ interface ComponentProps {
   id: string;
 }
 
-/**
- * @name ConfirmationModal
- *
- * @param toggleConfirmationModal ?: (event : React.MouseEvent<HTMLElement>) => void
- * @param performAction ?: (event : React.MouseEvent<HTMLElement>) => void
- *
- * @returns ConfirmationModal : Jsx
- */
 const ConfirmationModal: FC<ComponentProps> = ({
   toggleConfirmationModal,
   performAction,
   id,
 }) => {
   return (
-    <section className="confirmationModalWrapper">
-      <div className="confirmationModal">
+    <Modal variant="none" backdrop={true}>
+      <div className="modal__confirmation">
         <h2 className="confirmationModal__title">Are you sure?</h2>
         <p className="confirmationModal__description">
           If you wish to complete this action, click on the confirm button. If
@@ -61,7 +52,7 @@ const ConfirmationModal: FC<ComponentProps> = ({
           </Button>
         </div>
       </div>
-    </section>
+    </Modal>
   );
 };
 

@@ -1,4 +1,5 @@
 @use "../../scss/partials/branding" as branding;
+@use "../../scss/partials/mixins" as mixins;
 
 .modal {
     display: flex;
@@ -37,6 +38,21 @@
             width: 100%;
             background: branding.$brand_color_seven;
             text-align: center;
+        }
+
+        &-button{
+            background: branding.$brand_color_seven;
+            border-radius: 4px;
+            border: none;
+            width: max-content;
+            margin: auto;
+            padding: 0.1rem 0.75rem 0.3rem 0.75rem;
+            color: white;
+            box-shadow: branding.$button-shadow;
+
+            @include mixins.state(){
+                background: branding.$brand_color_seven__alt_3;
+            }
         }
     }
 
