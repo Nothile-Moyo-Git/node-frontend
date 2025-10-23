@@ -392,7 +392,9 @@ export const EditPost: FC = () => {
     <section className="editPost" data-testid="test-id-edit-post">
       {isLoading && <LoadingSpinner />}
       {!isLoading && showErrorText && unauthorisedRequestSection}
-      {!isLoading && renderErrorModal && <ErrorModal />}
+      {!isLoading && renderErrorModal && (
+        <ErrorModal testId="test-id-error-modal" />
+      )}
       {!isLoading && !showErrorText && !renderErrorModal && (
         <Form onSubmit={submitHandler}>
           <Title isFormValid={isFormValid}>

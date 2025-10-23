@@ -179,7 +179,9 @@ const PostScreen: FC = () => {
         </>
       )}
 
-      {!isQuerying && showErrorModal && <ErrorModal />}
+      {!isQuerying && showErrorModal && (
+        <ErrorModal testId="test-id-error-modal" />
+      )}
     </section>
   );
 };

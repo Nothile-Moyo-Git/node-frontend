@@ -291,6 +291,7 @@ export const ViewPosts: FC = () => {
           toggleConfirmationModal={toggleShowConfirmationModal}
           performAction={deletePost}
           id={deleteId}
+          testId="test-id-confirmation-modal"
         />
       )}
 
@@ -321,7 +322,9 @@ export const ViewPosts: FC = () => {
 
       {socketModal}
 
-      {!isLoading && showErrorText && <ErrorModal />}
+      {!isLoading && showErrorText && (
+        <ErrorModal testId="test-id-error-modal" />
+      )}
     </section>
   );
 };

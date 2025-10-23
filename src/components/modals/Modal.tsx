@@ -11,31 +11,28 @@
 import { FC, ReactNode } from "react";
 import "./Modal.scss";
 
-type ModalProps = {
-  children: ReactNode;
-  variant: string;
+interface ModalProps {
   backdrop: boolean;
-};
+  children?: ReactNode;
+  testId: string;
+  variant?: string;
+}
 
 /**
  * @name Modal
  *
  * @description - The usable Modal component, it uses variants and other properties to make it modular
  *
- * @param variant: string
- * @param backdrop: boolean
+ * @param variant: string: "confirmation | error": Defines the variant for content and styling
+ * @param backdrop: boolean: Defined whether our modal sticks out or not
  */
-const Modal: FC<ModalProps> = ({
-  children,
-  variant = "confirmation",
-  backdrop = false,
-}) => {
+const Modal: FC<ModalProps> = ({ children, backdrop = false, testId }) => {
   return (
-    <section className={`modal ${backdrop && "modal__backdrop"}`}>
-      <div className="modal__component">
-        {variant === "error" && <p>Error icon goes here</p>}
-        {children}
-      </div>
+    <section
+      className={`modal ${backdrop && "modal__backdrop"}`}
+      data-testid={testId}
+    >
+      <div className="modal__component">{children}</div>
     </section>
   );
 };
