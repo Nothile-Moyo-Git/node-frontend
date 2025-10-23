@@ -12,14 +12,18 @@ import { FC } from "react";
 import Modal from "../Modal";
 import ErrorIcon from "../../icons/ErrorIcon";
 
+interface ComponentProps {
+  testId: string;
+}
+
 /**
  * @name ErrorModal: ReactNode
  *
  * @description - A variation of the Error Modal component
  */
-const ErrorModal: FC = () => {
+const ErrorModal: FC<ComponentProps> = ({ testId }) => {
   return (
-    <Modal backdrop={false} variant="none">
+    <Modal backdrop={false} variant="none" testId={testId}>
       <div className="modal__error">
         <ErrorIcon />
         <h2>Oops!</h2>

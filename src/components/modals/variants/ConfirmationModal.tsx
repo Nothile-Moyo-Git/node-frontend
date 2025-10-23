@@ -14,28 +14,28 @@ import Modal from "../Modal";
 import Button from "../../button/Button";
 
 interface ComponentProps {
-  toggleConfirmationModal: (_id: string) => void;
-  performAction?: () => void;
   id: string;
+  performAction?: () => void;
+  testId: string;
+  toggleConfirmationModal: (_id: string) => void;
 }
 
 const ConfirmationModal: FC<ComponentProps> = ({
-  toggleConfirmationModal,
-  performAction,
   id,
+  performAction,
+  testId,
+  toggleConfirmationModal,
 }) => {
   return (
-    <Modal variant="none" backdrop={true}>
+    <Modal variant="none" backdrop={true} testId={testId}>
       <div className="modal__confirmation">
-        <h2 className="confirmationModal__title">Are you sure?</h2>
-        <p className="confirmationModal__description">
+        <h2>Are you sure?</h2>
+        <p>
           If you wish to complete this action, click on the confirm button. If
           you&apos;d like to cancel, click on cancel
         </p>
-        <p className="confirmationModal__description">
-          Please know that this action is NOT REVERSIBLE.
-        </p>
-        <div className="confirmationModal__buttons">
+        <p>Please know that this action is NOT REVERSIBLE.</p>
+        <div className="modal__confirmation-buttons">
           <Button
             variant="primary"
             onClick={performAction}

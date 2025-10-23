@@ -12,9 +12,10 @@ import { FC, ReactNode } from "react";
 import "./Modal.scss";
 
 interface ModalProps {
-  children?: ReactNode;
-  variant?: string;
   backdrop: boolean;
+  children?: ReactNode;
+  testId: string;
+  variant?: string;
 }
 
 /**
@@ -25,9 +26,12 @@ interface ModalProps {
  * @param variant: string: "confirmation | error": Defines the variant for content and styling
  * @param backdrop: boolean: Defined whether our modal sticks out or not
  */
-const Modal: FC<ModalProps> = ({ children, backdrop = false }) => {
+const Modal: FC<ModalProps> = ({ children, backdrop = false, testId }) => {
   return (
-    <section className={`modal ${backdrop && "modal__backdrop"}`}>
+    <section
+      className={`modal ${backdrop && "modal__backdrop"}`}
+      data-testid={testId}
+    >
       <div className="modal__component">{children}</div>
     </section>
   );

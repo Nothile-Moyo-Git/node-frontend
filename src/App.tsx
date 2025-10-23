@@ -124,7 +124,9 @@ const App: FC = () => {
     <div className="app" data-testid="test-id-app-component">
       {isLoading && <LoadingSpinner />}
 
-      {!isLoading && loadingError && <ErrorModal />}
+      {!isLoading && loadingError && (
+        <ErrorModal testId="test-id-error-modal" />
+      )}
 
       {!isLoading && appContextInstance?.userAuthenticated && user && (
         <div className="app__content">
