@@ -16,7 +16,6 @@ import { createFetchResponse } from "../../test-utils/methods/methods";
 import {
   mockContext,
   mockPost,
-  mockUser,
   mockFiles,
 } from "../../test-utils/mocks/objects";
 import { renderWithContext } from "../../test-utils/testRouter";
@@ -26,6 +25,12 @@ import { screen, waitFor } from "@testing-library/react";
 // Create our mockFetch so we can handle multiple requests
 let mockFetch: jest.MockedFunction<typeof fetch>;
 const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
+
+// Mocking image references
+// jest.mock(mockPost.imageUrl, () => "2B.png");
+console.log("Mock post");
+console.log(mockPost);
+console.log("\n\n");
 
 // Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
@@ -94,6 +99,7 @@ describe("Edit Post Component", () => {
               message: "500: Request unsuccessful",
               post: null,
               isUserValidated: false,
+              status: 500,
             },
           },
         }),
@@ -128,7 +134,7 @@ describe("Edit Post Component", () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it("Matches the screenshot", async () => {
+  it("Matches the snapshot", async () => {
     // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
     global.fetch = jest
       .fn()
@@ -140,6 +146,7 @@ describe("Edit Post Component", () => {
               message: "200: Request successful",
               post: mockPost,
               isUserValidated: true,
+              status: 200,
             },
           },
         }),
@@ -153,26 +160,44 @@ describe("Edit Post Component", () => {
             },
           },
         }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(
+      <EditPost />,
+      { route: `/edit-post/${mockPost._id}` },
+      mockContext,
+    );
+
+    // Make sure we have our edit post
+    const editPostComponent = await screen.findByTestId("test-id-edit-post");
+    expect(editPostComponent).toBeVisible();
+    expect(editPostComponent).toMatchSnapshot();
+  });
+
+  it("Completely loads the page and updates the content successfully", async () => {
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
       )
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
-            PostEditPostResponse: {
-              post: mockPost,
-              user: mockUser,
-              status: true,
-              message: "200: Request successful",
-              fileValidProps: {
-                fileName: mockPost.fileName,
-                imageUrl: mockPost.imageUrl,
-                isImageUrlValid: true,
-                isFileSizeValid: true,
-                isFileTypeValid: true,
-                isFileValid: true,
-              },
-              isContentValid: true,
-              isTitleValid: true,
-              isPostCreator: true,
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
             },
           },
         }),

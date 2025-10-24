@@ -17,6 +17,8 @@ import Input from "../../components/form/Input";
 import { generateBase64FromImage } from "../../util/file";
 import ImagePreview from "../../components/form/ImagePreview";
 import { AppContext } from "../../context/AppContext";
+import ToastModal from "../../components/modals/variants/ToastModal";
+import ExpiryWrapper from "../../components/expiry/ExpiryWrapper";
 
 const Sandbox = () => {
   // Dummy refs and states
@@ -209,9 +211,9 @@ const Sandbox = () => {
         </Button>
       </Form>
 
-      {/* <ToastModal variant="info" customMessage="This is the sandbox modal">
-        <div>Toast Modal</div>
-      </ToastModal> */}
+      <ExpiryWrapper lengthInSeconds={5}>
+        <ToastModal variant="info" customMessage="This is the sandbox modal" />
+      </ExpiryWrapper>
     </div>
   );
 };
