@@ -119,7 +119,7 @@ export const mockPosts: Post[] = [
 // Mocking the file response we would receive from the api
 export const mockFiles: FileData[] = [
   {
-    fileName: "2b.png",
+    fileName: "2B.png",
     imageUrl: "../../images/2B.png",
   },
   {

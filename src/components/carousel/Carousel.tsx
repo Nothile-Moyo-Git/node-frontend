@@ -52,10 +52,6 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
 
   const appContextInstance = useContext(AppContext);
 
-  console.log("Images");
-  console.log(images);
-  console.log("\n\n");
-
   // Get a list of our files from the backend with an API request
   useEffect(() => {
     // Render images
@@ -111,6 +107,10 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
             }),
           );
 
+          console.log("Renderable image");
+          console.log(renderableImages);
+          console.log("\n\n");
+
           setImages(renderableImages);
         }
       } catch (error) {
@@ -132,6 +132,14 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
     setCarouselImage(files[currentIndex]);
     setChosenImageIndex(currentIndex);
   };
+
+  console.log("Images");
+  console.log(images);
+
+  console.log("Files");
+  console.log(files);
+
+  console.log("\n\n");
 
   return images.length > 0 ? (
     <section className="carousel">

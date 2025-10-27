@@ -208,7 +208,6 @@ export const EditPost: FC = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      // Finished loading
       setIsLoading(false);
     }
 

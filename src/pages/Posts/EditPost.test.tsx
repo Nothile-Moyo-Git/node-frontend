@@ -23,7 +23,7 @@ import { EditPost } from "./EditPost";
 import { screen, waitFor } from "@testing-library/react";
 
 // Handle imports before since we render the full mocked DOM beforehand
-jest.mock("../../images/2B.png", () => "2B.png", { virtual: true });
+/* jest.mock("../../images/2B.png", () => "2B.png", { virtual: true });
 jest.mock("../../images/Kratos.png", () => "Kratos.png", { virtual: true });
 jest.mock("../../images/Alfira-face.jpg", () => "Alfira-face.jpg", {
   virtual: true,
@@ -32,7 +32,14 @@ jest.mock("../../images/Shanalotte.jpg", () => "Shanalotte.jpg", {
   virtual: true,
 });
 jest.mock("../../images/Edelgard.jpg", () => "Edelgard.jpg", { virtual: true });
-jest.mock("../../images/Tiefling.jpg", () => "Tiefling.jpg", { virtual: true });
+jest.mock("../../images/Tiefling.jpg", () => "Tiefling.jpg", { virtual: true }); */
+
+/* jest.mock(
+  // Match anything inside the images folder
+  /^.*\/images\/.*$/,
+  () => "mock-image.png",
+  { virtual: true },
+); */
 
 // Create our mockFetch so we can handle multiple requests
 let mockFetch: jest.MockedFunction<typeof fetch>;
@@ -207,16 +214,6 @@ describe("Edit Post Component", () => {
             },
           },
         }),
-      )
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            GetFilePathsResponse: {
-              status: 200,
-              files: mockFiles,
-            },
-          },
-        }),
       );
 
     // Render our component with routing and the context so we have authentication
@@ -226,9 +223,15 @@ describe("Edit Post Component", () => {
       mockContext,
     );
 
-    // Make sure we have our edit post
-    const editPostComponent = await screen.findByTestId("test-id-edit-post");
+    const editPostComponent = screen.getByTestId("test-id-edit-post");
     expect(editPostComponent).toBeVisible();
+
+    // Make sure we have our edit post
+    await waitFor(() => {
+      const carousel = screen.getByTestId("test-id-carousel-button");
+      expect(carousel).toBeVisible();
+    });
+
     expect(editPostComponent).toMatchSnapshot();
   });
 });
