@@ -22,15 +22,21 @@ import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
 import { screen, waitFor } from "@testing-library/react";
 
+// Handle imports before since we render the full mocked DOM beforehand
+jest.mock("../../images/2B.png", () => "2B.png", { virtual: true });
+jest.mock("../../images/Kratos.png", () => "Kratos.png", { virtual: true });
+jest.mock("../../images/Alfira-face.jpg", () => "Alfira-face.jpg", {
+  virtual: true,
+});
+jest.mock("../../images/Shanalotte.jpg", () => "Shanalotte.jpg", {
+  virtual: true,
+});
+jest.mock("../../images/Edelgard.jpg", () => "Edelgard.jpg", { virtual: true });
+jest.mock("../../images/Tiefling.jpg", () => "Tiefling.jpg", { virtual: true });
+
 // Create our mockFetch so we can handle multiple requests
 let mockFetch: jest.MockedFunction<typeof fetch>;
 const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
-
-// Mocking image references
-// jest.mock(mockPost.imageUrl, () => "2B.png");
-console.log("Mock post");
-console.log(mockPost);
-console.log("\n\n");
 
 // Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
@@ -188,6 +194,16 @@ describe("Edit Post Component", () => {
               post: mockPost,
               isUserValidated: true,
               status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
             },
           },
         }),
