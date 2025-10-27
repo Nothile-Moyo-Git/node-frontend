@@ -16,12 +16,23 @@ import { createFetchResponse } from "../../test-utils/methods/methods";
 import {
   mockContext,
   mockPost,
-  mockUser,
   mockFiles,
 } from "../../test-utils/mocks/objects";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
 import { screen, waitFor } from "@testing-library/react";
+
+// Handle imports before since we render the full mocked DOM beforehand
+jest.mock("../../images/2B.png", () => "2B.png", { virtual: true });
+jest.mock("../../images/Kratos.png", () => "Kratos.png", { virtual: true });
+jest.mock("../../images/Alfira-face.jpg", () => "Alfira-face.jpg", {
+  virtual: true,
+});
+jest.mock("../../images/Shanalotte.jpg", () => "Shanalotte.jpg", {
+  virtual: true,
+});
+jest.mock("../../images/Edelgard.jpg", () => "Edelgard.jpg", { virtual: true });
+jest.mock("../../images/Tiefling.jpg", () => "Tiefling.jpg", { virtual: true });
 
 // Create our mockFetch so we can handle multiple requests
 let mockFetch: jest.MockedFunction<typeof fetch>;
@@ -94,6 +105,7 @@ describe("Edit Post Component", () => {
               message: "500: Request unsuccessful",
               post: null,
               isUserValidated: false,
+              status: 500,
             },
           },
         }),
@@ -128,7 +140,7 @@ describe("Edit Post Component", () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it("Matches the screenshot", async () => {
+  it("Matches the snapshot", async () => {
     // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
     global.fetch = jest
       .fn()
@@ -140,6 +152,48 @@ describe("Edit Post Component", () => {
               message: "200: Request successful",
               post: mockPost,
               isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(
+      <EditPost />,
+      { route: `/edit-post/${mockPost._id}` },
+      mockContext,
+    );
+
+    // Make sure we have our edit post
+    const editPostComponent = await screen.findByTestId("test-id-edit-post");
+    expect(editPostComponent).toBeVisible();
+    expect(editPostComponent).toMatchSnapshot();
+  });
+
+  it("Completely loads the page and updates the content successfully", async () => {
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
             },
           },
         }),
@@ -157,22 +211,9 @@ describe("Edit Post Component", () => {
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
-            PostEditPostResponse: {
-              post: mockPost,
-              user: mockUser,
-              status: true,
-              message: "200: Request successful",
-              fileValidProps: {
-                fileName: mockPost.fileName,
-                imageUrl: mockPost.imageUrl,
-                isImageUrlValid: true,
-                isFileSizeValid: true,
-                isFileTypeValid: true,
-                isFileValid: true,
-              },
-              isContentValid: true,
-              isTitleValid: true,
-              isPostCreator: true,
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
             },
           },
         }),

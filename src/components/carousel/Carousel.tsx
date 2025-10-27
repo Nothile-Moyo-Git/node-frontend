@@ -52,6 +52,10 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
 
   const appContextInstance = useContext(AppContext);
 
+  console.log("Images");
+  console.log(images);
+  console.log("\n\n");
+
   // Get a list of our files from the backend with an API request
   useEffect(() => {
     // Render images
