@@ -68,7 +68,7 @@ exports[`Edit Post Component Completely loads the page and updates the content s
       </label>
       <div
         class="imagePreview"
-        style="background-size: contain; background-position: left;"
+        style="background-image: url(2B.png); background-size: contain; background-position: left;"
       />
     </div>
     <div
@@ -165,7 +165,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
       </label>
       <div
         class="imagePreview"
-        style="background-size: contain; background-position: left;"
+        style="background-image: url(2B.png); background-size: contain; background-position: left;"
       />
     </div>
     <div
