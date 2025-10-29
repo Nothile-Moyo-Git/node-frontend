@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Edit Post Component Completely loads the page and updates the content successfully 1`] = `
+exports[`Edit Post Component Completely loads the page 1`] = `
 <section
   class="editPost"
   data-testid="test-id-edit-post"
@@ -26,6 +26,7 @@ exports[`Edit Post Component Completely loads the page and updates the content s
       <input
         aria-labelledby="titleLabel"
         class="input  false"
+        data-testid="test-id-edit-post-title-input"
         name="title"
         placeholder="Enter your title here"
         required=""
@@ -129,6 +130,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
       <input
         aria-labelledby="titleLabel"
         class="input  false"
+        data-testid="test-id-edit-post-title-input"
         name="title"
         placeholder="Enter your title here"
         required=""
@@ -139,19 +141,25 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
     <div
       class="field "
     >
-      <div
-        class="loadingWrapper"
-        data-testid="test-id-loading-spinner"
+      <section
+        class="carousel"
       >
-        <span
-          class="loadingSpinner"
-        />
-        <p
-          class="loadingText"
+        <div
+          class="carousel__chosen-image"
         >
-          Loading, please wait...
-        </p>
-      </div>
+          <button
+            class="button button__primary"
+            data-testid="test-id-carousel-button"
+            type="submit"
+          >
+            Choose this image
+          </button>
+          <p>
+            Chosen image:
+             None
+          </p>
+        </div>
+      </section>
     </div>
     <div
       class="field "

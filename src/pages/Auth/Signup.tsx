@@ -177,6 +177,7 @@ export const SignupPage: FC = () => {
             name="name"
             placeholder="Please enter your name"
             ref={nameRef}
+            testId="test-id-signup-name-input"
             type="text"
             required={true}
           />
@@ -207,6 +208,7 @@ export const SignupPage: FC = () => {
             name="emailAddress"
             placeholder="Please enter your email"
             ref={emailRef}
+            testId="test-id-signup-email-input"
             type="email"
             required={true}
           />
@@ -227,6 +229,7 @@ export const SignupPage: FC = () => {
             name="firstPassword"
             placeholder="Please enter your password"
             ref={passwordRef}
+            testId="test-id-signup-password-input"
             type="password"
             required={true}
           />
@@ -247,6 +250,7 @@ export const SignupPage: FC = () => {
             name="confirmPassword"
             placeholder="Please confirm your password"
             ref={confirmPasswordRef}
+            testId="test-id-signup-password-confirm-input"
             type="password"
             required={true}
           />

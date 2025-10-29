@@ -193,6 +193,7 @@ const Sandbox = () => {
             ref={imageUrlRef}
             required={true}
             type="file"
+            testId="test-id-sandbox-file-upload-input"
           />
         </Field>
 

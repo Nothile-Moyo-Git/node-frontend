@@ -433,6 +433,7 @@ export const EditPost: FC = () => {
               ref={titleRef}
               required={true}
               type="string"
+              testId="test-id-edit-post-title-input"
             />
           </Field>
           {isDevelopment ? (
@@ -453,6 +454,7 @@ export const EditPost: FC = () => {
                 ref={imageUrlRef}
                 required={false}
                 type="file"
+                testId="test-id-edit-post-file-upload-input"
               />
             </Field>
           ) : (
