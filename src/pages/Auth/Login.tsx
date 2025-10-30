@@ -153,6 +153,7 @@ export const LoginPage: FC = () => {
             ref={emailRef}
             name="email"
             placeholder="Please enter your email address"
+            testId="test-id-login-email-input"
             type="text"
           />
         </Field>
@@ -171,6 +172,7 @@ export const LoginPage: FC = () => {
             error={!isPasswordValid}
             name="password"
             placeholder="Please enter your password"
+            testId="test-id-login-password-input"
             type="password"
             ref={passwordRef}
           />

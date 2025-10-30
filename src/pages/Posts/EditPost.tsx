@@ -78,6 +78,31 @@ export const EditPost: FC = () => {
   // Check which environment we're on for feature flag purposes
   const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
+  // Validate the before submission so we can either render errors or perform the request
+  const validateFields = () => {
+    const title = titleRef.current?.value || "";
+    const content = contentRef.current?.value || "";
+    let inputsValid = true;
+
+    if (title.length < 3 || title.length > 100) {
+      setIsFormValid(false);
+      setIsTitleValid(false);
+      inputsValid = false;
+    } else {
+      setIsTitleValid(true);
+    }
+
+    if (content.length < 6 || content.length > 600) {
+      setIsFormValid(false);
+      setIsContentValid(false);
+      inputsValid = false;
+    } else {
+      setIsContentValid(true);
+    }
+
+    return inputsValid;
+  };
+
   const getPostData = useCallback(
     async (userId: string) => {
       // Create the fields
@@ -208,7 +233,6 @@ export const EditPost: FC = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      // Finished loading
       setIsLoading(false);
     }
 
@@ -228,125 +252,127 @@ export const EditPost: FC = () => {
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
 
-    try {
-      // Get values
-      const userId = appContextInstance?.userId ?? "";
-      const title = titleRef.current?.value || "";
-      const content = contentRef.current?.value || "";
+    if (validateFields() === true) {
+      try {
+        // Get values
+        const userId = appContextInstance?.userId ?? "";
+        const title = titleRef.current?.value || "";
+        const content = contentRef.current?.value || "";
 
-      let fileData = {};
-      if (isDevelopment && uploadFile) {
-        fileData = await fileUploadHandler(
-          uploadFile,
-          appContextInstance?.baseUrl ? appContextInstance.baseUrl : "",
-        );
-      }
-
-      // Perform the API request to the backend
-      const editPostResponse = await fetch(
-        `${appContextInstance?.baseUrl}/graphql/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: `
-                        mutation PostEditPostResponse(
-                          $title : String!, 
-                          $content : String!, 
-                          $userId : String!, 
-                          $fileData : FileInput, 
-                          $postId : String!,
-                          $carouselFileData: CarouselFileData
-                        ){
-                            PostEditPostResponse(
-                              title : $title, 
-                              content : $content, 
-                              userId : $userId, 
-                              fileData : $fileData, 
-                              postId : $postId,
-                              carouselFileData : $carouselFileData
-                            ){
-                                post {
-                                    _id
-                                    fileLastUpdated
-                                    fileName
-                                    title
-                                    imageUrl
-                                    content
-                                    creator
-                                    createdAt
-                                    updatedAt
-                                }
-                                user
-                                status
-                                success
-                                message
-                                fileValidProps {
-                                    fileName
-                                    imageUrl
-                                    isImageUrlValid
-                                    isFileSizeValid
-                                    isFileTypeValid
-                                    isFileValid
-                                }
-                                isContentValid
-                                isTitleValid
-                                isPostCreator
-                            }
-                        }
-                    `,
-            variables: {
-              title: title,
-              content: content,
-              userId: userId,
-              fileData: fileData,
-              carouselFileData: carouselImage ? carouselImage : null,
-              postId: postId,
-            },
-          }),
-        },
-      );
-
-      // Get the result of the API request
-      const data = await editPostResponse.json();
-      const response = data.data.PostEditPostResponse;
-
-      const isFileValid =
-        response.fileValidProps.isFileSizeValid &&
-        response.fileValidProps.isFileTypeValid &&
-        response.fileValidProps.isFileValid &&
-        response.fileValidProps.isImageUrlValid;
-
-      // Apply validation on the fields so we can show errors if needed
-      if (uploadFile) {
-        setIsFileValid(isFileValid);
-      }
-      setIsFormValid(response.success);
-      setIsTitleValid(response.isTitleValid);
-      setIsContentValid(response.isContentValid);
-      setIsPostCreatorValid(response.isPostCreator);
-
-      if (response.success === true) {
-        // Reload the page if we were successful so we can query the updated results
-        alert(`Success, Post ${postId} updated`);
-        window.location.reload();
-      }
-
-      // Remove the image preview / file if it isn't valid so the user can upload a new one
-      if (uploadFile && !isFileValid) {
-        setUploadFile(undefined);
-        setImagePreview(null);
-        setShowImagePreview(false);
-        if (imageUrlRef.current) {
-          imageUrlRef.current.value = "";
+        let fileData = {};
+        if (isDevelopment && uploadFile) {
+          fileData = await fileUploadHandler(
+            uploadFile,
+            appContextInstance?.baseUrl ? appContextInstance.baseUrl : "",
+          );
         }
+
+        // Perform the API request to the backend
+        const editPostResponse = await fetch(
+          `${appContextInstance?.baseUrl}/graphql/posts`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              query: `
+                          mutation PostEditPostResponse(
+                            $title : String!, 
+                            $content : String!, 
+                            $userId : String!, 
+                            $fileData : FileInput, 
+                            $postId : String!,
+                            $carouselFileData: CarouselFileData
+                          ){
+                              PostEditPostResponse(
+                                title : $title, 
+                                content : $content, 
+                                userId : $userId, 
+                                fileData : $fileData, 
+                                postId : $postId,
+                                carouselFileData : $carouselFileData
+                              ){
+                                  post {
+                                      _id
+                                      fileLastUpdated
+                                      fileName
+                                      title
+                                      imageUrl
+                                      content
+                                      creator
+                                      createdAt
+                                      updatedAt
+                                  }
+                                  user
+                                  status
+                                  success
+                                  message
+                                  fileValidProps {
+                                      fileName
+                                      imageUrl
+                                      isImageUrlValid
+                                      isFileSizeValid
+                                      isFileTypeValid
+                                      isFileValid
+                                  }
+                                  isContentValid
+                                  isTitleValid
+                                  isPostCreator
+                              }
+                          }
+                      `,
+              variables: {
+                title: title,
+                content: content,
+                userId: userId,
+                fileData: fileData,
+                carouselFileData: carouselImage ? carouselImage : null,
+                postId: postId,
+              },
+            }),
+          },
+        );
+
+        // Get the result of the API request
+        const data = await editPostResponse.json();
+        const response = data.data.PostEditPostResponse;
+
+        const isFileValid =
+          response.fileValidProps.isFileSizeValid &&
+          response.fileValidProps.isFileTypeValid &&
+          response.fileValidProps.isFileValid &&
+          response.fileValidProps.isImageUrlValid;
+
+        // Apply validation on the fields so we can show errors if needed
+        if (uploadFile) {
+          setIsFileValid(isFileValid);
+        }
+        setIsFormValid(response.success);
+        setIsTitleValid(response.isTitleValid);
+        setIsContentValid(response.isContentValid);
+        setIsPostCreatorValid(response.isPostCreator);
+
+        if (response.success === true) {
+          // Reload the page if we were successful so we can query the updated results
+          alert(`Success, Post ${postId} updated`);
+          window.location.reload();
+        }
+
+        // Remove the image preview / file if it isn't valid so the user can upload a new one
+        if (uploadFile && !isFileValid) {
+          setUploadFile(undefined);
+          setImagePreview(null);
+          setShowImagePreview(false);
+          if (imageUrlRef.current) {
+            imageUrlRef.current.value = "";
+          }
+        }
+      } catch (error) {
+        console.log("Request failed");
+        console.error(error);
       }
-    } catch (error) {
-      console.log("Request failed");
-      console.error(error);
     }
   };
 
@@ -421,7 +447,9 @@ export const EditPost: FC = () => {
               id="titleLabel"
               htmlFor="title"
               error={!isTitleValid}
-              errorText={"Error: Title must be longer than 3 characters"}
+              errorText={
+                "Error: Title must be longer than 3 characters and less than 100"
+              }
             >
               Title*
             </Label>
@@ -434,6 +462,7 @@ export const EditPost: FC = () => {
               ref={titleRef}
               required={true}
               type="string"
+              testId="test-id-edit-post-title-input"
             />
           </Field>
           {isDevelopment ? (
@@ -454,6 +483,7 @@ export const EditPost: FC = () => {
                 ref={imageUrlRef}
                 required={false}
                 type="file"
+                testId="test-id-edit-post-file-upload-input"
               />
             </Field>
           ) : (
@@ -487,7 +517,7 @@ export const EditPost: FC = () => {
               error={!isContentValid}
               htmlFor="content"
               id="contentLabel"
-              errorText="Error: Content must be longer than 6 characters and less than 400 characters"
+              errorText="Error: Content must be longer than 6 characters and less than 600 characters"
             >
               Content*
             </Label>

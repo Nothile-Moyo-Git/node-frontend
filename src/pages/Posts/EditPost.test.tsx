@@ -21,18 +21,7 @@ import {
 import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
 import { screen, waitFor } from "@testing-library/react";
-
-// Handle imports before since we render the full mocked DOM beforehand
-jest.mock("../../images/2B.png", () => "2B.png", { virtual: true });
-jest.mock("../../images/Kratos.png", () => "Kratos.png", { virtual: true });
-jest.mock("../../images/Alfira-face.jpg", () => "Alfira-face.jpg", {
-  virtual: true,
-});
-jest.mock("../../images/Shanalotte.jpg", () => "Shanalotte.jpg", {
-  virtual: true,
-});
-jest.mock("../../images/Edelgard.jpg", () => "Edelgard.jpg", { virtual: true });
-jest.mock("../../images/Tiefling.jpg", () => "Tiefling.jpg", { virtual: true });
+import userEvent from "@testing-library/user-event";
 
 // Create our mockFetch so we can handle multiple requests
 let mockFetch: jest.MockedFunction<typeof fetch>;
@@ -175,13 +164,18 @@ describe("Edit Post Component", () => {
       mockContext,
     );
 
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
     // Make sure we have our edit post
     const editPostComponent = await screen.findByTestId("test-id-edit-post");
     expect(editPostComponent).toBeVisible();
     expect(editPostComponent).toMatchSnapshot();
   });
 
-  it("Completely loads the page and updates the content successfully", async () => {
+  it("Completely loads the page", async () => {
     // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
     global.fetch = jest
       .fn()
@@ -207,6 +201,42 @@ describe("Edit Post Component", () => {
             },
           },
         }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(
+      <EditPost />,
+      { route: `/edit-post/${mockPost._id}` },
+      mockContext,
+    );
+
+    const editPostComponent = screen.getByTestId("test-id-edit-post");
+    expect(editPostComponent).toBeVisible();
+
+    // Make sure we have our edit post
+    await waitFor(() => {
+      const carousel = screen.getByTestId("test-id-carousel-button");
+      expect(carousel).toBeVisible();
+    });
+
+    expect(editPostComponent).toMatchSnapshot();
+  });
+
+  it("Update the content of the page", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
       )
       .mockResolvedValueOnce(
         createFetchResponse({
@@ -226,9 +256,26 @@ describe("Edit Post Component", () => {
       mockContext,
     );
 
-    // Make sure we have our edit post
-    const editPostComponent = await screen.findByTestId("test-id-edit-post");
+    const editPostComponent = screen.getByTestId("test-id-edit-post");
     expect(editPostComponent).toBeVisible();
-    expect(editPostComponent).toMatchSnapshot();
+
+    // Make sure we have our edit post
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+
+      const carousel = screen.getByTestId("test-id-carousel-button");
+      expect(carousel).toBeVisible();
+    });
+
+    // Find the Title input
+    const titleInput = screen.getByTestId("test-id-edit-post-title-input");
+    expect(titleInput).toHaveValue(mockPost.title);
+
+    userEvent.clear(titleInput);
+    expect(titleInput).toHaveValue("");
+
+    const saveButton = screen.getByTestId("test-id-edit-post-submit-button");
+    expect(saveButton).toBeVisible();
   });
 });

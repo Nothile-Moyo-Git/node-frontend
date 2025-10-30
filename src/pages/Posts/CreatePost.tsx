@@ -242,6 +242,7 @@ export const CreatePostComponent: FC = () => {
             placeholder="Please enter your title"
             ref={titleRef}
             required={true}
+            testId="test-id-create-post-title-input"
             type="text"
           />
         </Field>
@@ -263,6 +264,7 @@ export const CreatePostComponent: FC = () => {
               onChange={fileUploadEvent}
               ref={imageUrlRef}
               required={true}
+              testId="test-id-create-post-file-upload-input"
               type="file"
             />
           </Field>

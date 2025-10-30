@@ -6,7 +6,6 @@ module.exports = {
     "^swiper/react$": "<rootDir>/src/test-utils/mockSwiperReact.tsx",
     "^swiper/modules$": "<rootDir>/src/test-utils/mockSwiperReact.tsx",
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
-    "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/__mocks__/fileMock.js",
   },
   modulePathIgnorePatterns: ["./src/mocks"],
   transformIgnorePatterns: [
@@ -16,6 +15,8 @@ module.exports = {
     "^.+\\.tsx?$": ["ts-jest", { useESM: true }], // ts-jest for TS/TSX files
     "^.+\\.js$": "babel-jest", // babel-jest for JS files including ESM modules
     "^.+\\.mjs$": "babel-jest",
+    "\\.(jpg|jpeg|png|gif|webp|svg)$":
+      "<rootDir>/src/test-utils/mocks/fileMock.js",
   },
   globals: {
     "ts-jest": {

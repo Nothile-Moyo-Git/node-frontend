@@ -24,6 +24,7 @@ interface ComponentProps {
   required?: boolean;
   square?: boolean;
   type: string;
+  testId: string;
 }
 
 /**
@@ -43,6 +44,7 @@ interface ComponentProps {
  * @param required ?: boolean
  * @param square ?: boolean
  * @param type : string
+ * @param testId: The ID used for testing so it can be referenced in jest
  */
 const Input = forwardRef<HTMLInputElement, ComponentProps>(
   function InputComponent(props, ref) {
@@ -66,6 +68,7 @@ const Input = forwardRef<HTMLInputElement, ComponentProps>(
         ref={ref}
         type={props.type}
         required={props.required}
+        data-testid={props.testId}
       />
     );
   },
