@@ -274,5 +274,8 @@ describe("Edit Post Component", () => {
 
     userEvent.clear(titleInput);
     expect(titleInput).toHaveValue("");
+
+    const saveButton = screen.getByTestId("test-id-edit-post-submit-button");
+    expect(saveButton).toBeVisible();
   });
 });
