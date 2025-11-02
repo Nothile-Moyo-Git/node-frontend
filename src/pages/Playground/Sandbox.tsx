@@ -182,6 +182,7 @@ const Sandbox = () => {
             id="imageUrlLabel"
             error={false}
             errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
+            testId="test-id-sandbox-image-label"
           >
             Image*
           </Label>

@@ -22,7 +22,7 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
           alt="Tieflings"
           class="article__image"
           draggable="false"
-          src="test-file-stub"
+          src="Tiefling.jpg"
         />
         <div
           class="article__content"
@@ -75,7 +75,7 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
           alt="The Sixth Post"
           class="article__image"
           draggable="false"
-          src="test-file-stub"
+          src="Edelgard.jpg"
         />
         <div
           class="article__content"
@@ -162,7 +162,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
           alt="Tieflings"
           class="article__image"
           draggable="false"
-          src="test-file-stub"
+          src="Tiefling.jpg"
         />
         <div
           class="article__content"
@@ -215,7 +215,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
           alt="The Sixth Post"
           class="article__image"
           draggable="false"
-          src="test-file-stub"
+          src="Edelgard.jpg"
         />
         <div
           class="article__content"
@@ -268,7 +268,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
           alt="Testing post number 6"
           class="article__image"
           draggable="false"
-          src="test-file-stub"
+          src="Shanalotte.jpg"
         />
         <div
           class="article__content"
@@ -355,7 +355,7 @@ exports[`View Posts component Should match snapshot 1`] = `
           alt="2B"
           class="article__image"
           draggable="false"
-          src="test-file-stub"
+          src="2B.png"
         />
         <div
           class="article__content"
@@ -408,7 +408,7 @@ exports[`View Posts component Should match snapshot 1`] = `
           alt="Alfira"
           class="article__image"
           draggable="false"
-          src="test-file-stub"
+          src="Alfira-face.jpg"
         />
         <div
           class="article__content"
@@ -461,7 +461,7 @@ exports[`View Posts component Should match snapshot 1`] = `
           alt="Emerald Herald"
           class="article__image"
           draggable="false"
-          src="test-file-stub"
+          src="Shanalotte.jpg"
         />
         <div
           class="article__content"
