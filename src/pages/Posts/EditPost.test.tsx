@@ -222,7 +222,7 @@ describe("Edit Post Component", () => {
     expect(editPostComponent).toMatchSnapshot();
   });
 
-  it("Update the content of the page", async () => {
+  it("Validate the inputs and handle errors", async () => {
     global.fetch = jest
       .fn()
       .mockResolvedValueOnce(
@@ -277,7 +277,7 @@ describe("Edit Post Component", () => {
     expect(saveButton).toBeVisible();
 
     // Find the content input and validate errors
-    // const contentLabel = screen.getByTestId("test-id-edit-post-content-label");
+    const contentLabel = screen.getByTestId("test-id-edit-post-content-label");
     const contentInput = screen.getByTestId("test-id-edit-post-content-input");
     expect(contentInput).toHaveValue(mockPost.content);
 
@@ -289,5 +289,83 @@ describe("Edit Post Component", () => {
     expect(titleLabel).toHaveTextContent(
       "Error: Title must be longer than 3 characters and less than 100",
     );
+
+    expect(contentLabel).toHaveTextContent(
+      "Error: Content must be longer than 6 characters and less than 600 characters",
+    );
+  });
+
+  it("Update content on the editPost page", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+    /* .mockRejectedValueOnce(
+        createFetchResponse({
+          data: {
+            PostEditPostResponse: {
+              post: updatedMockPost,
+              user
+              status
+              success
+              message
+              fileValidProps {
+                  fileName
+                  imageUrl
+                  isImageUrlValid
+                  isFileSizeValid
+                  isFileTypeValid
+                  isFileValid
+              }
+              isContentValid
+              isTitleValid
+              isPostCreator
+            },
+          },
+        }),
+      ); */
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(
+      <EditPost />,
+      { route: `/edit-post/${mockPost._id}` },
+      mockContext,
+    );
+
+    const editPostComponent = screen.getByTestId("test-id-edit-post");
+    expect(editPostComponent).toBeVisible();
+
+    // Make sure we have our edit post
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+
+      const carousel = screen.getByTestId("test-id-carousel-button");
+      expect(carousel).toBeVisible();
+    });
+
+    // const titleInput = screen.getByTestId("test-id-edit-post-title-input");
+    // const contentInput = screen.getByTestId("test-id-edit-post-content-input");
   });
 });
