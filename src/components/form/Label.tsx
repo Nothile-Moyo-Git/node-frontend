@@ -19,6 +19,7 @@ interface ComponentProps {
   id: string;
   error?: boolean;
   errorText?: string;
+  testId: string;
 }
 
 /**
@@ -30,6 +31,7 @@ interface ComponentProps {
  * @param htmlFor : string
  * @param error : boolean
  * @param errorText ?: string
+ * @param testId : string
  */
 const Label: FC<ComponentProps> = ({
   children,
@@ -37,9 +39,11 @@ const Label: FC<ComponentProps> = ({
   htmlFor,
   error,
   errorText,
+  testId,
 }) => {
   return (
     <label
+      data-testid={testId}
       id={id}
       htmlFor={htmlFor}
       className={`label ${error && "label__error"}`}

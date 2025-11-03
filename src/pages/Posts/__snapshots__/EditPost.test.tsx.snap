@@ -18,6 +18,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
     >
       <label
         class="label false"
+        data-testid="test-id-edit-post-title-label"
         for="title"
         id="titleLabel"
       >
@@ -62,6 +63,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
     >
       <label
         class="label false"
+        data-testid="test-id-edit-post-preview-image-label"
         for="imageUrl"
         id="imageUrlLabel"
       >
@@ -77,6 +79,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
     >
       <label
         class="label false"
+        data-testid="test-id-edit-post-content-label"
         for="content"
         id="contentLabel"
       >
@@ -85,6 +88,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
       <textarea
         aria-labelledby="contentLabel"
         class="textarea  false"
+        data-testid="test-id-edit-post-content-input"
         name="content"
         placeholder="Please enter your content"
         required=""
@@ -122,6 +126,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
     >
       <label
         class="label false"
+        data-testid="test-id-edit-post-title-label"
         for="title"
         id="titleLabel"
       >
@@ -166,6 +171,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
     >
       <label
         class="label false"
+        data-testid="test-id-edit-post-preview-image-label"
         for="imageUrl"
         id="imageUrlLabel"
       >
@@ -181,6 +187,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
     >
       <label
         class="label false"
+        data-testid="test-id-edit-post-content-label"
         for="content"
         id="contentLabel"
       >
@@ -189,6 +196,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
       <textarea
         aria-labelledby="contentLabel"
         class="textarea  false"
+        data-testid="test-id-edit-post-content-input"
         name="content"
         placeholder="Please enter your content"
         required=""

@@ -144,6 +144,7 @@ export const LoginPage: FC = () => {
             id="emailLabel"
             error={!isEmailValid}
             errorText={emailErrorText}
+            testId="test-id-login-email-label"
           >
             Email*
           </Label>
@@ -164,6 +165,7 @@ export const LoginPage: FC = () => {
             id="passwordLabel"
             error={!isPasswordValid}
             errorText={passwordErrorText}
+            testId="test-id-login-password-label"
           >
             Password*
           </Label>

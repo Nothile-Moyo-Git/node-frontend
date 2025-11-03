@@ -444,6 +444,7 @@ export const EditPost: FC = () => {
 
           <Field>
             <Label
+              testId="test-id-edit-post-title-label"
               id="titleLabel"
               htmlFor="title"
               error={!isTitleValid}
@@ -468,6 +469,7 @@ export const EditPost: FC = () => {
           {isDevelopment ? (
             <Field>
               <Label
+                testId="test-id-edit-post-file-upload-label"
                 id="imageUrlLabel"
                 htmlFor="imageUrl"
                 error={!isFileValid}
@@ -496,6 +498,7 @@ export const EditPost: FC = () => {
             <Field>
               {!showImagePreview && previousImageUrl && (
                 <Label
+                  testId="test-id-edit-post-preview-image-label"
                   id="imageUrlLabel"
                   htmlFor="imageUrl"
                   error={false}
@@ -514,6 +517,7 @@ export const EditPost: FC = () => {
 
           <Field>
             <Label
+              testId="test-id-edit-post-content-label"
               error={!isContentValid}
               htmlFor="content"
               id="contentLabel"
@@ -530,6 +534,7 @@ export const EditPost: FC = () => {
               startingRows={3}
               ref={contentRef}
               required={true}
+              testId="test-id-edit-post-content-input"
             />
           </Field>
 

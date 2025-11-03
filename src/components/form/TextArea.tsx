@@ -22,6 +22,7 @@ interface ComponentProps {
   required: boolean;
   square?: boolean;
   startingRows?: number;
+  testId: string;
 }
 
 /**
@@ -38,6 +39,7 @@ interface ComponentProps {
  * @param required : boolean
  * @param square : boolean
  * @param startingRows ?: number
+ * @param testId : string
  */
 const TextArea = forwardRef<HTMLTextAreaElement, ComponentProps>(
   function TextAreaComponent(props, ref) {
@@ -48,6 +50,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, ComponentProps>(
       <textarea
         aria-labelledby={props.ariaLabelledBy}
         className={`textarea ${textAreaClassNames} ${props.error === true && "textarea__error"}`}
+        data-testid={props.testId}
         defaultValue={props.initialValue}
         name={props.name}
         placeholder={props.placeholder}

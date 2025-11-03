@@ -268,14 +268,26 @@ describe("Edit Post Component", () => {
       expect(carousel).toBeVisible();
     });
 
-    // Find the Title input
+    // Find the Title input and validate errors
+    const titleLabel = screen.getByTestId("test-id-edit-post-title-label");
     const titleInput = screen.getByTestId("test-id-edit-post-title-input");
     expect(titleInput).toHaveValue(mockPost.title);
 
-    userEvent.clear(titleInput);
-    expect(titleInput).toHaveValue("");
-
     const saveButton = screen.getByTestId("test-id-edit-post-submit-button");
     expect(saveButton).toBeVisible();
+
+    // Find the content input and validate errors
+    // const contentLabel = screen.getByTestId("test-id-edit-post-content-label");
+    const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+    expect(contentInput).toHaveValue(mockPost.content);
+
+    userEvent.clear(contentInput);
+    userEvent.type(contentInput, "abc");
+
+    userEvent.click(saveButton);
+
+    expect(titleLabel).toHaveTextContent(
+      "Error: Title must be longer than 3 characters and less than 100",
+    );
   });
 });

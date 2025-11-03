@@ -232,6 +232,7 @@ export const CreatePostComponent: FC = () => {
             errorText="Error: Title must be longer than 3 characters"
             htmlFor="title"
             id="titleLabel"
+            testId="test-id-create-post-title-label"
           >
             Title*
           </Label>
@@ -254,6 +255,7 @@ export const CreatePostComponent: FC = () => {
               id="imageUrlLabel"
               error={!isFileValid}
               errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
+              testId="test-id-create-post-image-label"
             >
               Image*
             </Label>
@@ -290,6 +292,7 @@ export const CreatePostComponent: FC = () => {
             htmlFor="content"
             id="contentLabel"
             errorText="Error: Content must be longer than 6 characters and less than 400 characters"
+            testId="test-id-create-post-content-label"
           >
             Content*
           </Label>
@@ -301,6 +304,7 @@ export const CreatePostComponent: FC = () => {
             startingRows={3}
             ref={contentRef}
             required={true}
+            testId="test-id-create-post-content-input"
           />
         </Field>
 

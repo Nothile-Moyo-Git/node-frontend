@@ -168,6 +168,7 @@ export const SignupPage: FC = () => {
             id="nameLabel"
             error={!isNameValid}
             errorText="Error: Name must be at least 6 characters"
+            testId="test-id-signup-name-label"
           >
             Name*
           </Label>
@@ -194,6 +195,7 @@ export const SignupPage: FC = () => {
                 (isEmailValid && doesUserExist))
             }
             errorText={emailErrortext}
+            testId="test-id-signup-email-label"
           >
             Email*
           </Label>
@@ -220,6 +222,7 @@ export const SignupPage: FC = () => {
             id="passwordLabel"
             error={!isPasswordValid}
             errorText="Error: Password must be between 6 and 20 characters and contain numeric digits"
+            testId="test-id-signup-password-label"
           >
             Password*
           </Label>
@@ -241,6 +244,7 @@ export const SignupPage: FC = () => {
             id="confirmPasswordLabel"
             error={!isConfirmPasswordValid}
             errorText="Error: Passwords don't match"
+            testId="test-id-signup-password-confirm-label"
           >
             Confirm Password*
           </Label>
