@@ -42,6 +42,18 @@ export const mockPost: Post = {
   updatedAt: "1713644407010",
 };
 
+export const updatedMockPost: Post = {
+  _id: "662423764e8c8b1633534be8",
+  fileLastUpdated: "",
+  fileName: "2B.png",
+  title: "ABCD",
+  imageUrl: "..\frontend\x02src\x02images\x022B.png",
+  content: "ABCDEFG",
+  creator: "12345-nothile-id",
+  createdAt: "1713644407010",
+  updatedAt: "1713644407010",
+};
+
 // Mocking our posts
 export const mockPosts: Post[] = [
   {

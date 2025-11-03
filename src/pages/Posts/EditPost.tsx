@@ -305,7 +305,6 @@ export const EditPost: FC = () => {
                                       createdAt
                                       updatedAt
                                   }
-                                  user
                                   status
                                   success
                                   message
