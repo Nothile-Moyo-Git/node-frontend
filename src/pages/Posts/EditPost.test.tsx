@@ -17,15 +17,21 @@ import {
   mockContext,
   mockPost,
   mockFiles,
+  updatedMockPost,
 } from "../../test-utils/mocks/objects";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-// Create our mockFetch so we can handle multiple requests
+// Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
 const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
+const reloadMock = jest.fn();
+Object.defineProperty(window, "location", {
+  value: { reload: reloadMock },
+  writable: true,
+});
 
 // Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
@@ -320,31 +326,30 @@ describe("Edit Post Component", () => {
             },
           },
         }),
-      );
-    /* .mockRejectedValueOnce(
+      )
+      .mockResolvedValueOnce(
         createFetchResponse({
           data: {
             PostEditPostResponse: {
               post: updatedMockPost,
-              user
-              status
-              success
-              message
-              fileValidProps {
-                  fileName
-                  imageUrl
-                  isImageUrlValid
-                  isFileSizeValid
-                  isFileTypeValid
-                  isFileValid
-              }
-              isContentValid
-              isTitleValid
-              isPostCreator
+              status: 200,
+              success: true,
+              message: "200 : Request was successful",
+              fileValidProps: {
+                fileName: mockFiles[0].fileName,
+                imageUrl: mockFiles[0].imageUrl,
+                isFileValid: true,
+                isFileTypeValid: true,
+                isImageUrlValid: true,
+                isFileSizeValid: true,
+              },
+              isContentValid: true,
+              isTitleValid: true,
+              isPostCreator: true,
             },
           },
         }),
-      ); */
+      );
 
     // Render our component with routing and the context so we have authentication
     renderWithContext(
@@ -365,7 +370,31 @@ describe("Edit Post Component", () => {
       expect(carousel).toBeVisible();
     });
 
-    // const titleInput = screen.getByTestId("test-id-edit-post-title-input");
-    // const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+    const titleInput = screen.getByTestId("test-id-edit-post-title-input");
+    const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+
+    expect(titleInput).toHaveValue(mockPost.title);
+    expect(contentInput).toHaveValue(mockPost.content);
+
+    const saveButton = screen.getByTestId("test-id-edit-post-submit-button");
+
+    // Update the inputs so we can save them and then mock the request
+    userEvent.clear(titleInput);
+    userEvent.clear(contentInput);
+    userEvent.type(titleInput, updatedMockPost.title);
+    userEvent.type(contentInput, updatedMockPost.content);
+
+    expect(titleInput).toHaveValue(updatedMockPost.title);
+    expect(contentInput).toHaveValue(updatedMockPost.content);
+
+    userEvent.click(saveButton);
+
+    // Verify the alert and reload are called
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith(
+        expect.stringContaining("Success, Post"),
+      );
+      expect(reloadMock).toHaveBeenCalledTimes(1);
+    });
   });
 });
