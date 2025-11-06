@@ -20,7 +20,6 @@ import userEvent from "@testing-library/user-event";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 
 let mockFetch: jest.MockedFunction<typeof fetch>;
-const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
 
 // Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
@@ -53,7 +52,6 @@ afterEach(() => {
 
 afterAll(() => {
   server.close();
-  alertSpy.mockRestore();
 });
 
 describe("View Posts component", () => {
@@ -328,6 +326,14 @@ describe("View Posts component", () => {
       "test-id-confirmation-modal-confirm-button",
     );
     await act(async () => userEvent.click(confirm));
+
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith(
+        expect.stringContaining(
+          `Post ${mockPosts[5]._id} has successfully been deleted`,
+        ),
+      );
+    });
 
     // Find the remaining post
     expect(screen.queryByText(mockPosts[4].title)).toBeInTheDocument();

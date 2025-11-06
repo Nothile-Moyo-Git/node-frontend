@@ -4,6 +4,7 @@ const { ReadableStream, TransformStream } = require("node:stream/web");
 const { MessagePort } = require("worker_threads");
 const { Blob } = require("buffer");
 const DOMException = require("domexception");
+import { jest } from "@jest/globals";
 
 // Setting global values for Jest testing
 if (!String.prototype.toWellFormed) {
@@ -47,4 +48,16 @@ Object.defineProperty(document, "startViewTransition", {
     };
   },
   writable: true,
+});
+
+// Mock our window object, with the necessary variables, we use writable because it allows us to update read-only values
+Object.defineProperties(window, {
+  location: {
+    value: { reload: jest.fn() },
+    writable: true,
+  },
+  alert: {
+    value: jest.fn(),
+    writable: true,
+  },
 });

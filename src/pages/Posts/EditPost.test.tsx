@@ -26,12 +26,6 @@ import userEvent from "@testing-library/user-event";
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
-const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
-const reloadMock = jest.fn();
-Object.defineProperty(window, "location", {
-  value: { reload: reloadMock },
-  writable: true,
-});
 
 // Mocking socket.io jest so we don't make a real connection
 jest.mock("socket.io-client", () => {
@@ -54,6 +48,7 @@ beforeEach(() => {
   setMockAuthStorage();
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
+  jest.clearAllMocks();
 });
 
 // Cleanup mocks and environment
@@ -64,7 +59,6 @@ afterEach(() => {
 // End server polling when tests finish
 afterAll(() => {
   server.close();
-  alertSpy.mockRestore();
 });
 
 describe("Edit Post Component", () => {
@@ -389,12 +383,12 @@ describe("Edit Post Component", () => {
 
     userEvent.click(saveButton);
 
-    // Verify the alert and reload are called
+    // Give these time to run as they don't by default
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith(
         expect.stringContaining("Success, Post"),
       );
-      expect(reloadMock).toHaveBeenCalledTimes(1);
+      expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
   });
 });
