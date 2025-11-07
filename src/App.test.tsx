@@ -6,7 +6,6 @@
  */
 
 import { screen, waitFor } from "@testing-library/react";
-import { server } from "./test-utils/mockServer";
 import "@testing-library/jest-dom";
 
 // Importing mocks to be used for testing
@@ -27,20 +26,14 @@ const mockExpiryDate = generateUploadDate(
 
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 
-// Setup mocks and environment
-beforeAll(() => server.listen());
-
 beforeEach(() => {
   setMockAuthStorage();
 });
 
 // Cleanup mocks and environment
 afterEach(() => {
-  server.resetHandlers();
   clearAuthStorage();
 });
-
-afterAll(() => server.close());
 
 describe("App Component Tests", () => {
   // Handle the main authentication of the app

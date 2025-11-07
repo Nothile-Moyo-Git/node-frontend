@@ -9,13 +9,6 @@
  * All local storage items are deleted when the request is complete
  */
 
-/**
- * @name setMockAuthStorage
- *
- * @description Mocks setting authentication data for a user
- *
- * @type () => void
- */
 export const setMockAuthStorage = ({
   token = "mock-token",
   userId = "mock-user-id",

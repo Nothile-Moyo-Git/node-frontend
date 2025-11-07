@@ -7,7 +7,6 @@
  */
 
 import "@testing-library/jest-dom";
-import { server } from "../../test-utils/mockServer";
 import {
   clearAuthStorage,
   setMockAuthStorage,
@@ -27,22 +26,6 @@ import userEvent from "@testing-library/user-event";
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
-// Mocking socket.io jest so we don't make a real connection
-jest.mock("socket.io-client", () => {
-  return {
-    io: () => ({
-      on: jest.fn(),
-      emit: jest.fn(),
-      removeAllListeners: jest.fn(),
-    }),
-  };
-});
-
-// Setup mocks and environment
-beforeAll(() => {
-  server.listen();
-});
-
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
   setMockAuthStorage();
@@ -54,11 +37,6 @@ beforeEach(() => {
 // Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
-});
-
-// End server polling when tests finish
-afterAll(() => {
-  server.close();
 });
 
 describe("Edit Post Component", () => {
