@@ -5,6 +5,7 @@ const { MessagePort } = require("worker_threads");
 const { Blob } = require("buffer");
 const DOMException = require("domexception");
 import { jest } from "@jest/globals";
+import "./src/test-utils/mockSocket";
 
 // Setting global values for Jest testing
 if (!String.prototype.toWellFormed) {

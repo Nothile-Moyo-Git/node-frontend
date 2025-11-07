@@ -11,7 +11,7 @@ import {
   clearAuthStorage,
   setMockAuthStorage,
 } from "../../test-utils/authStorage";
-import { server } from "../../test-utils/mockServer";
+
 import { renderWithAct, renderWithContext } from "../../test-utils/testRouter";
 import { act, screen, waitFor } from "@testing-library/react";
 import { ViewPosts } from "./ViewPosts";
@@ -20,22 +20,6 @@ import userEvent from "@testing-library/user-event";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 
 let mockFetch: jest.MockedFunction<typeof fetch>;
-
-// Mocking socket.io jest so we don't make a real connection
-jest.mock("socket.io-client", () => {
-  return {
-    io: () => ({
-      on: jest.fn(),
-      emit: jest.fn(),
-      removeAllListeners: jest.fn(),
-    }),
-  };
-});
-
-// Setup mocks and environment
-beforeAll(() => {
-  server.listen();
-});
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
@@ -46,12 +30,8 @@ beforeEach(() => {
 
 // Cleanup mocks and environment
 afterEach(() => {
-  server.resetHandlers();
+  // server.resetHandlers();
   clearAuthStorage();
-});
-
-afterAll(() => {
-  server.close();
 });
 
 describe("View Posts component", () => {
