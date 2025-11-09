@@ -49,7 +49,7 @@ const childRoutes = [
     element: <PostScreen />,
   },
   {
-    path: "edit-post/:postId?",
+    path: "post/edit/:postId?",
     element: <EditPost />,
   },
   {

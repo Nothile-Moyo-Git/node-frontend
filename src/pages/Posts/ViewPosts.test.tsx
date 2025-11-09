@@ -30,7 +30,6 @@ beforeEach(() => {
 
 // Cleanup mocks and environment
 afterEach(() => {
-  // server.resetHandlers();
   clearAuthStorage();
 });
 

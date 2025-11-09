@@ -51,7 +51,7 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
             </a>
             <a
               class="link__edit"
-              href="/edit-post/662e7c6ad94fde36bf4bb55c"
+              href="/post/edit/662e7c6ad94fde36bf4bb55c"
             >
               Edit
             </a>
@@ -104,7 +104,7 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
             </a>
             <a
               class="link__edit"
-              href="/edit-post/67843561d02db477bac4843b"
+              href="/post/edit/67843561d02db477bac4843b"
             >
               Edit
             </a>
@@ -191,7 +191,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
             </a>
             <a
               class="link__edit"
-              href="/edit-post/662e7c6ad94fde36bf4bb55c"
+              href="/post/edit/662e7c6ad94fde36bf4bb55c"
             >
               Edit
             </a>
@@ -244,7 +244,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
             </a>
             <a
               class="link__edit"
-              href="/edit-post/67843561d02db477bac4843b"
+              href="/post/edit/67843561d02db477bac4843b"
             >
               Edit
             </a>
@@ -297,7 +297,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
             </a>
             <a
               class="link__edit"
-              href="/edit-post/68b0aac75d6f6df6ef698e7e"
+              href="/post/edit/68b0aac75d6f6df6ef698e7e"
             >
               Edit
             </a>
@@ -384,7 +384,7 @@ exports[`View Posts component Should match snapshot 1`] = `
             </a>
             <a
               class="link__edit"
-              href="/edit-post/662423764e8c8b1633534be8"
+              href="/post/edit/662423764e8c8b1633534be8"
             >
               Edit
             </a>
@@ -437,7 +437,7 @@ exports[`View Posts component Should match snapshot 1`] = `
             </a>
             <a
               class="link__edit"
-              href="/edit-post/662423884e8c8b1633534bf0"
+              href="/post/edit/662423884e8c8b1633534bf0"
             >
               Edit
             </a>
@@ -490,7 +490,7 @@ exports[`View Posts component Should match snapshot 1`] = `
             </a>
             <a
               class="link__edit"
-              href="/edit-post/662e7bcdd94fde36bf4bb554"
+              href="/post/edit/662e7bcdd94fde36bf4bb554"
             >
               Edit
             </a>

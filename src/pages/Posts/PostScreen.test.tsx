@@ -12,15 +12,9 @@ import {
   setMockAuthStorage,
 } from "../../test-utils/authStorage";
 import { act, screen } from "@testing-library/react";
-import { server } from "../../test-utils/mockServer";
 import { renderWithContext } from "../../test-utils/testRouter";
 import PostScreen from "./PostScreen";
 import { mockContext, mockPost } from "../../test-utils/mocks/objects";
-
-// Setup mocks and environment
-beforeAll(() => {
-  server.listen();
-});
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
@@ -30,11 +24,6 @@ beforeEach(() => {
 // Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
-});
-
-// End server polling when tests finish
-afterAll(() => {
-  server.close();
 });
 
 describe("Post Screen Component", () => {

@@ -47,7 +47,7 @@ describe("Edit Post Component", () => {
     // Render our component with routing and the context so we have authentication
     renderWithContext(
       <EditPost />,
-      { route: `/edit-post/${mockPost._id}` },
+      { route: `/post/edit/${mockPost._id}` },
       mockContext,
     );
 
@@ -91,7 +91,7 @@ describe("Edit Post Component", () => {
     // Render our component with routing and the context so we have authentication
     renderWithContext(
       <EditPost />,
-      { route: `/edit-post/${mockPost._id}` },
+      { route: `/post/edit/${mockPost._id}` },
       mockContext,
     );
 
@@ -138,7 +138,7 @@ describe("Edit Post Component", () => {
     // Render our component with routing and the context so we have authentication
     renderWithContext(
       <EditPost />,
-      { route: `/edit-post/${mockPost._id}` },
+      { route: `/post/edit/${mockPost._id}` },
       mockContext,
     );
 
@@ -184,7 +184,7 @@ describe("Edit Post Component", () => {
     // Render our component with routing and the context so we have authentication
     renderWithContext(
       <EditPost />,
-      { route: `/edit-post/${mockPost._id}` },
+      { route: `/post/edit/${mockPost._id}` },
       mockContext,
     );
 
@@ -230,7 +230,7 @@ describe("Edit Post Component", () => {
     // Render our component with routing and the context so we have authentication
     renderWithContext(
       <EditPost />,
-      { route: `/edit-post/${mockPost._id}` },
+      { route: `/post/edit/${mockPost._id}` },
       mockContext,
     );
 
@@ -326,7 +326,7 @@ describe("Edit Post Component", () => {
     // Render our component with routing and the context so we have authentication
     renderWithContext(
       <EditPost />,
-      { route: `/edit-post/${mockPost._id}` },
+      { route: `/post/edit/${mockPost._id}` },
       mockContext,
     );
 
