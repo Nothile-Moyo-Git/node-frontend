@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Create Post Component Matches the snapshot 1`] = `
+<section
+  class="createPost"
+  data-testid="test-id-create-post"
+>
+  <form
+    class="form  false"
+  >
+    <h2
+      class="title false"
+    >
+      Create Post
+    </h2>
+    <div
+      class="field "
+    >
+      <label
+        class="label false"
+        data-testid="test-id-create-post-title-label"
+        for="title"
+        id="titleLabel"
+      >
+        Title*
+      </label>
+      <input
+        aria-labelledby="titleLabel "
+        class="input  false"
+        data-testid="test-id-create-post-title-input"
+        name="title"
+        placeholder="Please enter your title"
+        required=""
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      class="field "
+    >
+      <section
+        class="carousel"
+      >
+        <div
+          class="carousel__chosen-image"
+        >
+          <button
+            class="button button__primary"
+            data-testid="test-id-carousel-button"
+            type="submit"
+          >
+            Choose this image
+          </button>
+          <p>
+            Chosen image:
+             None
+          </p>
+        </div>
+      </section>
+    </div>
+    <div
+      class="field "
+    >
+      <label
+        class="label false"
+        data-testid="test-id-create-post-content-label"
+        for="content"
+        id="contentLabel"
+      >
+        Content*
+      </label>
+      <textarea
+        aria-labelledby="contentLabel"
+        class="textarea  false"
+        data-testid="test-id-create-post-content-input"
+        name="content"
+        placeholder="Please enter your content"
+        required=""
+        rows="3"
+      />
+    </div>
+    <button
+      class="button button__primary"
+      data-testid="test-id-create-post-button"
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+</section>
+`;

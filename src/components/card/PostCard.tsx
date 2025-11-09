@@ -88,7 +88,7 @@ export const PostCard: FC<ComponentProps> = ({
 
           {isPostCreator && (
             <Link
-              to={`${BASENAME}/edit-post/${post?._id}`}
+              to={`${BASENAME}/post/edit/${post?._id}`}
               className="link__edit"
             >
               Edit
