@@ -68,132 +68,160 @@ export const CreatePostComponent: FC = () => {
     }
   }, [appContextInstance, navigate]);
 
+  // Validate the before submission so we can either render errors or perform the request
+  const validateFields = () => {
+    const title = titleRef.current?.value || "";
+    const content = contentRef.current?.value || "";
+
+    let inputsValid = true;
+
+    if (title.length < 3 || title.length > 100) {
+      setIsFormValid(false);
+      setIsTitleValid(false);
+      inputsValid = false;
+    } else {
+      setIsTitleValid(true);
+    }
+
+    if (content.length < 6 || content.length > 600) {
+      setIsFormValid(false);
+      setIsContentValid(false);
+      inputsValid = false;
+    } else {
+      setIsContentValid(true);
+    }
+
+    return inputsValid;
+  };
+
   // Handle the form submission for creating a new post
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
 
-    try {
-      const userId = appContextInstance?.userId;
+    if (validateFields() === true) {
+      try {
+        const userId = appContextInstance?.userId;
 
-      let title = "";
-      let content = "";
+        let title = "";
+        let content = "";
 
-      // Extract inputs
-      if (titleRef.current) {
-        title = titleRef.current.value;
-      }
-      if (contentRef.current) {
-        content = contentRef.current.value;
-      }
-
-      let fileData = {};
-
-      if (isDevelopment) {
-        if (uploadFile) {
-          fileData = await fileUploadHandler(
-            uploadFile,
-            appContextInstance?.baseUrl ? appContextInstance?.baseUrl : "",
-          );
+        // Extract inputs
+        if (titleRef.current) {
+          title = titleRef.current.value;
         }
-      }
+        if (contentRef.current) {
+          content = contentRef.current.value;
+        }
 
-      // Writing our mutations for both production and development, we choose based on the feature flag
-      const createPostMutation = `
-                    mutation PostCreatePostResponse(
-                      $title: String!, 
-                      $content: String!, 
-                      $userId: String!, 
-                      $fileData: FileInput,
-                      $carouselFileData: CarouselFileData
-                    ){
-                        PostCreatePostResponse(
-                          title: $title, 
-                          content: $content, 
-                          userId: $userId, 
-                          fileData: $fileData,
-                          carouselFileData: $carouselFileData
-                        ){
-                            post {
-                                _id
-                                fileLastUpdated
-                                fileName
-                                title
-                                imageUrl
-                                content
-                                creator
-                                createdAt
-                                updatedAt
-                            }
-                            user
-                            status
-                            success
-                            message
-                            isContentValid
-                            isTitleValid
-                            isFileValid
-                            isFileTypeValid
-                            isFileSizeValid
-                        }
-                    }
-                    `;
+        let fileData = {};
 
-      // Perform the API request to the backend
-      const createPostResponse = await fetch(
-        `${appContextInstance?.baseUrl}/graphql/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: createPostMutation,
-            variables: {
-              title: title,
-              content: content,
-              userId: userId,
-              fileData: fileData,
-              carouselFileData: carouselImage ? carouselImage : null,
-            },
-          }),
-        },
-      );
-
-      // Extract the data from the stream
-      const createPostData = await createPostResponse.json();
-
-      // Get the GraphQL request response
-      const data = createPostData.data.PostCreatePostResponse;
-
-      // Set & handle validation on the front end
-      setIsFormValid(data.success);
-      setIsFileValid(data.isFileValid);
-      setIsTitleValid(data.isTitleValid);
-      setIsContentValid(data.isContentValid);
-
-      if (data.success === true) {
-        // Created form data
-        const fields = new FormData();
-
-        for (const property in data.post) {
-          // Pass through non null or undefined values as FormData can only take strings or blobs
-          if (data.post[property]) {
-            fields.append(property, data.post[property]);
+        if (isDevelopment) {
+          if (uploadFile) {
+            fileData = await fileUploadHandler(
+              uploadFile,
+              appContextInstance?.baseUrl ? appContextInstance?.baseUrl : "",
+            );
           }
         }
 
-        // Trigger a modal which informs users that the post has been created
-        await fetch("/rest/socket/emit/post-created", {
-          method: "POST",
-          body: fields,
-        });
+        // Writing our mutations for both production and development, we choose based on the feature flag
+        const createPostMutation = `
+                      mutation PostCreatePostResponse(
+                        $title: String!, 
+                        $content: String!, 
+                        $userId: String!, 
+                        $fileData: FileInput,
+                        $carouselFileData: CarouselFileData
+                      ){
+                          PostCreatePostResponse(
+                            title: $title, 
+                            content: $content, 
+                            userId: $userId, 
+                            fileData: $fileData,
+                            carouselFileData: $carouselFileData
+                          ){
+                              post {
+                                  _id
+                                  fileLastUpdated
+                                  fileName
+                                  title
+                                  imageUrl
+                                  content
+                                  creator
+                                  createdAt
+                                  updatedAt
+                              }
+                              user
+                              status
+                              success
+                              message
+                              isContentValid
+                              isTitleValid
+                              isFileValid
+                              isFileTypeValid
+                              isFileSizeValid
+                          }
+                      }
+                      `;
 
-        alert("Post successfully submitted");
-        window.location.href = `${BASENAME}/posts`;
+        // Perform the API request to the backend
+        const createPostResponse = await fetch(
+          `${appContextInstance?.baseUrl}/graphql/posts`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              query: createPostMutation,
+              variables: {
+                title: title,
+                content: content,
+                userId: userId,
+                fileData: fileData,
+                carouselFileData: carouselImage ? carouselImage : null,
+              },
+            }),
+          },
+        );
+
+        // Extract the data from the stream
+        const createPostData = await createPostResponse.json();
+
+        // Get the GraphQL request response
+        const data = createPostData.data.PostCreatePostResponse;
+
+        // Set & handle validation on the front end
+        setIsFormValid(data.success);
+        setIsFileValid(data.isFileValid);
+        setIsTitleValid(data.isTitleValid);
+        setIsContentValid(data.isContentValid);
+
+        if (data.success === true) {
+          // Created form data
+          const fields = new FormData();
+
+          for (const property in data.post) {
+            // Pass through non null or undefined values as FormData can only take strings or blobs
+            if (data.post[property]) {
+              fields.append(property, data.post[property]);
+            }
+          }
+
+          // Trigger a modal which informs users that the post has been created
+          await fetch("/rest/socket/emit/post-created", {
+            method: "POST",
+            body: fields,
+          });
+
+          alert("Post successfully submitted");
+          window.location.href = `${BASENAME}/posts`;
+        }
+      } catch (error) {
+        console.warn("Error");
+        console.warn(error);
       }
-    } catch (error) {
-      console.warn("Error");
-      console.warn(error);
     }
   };
 
@@ -229,7 +257,7 @@ export const CreatePostComponent: FC = () => {
         <Field>
           <Label
             error={!isTitleValid}
-            errorText="Error: Title must be longer than 3 characters"
+            errorText="Error: Title must be longer than 3 characters and less than 100"
             htmlFor="title"
             id="titleLabel"
             testId="test-id-create-post-title-label"
@@ -291,7 +319,7 @@ export const CreatePostComponent: FC = () => {
             error={!isContentValid}
             htmlFor="content"
             id="contentLabel"
-            errorText="Error: Content must be longer than 6 characters and less than 400 characters"
+            errorText="Error: Content must be longer than 6 characters and less than 600 characters"
             testId="test-id-create-post-content-label"
           >
             Content*

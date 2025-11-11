@@ -18,6 +18,7 @@ import { CreatePostComponent } from "./CreatePost";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { screen, waitFor } from "@testing-library/react";
 import { createFetchResponse } from "../../test-utils/methods/methods";
+import userEvent from "@testing-library/user-event";
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
@@ -85,5 +86,62 @@ describe("Create Post Component", () => {
     const editPostComponent = await screen.findByTestId("test-id-create-post");
     expect(editPostComponent).toBeVisible();
     expect(editPostComponent).toMatchSnapshot();
+  });
+
+  it("Validate the inputs and handle errors", async () => {
+    // Mock the api request for the carousel
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetFilePathsResponse: {
+            status: 200,
+            files: mockFiles,
+          },
+        },
+      }),
+    );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(
+      <CreatePostComponent />,
+      { route: `/post/create` },
+      mockContext,
+    );
+
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+
+      const carousel = screen.getByTestId("test-id-carousel-button");
+      expect(carousel).toBeVisible();
+    });
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId(
+      "test-id-create-post-content-input",
+    );
+
+    const titleLabel = screen.getByTestId("test-id-create-post-title-label");
+    const contentLabel = screen.getByTestId(
+      "test-id-create-post-content-label",
+    );
+
+    // Check our base values, then try to submit so we get an error
+    expect(titleInput).toHaveTextContent("");
+    expect(contentInput).toHaveTextContent("");
+
+    userEvent.type(titleInput, "a");
+    userEvent.type(contentInput, "abc");
+
+    const saveButton = screen.getByTestId("test-id-create-post-button");
+    userEvent.click(saveButton);
+
+    expect(titleLabel).toHaveTextContent(
+      "Error: Title must be longer than 3 characters and less than 100",
+    );
+
+    expect(contentLabel).toHaveTextContent(
+      "Error: Content must be longer than 6 characters and less than 600 characters",
+    );
   });
 });
