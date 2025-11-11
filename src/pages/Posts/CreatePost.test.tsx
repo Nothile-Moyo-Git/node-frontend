@@ -9,11 +9,8 @@
  */
 
 import "@testing-library/jest-dom";
-import {
-  clearAuthStorage,
-  setMockAuthStorage,
-} from "../../test-utils/authStorage";
-import { mockContext, mockFiles } from "../../test-utils/mocks/objects";
+import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
+import { mockContext, mockFiles, mockPost, mockUser } from "../../test-utils/mocks/objects";
 import { CreatePostComponent } from "./CreatePost";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { screen, waitFor } from "@testing-library/react";
@@ -42,15 +39,9 @@ describe("Create Post Component", () => {
     mockFetch.mockImplementation(() => new Promise(() => {}));
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <CreatePostComponent />,
-      { route: `/post/create` },
-      mockContext,
-    );
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
 
-    const loadingIndicator = await screen.findByTestId(
-      "test-id-loading-spinner",
-    );
+    const loadingIndicator = await screen.findByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
   });
 
@@ -68,19 +59,15 @@ describe("Create Post Component", () => {
     );
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <CreatePostComponent />,
-      { route: `/post/create` },
-      mockContext,
-    );
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
 
     await waitFor(() => {
       const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
       expect(loadingSpinner).not.toBeInTheDocument();
-
-      const carousel = screen.getByTestId("test-id-carousel-button");
-      expect(carousel).toBeVisible();
     });
+
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
+    expect(chooseImageButton).toBeVisible();
 
     // Make sure we have our edit post
     const editPostComponent = await screen.findByTestId("test-id-create-post");
@@ -102,29 +89,21 @@ describe("Create Post Component", () => {
     );
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <CreatePostComponent />,
-      { route: `/post/create` },
-      mockContext,
-    );
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
 
     await waitFor(() => {
       const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
       expect(loadingSpinner).not.toBeInTheDocument();
-
-      const carousel = screen.getByTestId("test-id-carousel-button");
-      expect(carousel).toBeVisible();
     });
 
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
+    expect(chooseImageButton).toBeVisible();
+
     const titleInput = screen.getByTestId("test-id-create-post-title-input");
-    const contentInput = screen.getByTestId(
-      "test-id-create-post-content-input",
-    );
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
 
     const titleLabel = screen.getByTestId("test-id-create-post-title-label");
-    const contentLabel = screen.getByTestId(
-      "test-id-create-post-content-label",
-    );
+    const contentLabel = screen.getByTestId("test-id-create-post-content-label");
 
     // Check our base values, then try to submit so we get an error
     expect(titleInput).toHaveTextContent("");
@@ -136,12 +115,56 @@ describe("Create Post Component", () => {
     const saveButton = screen.getByTestId("test-id-create-post-button");
     userEvent.click(saveButton);
 
-    expect(titleLabel).toHaveTextContent(
-      "Error: Title must be longer than 3 characters and less than 100",
-    );
+    expect(titleLabel).toHaveTextContent("Error: Title must be longer than 3 characters and less than 100");
 
     expect(contentLabel).toHaveTextContent(
       "Error: Content must be longer than 6 characters and less than 600 characters",
     );
+  });
+
+  it("Should successfully perform the API request to create a post", async () => {
+    // Mock the api request for the carousel
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
+    expect(chooseImageButton).toBeVisible();
+    userEvent.click(chooseImageButton);
+
+    userEvent.type(titleInput, "ABC");
+    userEvent.type(contentInput, "ABCEDF");
   });
 });

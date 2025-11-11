@@ -22,10 +22,7 @@ interface ComponentProps {
   toggleConfirmationModal: (_id: string) => void;
 }
 
-export const PostCard: FC<ComponentProps> = ({
-  post,
-  toggleConfirmationModal,
-}) => {
+export const PostCard: FC<ComponentProps> = ({ post, toggleConfirmationModal }) => {
   const [image, setImage] = useState<string>();
 
   // We use this state in order to determine whether we shoud show the edit and delete buttons or not
@@ -61,36 +58,23 @@ export const PostCard: FC<ComponentProps> = ({
   }, [post]);
 
   // Get an upload date so we can show when the post was uploaded
-  const uploadDate = generateUploadDate(
-    post?.createdAt ? Number(post?.createdAt) : "",
-  );
+  const uploadDate = generateUploadDate(post?.createdAt ? Number(post?.createdAt) : "");
 
   return (
     <article className="article" data-testid={`test-id-post-${post._id}`}>
-      <img
-        src={image}
-        alt={post?.title}
-        className="article__image"
-        draggable={false}
-      />
+      <img src={image} alt={post?.title} className="article__image" draggable={false} />
 
       <div className="article__content">
         <h2 className="article__title">{post?.title}</h2>
         <p className="article__description">{post?.content}</p>
         <p>{`Uploaded: ${uploadDate}`}</p>
         <div className="article__buttons">
-          <Link
-            to={`${BASENAME}/post/${post?._id}`}
-            className="link__read-more"
-          >
+          <Link to={`${BASENAME}/post/${post?._id}`} className="link__read-more">
             Read more
           </Link>
 
           {isPostCreator && (
-            <Link
-              to={`${BASENAME}/post/edit/${post?._id}`}
-              className="link__edit"
-            >
+            <Link to={`${BASENAME}/post/edit/${post?._id}`} className="link__edit">
               Edit
             </Link>
           )}

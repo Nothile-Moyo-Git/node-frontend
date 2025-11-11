@@ -28,10 +28,7 @@ interface ModalProps {
  */
 const Modal: FC<ModalProps> = ({ children, backdrop = false, testId }) => {
   return (
-    <section
-      className={`modal ${backdrop && "modal__backdrop"}`}
-      data-testid={testId}
-    >
+    <section className={`modal ${backdrop && "modal__backdrop"}`} data-testid={testId}>
       <div className="modal__component">{children}</div>
     </section>
   );

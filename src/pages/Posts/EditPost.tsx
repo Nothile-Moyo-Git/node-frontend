@@ -9,15 +9,7 @@
  * This is a view screen which will take the postId in order to find the data required
  */
 
-import React, {
-  FC,
-  FormEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { FC, FormEvent, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./EditPost.scss";
 import { FileData, Post } from "../../@types";
@@ -110,16 +102,14 @@ export const EditPost: FC = () => {
       fields.append("userId", userId);
 
       // Query to GraphQL
-      const response = await fetch(
-        `${appContextInstance?.baseUrl}/graphql/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+      const response = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                     query GetAndValidatePostResponse($postId : String!, $userId : String!){
                         GetAndValidatePostResponse(postId : $postId, userId : $userId){
                             success
@@ -140,13 +130,12 @@ export const EditPost: FC = () => {
                         }
                     }
                 `,
-            variables: {
-              postId: postId,
-              userId: userId,
-            },
-          }),
-        },
-      );
+          variables: {
+            postId: postId,
+            userId: userId,
+          },
+        }),
+      });
 
       // Get the json from the backend
       const dataResponse = await response.json();
@@ -225,9 +214,7 @@ export const EditPost: FC = () => {
     try {
       if (appContextInstance?.userAuthenticated === true) {
         if (appContextInstance?.token !== "") {
-          handlePostDataQuery(
-            appContextInstance?.userId ? appContextInstance.userId : "",
-          );
+          handlePostDataQuery(appContextInstance?.userId ? appContextInstance.userId : "");
         }
       }
     } catch (error) {
@@ -240,13 +227,7 @@ export const EditPost: FC = () => {
     if (!appContextInstance?.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [
-    postId,
-    appContextInstance,
-    isPostCreatorValid,
-    handlePostDataQuery,
-    navigate,
-  ]);
+  }, [postId, appContextInstance, isPostCreatorValid, handlePostDataQuery, navigate]);
 
   // Update the post data, and return an error if required
   const submitHandler = async (event: FormEvent) => {
@@ -261,23 +242,18 @@ export const EditPost: FC = () => {
 
         let fileData = {};
         if (isDevelopment && uploadFile) {
-          fileData = await fileUploadHandler(
-            uploadFile,
-            appContextInstance?.baseUrl ? appContextInstance.baseUrl : "",
-          );
+          fileData = await fileUploadHandler(uploadFile, appContextInstance?.baseUrl ? appContextInstance.baseUrl : "");
         }
 
         // Perform the API request to the backend
-        const editPostResponse = await fetch(
-          `${appContextInstance?.baseUrl}/graphql/posts`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              query: `
+        const editPostResponse = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                           mutation PostEditPostResponse(
                             $title : String!, 
                             $content : String!, 
@@ -322,17 +298,16 @@ export const EditPost: FC = () => {
                               }
                           }
                       `,
-              variables: {
-                title: title,
-                content: content,
-                userId: userId,
-                fileData: fileData,
-                carouselFileData: carouselImage ? carouselImage : null,
-                postId: postId,
-              },
-            }),
-          },
-        );
+            variables: {
+              title: title,
+              content: content,
+              userId: userId,
+              fileData: fileData,
+              carouselFileData: carouselImage ? carouselImage : null,
+              postId: postId,
+            },
+          }),
+        });
 
         // Get the result of the API request
         const data = await editPostResponse.json();
@@ -376,9 +351,7 @@ export const EditPost: FC = () => {
   };
 
   // File upload handler, this is done so we can encode the file in a b64 format which allows us to send it to the backend
-  const fileUploadChangeEvent = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const fileUploadChangeEvent = async (event: React.ChangeEvent<HTMLInputElement>) => {
     // Set the file so that it's ready for upload
     if (event.target.files) {
       const file = event.target.files[0];
@@ -401,12 +374,7 @@ export const EditPost: FC = () => {
     <div>
       <p>Sorry, but you are not authorised to edit this post</p>
       {location.key !== "default" && (
-        <Button
-          type="button"
-          variant="back"
-          onClick={backToPreviousPage}
-          testId="test-id-edit-post-back-button"
-        >
+        <Button type="button" variant="back" onClick={backToPreviousPage} testId="test-id-edit-post-back-button">
           <MdKeyboardBackspace />
           Go back
         </Button>
@@ -418,24 +386,15 @@ export const EditPost: FC = () => {
     <section className="editPost" data-testid="test-id-edit-post">
       {isLoading && <LoadingSpinner />}
       {!isLoading && showErrorText && unauthorisedRequestSection}
-      {!isLoading && renderErrorModal && (
-        <ErrorModal testId="test-id-error-modal" />
-      )}
+      {!isLoading && renderErrorModal && <ErrorModal testId="test-id-error-modal" />}
       {!isLoading && !showErrorText && !renderErrorModal && (
         <Form onSubmit={submitHandler}>
           <Title isFormValid={isFormValid}>
-            {isFormValid
-              ? `Edit Post : ${postData?.title}`
-              : "Error: Please fix the errors below"}
+            {isFormValid ? `Edit Post : ${postData?.title}` : "Error: Please fix the errors below"}
           </Title>
 
           {location.key !== "default" && (
-            <Button
-              type="button"
-              variant="back"
-              onClick={backToPreviousPage}
-              testId="test-id-edit-post-back-button"
-            >
+            <Button type="button" variant="back" onClick={backToPreviousPage} testId="test-id-edit-post-back-button">
               <MdKeyboardBackspace />
               Go back
             </Button>
@@ -447,9 +406,7 @@ export const EditPost: FC = () => {
               id="titleLabel"
               htmlFor="title"
               error={!isTitleValid}
-              errorText={
-                "Error: Title must be longer than 3 characters and less than 100"
-              }
+              errorText={"Error: Title must be longer than 3 characters and less than 100"}
             >
               Title*
             </Label>
@@ -505,9 +462,7 @@ export const EditPost: FC = () => {
                 >{`Previous image: ${postData?.fileName}`}</Label>
               )}
               <ImagePreview
-                encodedImage={
-                  showImagePreview ? imagePreview : previousImageUrl
-                }
+                encodedImage={showImagePreview ? imagePreview : previousImageUrl}
                 imageSize="contain"
                 imagePosition="left"
               />

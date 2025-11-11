@@ -39,24 +39,21 @@ export const ViewPosts: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [showErrorText, setShowErrorText] = useState<boolean>(false);
-  const [showConfirmationModal, setShowConfirmationModal] =
-    useState<boolean>(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState<string>("");
   const [socketModal, setSocketModal] = useState(<></>);
 
   // Get posts method, we define it here so we can call it asynchronously
   const getPosts = useCallback(async () => {
     // Perform the signup request
-    const response = await fetch(
-      `${appContextInstance?.baseUrl}/graphql/posts`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+    const response = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `
                     query GetPostsResponse($currentPage : Int!){
                         GetPostsResponse(currentPage : $currentPage){
                             message
@@ -76,12 +73,11 @@ export const ViewPosts: FC = () => {
                         }
                     }
                 `,
-          variables: {
-            currentPage: params.page ? Number(params.page) : 1,
-          },
-        }),
-      },
-    );
+        variables: {
+          currentPage: params.page ? Number(params.page) : 1,
+        },
+      }),
+    });
 
     // Show the error if the request failed
     if (response.status === 200) {
@@ -152,16 +148,14 @@ export const ViewPosts: FC = () => {
 
     try {
       // Perform the signup request
-      const response = await fetch(
-        `${appContextInstance?.baseUrl}/graphql/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+      const response = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                         mutation PostDeletePostResponse($postId : String!, $userId : String!){
                             PostDeletePostResponse(postId : $postId, userId : $userId){
                                 success
@@ -171,13 +165,12 @@ export const ViewPosts: FC = () => {
                             }
                         }
                     `,
-            variables: {
-              postId: postId,
-              userId: userId,
-            },
-          }),
-        },
-      );
+          variables: {
+            postId: postId,
+            userId: userId,
+          },
+        }),
+      });
 
       // Get the result from the endpoint
       const {
@@ -190,13 +183,10 @@ export const ViewPosts: FC = () => {
       fields.append("highestPageNumber", result.highestPageNumber);
 
       // Trigger a modal which informs users that the post has been deleted
-      await fetch(
-        `${appContextInstance?.baseUrl}/rest/socket/emit/post-deleted`,
-        {
-          method: "POST",
-          body: fields,
-        },
-      );
+      await fetch(`${appContextInstance?.baseUrl}/rest/socket/emit/post-deleted`, {
+        method: "POST",
+        body: fields,
+      });
 
       fetchPosts();
       setShowConfirmationModal(false);
@@ -211,9 +201,7 @@ export const ViewPosts: FC = () => {
   };
 
   const liveChatEndpoint =
-    process.env.NODE_ENV.trim() === "development"
-      ? process.env.API_URL_DEV
-      : process.env.API_URL_PROD;
+    process.env.NODE_ENV.trim() === "development" ? process.env.API_URL_DEV : process.env.API_URL_PROD;
 
   // Get the correct port based on the environment
   const port =
@@ -228,14 +216,8 @@ export const ViewPosts: FC = () => {
     client.on("post added", (postData) => {
       setSocketModal(
         <ExpiryWrapper lengthInSeconds={5}>
-          <ToastModal
-            variant="success"
-            customMessage={`Success : Post ${postData.post.title} added!`}
-          >
-            <Link
-              to={`${BASENAME}/post/${postData.post._id}`}
-              className="viewPosts__modal-link"
-            >
+          <ToastModal variant="success" customMessage={`Success : Post ${postData.post.title} added!`}>
+            <Link to={`${BASENAME}/post/${postData.post._id}`} className="viewPosts__modal-link">
               View Post
             </Link>
           </ToastModal>
@@ -301,10 +283,7 @@ export const ViewPosts: FC = () => {
             {posts.map((post: Post) => {
               return (
                 <li key={post._id}>
-                  <PostCard
-                    post={post}
-                    toggleConfirmationModal={toggleShowConfirmationModal}
-                  />
+                  <PostCard post={post} toggleConfirmationModal={toggleShowConfirmationModal} />
                 </li>
               );
             })}
@@ -312,19 +291,11 @@ export const ViewPosts: FC = () => {
         </>
       )}
 
-      {!isLoading && (
-        <Paginator
-          currentPage={page}
-          numberOfPages={numberOfPages}
-          setPage={setPage}
-        />
-      )}
+      {!isLoading && <Paginator currentPage={page} numberOfPages={numberOfPages} setPage={setPage} />}
 
       {socketModal}
 
-      {!isLoading && showErrorText && (
-        <ErrorModal testId="test-id-error-modal" />
-      )}
+      {!isLoading && showErrorText && <ErrorModal testId="test-id-error-modal" />}
     </section>
   );
 };

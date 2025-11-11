@@ -8,14 +8,7 @@
  * Only logged in users will be able to create posts in the backend
  */
 
-import React, {
-  FC,
-  FormEvent,
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-} from "react";
+import React, { FC, FormEvent, useContext, useEffect, useState, useRef } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { BASENAME } from "../../util/util";
@@ -165,26 +158,23 @@ export const CreatePostComponent: FC = () => {
                       `;
 
         // Perform the API request to the backend
-        const createPostResponse = await fetch(
-          `${appContextInstance?.baseUrl}/graphql/posts`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              query: createPostMutation,
-              variables: {
-                title: title,
-                content: content,
-                userId: userId,
-                fileData: fileData,
-                carouselFileData: carouselImage ? carouselImage : null,
-              },
-            }),
+        const createPostResponse = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-        );
+          body: JSON.stringify({
+            query: createPostMutation,
+            variables: {
+              title: title,
+              content: content,
+              userId: userId,
+              fileData: fileData,
+              carouselFileData: carouselImage ? carouselImage : null,
+            },
+          }),
+        });
 
         // Extract the data from the stream
         const createPostData = await createPostResponse.json();
@@ -226,9 +216,7 @@ export const CreatePostComponent: FC = () => {
   };
 
   // File upload handler, this is done so we can encode the file in a b64 format which allows us to send it to the backend
-  const fileUploadEvent = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const fileUploadEvent = async (event: React.ChangeEvent<HTMLInputElement>) => {
     // Set the file so that it's ready for upload
     if (event.target.files) {
       const file = event.target.files[0];
@@ -250,10 +238,7 @@ export const CreatePostComponent: FC = () => {
   return (
     <section className="createPost" data-testid="test-id-create-post">
       <Form onSubmit={submitHandler}>
-        <Title isFormValid={isFormValid}>
-          {isFormValid ? "Create Post" : "Error: Please fix the errors below"}
-        </Title>
-
+        <Title isFormValid={isFormValid}>{isFormValid ? "Create Post" : "Error: Please fix the errors below"}</Title>
         <Field>
           <Label
             error={!isTitleValid}
@@ -306,11 +291,7 @@ export const CreatePostComponent: FC = () => {
 
         {showImagePreview && (
           <Field>
-            <ImagePreview
-              encodedImage={imagePreview}
-              imageSize="contain"
-              imagePosition="left"
-            />
+            <ImagePreview encodedImage={imagePreview} imageSize="contain" imagePosition="left" />
           </Field>
         )}
 

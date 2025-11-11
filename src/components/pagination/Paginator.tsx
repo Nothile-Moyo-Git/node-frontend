@@ -18,11 +18,7 @@ interface ComponentProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const Paginator: FC<ComponentProps> = ({
-  numberOfPages,
-  currentPage = 1,
-  setPage,
-}) => {
+export const Paginator: FC<ComponentProps> = ({ numberOfPages, currentPage = 1, setPage }) => {
   const [previousPages, setPreviousPages] = useState<number[]>([]);
   const [upcomingPages, setUpcomingPages] = useState<number[]>([]);
 
@@ -114,10 +110,7 @@ export const Paginator: FC<ComponentProps> = ({
         ))}
 
       {numberOfPages > 7 ? (
-        <form
-          className="paginator__select-wrapper"
-          onSubmit={customPageSelected}
-        >
+        <form className="paginator__select-wrapper" onSubmit={customPageSelected}>
           <Select
             currentValue={currentPage}
             id="pagination-select-component"
@@ -126,15 +119,10 @@ export const Paginator: FC<ComponentProps> = ({
             pages={pagesArray}
             variant="pagination"
           />
-          <button className="paginator__button paginator__button--current-select">
-            Go
-          </button>
+          <button className="paginator__button paginator__button--current-select">Go</button>
         </form>
       ) : (
-        <button
-          disabled
-          className="paginator__button paginator__button--current-normal"
-        >
+        <button disabled className="paginator__button paginator__button--current-normal">
           {currentPage}
         </button>
       )}

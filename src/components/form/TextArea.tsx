@@ -41,25 +41,23 @@ interface ComponentProps {
  * @param startingRows ?: number
  * @param testId : string
  */
-const TextArea = forwardRef<HTMLTextAreaElement, ComponentProps>(
-  function TextAreaComponent(props, ref) {
-    // Set the classnames for the textarea
-    const textAreaClassNames = props.square ? "textarea__square" : "";
+const TextArea = forwardRef<HTMLTextAreaElement, ComponentProps>(function TextAreaComponent(props, ref) {
+  // Set the classnames for the textarea
+  const textAreaClassNames = props.square ? "textarea__square" : "";
 
-    return (
-      <textarea
-        aria-labelledby={props.ariaLabelledBy}
-        className={`textarea ${textAreaClassNames} ${props.error === true && "textarea__error"}`}
-        data-testid={props.testId}
-        defaultValue={props.initialValue}
-        name={props.name}
-        placeholder={props.placeholder}
-        ref={ref}
-        required={props.required}
-        rows={props.startingRows ? props.startingRows : 3}
-      />
-    );
-  },
-);
+  return (
+    <textarea
+      aria-labelledby={props.ariaLabelledBy}
+      className={`textarea ${textAreaClassNames} ${props.error === true && "textarea__error"}`}
+      data-testid={props.testId}
+      defaultValue={props.initialValue}
+      name={props.name}
+      placeholder={props.placeholder}
+      ref={ref}
+      required={props.required}
+      rows={props.startingRows ? props.startingRows : 3}
+    />
+  );
+});
 
 export default TextArea;

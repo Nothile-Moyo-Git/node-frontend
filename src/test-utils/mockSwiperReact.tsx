@@ -16,12 +16,7 @@ export const Swiper = ({ children, ...props }: { children: ReactNode }) => {
   </div>;
 };
 
-export const SwiperSlide = ({
-  children,
-  ...props
-}: {
-  children: ReactNode;
-}) => {
+export const SwiperSlide = ({ children, ...props }: { children: ReactNode }) => {
   <div data-testid="swiper-slide" {...props}>
     {children}
   </div>;

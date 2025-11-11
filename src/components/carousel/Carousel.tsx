@@ -11,21 +11,8 @@
 // Make sure that these are scoped more than the default styling if the override doesn't work
 import "./Carousel.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Pagination,
-  Navigation,
-  Autoplay,
-  Thumbs,
-  FreeMode,
-} from "swiper/modules";
-import React, {
-  FC,
-  useContext,
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import { Pagination, Navigation, Autoplay, Thumbs, FreeMode } from "swiper/modules";
+import React, { FC, useContext, useState, useEffect, Dispatch, SetStateAction } from "react";
 import { AppContext } from "../../context/AppContext";
 import { FileData } from "../../@types";
 import LoadingSpinner from "../loader/LoadingSpinner";
@@ -42,9 +29,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | string | null>(
-    null,
-  );
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | string | null>(null);
 
   // We store the index in state since we want our button to be outside of the swiper carousel
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -57,16 +42,14 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
     // Render images
     const generateImageSources = async () => {
       // Get a list of files
-      const result = await fetch(
-        `${appContextInstance?.baseUrl}/graphql/files`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+      const result = await fetch(`${appContextInstance?.baseUrl}/graphql/files`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                               query GetFilePathsResponse{
                                   GetFilePathsResponse{
                                       status
@@ -77,9 +60,8 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
                                   }
                               }
                           `,
-          }),
-        },
-      );
+        }),
+      });
 
       if (result.status === 200) {
         const {
@@ -132,18 +114,12 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   return images.length > 0 ? (
     <section className="carousel">
       <div className="carousel__chosen-image">
-        <Button
-          variant="primary"
-          onClick={setChosenImageHandler}
-          testId="test-id-carousel-button"
-        >
+        <Button variant="primary" onClick={setChosenImageHandler} testId="test-id-carousel-choose-button">
           Choose this image
         </Button>
         <p>
           Chosen image:
-          {chosenImageIndex || chosenImageIndex === 0
-            ? ` ${files[chosenImageIndex].fileName}`
-            : " None"}
+          {chosenImageIndex || chosenImageIndex === 0 ? ` ${files[chosenImageIndex].fileName}` : " None"}
         </p>
       </div>
       {/* Main carousel */}
@@ -168,11 +144,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
           <SwiperSlide key={files[index].fileName}>
             <img
               alt={files[index].fileName}
-              className={
-                chosenImageIndex === index
-                  ? "swiper__image swiper__image--chosen"
-                  : "swiper__image"
-              }
+              className={chosenImageIndex === index ? "swiper__image swiper__image--chosen" : "swiper__image"}
               draggable={false}
               src={image}
             />
@@ -206,9 +178,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
             <img
               alt={files[index].fileName}
               className={
-                chosenImageIndex === index
-                  ? "swiper__thumbnail swiper__thumbnail--chosen"
-                  : "swiper__thumbnail"
+                chosenImageIndex === index ? "swiper__thumbnail swiper__thumbnail--chosen" : "swiper__thumbnail"
               }
               draggable={false}
               src={image}

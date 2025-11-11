@@ -81,11 +81,7 @@ export const generateUploadDate = (date: string | number) => {
  *
  * @returns sessionValid : boolean
  */
-export const checkSessionValidation = async (
-  userId: string,
-  token: string,
-  baseUrl: string,
-) => {
+export const checkSessionValidation = async (userId: string, token: string, baseUrl: string) => {
   try {
     // Perform the signup request
     await fetch(`${baseUrl}/graphql/auth`, {
@@ -127,11 +123,7 @@ export const checkSessionValidation = async (
  *
  * @returns userExists: boolean
  */
-export const doesUserExist = async (
-  userId: string,
-  baseUrl: string,
-  token?: string,
-) => {
+export const doesUserExist = async (userId: string, baseUrl: string, token?: string) => {
   const response = await fetch(`${baseUrl}/graphql/auth`, {
     method: "POST",
     headers: {

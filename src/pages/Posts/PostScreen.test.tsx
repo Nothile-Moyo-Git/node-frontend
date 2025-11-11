@@ -7,10 +7,7 @@
  */
 
 import "@testing-library/jest-dom";
-import {
-  clearAuthStorage,
-  setMockAuthStorage,
-} from "../../test-utils/authStorage";
+import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 import { act, screen } from "@testing-library/react";
 import { renderWithContext } from "../../test-utils/testRouter";
 import PostScreen from "./PostScreen";
@@ -45,11 +42,7 @@ describe("Post Screen Component", () => {
 
     // Render the post screen
     await act(async () => {
-      renderWithContext(
-        <PostScreen />,
-        { route: `/post/${mockPost._id}` },
-        mockContext,
-      );
+      renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
     });
 
     // Build and check the snapshot
@@ -63,16 +56,10 @@ describe("Post Screen Component", () => {
     global.fetch = jest.fn().mockImplementation(() => new Promise(() => {}));
 
     // Render the post screen
-    renderWithContext(
-      <PostScreen />,
-      { route: `/post/${mockPost._id}` },
-      mockContext,
-    );
+    renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
 
     // Check to see if the loading spinner is visible
-    const loadingIndicator = await screen.findByTestId(
-      "test-id-loading-spinner",
-    );
+    const loadingIndicator = await screen.findByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
   });
 
@@ -94,11 +81,7 @@ describe("Post Screen Component", () => {
     });
 
     // Render the post screen
-    renderWithContext(
-      <PostScreen />,
-      { route: `/post/${mockPost._id}` },
-      mockContext,
-    );
+    renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
 
     // Find post information
     const postTitle = await screen.findByText(mockPost.title);

@@ -20,9 +20,7 @@ import { mockUser } from "./test-utils/mocks/objects";
 import App from "./App";
 
 // Two weeks after original expiry date
-const mockExpiryDate = generateUploadDate(
-  new Date(Date.now() + 12096e5).toISOString(),
-);
+const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
 
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 

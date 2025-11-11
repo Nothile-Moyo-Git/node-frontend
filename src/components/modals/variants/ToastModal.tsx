@@ -28,19 +28,11 @@ interface ComponentProps {
  *
  * @description : A toast modal which has color variants
  */
-const ToastModal: FC<ComponentProps> = ({
-  variant = "info",
-  customMessage,
-  children,
-}) => {
+const ToastModal: FC<ComponentProps> = ({ variant = "info", customMessage, children }) => {
   // Variables to set state
   const [toastStyles, setToastStyles] = useState<string>(``);
-  const [defaultToastMessage, setDefaultToastMessage] = useState<string>(
-    `Your request has been processed`,
-  );
-  const [icon, setIcon] = useState<ReactElement>(
-    <IoMdInformationCircleOutline />,
-  );
+  const [defaultToastMessage, setDefaultToastMessage] = useState<string>(`Your request has been processed`);
+  const [icon, setIcon] = useState<ReactElement>(<IoMdInformationCircleOutline />);
 
   // We set the styling and icons based on the variant
   useEffect(() => {
@@ -71,9 +63,7 @@ const ToastModal: FC<ComponentProps> = ({
 
       case "warning":
         setToastStyles("toast--warning");
-        setDefaultToastMessage(
-          `Your request was successful, but should be doublechecked.`,
-        );
+        setDefaultToastMessage(`Your request was successful, but should be doublechecked.`);
         setIcon(<IoIosWarning />);
         break;
 

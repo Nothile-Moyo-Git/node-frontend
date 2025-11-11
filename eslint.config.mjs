@@ -52,7 +52,13 @@ export default [
       },
     },
     rules: {
-      "prettier/prettier": ["error", { "endOfLine": "auto" }],
+      "prettier/prettier": [
+        "error", 
+        { 
+          "endOfLine": "auto",
+          "printWidth": 120
+        }
+      ],
       "react/react-in-jsx-scope": "off",
       "no-unused-vars": [
         "warn",

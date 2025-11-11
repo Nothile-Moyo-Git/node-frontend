@@ -53,16 +53,14 @@ export const LoginPage: FC = () => {
     // Perform the login request to the backend
     try {
       // Perform the signup request
-      const result = await fetch(
-        `${appContextInstance?.baseUrl}/graphql/auth`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+      const result = await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                         mutation loginResponse($emailAddress : String!, $password : String!){
                             loginResponse(emailAddress : $emailAddress, password : $password){
                                 userExists
@@ -76,26 +74,17 @@ export const LoginPage: FC = () => {
                             }
                         }
                     `,
-            variables: {
-              emailAddress: emailAddress,
-              password: password,
-            },
-          }),
-        },
-      );
+          variables: {
+            emailAddress: emailAddress,
+            password: password,
+          },
+        }),
+      });
 
       // Get the data from the response
       const {
         data: {
-          loginResponse: {
-            success,
-            emailValid,
-            emailErrorText,
-            passwordValid,
-            passwordErrorText,
-            token,
-            userId,
-          },
+          loginResponse: { success, emailValid, emailErrorText, passwordValid, passwordErrorText, token, userId },
         },
       } = await result.json();
 

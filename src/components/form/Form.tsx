@@ -34,12 +34,7 @@ interface ComponentProps {
  * @param isFormValid ?: boolean
  * @param onSubmit : (event: FormEvent) => void
  */
-const Form: FC<ComponentProps> = ({
-  size,
-  children,
-  isFormValid,
-  onSubmit,
-}) => {
+const Form: FC<ComponentProps> = ({ size, children, isFormValid, onSubmit }) => {
   // Set the size of the form
   let formStyles = "";
 
@@ -53,10 +48,7 @@ const Form: FC<ComponentProps> = ({
   }
 
   return (
-    <form
-      className={`form ${formStyles} ${isFormValid === false && "form__error"}`}
-      onSubmit={onSubmit}
-    >
+    <form className={`form ${formStyles} ${isFormValid === false && "form__error"}`} onSubmit={onSubmit}>
       {children}
     </form>
   );
