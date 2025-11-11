@@ -34,8 +34,7 @@ export const SignupPage: FC = () => {
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [emailErrortext, setEmailErrorText] = useState<string>("");
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
-  const [isConfirmPasswordValid, setIsconfirmPasswordValid] =
-    useState<boolean>(true);
+  const [isConfirmPasswordValid, setIsconfirmPasswordValid] = useState<boolean>(true);
   const [doesUserExist, setDoesUserExist] = useState<boolean>(true);
   const [validateField, setValidateField] = useState<boolean>(false);
 
@@ -70,16 +69,14 @@ export const SignupPage: FC = () => {
     // Perform the signup request to the backend
     try {
       // Perform the signup request
-      const result = await fetch(
-        `${appContextInstance?.baseUrl}/graphql/auth`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+      const result = await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                         mutation signupUserResponse($name : String!, $email : String!, $password : String!, $confirmPassword : String!){
                             signupUserResponse(name : $name, email : $email, password : $password, confirmPassword : $confirmPassword){
                                 isNameValid,
@@ -91,15 +88,14 @@ export const SignupPage: FC = () => {
                             }
                         }
                     `,
-            variables: {
-              name: name,
-              email: emailAddress,
-              password: password,
-              confirmPassword: confirmPassword,
-            },
-          }),
-        },
-      );
+          variables: {
+            name: name,
+            email: emailAddress,
+            password: password,
+            confirmPassword: confirmPassword,
+          },
+        }),
+      });
 
       const response = await result.json();
 
@@ -131,13 +127,7 @@ export const SignupPage: FC = () => {
         setValidateField(false);
       }
 
-      if (
-        !data.userExists &&
-        data.isNameValid &&
-        data.isEmailValid &&
-        data.isPasswordValid &&
-        data.doPasswordsMatch
-      ) {
+      if (!data.userExists && data.isNameValid && data.isEmailValid && data.isPasswordValid && data.doPasswordsMatch) {
         alert("Success");
         navigate(`${BASENAME}/login`);
       }
@@ -188,12 +178,7 @@ export const SignupPage: FC = () => {
           <Label
             htmlFor="emailAddress"
             id="emailLabel"
-            error={
-              validateField &&
-              (!isEmailValid ||
-                !doesUserExist ||
-                (isEmailValid && doesUserExist))
-            }
+            error={validateField && (!isEmailValid || !doesUserExist || (isEmailValid && doesUserExist))}
             errorText={emailErrortext}
             testId="test-id-signup-email-label"
           >
@@ -201,12 +186,7 @@ export const SignupPage: FC = () => {
           </Label>
           <Input
             ariaLabelledBy="emailLabel"
-            error={
-              validateField &&
-              (!isEmailValid ||
-                !doesUserExist ||
-                (isEmailValid && doesUserExist))
-            }
+            error={validateField && (!isEmailValid || !doesUserExist || (isEmailValid && doesUserExist))}
             name="emailAddress"
             placeholder="Please enter your email"
             ref={emailRef}

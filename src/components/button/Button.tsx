@@ -31,13 +31,7 @@ interface ComponentProps {
  *
  * @returns Button : FC<ComponentProps>
  */
-const Button: FC<ComponentProps> = ({
-  children,
-  variant,
-  type,
-  testId,
-  onClick,
-}) => {
+const Button: FC<ComponentProps> = ({ children, variant, type, testId, onClick }) => {
   let variantClassName = "";
 
   // Implement styling for the variant
@@ -76,12 +70,7 @@ const Button: FC<ComponentProps> = ({
   }
 
   return (
-    <button
-      className={`button ${variantClassName}`}
-      data-testid={testId}
-      onClick={onClick}
-      type={type || "submit"}
-    >
+    <button className={`button ${variantClassName}`} data-testid={testId} onClick={onClick} type={type || "submit"}>
       {children}
     </button>
   );

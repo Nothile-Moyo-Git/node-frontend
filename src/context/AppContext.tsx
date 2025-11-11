@@ -34,9 +34,7 @@ export const AppContext = React.createContext<ContextProps | null>(null);
 const AppContextProvider = ({ children }: ComponentProps) => {
   // Get the current environment so that we can get the baseUrl for API requests for dev vs prod
   const environment =
-    process.env.NODE_ENV.trim() === "development"
-      ? process.env.REACT_APP_API_DEV
-      : process.env.REACT_APP_API_PROD;
+    process.env.NODE_ENV.trim() === "development" ? process.env.REACT_APP_API_DEV : process.env.REACT_APP_API_PROD;
 
   // Set our token and expiration states
   const [token, setToken] = useState<string>("");

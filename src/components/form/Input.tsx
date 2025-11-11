@@ -46,32 +46,30 @@ interface ComponentProps {
  * @param type : string
  * @param testId: The ID used for testing so it can be referenced in jest
  */
-const Input = forwardRef<HTMLInputElement, ComponentProps>(
-  function InputComponent(props, ref) {
-    // Set the classNames for the input
-    const inputClassNames = props.square ? "input__square" : "";
+const Input = forwardRef<HTMLInputElement, ComponentProps>(function InputComponent(props, ref) {
+  // Set the classNames for the input
+  const inputClassNames = props.square ? "input__square" : "";
 
-    const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (props.onChange) {
-        props.onChange(event);
-      }
-    };
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.onChange) {
+      props.onChange(event);
+    }
+  };
 
-    return (
-      <input
-        aria-labelledby={props.ariaLabelledBy}
-        className={`input ${inputClassNames} ${props.error === true && "input__error"}`}
-        defaultValue={props.initialValue}
-        name={props.name}
-        onChange={changeHandler}
-        placeholder={props.placeholder}
-        ref={ref}
-        type={props.type}
-        required={props.required}
-        data-testid={props.testId}
-      />
-    );
-  },
-);
+  return (
+    <input
+      aria-labelledby={props.ariaLabelledBy}
+      className={`input ${inputClassNames} ${props.error === true && "input__error"}`}
+      defaultValue={props.initialValue}
+      name={props.name}
+      onChange={changeHandler}
+      placeholder={props.placeholder}
+      ref={ref}
+      type={props.type}
+      required={props.required}
+      data-testid={props.testId}
+    />
+  );
+});
 
 export default Input;

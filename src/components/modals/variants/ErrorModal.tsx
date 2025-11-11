@@ -29,10 +29,7 @@ const ErrorModal: FC<ComponentProps> = ({ testId }) => {
         <h2>Oops!</h2>
         <p>Something went wrong and your request was not completed.</p>
         <p>Please reload the page or email me using the button below.</p>
-        <a
-          className="modal__error-button"
-          href="mailto:@nottsthrowaway1@gmail.com"
-        >
+        <a className="modal__error-button" href="mailto:@nottsthrowaway1@gmail.com">
           Email me
         </a>
       </div>

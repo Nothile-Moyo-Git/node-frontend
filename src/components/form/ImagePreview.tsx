@@ -19,11 +19,7 @@ interface ComponentProps {
   imagePosition?: string;
 }
 
-const ImagePreview: FC<ComponentProps> = ({
-  encodedImage,
-  imageSize,
-  imagePosition,
-}) => {
+const ImagePreview: FC<ComponentProps> = ({ encodedImage, imageSize, imagePosition }) => {
   return (
     <div
       className="imagePreview"

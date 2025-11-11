@@ -7,17 +7,9 @@
  */
 
 import "@testing-library/jest-dom";
-import {
-  clearAuthStorage,
-  setMockAuthStorage,
-} from "../../test-utils/authStorage";
+import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 import { createFetchResponse } from "../../test-utils/methods/methods";
-import {
-  mockContext,
-  mockPost,
-  mockFiles,
-  updatedMockPost,
-} from "../../test-utils/mocks/objects";
+import { mockContext, mockPost, mockFiles, updatedMockPost } from "../../test-utils/mocks/objects";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
 import { screen, waitFor } from "@testing-library/react";
@@ -45,23 +37,15 @@ describe("Edit Post Component", () => {
     mockFetch.mockImplementation(() => new Promise(() => {}));
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <EditPost />,
-      { route: `/post/edit/${mockPost._id}` },
-      mockContext,
-    );
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
 
-    const loadingIndicator = await screen.findByTestId(
-      "test-id-loading-spinner",
-    );
+    const loadingIndicator = await screen.findByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
   });
 
   it("Renders the error modal as the API request fails", async () => {
     // We're ignoring the console in this test as we don't need the output here, but is useful for dev / prod
-    const consoleErrorSpy = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
     mockFetch
       .mockResolvedValueOnce(
@@ -89,11 +73,7 @@ describe("Edit Post Component", () => {
       );
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <EditPost />,
-      { route: `/post/edit/${mockPost._id}` },
-      mockContext,
-    );
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
 
     // Wait for the API request to complete, and then find the error modal on the page
     await waitFor(() => {
@@ -136,11 +116,7 @@ describe("Edit Post Component", () => {
       );
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <EditPost />,
-      { route: `/post/edit/${mockPost._id}` },
-      mockContext,
-    );
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
 
     await waitFor(() => {
       const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
@@ -182,11 +158,7 @@ describe("Edit Post Component", () => {
       );
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <EditPost />,
-      { route: `/post/edit/${mockPost._id}` },
-      mockContext,
-    );
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
 
     const editPostComponent = screen.getByTestId("test-id-edit-post");
     expect(editPostComponent).toBeVisible();
@@ -228,11 +200,7 @@ describe("Edit Post Component", () => {
       );
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <EditPost />,
-      { route: `/post/edit/${mockPost._id}` },
-      mockContext,
-    );
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
 
     const editPostComponent = screen.getByTestId("test-id-edit-post");
     expect(editPostComponent).toBeVisible();
@@ -264,9 +232,7 @@ describe("Edit Post Component", () => {
 
     userEvent.click(saveButton);
 
-    expect(titleLabel).toHaveTextContent(
-      "Error: Title must be longer than 3 characters and less than 100",
-    );
+    expect(titleLabel).toHaveTextContent("Error: Title must be longer than 3 characters and less than 100");
 
     expect(contentLabel).toHaveTextContent(
       "Error: Content must be longer than 6 characters and less than 600 characters",
@@ -324,11 +290,7 @@ describe("Edit Post Component", () => {
       );
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(
-      <EditPost />,
-      { route: `/post/edit/${mockPost._id}` },
-      mockContext,
-    );
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
 
     const editPostComponent = screen.getByTestId("test-id-edit-post");
     expect(editPostComponent).toBeVisible();
@@ -363,9 +325,7 @@ describe("Edit Post Component", () => {
 
     // Give these time to run as they don't by default
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
-        expect.stringContaining("Success, Post"),
-      );
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Success, Post"));
       expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
   });

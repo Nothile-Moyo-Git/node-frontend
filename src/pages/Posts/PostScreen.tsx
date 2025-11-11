@@ -39,16 +39,14 @@ const PostScreen: FC = () => {
     // Get posts method, we define it here so we can call it asynchronously
     const getPostData = async () => {
       // Requesting the post from GraphQL using the postID, it's a post request
-      const response = await fetch(
-        `${appContextInstance?.baseUrl}/graphql/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+      const response = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
                         query GetPostResponse($postId : String!){
                             GetPostResponse(postId : $postId){
                                 success
@@ -67,12 +65,11 @@ const PostScreen: FC = () => {
                             }
                         }
                     `,
-            variables: {
-              postId: postId ? postId : "",
-            },
-          }),
-        },
-      );
+          variables: {
+            postId: postId ? postId : "",
+          },
+        }),
+      });
 
       // Show the error if the request failed
       if (response.status === 200) {
@@ -92,10 +89,7 @@ const PostScreen: FC = () => {
 
       // Attempt to pull post data, returns an error if the request fails and renders the error modal
       try {
-        if (
-          appContextInstance?.userAuthenticated === true &&
-          appContextInstance?.token !== ""
-        ) {
+        if (appContextInstance?.userAuthenticated === true && appContextInstance?.token !== "") {
           // Method defined here to allow async calls in a useEffect hook
           const result = await getPostData();
 
@@ -144,9 +138,7 @@ const PostScreen: FC = () => {
   }, [postData]);
 
   // Get an upload date so we can show when the post was uploaded
-  const uploadDate = generateUploadDate(
-    postData?.createdAt ? postData?.createdAt : "",
-  );
+  const uploadDate = generateUploadDate(postData?.createdAt ? postData?.createdAt : "");
 
   // Back handler
   const backToPreviousPage = () => {
@@ -164,11 +156,7 @@ const PostScreen: FC = () => {
         <>
           <h1 className="post__title">{postData?.title}</h1>
           {location.key !== "default" && (
-            <Button
-              variant="back"
-              onClick={backToPreviousPage}
-              testId="test-id-post-back-button"
-            >
+            <Button variant="back" onClick={backToPreviousPage} testId="test-id-post-back-button">
               <MdKeyboardBackspace />
               Go back
             </Button>
@@ -179,9 +167,7 @@ const PostScreen: FC = () => {
         </>
       )}
 
-      {!isQuerying && showErrorModal && (
-        <ErrorModal testId="test-id-error-modal" />
-      )}
+      {!isQuerying && showErrorModal && <ErrorModal testId="test-id-error-modal" />}
     </section>
   );
 };

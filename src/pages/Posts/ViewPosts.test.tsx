@@ -7,10 +7,7 @@
  */
 
 import "@testing-library/jest-dom";
-import {
-  clearAuthStorage,
-  setMockAuthStorage,
-} from "../../test-utils/authStorage";
+import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 
 import { renderWithAct, renderWithContext } from "../../test-utils/testRouter";
 import { act, screen, waitFor } from "@testing-library/react";
@@ -65,17 +62,13 @@ describe("View Posts component", () => {
 
     renderWithContext(<ViewPosts />, { route: "/posts" }, mockContext);
 
-    const loadingIndicator = await screen.findByTestId(
-      "test-id-loading-spinner",
-    );
+    const loadingIndicator = await screen.findByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
   });
 
   it("Renders the error modal as the API request fails", async () => {
     // We're ignoring the console in this test as we don't need the output here, but is useful for dev / prod
-    const consoleErrorSpy = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
     mockFetch.mockRejectedValueOnce(
       createFetchResponse({
@@ -183,17 +176,13 @@ describe("View Posts component", () => {
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
 
     // Go to page 2 as we have 6 posts which allows us to use pagination
-    const paginationPage2 = await screen.findByTestId(
-      "test-id-pagination-page-2",
-    );
+    const paginationPage2 = await screen.findByTestId("test-id-pagination-page-2");
 
     await act(async () => {
       userEvent.click(paginationPage2);
     });
 
-    const tieflings = await screen.findByTestId(
-      `test-id-post-${mockPosts[3]._id}`,
-    );
+    const tieflings = await screen.findByTestId(`test-id-post-${mockPosts[3]._id}`);
     expect(tieflings).toBeVisible();
 
     const edelGard = await screen.findByText(mockPosts[4].title);
@@ -290,27 +279,19 @@ describe("View Posts component", () => {
     expect(screen.queryByText(mockPosts[4].title)).not.toBeInTheDocument();
 
     // Navigate to the second page
-    const paginationPage2 = await screen.findByTestId(
-      "test-id-pagination-page-2",
-    );
+    const paginationPage2 = await screen.findByTestId("test-id-pagination-page-2");
     await act(async () => userEvent.click(paginationPage2));
 
     // Find the delete the last post on the page
-    const deleteBtn = await screen.findByTestId(
-      `test-id-delete-${mockPosts[5]._id}`,
-    );
+    const deleteBtn = await screen.findByTestId(`test-id-delete-${mockPosts[5]._id}`);
     expect(deleteBtn).toBeVisible();
     await act(async () => userEvent.click(deleteBtn));
-    const confirm = await screen.findByTestId(
-      "test-id-confirmation-modal-confirm-button",
-    );
+    const confirm = await screen.findByTestId("test-id-confirmation-modal-confirm-button");
     await act(async () => userEvent.click(confirm));
 
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith(
-        expect.stringContaining(
-          `Post ${mockPosts[5]._id} has successfully been deleted`,
-        ),
+        expect.stringContaining(`Post ${mockPosts[5]._id} has successfully been deleted`),
       );
     });
 

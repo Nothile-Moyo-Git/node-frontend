@@ -33,21 +33,9 @@ interface ComponentProps {
  * @param errorText ?: string
  * @param testId : string
  */
-const Label: FC<ComponentProps> = ({
-  children,
-  id,
-  htmlFor,
-  error,
-  errorText,
-  testId,
-}) => {
+const Label: FC<ComponentProps> = ({ children, id, htmlFor, error, errorText, testId }) => {
   return (
-    <label
-      data-testid={testId}
-      id={id}
-      htmlFor={htmlFor}
-      className={`label ${error && "label__error"}`}
-    >
+    <label data-testid={testId} id={id} htmlFor={htmlFor} className={`label ${error && "label__error"}`}>
       {error ? errorText : children}
     </label>
   );

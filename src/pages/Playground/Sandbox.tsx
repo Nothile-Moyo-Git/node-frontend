@@ -32,9 +32,7 @@ const Sandbox = () => {
   const imageUrlRef = useRef<HTMLInputElement>(null);
 
   // File upload request, this one doesn't use GraphQL but will be used alongside a GraphQL request
-  const dummyFileUploadHandler = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const dummyFileUploadHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
     // Set the file so that it's ready for upload
     if (event.target.files) {
       const file = event.target.files[0];
@@ -155,21 +153,13 @@ const Sandbox = () => {
 
       <br />
 
-      <Button
-        variant="primary"
-        onClick={signupResolver}
-        testId="sandbox-create-user-button"
-      >
+      <Button variant="primary" onClick={signupResolver} testId="sandbox-create-user-button">
         Create new user
       </Button>
 
       <br />
 
-      <Button
-        variant="primary"
-        onClick={getUserStatusResolver}
-        testId="sandbox-get-user-button"
-      >
+      <Button variant="primary" onClick={getUserStatusResolver} testId="sandbox-get-user-button">
         Get user status
       </Button>
 
@@ -200,11 +190,7 @@ const Sandbox = () => {
 
         {showImagePreview && (
           <Field>
-            <ImagePreview
-              encodedImage={imagePreview}
-              imageSize="contain"
-              imagePosition="left"
-            />
+            <ImagePreview encodedImage={imagePreview} imageSize="contain" imagePosition="left" />
           </Field>
         )}
 

@@ -20,16 +20,10 @@ export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
     },
   });
 
-  return render(
-    <RouterProvider router={router} future={{ v7_startTransition: true }} />,
-  );
+  return render(<RouterProvider router={router} future={{ v7_startTransition: true }} />);
 }
 
-export const renderWithContext = (
-  ui: ReactNode,
-  { route = "/" } = {},
-  context: ContextProps,
-) => {
+export const renderWithContext = (ui: ReactNode, { route = "/" } = {}, context: ContextProps) => {
   const router = createMemoryRouter(routes, {
     initialEntries: [route],
     future: {
@@ -45,11 +39,7 @@ export const renderWithContext = (
 };
 
 // Render with act here so I don't constantly need to wrap it and save on duplication
-export const renderWithAct = async (
-  ui: ReactNode,
-  { route = "/" } = {},
-  context: ContextProps,
-) => {
+export const renderWithAct = async (ui: ReactNode, { route = "/" } = {}, context: ContextProps) => {
   await act(async () => {
     renderWithContext(ui, { route }, context);
   });

@@ -17,11 +17,7 @@ interface ComponentProps {
 }
 
 const Title: FC<ComponentProps> = ({ isFormValid, children }) => {
-  return (
-    <h2 className={`title ${isFormValid === false && "title__error"}`}>
-      {children}
-    </h2>
-  );
+  return <h2 className={`title ${isFormValid === false && "title__error"}`}>{children}</h2>;
 };
 
 export default Title;
