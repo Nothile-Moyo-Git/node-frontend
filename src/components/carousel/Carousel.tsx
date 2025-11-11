@@ -135,7 +135,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
         <Button
           variant="primary"
           onClick={setChosenImageHandler}
-          testId="test-id-carousel-button"
+          testId="test-id-carousel-choose-button"
         >
           Choose this image
         </Button>
