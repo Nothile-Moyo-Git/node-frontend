@@ -26,6 +26,14 @@ beforeEach(() => {
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
   jest.clearAllMocks();
+
+  Object.defineProperty(window, "location", {
+    value: {
+      ...window.location,
+      href: `${process.env.REACT_APP_API_DEV}/post/create`,
+    },
+    writable: true,
+  });
 });
 
 // Cleanup mocks and environment
@@ -142,8 +150,14 @@ describe("Create Post Component", () => {
             PostCreatePostResponse: {
               post: mockPost,
               user: mockUser,
-              status: 200,
-              files: mockFiles,
+              status: 201,
+              success: true,
+              message: "Post created successfully",
+              isContentValid: true,
+              isTitleValid: true,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
             },
           },
         }),
@@ -162,9 +176,81 @@ describe("Create Post Component", () => {
 
     const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
     expect(chooseImageButton).toBeVisible();
-    userEvent.click(chooseImageButton);
 
+    const submitButton = screen.getByTestId("test-id-create-post-button");
+
+    userEvent.click(chooseImageButton);
     userEvent.type(titleInput, "ABC");
     userEvent.type(contentInput, "ABCEDF");
+    userEvent.click(submitButton);
+
+    // Give these time to run as they don't by default
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Post successfully submitted"));
+      expect(window.location.href).toContain("/posts");
+    });
+  });
+
+  it("Should render errors if creation fails from the backend", async () => {
+    // Mock the api request for the carousel
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 421,
+              success: false,
+              message: "Post creation unsuccessful",
+              isContentValid: false,
+              isTitleValid: false,
+              isFileValid: false,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+
+    const titleLabel = screen.getByTestId("test-id-create-post-title-label");
+    const contentLabel = screen.getByTestId("test-id-create-post-content-label");
+
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
+    expect(chooseImageButton).toBeVisible();
+
+    const submitButton = screen.getByTestId("test-id-create-post-button");
+
+    userEvent.click(chooseImageButton);
+    userEvent.type(titleInput, "ABC");
+    userEvent.type(contentInput, "ABCEDF");
+    userEvent.click(submitButton);
+
+    expect(titleLabel).toHaveTextContent("Error: Title must be longer than 3 characters and less than 100");
+    expect(contentLabel).toHaveTextContent(
+      "Error: Content must be longer than 6 characters and less than 600 characters",
+    );
   });
 });
