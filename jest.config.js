@@ -15,8 +15,7 @@ module.exports = {
     "^.+\\.tsx?$": ["ts-jest", { useESM: true }], // ts-jest for TS/TSX files
     "^.+\\.js$": "babel-jest", // babel-jest for JS files including ESM modules
     "^.+\\.mjs$": "babel-jest",
-    "\\.(jpg|jpeg|png|gif|webp|svg)$":
-      "<rootDir>/src/test-utils/mocks/fileMock.js",
+    "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/test-utils/mocks/fileMock.js",
   },
   globals: {
     "ts-jest": {
