@@ -12,9 +12,10 @@ import "@testing-library/jest-dom";
 import "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 import { mockContext } from "./test-utils/mocks/objects";
+import { createFetchResponse } from "./test-utils/methods/methods";
 
 // Component imports, we do this here
-import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
+import { renderWithAct, renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 import { generateUploadDate } from "./util/util";
 import { mockUser } from "./test-utils/mocks/objects";
 import App from "./App";
@@ -114,5 +115,39 @@ describe("App Component Tests", () => {
       expect(loadingSpinner).not.toBeInTheDocument();
       expect(userText).toBeInTheDocument();
     });
+  });
+
+  it("Handles a failed authentication request", async () => {
+    // Mock a successful request which fails to show user data and isntead shows the error modal
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostUserDetailsResponse: {
+              sessionCreated: mockCreationDate,
+              sessionExpires: mockExpiryDate,
+              user: mockUser,
+              success: false,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            checkCreateSessionResponse: {
+              success: false,
+              status: 500,
+              message: "Error: Request failed",
+            },
+          },
+        }),
+      );
+
+    renderWithAct(<App />, { route: "/" }, mockContext);
+
+    const appComponent = screen.getByTestId("test-id-app-component");
+    expect(appComponent).toMatchSnapshot();
   });
 });
