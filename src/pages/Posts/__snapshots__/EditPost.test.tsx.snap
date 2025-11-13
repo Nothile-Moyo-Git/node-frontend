@@ -154,7 +154,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
         >
           <button
             class="button button__primary"
-            data-testid="test-id-carousel-button"
+            data-testid="test-id-carousel-choose-button"
             type="submit"
           >
             Choose this image

@@ -209,7 +209,7 @@ describe("Create Post Component", () => {
         createFetchResponse({
           data: {
             PostCreatePostResponse: {
-              post: mockPost,
+              post: null,
               user: mockUser,
               status: 421,
               success: false,
@@ -248,9 +248,11 @@ describe("Create Post Component", () => {
     userEvent.type(contentInput, "ABCEDF");
     userEvent.click(submitButton);
 
-    expect(titleLabel).toHaveTextContent("Error: Title must be longer than 3 characters and less than 100");
-    expect(contentLabel).toHaveTextContent(
-      "Error: Content must be longer than 6 characters and less than 600 characters",
-    );
+    await waitFor(() => {
+      expect(titleLabel).toHaveTextContent("Error: Title must be longer than 3 characters and less than 100");
+      expect(contentLabel).toHaveTextContent(
+        "Error: Content must be longer than 6 characters and less than 600 characters",
+      );
+    });
   });
 });
