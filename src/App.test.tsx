@@ -46,9 +46,13 @@ describe("App Component Tests", () => {
   });
 
   it("Should show loading spinner", async () => {
-    renderWithRouter(<App />);
+    // Make the request never resolve so the loading spinner keeps spinning
+    global.fetch = jest.fn(() => new Promise(() => {}));
 
-    const loadingIndicator = screen.getByTestId("test-id-loading-spinner");
+    // Pass the context through so we can handle authentication requests
+    renderWithContext(<App />, { route: "/" }, mockContext);
+
+    const loadingIndicator = await screen.findByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
   });
 
@@ -133,17 +137,19 @@ describe("App Component Tests", () => {
           },
         }),
       )
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            checkCreateSessionResponse: {
-              success: false,
-              status: 500,
-              message: "Error: Request failed",
-            },
-          },
-        }),
-      );
+      .mockRejectedValueOnce(new Error("Network error"));
+
+    // .mockResolvedValueOnce(
+    //   createFetchResponse({
+    //     data: {
+    //       checkCreateSessionResponse: {
+    //         success: false,
+    //         status: 500,
+    //         message: "Error: Request failed",
+    //       },
+    //     },
+    //   }),
+    // );
 
     renderWithAct(<App />, { route: "/" }, mockContext);
 
