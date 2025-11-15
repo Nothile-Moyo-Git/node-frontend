@@ -72,7 +72,6 @@ const App: FC = () => {
       setUser(user);
       setSessionExpiryDate(sessionExpires);
       setSessionCreationDate(sessionCreated);
-      setIsLoading(false);
     };
 
     const fetchAuthentication = async () => {
@@ -84,12 +83,14 @@ const App: FC = () => {
         }
 
         if (appContextInstance?.userAuthenticated && appContextInstance.userId && appContextInstance.token) {
-          checkSessionValidation(appContextInstance.userId, appContextInstance.token, appContextInstance.baseUrl);
+          await checkSessionValidation(appContextInstance.userId, appContextInstance.token, appContextInstance.baseUrl);
         }
       } catch (error) {
         console.log("Error: User could not be validated");
         console.error(error);
         // We have a response so we're not loading data anymore
+        setLoadingError(true);
+      } finally {
         setIsLoading(false);
       }
 
