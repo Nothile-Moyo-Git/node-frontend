@@ -15,7 +15,7 @@ import { mockContext } from "./test-utils/mocks/objects";
 import { createFetchResponse } from "./test-utils/methods/methods";
 
 // Component imports, we do this here
-import { renderWithAct, renderWithContext, renderWithRouter } from "./test-utils/testRouter";
+import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 import { generateUploadDate } from "./util/util";
 import { mockUser } from "./test-utils/mocks/objects";
 import App from "./App";
@@ -123,37 +123,38 @@ describe("App Component Tests", () => {
 
   it("Handles a failed authentication request", async () => {
     // Mock a successful request which fails to show user data and isntead shows the error modal
-    global.fetch = jest
-      .fn()
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            PostUserDetailsResponse: {
-              sessionCreated: mockCreationDate,
-              sessionExpires: mockExpiryDate,
-              user: mockUser,
-              success: false,
-            },
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: false,
           },
-        }),
-      )
-      .mockRejectedValueOnce(new Error("Network error"));
+        },
+      }),
+    );
 
-    // .mockResolvedValueOnce(
-    //   createFetchResponse({
-    //     data: {
-    //       checkCreateSessionResponse: {
-    //         success: false,
-    //         status: 500,
-    //         message: "Error: Request failed",
-    //       },
-    //     },
-    //   }),
-    // );
+    mockContext.validateAuthentication = jest.fn(() => {
+      throw new Error("Auth failed");
+    });
 
-    renderWithAct(<App />, { route: "/" }, mockContext);
+    renderWithContext(<App />, { route: "/" }, mockContext);
 
-    const appComponent = screen.getByTestId("test-id-app-component");
-    expect(appComponent).toMatchSnapshot();
+    await waitFor(() => {
+      const errorModal = screen.getByTestId("test-id-error-modal");
+      expect(errorModal).toBeVisible();
+    });
   });
+
+  /* it("Redirects to login if user is not authenticated", async () => {
+    mockContext.userAuthenticated = false;
+
+    renderWithContext(<App />, { route: "/" }, mockContext);
+
+    await waitFor(() => {
+      expect(mockContext.navigate).toHaveBeenCalledWith("/login");
+    });
+  }); */
 });

@@ -32,7 +32,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
-    "test": "jest --clearCache && jest --updateSnapshot --verbose --coverage",
+    "test": "jest --clearCache && jest --updateSnapshot --verbose --silent",
+    "test:logs": "jest --clearCache && jest --updateSnapshot --verbose --coverage",
     "eject": "react-scripts eject",
     "lint": "npx eslint src",
     "lint:fix": "npx eslint src --fix"

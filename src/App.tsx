@@ -86,10 +86,11 @@ const App: FC = () => {
           await checkSessionValidation(appContextInstance.userId, appContextInstance.token, appContextInstance.baseUrl);
         }
       } catch (error) {
-        console.log("Error: User could not be validated");
-        console.error(error);
+        // console.error(error);
         // We have a response so we're not loading data anymore
-        setLoadingError(true);
+        if (error) {
+          setLoadingError(true);
+        }
       } finally {
         setIsLoading(false);
       }
