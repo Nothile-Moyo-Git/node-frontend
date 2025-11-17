@@ -16,7 +16,7 @@ import Label from "../../components/form/Label";
 import Input from "../../components/form/Input";
 import Button from "../../components/button/Button";
 import Title from "../../components/form/Title";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export const LoginPage: FC = () => {
   // redirect using the navigate hook and not redirect

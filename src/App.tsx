@@ -9,7 +9,7 @@ import LoadingSpinner from "./components/loader/LoadingSpinner";
 import { BASENAME, checkSessionValidation } from "./util/util";
 import "./App.scss";
 import { User } from "./@types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import ErrorModal from "./components/modals/variants/ErrorModal";
 
 const App: FC = () => {

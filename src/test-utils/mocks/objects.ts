@@ -30,12 +30,13 @@ export const mockContext: ContextProps = {
 
 export const mockFailedContext: ContextProps = {
   baseUrl: process.env.API_URL_DEV ?? "http://localhost:4000",
-  checkAuthentication: () => false,
+  checkAuthentication: () => true,
+  expiresIn: "2025-11-28T23:12:15.895Z",
   logoutUser: () => {},
   token: "",
-  userId: "",
+  userId: "12345-nothile-id",
   userAuthenticated: false,
-  validateAuthentication: () => false,
+  validateAuthentication: () => {},
 };
 
 // Mocking the individual post
