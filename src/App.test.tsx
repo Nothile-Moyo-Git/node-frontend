@@ -7,6 +7,7 @@
 
 import { screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import * as router from "react-router";
 
 // Importing mocks to be used for testing
 import "./test-utils/setupTestMocks";
@@ -22,11 +23,13 @@ import App from "./App";
 
 // Two weeks after original expiry date
 const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
-
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
+
+const navigate = jest.fn();
 
 beforeEach(() => {
   setMockAuthStorage();
+  jest.spyOn(router, "useNavigate").mockReturnValue(navigate);
 });
 
 // Cleanup mocks and environment
@@ -148,13 +151,16 @@ describe("App Component Tests", () => {
     });
   });
 
-  /* it("Redirects to login if user is not authenticated", async () => {
-    mockContext.userAuthenticated = false;
+  it("Redirects to login if user is not authenticated", async () => {
+    const context = {
+      ...mockContext,
+      userAuthenticated: false,
+    };
 
-    renderWithContext(<App />, { route: "/" }, mockContext);
+    renderWithContext(<App />, { route: "/" }, context);
 
     await waitFor(() => {
-      expect(mockContext.navigate).toHaveBeenCalledWith("/login");
+      expect(navigate).toHaveBeenCalledWith("/login");
     });
-  }); */
+  });
 });

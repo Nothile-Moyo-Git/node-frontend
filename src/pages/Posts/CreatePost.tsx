@@ -10,7 +10,7 @@
 
 import React, { FC, FormEvent, useContext, useEffect, useState, useRef } from "react";
 import { AppContext } from "../../context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { BASENAME } from "../../util/util";
 import Form from "../../components/form/Form";
 import Title from "../../components/form/Title";

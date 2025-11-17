@@ -10,7 +10,7 @@ import "./Signup.scss";
 
 import { FC, useState, useContext, useEffect, useRef, FormEvent } from "react";
 import { AppContext } from "../../context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { BASENAME } from "../../util/util";
 
 import Button from "../../components/button/Button";
