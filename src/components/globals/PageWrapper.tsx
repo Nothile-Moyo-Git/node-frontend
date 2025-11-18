@@ -11,7 +11,7 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { FC, useState, ReactNode, useEffect, useContext } from "react";
 import { AppContext } from "../../context/AppContext";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import Menu from "../menu/Menu";
 import "./PageWrapper.scss";
 import { BASENAME, doesUserExist } from "../../util/util";

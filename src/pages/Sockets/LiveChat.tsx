@@ -16,7 +16,7 @@ import Field from "../../components/form/Field";
 import Button from "../../components/button/Button";
 import { AppContext } from "../../context/AppContext";
 import { User } from "../../@types";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { BASENAME } from "../../util/util";
 import TextArea from "../../components/form/TextArea";
 
