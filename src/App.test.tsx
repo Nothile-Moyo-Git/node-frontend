@@ -29,10 +29,11 @@ jest.mock("react-router-dom", () => ({
 // Two weeks after original expiry date
 const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
-const mockNavigate = jest.fn();
+let mockNavigate = jest.fn();
 
 beforeEach(() => {
   setMockAuthStorage();
+  mockNavigate = jest.fn();
   (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 });
 
@@ -159,6 +160,78 @@ describe("App Component Tests", () => {
     const context = {
       ...mockContext,
       userAuthenticated: false,
+    };
+
+    renderWithContext(<App />, { route: "/" }, context);
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/login");
+    });
+  });
+});
+
+// These are the extra tests simply to meet code coverage standards as an experiment
+// This won't be repeated across other tests and it doesn't serve any purpose other than the feel good feeling
+describe("App Component Tests - Coverage Tests", () => {
+  it("Does NOT call checkSessionValidation if user has no token", async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: true,
+          },
+        },
+      }),
+    );
+
+    const context = {
+      ...mockContext,
+      userId: "123",
+      token: undefined,
+    };
+
+    renderWithContext(<App />, { route: "/" }, context);
+
+    await waitFor(() => {
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+  });
+
+  it("Skips both API calls if userAuthenticated is true but no userId", async () => {
+    const context = {
+      ...mockContext,
+      userAuthenticated: true,
+      userId: undefined,
+    };
+
+    renderWithContext(<App />, { route: "/" }, context);
+
+    await waitFor(() => {
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+  });
+
+  it("Does NOT set loadingError if error is falsy", async () => {
+    mockContext.validateAuthentication = jest.fn(() => {
+      throw null;
+    });
+
+    renderWithContext(<App />, { route: "/" }, mockContext);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("test-id-error-modal")).toBeNull();
+    });
+  });
+
+  it("Redirects to login if token exists but user is not authenticated", async () => {
+    const context = {
+      ...mockContext,
+      userAuthenticated: false,
+      token: "abc123",
+      userId: "123",
     };
 
     renderWithContext(<App />, { route: "/" }, context);
