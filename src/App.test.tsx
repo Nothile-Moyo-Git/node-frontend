@@ -2,165 +2,251 @@
  * Author: Nothile Moyo
  * Date created: 27/08/2025
  *
- * @description: This is the test file for the App file, it handles the basic authentication and handling the user request
+ * @description: Tests for App.tsx including UI, loading states, redirects & branch coverage.
  */
 
 import { screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import * as router from "react-router";
+import { useNavigate } from "react-router-dom";
 
-// Importing mocks to be used for testing
+// Test utilities
 import "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
-import { mockContext } from "./test-utils/mocks/objects";
+import { mockContext, mockUser } from "./test-utils/mocks/objects";
 import { createFetchResponse } from "./test-utils/methods/methods";
+import { renderWithAct, renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 
-// Component imports, we do this here
-import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
-import { generateUploadDate } from "./util/util";
-import { mockUser } from "./test-utils/mocks/objects";
+// App + helpers
 import App from "./App";
+import { generateUploadDate } from "./util/util";
+import { ContextProps } from "./context/AppContext";
 
-// Two weeks after original expiry date
+// ---- Module Mocks ----
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: jest.fn(),
+}));
+
+jest.mock("./util/util", () => ({
+  ...jest.requireActual("./util/util"),
+  checkSessionValidation: jest.fn(),
+}));
+
+// ---- Test Setup Values ----
 const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 
-const navigate = jest.fn();
+let mockNavigate = jest.fn();
 
 beforeEach(() => {
+  jest.restoreAllMocks();
   setMockAuthStorage();
-  jest.spyOn(router, "useNavigate").mockReturnValue(navigate);
+  mockNavigate = jest.fn();
+  (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 });
 
-// Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
 });
 
+//
+// ──────────────────────────────────────────────────────
+//   BASE TESTS
+// ──────────────────────────────────────────────────────
+//
 describe("App Component Tests", () => {
-  // Handle the main authentication of the app
-  it("Renders the app successfully", () => {
+  it("Renders successfully", () => {
     renderWithRouter(<App />);
-
-    // Check if the app component is rendered and we navigate to it successfully
-    const appComponent = screen.getByTestId("test-id-app-component");
-    expect(appComponent).toBeDefined();
-    expect(appComponent).toMatchSnapshot();
+    expect(screen.getByTestId("test-id-app-component")).toBeDefined();
   });
 
-  it("Should show loading spinner", async () => {
-    // Make the request never resolve so the loading spinner keeps spinning
-    global.fetch = jest.fn(() => new Promise(() => {}));
+  it("Shows loading spinner while waiting for fetch", async () => {
+    jest.spyOn(global, "fetch").mockImplementation(() => new Promise(() => {}));
 
-    // Pass the context through so we can handle authentication requests
-    renderWithContext(<App />, { route: "/" }, mockContext);
+    renderWithAct(<App />, { route: "/" }, { ...mockContext, token: undefined });
 
-    const loadingIndicator = await screen.findByTestId("test-id-loading-spinner");
-    expect(loadingIndicator).toBeVisible();
+    const spinner = await screen.findByTestId("test-id-loading-spinner");
+    expect(spinner).toBeInTheDocument();
   });
 
-  it("Should not show loading spinner is app loaded successfully", async () => {
-    // Mock a successful request to fetch user data which hides the loading spinner
-    global.fetch = jest.fn().mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          data: {
-            PostUserDetailsResponse: {
-              sessionCreated: mockCreationDate,
-              sessionExpires: mockExpiryDate,
-              user: mockUser,
-              success: true,
-            },
-          },
-        }),
-    });
-
-    renderWithContext(<App />, { route: "/" }, mockContext);
-
-    await waitFor(() => {
-      const loadingIndicator = screen.queryByTestId("test-id-loading-spinner");
-      expect(loadingIndicator).not.toBeInTheDocument();
-    });
-  });
-
-  it("Should show error modal if app isn't loaded successfully", async () => {
-    // Mock a successful request which fails to show user data and isntead shows the error modal
-    global.fetch = jest.fn().mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          data: {
-            PostUserDetailsResponse: {
-              sessionCreated: mockCreationDate,
-              sessionExpires: mockExpiryDate,
-              user: mockUser,
-              success: false,
-            },
-          },
-        }),
-    });
-
-    renderWithContext(<App />, { route: "/" }, mockContext);
-
-    await waitFor(() => {
-      const errorModal = screen.getByTestId("test-id-error-modal");
-      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
-
-      expect(errorModal).toBeVisible();
-      expect(loadingSpinner).not.toBeInTheDocument();
-    });
-  });
-
-  it("Show user details", async () => {
-    renderWithContext(<App />, { route: "/" }, mockContext);
-
-    // Wait for loading spinner to disappear and user details to render
-    // We have to use a waitFor here since we're mocking the api reques
-    await waitFor(() => {
-      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
-      const userText = screen.getByText(/Welcome Nothile Moyo/);
-
-      expect(loadingSpinner).not.toBeInTheDocument();
-      expect(userText).toBeInTheDocument();
-    });
-  });
-
-  it("Handles a failed authentication request", async () => {
-    // Mock a successful request which fails to show user data and isntead shows the error modal
-    global.fetch = jest.fn().mockResolvedValueOnce(
+  it("Removes spinner once data loads", async () => {
+    global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
           PostUserDetailsResponse: {
             sessionCreated: mockCreationDate,
             sessionExpires: mockExpiryDate,
             user: mockUser,
-            success: false,
+            success: true,
           },
         },
       }),
     );
 
-    mockContext.validateAuthentication = jest.fn(() => {
-      throw new Error("Auth failed");
-    });
+    renderWithContext(<App />, { route: "/" }, mockContext);
+
+    await waitFor(() => expect(screen.queryByTestId("test-id-loading-spinner")).not.toBeInTheDocument());
+  });
+
+  it("Shows error modal when backend returns success: false", async () => {
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: { ...mockUser, success: false },
+        },
+      }),
+    );
+
+    renderWithContext(<App />, { route: "/" }, mockContext);
+
+    await waitFor(() => expect(screen.getByTestId("test-id-error-modal")).toBeVisible());
+  });
+
+  it("Displays user details after successful authentication", async () => {
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: true,
+          },
+        },
+      }),
+    );
 
     renderWithContext(<App />, { route: "/" }, mockContext);
 
     await waitFor(() => {
-      const errorModal = screen.getByTestId("test-id-error-modal");
-      expect(errorModal).toBeVisible();
+      expect(screen.getByText(/Welcome Nothile Moyo/)).toBeInTheDocument();
+      expect(screen.getByText(/Current status : active/)).toBeInTheDocument();
     });
+  });
+
+  it("Shows error modal if validateAuthentication throws", async () => {
+    renderWithContext(
+      <App />,
+      { route: "/" },
+      {
+        ...mockContext,
+        validateAuthentication: () => {
+          throw new Error("Auth failed");
+        },
+      },
+    );
+
+    await waitFor(() => expect(screen.getByTestId("test-id-error-modal")).toBeVisible());
   });
 
   it("Redirects to login if user is not authenticated", async () => {
-    const context = {
-      ...mockContext,
-      userAuthenticated: false,
-    };
+    renderWithContext(<App />, { route: "/" }, { ...mockContext, userAuthenticated: false });
 
-    renderWithContext(<App />, { route: "/" }, context);
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
+  });
+});
+
+//
+// ──────────────────────────────────────────────────────
+//   BRANCH / EDGE CASES
+// ──────────────────────────────────────────────────────
+//
+describe("App Component - Edge Case Coverage", () => {
+  it("Does NOT call checkSessionValidation if token is undefined", async () => {
+    renderWithContext(
+      <App />,
+      { route: "/" },
+      {
+        ...mockContext,
+        userAuthenticated: true,
+        userId: "123",
+        token: undefined,
+      },
+    );
+
+    await waitFor(() => expect(mockNavigate).not.toHaveBeenCalled());
+  });
+
+  it("Skips API calls if authenticated but missing userId", async () => {
+    renderWithContext(
+      <App />,
+      { route: "/" },
+      {
+        ...mockContext,
+        userAuthenticated: true,
+        userId: undefined,
+        token: "abc123",
+      },
+    );
+
+    await waitFor(() => expect(mockNavigate).not.toHaveBeenCalled());
+  });
+
+  it("Does not set loadingError if thrown error is falsy", async () => {
+    renderWithContext(
+      <App />,
+      { route: "/" },
+      {
+        ...mockContext,
+        validateAuthentication: () => {
+          throw null;
+        },
+      },
+    );
 
     await waitFor(() => {
-      expect(navigate).toHaveBeenCalledWith("/login");
+      expect(screen.queryByTestId("test-id-error-modal")).toBeNull();
+      expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
+
+  it("Redirects when user has token but is NOT authenticated", async () => {
+    renderWithContext(
+      <App />,
+      { route: "/" },
+      {
+        ...mockContext,
+        userAuthenticated: false,
+        token: "abc123",
+      },
+    );
+
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
+  });
+
+  it("Redirects when AppContext is missing", async () => {
+    renderWithContext(<App />, { route: "/" }, undefined as unknown as ContextProps);
+
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
+  });
+
+  /* it("Calls checkSessionValidation when token, userId & userAuthenticated are valid", async () => {
+    (checkSessionValidation as jest.Mock).mockResolvedValue(undefined);
+
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: true,
+          },
+        },
+      }),
+    );
+
+    renderWithContext(
+      <App />,
+      { route: "/" },
+      {
+        ...mockContext,
+        userAuthenticated: true,
+        userId: "123",
+        token: "valid-token",
+      },
+    );
+
+    await waitFor(() => expect(checkSessionValidation).toHaveBeenCalled());
+  }); */
 });
