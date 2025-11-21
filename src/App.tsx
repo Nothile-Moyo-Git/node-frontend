@@ -79,10 +79,12 @@ const App: FC = () => {
         appContextInstance?.validateAuthentication();
 
         if (appContextInstance?.userAuthenticated && appContextInstance.userId) {
+          console.log("Details called");
           getUserDetails(appContextInstance.userId);
         }
 
         if (appContextInstance?.userAuthenticated && appContextInstance.userId && appContextInstance.token) {
+          console.log("Validation called");
           await checkSessionValidation(appContextInstance.userId, appContextInstance.token, appContextInstance.baseUrl);
         }
       } catch (error) {
@@ -92,6 +94,7 @@ const App: FC = () => {
           setLoadingError(true);
         }
       } finally {
+        console.log("Loading finished: ");
         setIsLoading(false);
       }
 
