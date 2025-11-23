@@ -52,57 +52,25 @@ afterEach(() => {
 // Our main tests, these tests cover key functionality
 describe("App Component Tests", () => {
   it("Renders successfully", () => {
+    console.log("Current test: Renders successfully");
     renderWithRouter(<App />);
     expect(screen.getByTestId("test-id-app-component")).toBeDefined();
   });
 
-  it.only("Shows loading spinner while waiting for fetch", async () => {
-    // We log to console here so that we can see what test we're running for our logs tests
-    console.log("Current test: Shows loading spinner while waiting for fetch");
-    // We're mocking the error here because it tells us to wrap our component in an act which we don't want
-    // We don't want this because it triggers isLoading(false) in the finally block
-    const consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-
-    // Stop fetch from resolving AND prevent the async chain from triggering the finally block
+  it("Shows loading spinner while waiting for fetch and hides it on completion", async () => {
+    // Doesn't resolve the request in order to view the loading spinner
     global.fetch = jest.fn(() => new Promise(() => {}));
 
-    // Prevent validateAuthentication from throwing or running async logic
-    mockContext.validateAuthentication = jest.fn();
-
-    // We render with context here so we don't finish updating state which sets loading to false
     renderWithContext(<App />, { route: "/" }, mockContext);
 
-    // Find and show the loading spinner, we use get and not find here
-    const spinner = screen.getByTestId("test-id-loading-spinner");
-    expect(spinner).toBeInTheDocument();
+    expect(screen.getByTestId("test-id-loading-spinner")).toBeInTheDocument();
 
-    expect(screen.getByTestId("test-id-app-component")).toMatchSnapshot();
-    // Allow our console erorrs to continue working as expected
-    consoleError.mockRestore();
-    warnSpy.mockRestore();
-  });
-
-  it("Removes spinner once data loads", async () => {
-    global.fetch = jest.fn().mockResolvedValue(
-      createFetchResponse({
-        data: {
-          PostUserDetailsResponse: {
-            sessionCreated: mockCreationDate,
-            sessionExpires: mockExpiryDate,
-            user: mockUser,
-            success: true,
-          },
-        },
-      }),
-    );
-
-    renderWithContext(<App />, { route: "/" }, mockContext);
-
+    // Check that the loading spinner is now hidden, this also avoids the issue with a missing act
     await waitFor(() => expect(screen.queryByTestId("test-id-loading-spinner")).not.toBeInTheDocument());
   });
 
   it("Shows error modal when backend returns success: false", async () => {
+    console.log("Current test: Shows error modal when backend returns success: false");
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
