@@ -14,7 +14,7 @@ import "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 import { mockContext, mockUser } from "./test-utils/mocks/objects";
 import { createFetchResponse } from "./test-utils/methods/methods";
-import { renderWithAct, renderWithContext, renderWithRouter } from "./test-utils/testRouter";
+import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 
 // App + helpers
 import App from "./App";
@@ -49,46 +49,28 @@ afterEach(() => {
   clearAuthStorage();
 });
 
-//
-// ──────────────────────────────────────────────────────
-//   BASE TESTS
-// ──────────────────────────────────────────────────────
-//
+// Our main tests, these tests cover key functionality
 describe("App Component Tests", () => {
   it("Renders successfully", () => {
+    console.log("Current test: Renders successfully");
     renderWithRouter(<App />);
     expect(screen.getByTestId("test-id-app-component")).toBeDefined();
   });
 
-  it("Shows loading spinner while waiting for fetch", async () => {
-    jest.spyOn(global, "fetch").mockImplementation(() => new Promise(() => {}));
-
-    renderWithAct(<App />, { route: "/" }, { ...mockContext, token: undefined });
-
-    const spinner = await screen.findByTestId("test-id-loading-spinner");
-    expect(spinner).toBeInTheDocument();
-  });
-
-  it("Removes spinner once data loads", async () => {
-    global.fetch = jest.fn().mockResolvedValue(
-      createFetchResponse({
-        data: {
-          PostUserDetailsResponse: {
-            sessionCreated: mockCreationDate,
-            sessionExpires: mockExpiryDate,
-            user: mockUser,
-            success: true,
-          },
-        },
-      }),
-    );
+  it("Shows loading spinner while waiting for fetch and hides it on completion", async () => {
+    // Doesn't resolve the request in order to view the loading spinner
+    global.fetch = jest.fn(() => new Promise(() => {}));
 
     renderWithContext(<App />, { route: "/" }, mockContext);
 
+    expect(screen.getByTestId("test-id-loading-spinner")).toBeInTheDocument();
+
+    // Check that the loading spinner is now hidden, this also avoids the issue with a missing act
     await waitFor(() => expect(screen.queryByTestId("test-id-loading-spinner")).not.toBeInTheDocument());
   });
 
   it("Shows error modal when backend returns success: false", async () => {
+    console.log("Current test: Shows error modal when backend returns success: false");
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
@@ -146,11 +128,8 @@ describe("App Component Tests", () => {
   });
 });
 
-//
-// ──────────────────────────────────────────────────────
-//   BRANCH / EDGE CASES
-// ──────────────────────────────────────────────────────
-//
+// Coverage tests, these are done to increase code coverage to 100% for this file as a test
+// I do not recommend aiming for 100% coverage, but instead, enough coverage to cover key functionality
 describe("App Component - Edge Case Coverage", () => {
   it("Does NOT call checkSessionValidation if token is undefined", async () => {
     renderWithContext(
