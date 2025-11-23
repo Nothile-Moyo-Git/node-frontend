@@ -14,7 +14,7 @@ import "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 import { mockContext, mockUser } from "./test-utils/mocks/objects";
 import { createFetchResponse } from "./test-utils/methods/methods";
-import { renderWithAct, renderWithContext, renderWithRouter } from "./test-utils/testRouter";
+import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 
 // App + helpers
 import App from "./App";
@@ -49,24 +49,38 @@ afterEach(() => {
   clearAuthStorage();
 });
 
-//
-// ──────────────────────────────────────────────────────
-//   BASE TESTS
-// ──────────────────────────────────────────────────────
-//
+// Our main tests, these tests cover key functionality
 describe("App Component Tests", () => {
   it("Renders successfully", () => {
     renderWithRouter(<App />);
     expect(screen.getByTestId("test-id-app-component")).toBeDefined();
   });
 
-  it("Shows loading spinner while waiting for fetch", async () => {
-    jest.spyOn(global, "fetch").mockImplementation(() => new Promise(() => {}));
+  it.only("Shows loading spinner while waiting for fetch", async () => {
+    // We log to console here so that we can see what test we're running for our logs tests
+    console.log("Current test: Shows loading spinner while waiting for fetch");
+    // We're mocking the error here because it tells us to wrap our component in an act which we don't want
+    // We don't want this because it triggers isLoading(false) in the finally block
+    const consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
 
-    renderWithAct(<App />, { route: "/" }, { ...mockContext, token: undefined });
+    // Stop fetch from resolving AND prevent the async chain from triggering the finally block
+    global.fetch = jest.fn(() => new Promise(() => {}));
 
-    const spinner = await screen.findByTestId("test-id-loading-spinner");
+    // Prevent validateAuthentication from throwing or running async logic
+    mockContext.validateAuthentication = jest.fn();
+
+    // We render with context here so we don't finish updating state which sets loading to false
+    renderWithContext(<App />, { route: "/" }, mockContext);
+
+    // Find and show the loading spinner, we use get and not find here
+    const spinner = screen.getByTestId("test-id-loading-spinner");
     expect(spinner).toBeInTheDocument();
+
+    expect(screen.getByTestId("test-id-app-component")).toMatchSnapshot();
+    // Allow our console erorrs to continue working as expected
+    consoleError.mockRestore();
+    warnSpy.mockRestore();
   });
 
   it("Removes spinner once data loads", async () => {
@@ -146,11 +160,8 @@ describe("App Component Tests", () => {
   });
 });
 
-//
-// ──────────────────────────────────────────────────────
-//   BRANCH / EDGE CASES
-// ──────────────────────────────────────────────────────
-//
+// Coverage tests, these are done to increase code coverage to 100% for this file as a test
+// I do not recommend aiming for 100% coverage, but instead, enough coverage to cover key functionality
 describe("App Component - Edge Case Coverage", () => {
   it("Does NOT call checkSessionValidation if token is undefined", async () => {
     renderWithContext(

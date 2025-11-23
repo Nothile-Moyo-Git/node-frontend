@@ -79,22 +79,22 @@ const App: FC = () => {
         appContextInstance?.validateAuthentication();
 
         if (appContextInstance?.userAuthenticated && appContextInstance.userId) {
-          console.log("Details called");
+          console.log("Get user details called");
           getUserDetails(appContextInstance.userId);
         }
 
         if (appContextInstance?.userAuthenticated && appContextInstance.userId && appContextInstance.token) {
-          console.log("Validation called");
+          console.log("Check session validation");
           await checkSessionValidation(appContextInstance.userId, appContextInstance.token, appContextInstance.baseUrl);
         }
       } catch (error) {
-        // console.error(error);
+        console.error(error);
         // We have a response so we're not loading data anymore
         if (error) {
           setLoadingError(true);
         }
       } finally {
-        console.log("Loading finished: ");
+        console.log("Loading finished");
         setIsLoading(false);
       }
 
