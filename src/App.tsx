@@ -3,7 +3,7 @@
  * Author : Nothile Moyo
  */
 
-import React, { FC, useState, useEffect, useContext } from "react";
+import { FC, useState, useEffect, useContext } from "react";
 import { AppContext } from "./context/AppContext";
 import LoadingSpinner from "./components/loader/LoadingSpinner";
 import { BASENAME, checkSessionValidation } from "./util/util";
@@ -79,12 +79,10 @@ const App: FC = () => {
         appContextInstance?.validateAuthentication();
 
         if (appContextInstance?.userAuthenticated && appContextInstance.userId) {
-          console.log("Get user details called");
-          getUserDetails(appContextInstance.userId);
+          await getUserDetails(appContextInstance.userId);
         }
 
         if (appContextInstance?.userAuthenticated && appContextInstance.userId && appContextInstance.token) {
-          console.log("Check session validation");
           await checkSessionValidation(appContextInstance.userId, appContextInstance.token, appContextInstance.baseUrl);
         }
       } catch (error) {
@@ -94,7 +92,6 @@ const App: FC = () => {
           setLoadingError(true);
         }
       } finally {
-        console.log("Loading finished");
         setIsLoading(false);
       }
 
