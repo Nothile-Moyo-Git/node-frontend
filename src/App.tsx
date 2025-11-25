@@ -77,6 +77,7 @@ const App: FC = () => {
     const fetchAuthentication = async () => {
       try {
         appContextInstance?.validateAuthentication();
+        console.log("Is user authenticated: ", appContextInstance?.userAuthenticated);
 
         if (appContextInstance?.userAuthenticated && appContextInstance.userId) {
           await getUserDetails(appContextInstance.userId);

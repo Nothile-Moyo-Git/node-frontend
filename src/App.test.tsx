@@ -18,7 +18,7 @@ import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 
 // App + helpers
 import App from "./App";
-import { generateUploadDate } from "./util/util";
+import { checkSessionValidation, generateUploadDate } from "./util/util";
 
 // ---- Module Mocks ----
 jest.mock("react-router-dom", () => ({
@@ -137,6 +137,20 @@ describe("App Component Tests", () => {
 describe("App Component - Edge Case Coverage", () => {
   it("Does NOT call checkSessionValidation if token is undefined", async () => {
     console.log("Current test: Does NOT call checkSessionValidation if token is undefined");
+
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: true,
+          },
+        },
+      }),
+    );
+
     renderWithContext(
       <App />,
       { route: "/" },
@@ -149,5 +163,64 @@ describe("App Component - Edge Case Coverage", () => {
     );
 
     await waitFor(() => expect(mockNavigate).not.toHaveBeenCalled());
+  });
+
+  it("Does NOT call getUserDetails if userId is undefined", async () => {
+    console.log("Current test: Does NOT call getUserDetails if token is undefined");
+
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: true,
+          },
+        },
+      }),
+    );
+
+    renderWithContext(
+      <App />,
+      { route: "/" },
+      {
+        ...mockContext,
+        userAuthenticated: true,
+        userId: undefined,
+      },
+    );
+
+    await waitFor(() => expect(mockNavigate).not.toHaveBeenCalled());
+  });
+
+  it("Runs checkSessionValidation even when backend returns success:false", async () => {
+    console.log("Current test: Runs checkSessionValidation even when backend returns success:false");
+    (checkSessionValidation as jest.Mock).mockResolvedValue(undefined);
+
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: false,
+          },
+        },
+      }),
+    );
+
+    renderWithContext(
+      <App />,
+      { route: "/" },
+      { ...mockContext, userAuthenticated: true, userId: "123", token: "abc" },
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("test-id-error-modal")).toBeVisible();
+      expect(checkSessionValidation).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
   });
 });
