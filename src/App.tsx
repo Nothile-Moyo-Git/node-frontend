@@ -18,6 +18,8 @@ const App: FC = () => {
   const navigate = useNavigate();
   const { isLoading, error, user, sessionCreated, sessionExpires } = useUserDetails();
 
+  console.log("isLoading: ", isLoading);
+
   const appContextInstance = useContext(AppContext);
 
   if (!isLoading && !appContextInstance?.userAuthenticated) {
