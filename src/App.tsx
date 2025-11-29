@@ -28,7 +28,6 @@ const App: FC = () => {
 
   return (
     <div data-testid="test-id-app-component">
-      {`isLoading: ${isLoading}`}
       {isLoading && <LoadingSpinner />}
 
       {!isLoading && error && <ErrorModal testId="test-id-error-modal" />}
