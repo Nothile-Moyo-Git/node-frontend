@@ -24,6 +24,7 @@ const App: FC = () => {
   console.log("error: ", error);
   console.log("sessionCreated: ", sessionCreated);
   console.log("sessionExpires: ", sessionExpires);
+  console.log("\n\n");
 
   const appContextInstance = useContext(AppContext);
 

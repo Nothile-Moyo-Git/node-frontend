@@ -14,6 +14,7 @@ import { checkSessionValidation } from "../util/util";
 
 //
 interface UserDetailsInterface {
+  isLoading: boolean;
   error: boolean;
   user: User | null;
   sessionCreated: string;
@@ -40,14 +41,22 @@ const useUserDetails = () => {
   // Get our context from the backend for our session details we get from local storage
   const context = useContext(AppContext);
 
+  const [contentFetched, setContextFetched] = useState<boolean>(false);
+
   // State management for the userDetails hook
   const [userDetails, setUserDetails] = useState<UserDetailsInterface>({
+    isLoading: true,
     error: false,
     user: null,
     sessionCreated: "",
     sessionExpires: "",
   });
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // We do this here because we need the state in our context to update first before we execute the api requests
+  useEffect(() => {
+    context?.validateAuthentication();
+    setContextFetched(true);
+  }, [context]);
 
   useEffect(() => {
     // Get user details if the user is authenticated from the backend
@@ -90,10 +99,11 @@ const useUserDetails = () => {
       const { data } = await response.json();
       return data.PostUserDetailsResponse;
     };
+
     const handleRequest = async () => {
       try {
-        // Get our values from local storage
-        context?.validateAuthentication();
+        console.log("try block");
+        console.log("Context: ", context);
 
         // Get the details from the backend
         if (context?.userAuthenticated && context.userId) {
@@ -119,16 +129,22 @@ const useUserDetails = () => {
         setUserDetails((previousState) => {
           return { ...previousState, error: true };
         });
+        console.log("Catch block");
         console.warn(`useUserDetails caught error: ${error}`);
       } finally {
-        setIsLoading(false);
+        setUserDetails((previousState) => {
+          return { ...previousState, isLoading: false };
+        });
+        console.log("Finally block");
       }
     };
 
-    handleRequest();
-  }, [context]);
+    if (contentFetched === true) {
+      handleRequest();
+    }
+  }, [context, contentFetched]);
 
-  return { ...userDetails, isLoading };
+  return userDetails;
 };
 
 export default useUserDetails;
