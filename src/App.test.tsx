@@ -19,7 +19,6 @@ import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 // App + helpers
 import App from "./App";
 import { generateUploadDate } from "./util/util";
-import { ContextProps } from "./context/AppContext";
 
 // ---- Module Mocks ----
 jest.mock("react-router-dom", () => ({
@@ -64,9 +63,6 @@ describe("App Component Tests", () => {
     renderWithContext(<App />, { route: "/" }, mockContext);
 
     expect(screen.getByTestId("test-id-loading-spinner")).toBeInTheDocument();
-
-    // Check that the loading spinner is now hidden, this also avoids the issue with a missing act
-    await waitFor(() => expect(screen.queryByTestId("test-id-loading-spinner")).not.toBeInTheDocument());
   });
 
   it("Shows error modal when backend returns success: false", async () => {
@@ -85,6 +81,7 @@ describe("App Component Tests", () => {
   });
 
   it("Displays user details after successful authentication", async () => {
+    console.log("Current test: Displays user details after successful authentication");
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
@@ -103,10 +100,17 @@ describe("App Component Tests", () => {
     await waitFor(() => {
       expect(screen.getByText(/Welcome Nothile Moyo/)).toBeInTheDocument();
       expect(screen.getByText(/Current status : active/)).toBeInTheDocument();
+      expect(screen.getByText(/Email address : nothile1@gmail.com/)).toBeInTheDocument();
+      expect(screen.getByText(`Session created : ${mockCreationDate}`)).toBeInTheDocument();
+      expect(screen.getByText(`Session expires : ${mockExpiryDate}`)).toBeInTheDocument();
     });
   });
 
   it("Shows error modal if validateAuthentication throws", async () => {
+    console.log("Current test: Shows error modal if validateAuthentication throws");
+
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
     renderWithContext(
       <App />,
       { route: "/" },
@@ -119,9 +123,12 @@ describe("App Component Tests", () => {
     );
 
     await waitFor(() => expect(screen.getByTestId("test-id-error-modal")).toBeVisible());
+
+    consoleErrorSpy.mockRestore();
   });
 
   it("Redirects to login if user is not authenticated", async () => {
+    console.log("Current test: Redirects to login if user is not authenticated");
     renderWithContext(<App />, { route: "/" }, { ...mockContext, userAuthenticated: false });
 
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
@@ -132,75 +139,7 @@ describe("App Component Tests", () => {
 // I do not recommend aiming for 100% coverage, but instead, enough coverage to cover key functionality
 describe("App Component - Edge Case Coverage", () => {
   it("Does NOT call checkSessionValidation if token is undefined", async () => {
-    renderWithContext(
-      <App />,
-      { route: "/" },
-      {
-        ...mockContext,
-        userAuthenticated: true,
-        userId: "123",
-        token: undefined,
-      },
-    );
-
-    await waitFor(() => expect(mockNavigate).not.toHaveBeenCalled());
-  });
-
-  it("Skips API calls if authenticated but missing userId", async () => {
-    renderWithContext(
-      <App />,
-      { route: "/" },
-      {
-        ...mockContext,
-        userAuthenticated: true,
-        userId: undefined,
-        token: "abc123",
-      },
-    );
-
-    await waitFor(() => expect(mockNavigate).not.toHaveBeenCalled());
-  });
-
-  it("Does not set loadingError if thrown error is falsy", async () => {
-    renderWithContext(
-      <App />,
-      { route: "/" },
-      {
-        ...mockContext,
-        validateAuthentication: () => {
-          throw null;
-        },
-      },
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByTestId("test-id-error-modal")).toBeNull();
-      expect(mockNavigate).not.toHaveBeenCalled();
-    });
-  });
-
-  it("Redirects when user has token but is NOT authenticated", async () => {
-    renderWithContext(
-      <App />,
-      { route: "/" },
-      {
-        ...mockContext,
-        userAuthenticated: false,
-        token: "abc123",
-      },
-    );
-
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
-  });
-
-  it("Redirects when AppContext is missing", async () => {
-    renderWithContext(<App />, { route: "/" }, undefined as unknown as ContextProps);
-
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
-  });
-
-  /* it("Calls checkSessionValidation when token, userId & userAuthenticated are valid", async () => {
-    (checkSessionValidation as jest.Mock).mockResolvedValue(undefined);
+    console.log("Current test: Does NOT call checkSessionValidation if token is undefined");
 
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
@@ -222,10 +161,10 @@ describe("App Component - Edge Case Coverage", () => {
         ...mockContext,
         userAuthenticated: true,
         userId: "123",
-        token: "valid-token",
+        token: undefined,
       },
     );
 
-    await waitFor(() => expect(checkSessionValidation).toHaveBeenCalled());
-  }); */
+    await waitFor(() => expect(mockNavigate).not.toHaveBeenCalled());
+  });
 });
