@@ -14,7 +14,6 @@ import { checkSessionValidation } from "../util/util";
 
 //
 interface UserDetailsInterface {
-  isLoading: boolean;
   error: boolean;
   user: User | null;
   sessionCreated: string;
@@ -43,12 +42,12 @@ const useUserDetails = () => {
 
   // State management for the userDetails hook
   const [userDetails, setUserDetails] = useState<UserDetailsInterface>({
-    isLoading: true,
     error: false,
     user: null,
     sessionCreated: "",
     sessionExpires: "",
   });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // Get user details if the user is authenticated from the backend
@@ -115,23 +114,21 @@ const useUserDetails = () => {
             await checkSessionValidation(context.userId, context.token, context.baseUrl);
           }
         }
-      } catch {
+      } catch (error) {
+        // Set the error so we can render our error modal
         setUserDetails((previousState) => {
           return { ...previousState, error: true };
         });
+        console.warn(`useUserDetails caught error: ${error}`);
       } finally {
-        setTimeout(() => {
-          setUserDetails((previousState) => {
-            return { ...previousState, isLoading: false };
-          });
-        }, 3000);
+        setIsLoading(false);
       }
     };
 
     handleRequest();
   }, [context]);
 
-  return userDetails;
+  return { ...userDetails, isLoading };
 };
 
 export default useUserDetails;
