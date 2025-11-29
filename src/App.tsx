@@ -16,9 +16,7 @@ import useUserDetails from "./hooks/useUserDetails";
 
 const App: FC = () => {
   const navigate = useNavigate();
-  // Pull isLoading from the hook but setting it to true for testing
-  const { error, user, sessionCreated, sessionExpires } = useUserDetails();
-  const isLoading = true;
+  const { isLoading, error, user, sessionCreated, sessionExpires } = useUserDetails();
 
   console.log("isLoading: ", isLoading);
 
@@ -30,6 +28,7 @@ const App: FC = () => {
 
   return (
     <div data-testid="test-id-app-component">
+      {`isLoading: ${isLoading}`}
       {isLoading && <LoadingSpinner />}
 
       {!isLoading && error && <ErrorModal testId="test-id-error-modal" />}
