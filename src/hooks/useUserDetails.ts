@@ -120,9 +120,11 @@ const useUserDetails = () => {
           return { ...previousState, error: true };
         });
       } finally {
-        setUserDetails((previousState) => {
-          return { ...previousState, isLoading: false };
-        });
+        setTimeout(() => {
+          setUserDetails((previousState) => {
+            return { ...previousState, isLoading: false };
+          });
+        }, 3000);
       }
     };
 
