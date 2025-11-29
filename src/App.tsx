@@ -16,7 +16,9 @@ import useUserDetails from "./hooks/useUserDetails";
 
 const App: FC = () => {
   const navigate = useNavigate();
-  const { isLoading, error, user, sessionCreated, sessionExpires } = useUserDetails();
+  // Pull isLoading from the hook but setting it to true for testing
+  const { error, user, sessionCreated, sessionExpires } = useUserDetails();
+  const isLoading = true;
 
   console.log("isLoading: ", isLoading);
 
