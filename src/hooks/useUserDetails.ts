@@ -102,9 +102,6 @@ const useUserDetails = () => {
 
     const handleRequest = async () => {
       try {
-        console.log("try block");
-        console.log("Context: ", context);
-
         // Get the details from the backend
         if (context?.userAuthenticated && context.userId) {
           const { user, success, sessionCreated, sessionExpires } = await getUserDetails();
@@ -129,13 +126,11 @@ const useUserDetails = () => {
         setUserDetails((previousState) => {
           return { ...previousState, error: true };
         });
-        console.log("Catch block");
         console.warn(`useUserDetails caught error: ${error}`);
       } finally {
         setUserDetails((previousState) => {
           return { ...previousState, isLoading: false };
         });
-        console.log("Finally block");
       }
     };
 
