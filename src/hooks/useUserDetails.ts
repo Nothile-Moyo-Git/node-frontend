@@ -54,7 +54,7 @@ const useUserDetails = () => {
 
   // We do this here because we need the state in our context to update first before we execute the api requests
   useEffect(() => {
-    context?.validateAuthentication();
+    context.validateAuthentication();
     setContextFetched(true);
   }, [context]);
 
@@ -63,7 +63,7 @@ const useUserDetails = () => {
     const getUserDetails = async () => {
       // Perform the fetch request using GraphQL in order to get the user details on the main app page
       // Note: Please convert your id to an objectId in the backend
-      const response = await fetch(`${context?.baseUrl}/graphql/auth`, {
+      const response = await fetch(`${context.baseUrl}/graphql/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,8 +89,8 @@ const useUserDetails = () => {
               }
             `,
           variables: {
-            _id: context?.userId ?? "",
-            token: context?.token ?? "",
+            _id: context.userId,
+            token: context.token,
           },
         }),
       });
@@ -103,7 +103,7 @@ const useUserDetails = () => {
     const handleRequest = async () => {
       try {
         // Get the details from the backend
-        if (context?.userAuthenticated && context.userId) {
+        if (context.userAuthenticated && context.userId) {
           const { user, success, sessionCreated, sessionExpires } = await getUserDetails();
 
           if (!success) {
@@ -117,7 +117,7 @@ const useUserDetails = () => {
             return { ...previousState, user, sessionCreated, sessionExpires };
           });
 
-          if (context?.userAuthenticated && context.userId && context.token) {
+          if (context.userAuthenticated && context.userId && context.token) {
             await checkSessionValidation(context.userId, context.token, context.baseUrl);
           }
         }

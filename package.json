@@ -34,6 +34,7 @@
     "build": "react-scripts build",
     "test": "jest --clearCache && jest --updateSnapshot --verbose --silent",
     "test:logs": "jest --clearCache && jest --updateSnapshot --verbose --coverage",
+    "test:logs-single": "jest --clearCache && jest --updateSnapshot --verbose --coverage --runTestsByPath",
     "eject": "react-scripts eject",
     "lint": "npx eslint src",
     "lint:fix": "npx eslint src --fix"

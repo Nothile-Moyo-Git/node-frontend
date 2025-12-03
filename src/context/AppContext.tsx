@@ -29,7 +29,12 @@ interface ComponentProps {
   children?: ReactNode;
 }
 
-export const AppContext = React.createContext<ContextProps | null>(null);
+export const AppContext = React.createContext<ContextProps>({
+  baseUrl: "",
+  validateAuthentication: () => {},
+  checkAuthentication: () => false,
+  logoutUser: () => {},
+});
 
 const AppContextProvider = ({ children }: ComponentProps) => {
   // Get the current environment so that we can get the baseUrl for API requests for dev vs prod
