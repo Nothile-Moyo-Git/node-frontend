@@ -165,7 +165,7 @@ describe("Edit Post Component", () => {
 
     // Make sure we have our edit post
     await waitFor(() => {
-      const carousel = screen.getByTestId("test-id-carousel-button");
+      const carousel = screen.getByTestId("test-id-carousel-choose-button");
       expect(carousel).toBeVisible();
     });
 
@@ -210,7 +210,7 @@ describe("Edit Post Component", () => {
       const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
       expect(loadingSpinner).not.toBeInTheDocument();
 
-      const carousel = screen.getByTestId("test-id-carousel-button");
+      const carousel = screen.getByTestId("test-id-carousel-choose-button");
       expect(carousel).toBeVisible();
     });
 
@@ -300,7 +300,7 @@ describe("Edit Post Component", () => {
       const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
       expect(loadingSpinner).not.toBeInTheDocument();
 
-      const carousel = screen.getByTestId("test-id-carousel-button");
+      const carousel = screen.getByTestId("test-id-carousel-choose-button");
       expect(carousel).toBeVisible();
     });
 

@@ -5,7 +5,7 @@
  * @description: Tests for App.tsx including UI, loading states, redirects & branch coverage.
  */
 
-import { screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +19,8 @@ import { renderWithContext, renderWithRouter } from "./test-utils/testRouter";
 // App + helpers
 import App from "./App";
 import { generateUploadDate } from "./util/util";
+import { AppContext } from "./context/AppContext";
+import { ReactNode } from "react";
 
 // ---- Module Mocks ----
 jest.mock("react-router-dom", () => ({
@@ -106,32 +108,30 @@ describe("App Component Tests", () => {
     });
   });
 
-  it("Shows error modal if validateAuthentication throws", async () => {
-    console.log("Current test: Shows error modal if validateAuthentication throws");
-
-    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-    renderWithContext(
-      <App />,
-      { route: "/" },
-      {
-        ...mockContext,
-        validateAuthentication: () => {
-          throw new Error("Auth failed");
-        },
-      },
-    );
-
-    await waitFor(() => expect(screen.getByTestId("test-id-error-modal")).toBeVisible());
-
-    consoleErrorSpy.mockRestore();
-  });
-
   it("Redirects to login if user is not authenticated", async () => {
     console.log("Current test: Redirects to login if user is not authenticated");
     renderWithContext(<App />, { route: "/" }, { ...mockContext, userAuthenticated: false });
 
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
+  });
+
+  it("renders the ErrorModal when useUserDetails catches an error", async () => {
+    // Force useUserDetails to hit its catch block by throwing an error
+    global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network fail"));
+
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <AppContext.Provider value={mockContext}>{children}</AppContext.Provider>
+    );
+
+    const { queryByTestId, getByTestId } = render(<App />, { wrapper });
+
+    // Before updates: error modal should not appear yet
+    expect(queryByTestId("test-id-error-modal")).toBeNull();
+
+    // Wait for the state transitions inside useUserDetails:
+    await waitFor(() => {
+      expect(getByTestId("test-id-error-modal")).toBeInTheDocument();
+    });
   });
 });
 
