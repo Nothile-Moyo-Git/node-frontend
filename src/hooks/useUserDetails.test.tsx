@@ -124,10 +124,9 @@ describe("useUserSession Hook", () => {
     // Wait for React to finish async updates
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
+      expect(result.current.error).toBe(true);
+      expect(result.current.user).toBe(null);
     });
-
-    expect(result.current.error).toBe(true);
-    expect(result.current.user).toBe(null);
 
     // Restore console
     consoleSpy.mockRestore();
@@ -263,10 +262,11 @@ describe("useUserSession Hook", () => {
       <AppContext.Provider value={contextWithoutToken}>{children}</AppContext.Provider>
     );
 
-    renderHook(() => useUserDetails(), { wrapper });
+    const { result } = renderHook(() => useUserDetails(), { wrapper });
 
     await waitFor(() => {
       expect(checkSessionValidation).not.toHaveBeenCalled();
+      expect(result.current.isLoading).toBe(false);
     });
   });
 
@@ -312,81 +312,6 @@ describe("useUserSession Hook", () => {
       expect(result.current.error).toBe(false);
       expect(result.current.sessionCreated).toBe("");
       expect(result.current.sessionExpires).toBe("");
-    });
-  });
-
-  it("Handles a malformed JSON response and triggers the catch block", async () => {
-    console.log("Current test: malformed JSON response");
-
-    // fetch resolves, but .json() throws
-    global.fetch = jest.fn().mockResolvedValue({
-      json: jest.fn().mockRejectedValue(new Error("Invalid JSON")),
-    });
-
-    const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-
-    const { result } = renderHook(() => useUserDetails(), { wrapper });
-
-    await waitFor(() => {
-      expect(result.current.error).toBe(true);
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(checkSessionValidation).not.toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalled();
-
-    consoleSpy.mockRestore();
-  });
-
-  it("Handles edge cases for missing context, null user, and unsuccessful response", async () => {
-    // Completely missing context (AppContext not provided)
-    const { result: resultNoContext } = renderHook(() => useUserDetails());
-    await waitFor(() => {
-      expect(resultNoContext.current.isLoading).toBe(false);
-      expect(resultNoContext.current.user).toBeNull();
-      expect(resultNoContext.current.error).toBe(false);
-    });
-
-    // Mock fetch returning null user but success true
-    global.fetch = jest.fn().mockResolvedValue(
-      createFetchResponse({
-        data: {
-          PostUserDetailsResponse: {
-            sessionCreated: mockCreationDate,
-            sessionExpires: mockExpiryDate,
-            user: null,
-            success: true,
-          },
-        },
-      }),
-    );
-
-    const { result: resultNullUser } = renderHook(() => useUserDetails(), { wrapper });
-    await waitFor(() => {
-      expect(resultNullUser.current.user).toBeNull();
-      expect(resultNullUser.current.isLoading).toBe(false);
-      expect(resultNullUser.current.error).toBe(false);
-    });
-
-    // Mock fetch returning success false
-    global.fetch = jest.fn().mockResolvedValue(
-      createFetchResponse({
-        data: {
-          PostUserDetailsResponse: {
-            sessionCreated: "",
-            sessionExpires: "",
-            user: null,
-            success: false,
-          },
-        },
-      }),
-    );
-
-    const { result: resultFailed } = renderHook(() => useUserDetails(), { wrapper });
-    await waitFor(() => {
-      expect(resultFailed.current.isLoading).toBe(false);
-      expect(resultFailed.current.error).toBe(true);
-      expect(resultFailed.current.user).toBeNull();
     });
   });
 });

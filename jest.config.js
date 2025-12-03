@@ -24,4 +24,10 @@ module.exports = {
   },
   extensionsToTreatAsEsm: [".ts", ".tsx"], // treat TypeScript files as ESM
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "mjs", "json", "node"],
+  // Coverage details, we need these when trying to get our logs from files, very important for improving coverage
+  // We need them to be explicit so we can see exactly what's missing and needed
+
+  // This determines the type of coverage we'll get in our report
+  coverageReporters: ["text", "text-summary", "json", "lcov"],
+  collectCoverageFrom: ["**/*.{ts,tsx}"],
 };

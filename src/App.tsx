@@ -20,7 +20,7 @@ const App: FC = () => {
 
   const appContextInstance = useContext(AppContext);
 
-  if (!isLoading && !appContextInstance?.userAuthenticated) {
+  if (!isLoading && !appContextInstance.userAuthenticated) {
     navigate(`${BASENAME}/login`);
   }
 
@@ -30,11 +30,11 @@ const App: FC = () => {
 
       {!isLoading && error && <ErrorModal testId="test-id-error-modal" />}
 
-      {!isLoading && appContextInstance?.userAuthenticated && user && !error && (
+      {!isLoading && appContextInstance.userAuthenticated && user && !error && (
         <div className="app__content">
-          <h1 className="app__title">{`Welcome ${user?.name}`}</h1>
-          <p className="app__text">{`Current status : ${user?.status}`}</p>
-          <p className="app__text">{`Email address : ${user?.email}`}</p>
+          <h1 className="app__title">{`Welcome ${user.name}`}</h1>
+          <p className="app__text">{`Current status : ${user.status}`}</p>
+          <p className="app__text">{`Email address : ${user.email}`}</p>
           <p className="app__text">{`Session created : ${sessionCreated}`}</p>
           <p className="app__text">{`Session expires : ${sessionExpires}`}</p>
         </div>

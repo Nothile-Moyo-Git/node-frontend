@@ -119,6 +119,14 @@ You can find these tests with the extension ".tsx".
 
 The tests haven't been written yet but will be implemented, for the front end, these will be unit tests.
 
+When running a test with explicit logs, you'll want to run a variation of the following command
+```npm run test:logs-single``` -- <test-file> --collectCoverageFrom=<base-file>
+
+*This will ensure that you get a full coverage report with a summary in your terminal*
+
+**This runs the code for your local file, and also the test file, with full coverage being generated**
+**Note: When doing this, check your lcov-report, then find the component/hook/method file mocked, and open it in your browser. The styling will show you the missing coverage**
+
 - Jest
 > [Learn about Jest](https://jestjs.io/)
 
