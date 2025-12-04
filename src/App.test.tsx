@@ -97,7 +97,7 @@ describe("App Component Tests", () => {
       }),
     );
 
-    renderWithContext(<App />, { route: "/" }, mockContext);
+    const { baseElement } = renderWithContext(<App />, { route: "/" }, mockContext);
 
     await waitFor(() => {
       expect(screen.getByText(/Welcome Nothile Moyo/)).toBeInTheDocument();
@@ -106,6 +106,9 @@ describe("App Component Tests", () => {
       expect(screen.getByText(`Session created : ${mockCreationDate}`)).toBeInTheDocument();
       expect(screen.getByText(`Session expires : ${mockExpiryDate}`)).toBeInTheDocument();
     });
+
+    // Generate our snapshot of our file when it loads successfully so we can see it
+    expect(baseElement).toMatchSnapshot();
   });
 
   it("Redirects to login if user is not authenticated", async () => {

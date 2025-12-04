@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App Component Tests Displays user details after successful authentication 1`] = `
+<body>
+  <div>
+    <div
+      data-testid="test-id-app-component"
+    >
+      <div
+        class="app__content"
+      >
+        <h1
+          class="app__title"
+        >
+          Welcome Nothile Moyo
+        </h1>
+        <p
+          class="app__text"
+        >
+          Current status : active
+        </p>
+        <p
+          class="app__text"
+        >
+          Email address : nothile1@gmail.com
+        </p>
+        <p
+          class="app__text"
+        >
+          Session created : 2025/12/04 23:47:54
+        </p>
+        <p
+          class="app__text"
+        >
+          Session expires : 2025/12/18 23:47:54
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+`;

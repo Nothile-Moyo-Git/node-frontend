@@ -8,7 +8,7 @@
  * Has the base styling and will also perform event handling if required
  */
 
-import { ButtonType } from "../../@types";
+import { type ButtonType } from "../../@types";
 import "./Button.scss";
 
 import React, { FC, ReactNode } from "react";
