@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button Component Renders the button and matches the snapshot 1`] = `
+<body>
+  <div>
+    <button
+      class="button "
+      data-testid="test-id-test-button"
+      type="submit"
+    >
+      Click me!
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Button Component renders correctly with variant="back" 1`] = `
+<body>
+  <div>
+    <button
+      class="button button__back"
+      data-testid="btn-back"
+      type="submit"
+    >
+      Click me!
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Button Component renders correctly with variant="delete" 1`] = `
+<body>
+  <div>
+    <button
+      class="button button__delete"
+      data-testid="btn-delete"
+      type="submit"
+    >
+      Click me!
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Button Component renders correctly with variant="error" 1`] = `
+<body>
+  <div>
+    <button
+      class="button button__error"
+      data-testid="btn-error"
+      type="submit"
+    >
+      Click me!
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Button Component renders correctly with variant="menu" 1`] = `
+<body>
+  <div>
+    <button
+      class="button button__menu"
+      data-testid="btn-menu"
+      type="submit"
+    >
+      Click me!
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Button Component renders correctly with variant="primary" 1`] = `
+<body>
+  <div>
+    <button
+      class="button button__primary"
+      data-testid="btn-primary"
+      type="submit"
+    >
+      Click me!
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Button Component renders correctly with variant="secondary" 1`] = `
+<body>
+  <div>
+    <button
+      class="button button__secondary"
+      data-testid="btn-secondary"
+      type="submit"
+    >
+      Click me!
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Button Component renders correctly with variant="square" 1`] = `
+<body>
+  <div>
+    <button
+      class="button button__square"
+      data-testid="btn-square"
+      type="submit"
+    >
+      Click me!
+    </button>
+  </div>
+</body>
+`;
