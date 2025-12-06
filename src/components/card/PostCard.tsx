@@ -33,18 +33,18 @@ export const PostCard: FC<ComponentProps> = ({ post, toggleConfirmationModal }) 
 
   // Check if we're the same user here
   useEffect(() => {
-    setIsPostCreator(appContextInstance?.userId === post.creator);
+    setIsPostCreator(appContextInstance.userId === post.creator);
   }, [appContextInstance, post.creator]);
 
   useEffect(() => {
     const getImage = async () => {
       try {
         // Only fetch the file if we have a filename
-        if (post?.fileName) {
+        if (post.fileName) {
           // Fetch the image, if it fails, reload the component
           setImage(
             await require(
-              `../../images${post?.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post?.fileName}`,
+              `../../images${post.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post.fileName}`,
             ),
           );
         }
@@ -58,23 +58,23 @@ export const PostCard: FC<ComponentProps> = ({ post, toggleConfirmationModal }) 
   }, [post]);
 
   // Get an upload date so we can show when the post was uploaded
-  const uploadDate = generateUploadDate(post?.createdAt ? Number(post?.createdAt) : "");
+  const uploadDate = generateUploadDate(post.createdAt ? Number(post.createdAt) : "");
 
   return (
     <article className="article" data-testid={`test-id-post-${post._id}`}>
-      <img src={image} alt={post?.title} className="article__image" draggable={false} />
+      <img src={image} alt={post.title} className="article__image" draggable={false} />
 
       <div className="article__content">
-        <h2 className="article__title">{post?.title}</h2>
-        <p className="article__description">{post?.content}</p>
+        <h2 className="article__title">{post.title}</h2>
+        <p className="article__description">{post.content}</p>
         <p>{`Uploaded: ${uploadDate}`}</p>
         <div className="article__buttons">
-          <Link to={`${BASENAME}/post/${post?._id}`} className="link__read-more">
+          <Link to={`${BASENAME}/post/${post._id}`} className="link__read-more">
             Read more
           </Link>
 
           {isPostCreator && (
-            <Link to={`${BASENAME}/post/edit/${post?._id}`} className="link__edit">
+            <Link to={`${BASENAME}/post/edit/${post._id}`} className="link__edit">
               Edit
             </Link>
           )}

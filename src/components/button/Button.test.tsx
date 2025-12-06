@@ -19,7 +19,7 @@ beforeEach(() => {
   global.fetch = mockFetch;
 });
 
-describe("Edit Post Component", () => {
+describe("Button Component", () => {
   it("Renders the button and matches the snapshot", () => {
     // We render our button here, we can extract screen methods from the render method is we destrust the object that's
     const { baseElement, getByTestId } = render(<Button testId="test-id-test-button">Click me!</Button>);

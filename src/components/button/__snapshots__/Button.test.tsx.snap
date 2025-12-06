@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Edit Post Component Renders the button and matches the snapshot 1`] = `
+exports[`Button Component Renders the button and matches the snapshot 1`] = `
 <body>
   <div>
     <button
@@ -14,7 +14,7 @@ exports[`Edit Post Component Renders the button and matches the snapshot 1`] = `
 </body>
 `;
 
-exports[`Edit Post Component renders correctly with variant="back" 1`] = `
+exports[`Button Component renders correctly with variant="back" 1`] = `
 <body>
   <div>
     <button
@@ -28,7 +28,7 @@ exports[`Edit Post Component renders correctly with variant="back" 1`] = `
 </body>
 `;
 
-exports[`Edit Post Component renders correctly with variant="delete" 1`] = `
+exports[`Button Component renders correctly with variant="delete" 1`] = `
 <body>
   <div>
     <button
@@ -42,7 +42,7 @@ exports[`Edit Post Component renders correctly with variant="delete" 1`] = `
 </body>
 `;
 
-exports[`Edit Post Component renders correctly with variant="error" 1`] = `
+exports[`Button Component renders correctly with variant="error" 1`] = `
 <body>
   <div>
     <button
@@ -56,7 +56,7 @@ exports[`Edit Post Component renders correctly with variant="error" 1`] = `
 </body>
 `;
 
-exports[`Edit Post Component renders correctly with variant="menu" 1`] = `
+exports[`Button Component renders correctly with variant="menu" 1`] = `
 <body>
   <div>
     <button
@@ -70,7 +70,7 @@ exports[`Edit Post Component renders correctly with variant="menu" 1`] = `
 </body>
 `;
 
-exports[`Edit Post Component renders correctly with variant="primary" 1`] = `
+exports[`Button Component renders correctly with variant="primary" 1`] = `
 <body>
   <div>
     <button
@@ -84,7 +84,7 @@ exports[`Edit Post Component renders correctly with variant="primary" 1`] = `
 </body>
 `;
 
-exports[`Edit Post Component renders correctly with variant="secondary" 1`] = `
+exports[`Button Component renders correctly with variant="secondary" 1`] = `
 <body>
   <div>
     <button
@@ -98,7 +98,7 @@ exports[`Edit Post Component renders correctly with variant="secondary" 1`] = `
 </body>
 `;
 
-exports[`Edit Post Component renders correctly with variant="square" 1`] = `
+exports[`Button Component renders correctly with variant="square" 1`] = `
 <body>
   <div>
     <button
