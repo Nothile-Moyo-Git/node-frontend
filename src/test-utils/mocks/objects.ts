@@ -42,7 +42,7 @@ export const mockFailedContext: ContextProps = {
 // Mocking the individual post
 export const mockPost: Post = {
   _id: "662423764e8c8b1633534be8",
-  fileLastUpdated: "",
+  fileLastUpdated: "2025/06",
   fileName: "2B.png",
   title: "2B",
   imageUrl: "..\frontend\x02src\x02images\x022B.png",
@@ -50,6 +50,18 @@ export const mockPost: Post = {
     "YoRHa No. 2 Type B,[a] commonly known as 2B,[b] is a fictional android from the 2017 video game Nier: Automata, a spin-off of the Drakengard series developed by PlatinumGames and published by Square Enix. One of the game's three protagonists, 2B is a soldier for YoRHa, an android task force fighting a proxy war with alien-created Machine Lifeforms. Her story arc focuses on her backstory within YoRHa, and her relationship with her partner 9S, a reconnaissance android. She is also featured in related media, such as the anime Nier: Automata Ver1.1a.",
   creator: "12345-nothile-id",
   createdAt: "1713644407010",
+  updatedAt: "1713644407010",
+};
+
+export const mockPostWithoutOptionals: Post = {
+  _id: "662423764e8c8b1633534be8",
+  fileLastUpdated: "",
+  fileName: "2B.png",
+  title: "2B",
+  imageUrl: "..\frontend\x02src\x02images\x022B.png",
+  content:
+    "YoRHa No. 2 Type B,[a] commonly known as 2B,[b] is a fictional android from the 2017 video game Nier: Automata, a spin-off of the Drakengard series developed by PlatinumGames and published by Square Enix. One of the game's three protagonists, 2B is a soldier for YoRHa, an android task force fighting a proxy war with alien-created Machine Lifeforms. Her story arc focuses on her backstory within YoRHa, and her relationship with her partner 9S, a reconnaissance android. She is also featured in related media, such as the anime Nier: Automata Ver1.1a.",
+  creator: "12345-nothile-id",
   updatedAt: "1713644407010",
 };
 
