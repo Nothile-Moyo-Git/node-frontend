@@ -49,7 +49,7 @@ export const PostCard: FC<ComponentProps> = ({ post, toggleConfirmationModal }) 
           );
         }
       } catch (error) {
-        console.warn("Could not extract image");
+        console.error("Could not extract image");
         console.log(error);
       }
     };

@@ -13,6 +13,7 @@ import { PostCard } from "./PostCard";
 import { mockContext } from "../../test-utils/mocks/objects";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { Post } from "../../@types";
 
 // Mock undici so we can fix the fastNowTimeout?.unref error
 jest.mock("undici", () => ({
@@ -54,6 +55,36 @@ describe("Post Card component", () => {
 
     const deleteButton = screen.getByTestId(`test-id-delete-${mockPostWithoutOptionals._id}`);
     userEvent.click(deleteButton);
+
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("Triggers the error in the catch block for the image", async () => {
+    const mockPostNoImage: Post = {
+      ...mockPost,
+      fileName: "broken.png",
+    };
+
+    // Mock our error logs so we can see test them without rendering them during tests
+    const mockError = jest.spyOn(console, "error").mockImplementation(() => {});
+    const mockLog = jest.spyOn(console, "log").mockImplementation(() => {});
+
+    const { baseElement } = renderWithoutRouting(
+      <PostCard post={mockPostNoImage} toggleConfirmationModal={jest.fn}>
+        <div>PostCard</div>
+      </PostCard>,
+      mockContext,
+    );
+
+    // Here we click on the toggleConfirmationModal button
+    await waitFor(() => {
+      // Get and view the error
+      expect(mockError).toHaveBeenCalledWith("Could not extract image");
+      expect(mockLog).toHaveBeenCalled();
+
+      const image = screen.queryByTestId("test-id-postcard-image");
+      expect(image).not.toBeVisible();
+    });
 
     expect(baseElement).toMatchSnapshot();
   });
