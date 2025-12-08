@@ -6,11 +6,12 @@
  * We use this to be able to render our components
  *
  */
-import { act, ReactNode } from "react";
+import { act, ReactElement, ReactNode } from "react";
 import { render } from "@testing-library/react";
-import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import { createMemoryRouter, RouterProvider, MemoryRouter } from "react-router-dom";
 import { AppContext, ContextProps } from "../context/AppContext";
 import { routes } from "../routes/Router";
+import { BASENAME } from "../util/util";
 
 export function renderWithRouter(ui: ReactNode, { route = "/" } = {}) {
   const router = createMemoryRouter(routes, {
@@ -43,4 +44,13 @@ export const renderWithAct = async (ui: ReactNode, { route = "/" } = {}, context
   await act(async () => {
     renderWithContext(ui, { route }, context);
   });
+};
+
+// Render without routing so that we can test individual components in isolation
+export const renderWithoutRouting = (component: ReactElement, context: ContextProps) => {
+  return render(
+    <MemoryRouter basename={BASENAME} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <AppContext.Provider value={context}>{component}</AppContext.Provider>
+    </MemoryRouter>,
+  );
 };

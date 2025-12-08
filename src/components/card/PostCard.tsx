@@ -49,7 +49,7 @@ export const PostCard: FC<ComponentProps> = ({ post, toggleConfirmationModal }) 
           );
         }
       } catch (error) {
-        console.log("Could not extract image");
+        console.warn("Could not extract image");
         console.log(error);
       }
     };
@@ -62,7 +62,13 @@ export const PostCard: FC<ComponentProps> = ({ post, toggleConfirmationModal }) 
 
   return (
     <article className="article" data-testid={`test-id-post-${post._id}`}>
-      <img src={image} alt={post.title} className="article__image" draggable={false} />
+      <img
+        src={image}
+        alt={post.title}
+        className="article__image"
+        draggable={false}
+        data-testid="test-id-postcard-image"
+      />
 
       <div className="article__content">
         <h2 className="article__title">{post.title}</h2>
