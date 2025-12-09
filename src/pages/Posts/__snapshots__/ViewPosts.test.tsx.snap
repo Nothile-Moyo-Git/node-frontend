@@ -21,6 +21,7 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
         <img
           alt="Tieflings"
           class="article__image"
+          data-testid="test-id-postcard-image"
           draggable="false"
           src="Tiefling.jpg"
         />
@@ -74,6 +75,7 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
         <img
           alt="The Sixth Post"
           class="article__image"
+          data-testid="test-id-postcard-image"
           draggable="false"
           src="Edelgard.jpg"
         />
@@ -161,6 +163,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
         <img
           alt="Tieflings"
           class="article__image"
+          data-testid="test-id-postcard-image"
           draggable="false"
           src="Tiefling.jpg"
         />
@@ -214,6 +217,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
         <img
           alt="The Sixth Post"
           class="article__image"
+          data-testid="test-id-postcard-image"
           draggable="false"
           src="Edelgard.jpg"
         />
@@ -267,6 +271,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
         <img
           alt="Testing post number 6"
           class="article__image"
+          data-testid="test-id-postcard-image"
           draggable="false"
           src="Shanalotte.jpg"
         />
@@ -354,6 +359,7 @@ exports[`View Posts component Should match snapshot 1`] = `
         <img
           alt="2B"
           class="article__image"
+          data-testid="test-id-postcard-image"
           draggable="false"
           src="2B.png"
         />
@@ -407,6 +413,7 @@ exports[`View Posts component Should match snapshot 1`] = `
         <img
           alt="Alfira"
           class="article__image"
+          data-testid="test-id-postcard-image"
           draggable="false"
           src="Alfira-face.jpg"
         />
@@ -460,6 +467,7 @@ exports[`View Posts component Should match snapshot 1`] = `
         <img
           alt="Emerald Herald"
           class="article__image"
+          data-testid="test-id-postcard-image"
           draggable="false"
           src="Shanalotte.jpg"
         />
