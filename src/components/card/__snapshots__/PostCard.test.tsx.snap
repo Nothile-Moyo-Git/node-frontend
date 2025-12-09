@@ -117,3 +117,119 @@ exports[`Post Card component Render the PostCard component without optional valu
   </div>
 </body>
 `;
+
+exports[`Post Card component Triggers the error in the catch block for the image 1`] = `
+<body>
+  <div>
+    <article
+      class="article"
+      data-testid="test-id-post-662423764e8c8b1633534be8"
+    >
+      <img
+        alt="2B"
+        class="article__image"
+        data-testid="test-id-postcard-image"
+        draggable="false"
+      />
+      <div
+        class="article__content"
+      >
+        <h2
+          class="article__title"
+        >
+          2B
+        </h2>
+        <p
+          class="article__description"
+        >
+          YoRHa No. 2 Type B,[a] commonly known as 2B,[b] is a fictional android from the 2017 video game Nier: Automata, a spin-off of the Drakengard series developed by PlatinumGames and published by Square Enix. One of the game's three protagonists, 2B is a soldier for YoRHa, an android task force fighting a proxy war with alien-created Machine Lifeforms. Her story arc focuses on her backstory within YoRHa, and her relationship with her partner 9S, a reconnaissance android. She is also featured in related media, such as the anime Nier: Automata Ver1.1a.
+        </p>
+        <p>
+          Uploaded: 2024/04/20 21:20:07
+        </p>
+        <div
+          class="article__buttons"
+        >
+          <a
+            class="link__read-more"
+            href="/post/662423764e8c8b1633534be8"
+          >
+            Read more
+          </a>
+          <a
+            class="link__edit"
+            href="/post/edit/662423764e8c8b1633534be8"
+          >
+            Edit
+          </a>
+          <button
+            class="button button__delete"
+            data-testid="test-id-delete-662423764e8c8b1633534be8"
+            type="submit"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </article>
+  </div>
+</body>
+`;
+
+exports[`Post Card component Try to render an image without a fileName so we skip the import 1`] = `
+<body>
+  <div>
+    <article
+      class="article"
+      data-testid="test-id-post-662423764e8c8b1633534be8"
+    >
+      <img
+        alt="2B"
+        class="article__image"
+        data-testid="test-id-postcard-image"
+        draggable="false"
+      />
+      <div
+        class="article__content"
+      >
+        <h2
+          class="article__title"
+        >
+          2B
+        </h2>
+        <p
+          class="article__description"
+        >
+          YoRHa No. 2 Type B,[a] commonly known as 2B,[b] is a fictional android from the 2017 video game Nier: Automata, a spin-off of the Drakengard series developed by PlatinumGames and published by Square Enix. One of the game's three protagonists, 2B is a soldier for YoRHa, an android task force fighting a proxy war with alien-created Machine Lifeforms. Her story arc focuses on her backstory within YoRHa, and her relationship with her partner 9S, a reconnaissance android. She is also featured in related media, such as the anime Nier: Automata Ver1.1a.
+        </p>
+        <p>
+          Uploaded: 2024/04/20 21:20:07
+        </p>
+        <div
+          class="article__buttons"
+        >
+          <a
+            class="link__read-more"
+            href="/post/662423764e8c8b1633534be8"
+          >
+            Read more
+          </a>
+          <a
+            class="link__edit"
+            href="/post/edit/662423764e8c8b1633534be8"
+          >
+            Edit
+          </a>
+          <button
+            class="button button__delete"
+            data-testid="test-id-delete-662423764e8c8b1633534be8"
+            type="submit"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </article>
+  </div>
+</body>
+`;
