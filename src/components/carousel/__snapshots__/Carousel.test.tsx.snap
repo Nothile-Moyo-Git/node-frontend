@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Carousel Component Handle errors if the catch block is hit 1`] = `
+<body>
+  <div>
+    <div
+      class="loadingWrapper"
+      data-testid="test-id-loading-spinner"
+    >
+      <span
+        class="loadingSpinner"
+      />
+      <p
+        class="loadingText"
+      >
+        Loading, please wait...
+      </p>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Carousel Component Renders the carousel component 1`] = `
+<body>
+  <div />
+</body>
+`;

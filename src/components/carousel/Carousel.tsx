@@ -42,7 +42,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
     // Render images
     const generateImageSources = async () => {
       // Get a list of files
-      const result = await fetch(`${appContextInstance?.baseUrl}/graphql/files`, {
+      const result = await fetch(`${appContextInstance.baseUrl}/graphql/files`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,8 +92,8 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
           setImages(renderableImages);
         }
       } catch (error) {
-        console.log("Error assigning your files, please read below\n");
-        console.log(error);
+        console.warn("Error assigning your files, please read below\n");
+        console.error(error);
       }
     };
 
