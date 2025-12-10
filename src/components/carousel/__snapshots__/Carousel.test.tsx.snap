@@ -1,27 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Carousel Component Handle errors if the catch block is hit 1`] = `
+exports[`Carousel Component Renders the carousel component 1`] = `
 <body>
   <div>
-    <div
-      class="loadingWrapper"
-      data-testid="test-id-loading-spinner"
+    <section
+      class="carousel"
     >
-      <span
-        class="loadingSpinner"
-      />
-      <p
-        class="loadingText"
+      <div
+        class="carousel__chosen-image"
       >
-        Loading, please wait...
-      </p>
-    </div>
+        <button
+          class="button button__primary"
+          data-testid="test-id-carousel-choose-button"
+          type="submit"
+        >
+          Choose this image
+        </button>
+        <p>
+          Chosen image:
+           None
+        </p>
+      </div>
+    </section>
   </div>
 </body>
 `;
 
-exports[`Carousel Component Renders the carousel component 1`] = `
+exports[`Carousel Component Update the swiper 1`] = `
 <body>
-  <div />
+  <div>
+    <section
+      class="carousel"
+    >
+      <div
+        class="carousel__chosen-image"
+      >
+        <button
+          class="button button__primary"
+          data-testid="test-id-carousel-choose-button"
+          type="submit"
+        >
+          Choose this image
+        </button>
+        <p>
+          Chosen image:
+           2B.png
+        </p>
+      </div>
+    </section>
+  </div>
 </body>
 `;
