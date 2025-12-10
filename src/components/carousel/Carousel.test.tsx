@@ -15,6 +15,8 @@ import { renderWithoutRouting } from "../../test-utils/testRouter";
 import Carousel from "./Carousel";
 import { FileData } from "../../@types";
 import { waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
@@ -39,11 +41,13 @@ describe("Carousel Component", () => {
       }),
     );
 
-    // Render our carousel component
-    await act(async () => {
-      const { baseElement } = renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
-      expect(baseElement).toMatchSnapshot();
+    // Render and update our component so we can see it being rendered
+    const { baseElement } = await act(async () => {
+      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
     });
+
+    // Render our carousel component
+    expect(baseElement).toMatchSnapshot();
   });
 
   it("Handle errors if the catch block is hit", async () => {
@@ -66,7 +70,7 @@ describe("Carousel Component", () => {
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
     const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
-    const { baseElement } = renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
+    renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
 
     // Wait for the component to attempt image loading and hit the catch block
     await waitFor(() => {
@@ -76,8 +80,6 @@ describe("Carousel Component", () => {
 
     warnSpy.mockRestore();
     errorSpy.mockRestore();
-
-    expect(baseElement).toMatchSnapshot();
   });
 
   it("Update the swiper", async () => {
@@ -93,25 +95,16 @@ describe("Carousel Component", () => {
       }),
     );
 
-    renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
-
-    // Find the first swiper instance (main carousel)
-    const swiperEvent = new Event("realIndexChange");
-
-    // Mock a swiper object passed to updateSwiperIndexHandler
-    const mockSwiper = { realIndex: 1 };
-
-    // Manually trigger Swiper's event handler
-    // (Testing Library doesn't fire Swiper's custom events automatically)
-    await waitFor(() => {
-      // Access the swiper prop callback directly
-      const swiperInstance = document.querySelector(".swiper") as HTMLElement & { onRealIndexChange?: Function };
-
-      // Simulate the index update
-      // This forces updateSwiperIndexHandler to run
-      if (swiperInstance?.onRealIndexChange) {
-        swiperInstance.onRealIndexChange(mockSwiper);
-      }
+    // Render and update our component so we can see it being rendered
+    const { baseElement } = await act(async () => {
+      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
     });
+
+    // Choose an image and select it
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
+
+    userEvent.click(chooseImageButton);
+
+    expect(baseElement).toMatchSnapshot();
   });
 });
