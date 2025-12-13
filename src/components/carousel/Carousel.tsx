@@ -20,11 +20,19 @@ import Button from "../button/Button";
 
 // Types
 import type { Swiper as SwiperCore } from "swiper";
+import { useCarouselIndex } from "./hooks/useCarouselIndex";
 
 interface ComponentProps {
   setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>;
 }
 
+/**
+ * @name Carousel
+ *
+ * @description The carousel component, uses "react/swiper" as a dependency
+ *
+ * @param setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>
+ */
 const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
@@ -32,8 +40,8 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | string | null>(null);
 
   // We store the index in state since we want our button to be outside of the swiper carousel
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [chosenImageIndex, setChosenImageIndex] = useState<number | null>();
+  // This has been moved to the useCarouselIndex hook for a separation of concerns and easier testing
+  const { chosenImageIndex, updateIndex, chooseImage } = useCarouselIndex();
 
   const appContextInstance = useContext(AppContext);
 
@@ -41,29 +49,29 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
   useEffect(() => {
     // Render images
     const generateImageSources = async () => {
-      // Get a list of files
-      const result = await fetch(`${appContextInstance.baseUrl}/graphql/files`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-                              query GetFilePathsResponse{
-                                  GetFilePathsResponse{
-                                      status
-                                      files {
-                                      fileName
-                                      imageUrl
-                                      }
-                                  }
-                              }
-                          `,
-        }),
-      });
+      try {
+        // Get a list of files
+        const result = await fetch(`${appContextInstance.baseUrl}/graphql/files`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
+                                query GetFilePathsResponse{
+                                    GetFilePathsResponse{
+                                        status
+                                        files {
+                                        fileName
+                                        imageUrl
+                                        }
+                                    }
+                                }
+                            `,
+          }),
+        });
 
-      if (result.status === 200) {
         const {
           data: {
             GetFilePathsResponse: { files },
@@ -71,6 +79,9 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
         } = await result.json();
 
         setFiles(files);
+      } catch (error) {
+        console.warn("GetFilePathsResponse query failed, view error below");
+        console.error(error);
       }
     };
 
@@ -100,15 +111,10 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
     retrieveImages();
   }, [files]);
 
-  // We update our index in state so we can keep our button to choose a slide in place instead of rendering multiple buttons
-  const updateSwiperIndexHandler = (swiper: SwiperCore) => {
-    setCurrentIndex(swiper.realIndex);
-  };
-
   const setChosenImageHandler = (event: React.MouseEvent) => {
     event.preventDefault();
-    setCarouselImage(files[currentIndex]);
-    setChosenImageIndex(currentIndex);
+    const chosenFile = chooseImage();
+    setCarouselImage(files[chosenFile]);
   };
 
   return images.length > 0 ? (
@@ -132,7 +138,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
         loop={true}
         modules={[Pagination, Navigation, Autoplay, Thumbs]}
         navigation
-        onRealIndexChange={updateSwiperIndexHandler}
+        onRealIndexChange={updateIndex}
         pagination={{
           type: "bullets",
           clickable: true,
