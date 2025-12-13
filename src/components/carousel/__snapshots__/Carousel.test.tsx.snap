@@ -26,7 +26,27 @@ exports[`Carousel Component Renders the carousel component 1`] = `
 </body>
 `;
 
-exports[`Carousel Component Update the swiper 1`] = `
+exports[`Carousel Component Successfully gets an empty list of files 1`] = `
+<body>
+  <div>
+    <div
+      class="loadingWrapper"
+      data-testid="test-id-loading-spinner"
+    >
+      <span
+        class="loadingSpinner"
+      />
+      <p
+        class="loadingText"
+      >
+        Loading, please wait...
+      </p>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Carousel Component Updates the swiper 1`] = `
 <body>
   <div>
     <section

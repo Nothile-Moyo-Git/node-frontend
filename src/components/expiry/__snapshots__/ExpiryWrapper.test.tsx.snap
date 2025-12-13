@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExpiryWrapper Component Delete the component with a timeout 1`] = `
+<body>
+  <div />
+</body>
+`;
+
+exports[`ExpiryWrapper Component Successfully shows the component 1`] = `
+<body>
+  <div>
+    <div>
+      Expired component
+    </div>
+  </div>
+</body>
+`;

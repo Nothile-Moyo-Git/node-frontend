@@ -7,7 +7,6 @@
  * Description: Tests for the carousel component, covers the branching functionality
  *
  */
-
 import { act } from "react";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import { mockContext, mockFiles } from "../../test-utils/mocks/objects";
@@ -82,7 +81,7 @@ describe("Carousel Component", () => {
     errorSpy.mockRestore();
   });
 
-  it("Update the swiper", async () => {
+  it("Updates the swiper", async () => {
     // Get the images from the backend
     mockFetch.mockResolvedValueOnce(
       createFetchResponse({
@@ -106,5 +105,48 @@ describe("Carousel Component", () => {
     userEvent.click(chooseImageButton);
 
     expect(baseElement).toMatchSnapshot();
+  });
+
+  it("Successfully gets an empty list of files", async () => {
+    // Get the images from the backend
+    // Pass an empty array here to skip the call to set the
+    mockFetch.mockResolvedValueOnce(
+      createFetchResponse(
+        {
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: [],
+            },
+          },
+        },
+        418,
+      ),
+    );
+
+    // Render and update our component so we can see it being rendered
+    const { baseElement } = await act(async () => {
+      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
+    });
+
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("Handles fetch failure and triggers the first catch block", async () => {
+    // Make fetch throw an actual error
+    mockFetch.mockRejectedValueOnce(new Error("Network failed"));
+
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
+
+    await waitFor(() => {
+      expect(warnSpy).toHaveBeenCalledWith("GetFilePathsResponse query failed, view error below");
+      expect(errorSpy).toHaveBeenCalled();
+    });
+
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
   });
 });
