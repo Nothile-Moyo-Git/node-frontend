@@ -110,7 +110,7 @@ export const Paginator: FC<ComponentProps> = ({ numberOfPages, currentPage = 1, 
         ))}
 
       {numberOfPages > 7 ? (
-        <form className="paginator__select-wrapper" onSubmit={customPageSelected}>
+        <form className="paginator__select-wrapper" onSubmit={customPageSelected} data-testid="test-id-pagination-form">
           <Select
             currentValue={currentPage}
             id="pagination-select-component"

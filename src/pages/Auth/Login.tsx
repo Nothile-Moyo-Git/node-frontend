@@ -124,7 +124,7 @@ export const LoginPage: FC = () => {
 
   return (
     <section className="login">
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={submitHandler} testId="test-id-login-form">
         <Title>Login</Title>
 
         <Field>

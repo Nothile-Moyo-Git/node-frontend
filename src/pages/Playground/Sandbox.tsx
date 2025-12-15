@@ -165,7 +165,7 @@ const Sandbox = () => {
 
       <br />
 
-      <Form onSubmit={createDummyPostResolver}>
+      <Form onSubmit={createDummyPostResolver} testId="test-id-sandbox-form">
         <Field>
           <Label
             htmlFor="imageUrl"
