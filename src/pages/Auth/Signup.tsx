@@ -149,7 +149,7 @@ export const SignupPage: FC = () => {
 
   return (
     <section className="signup">
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={submitHandler} testId="test-id-signup-form">
         <Title>Signup</Title>
 
         <Field>

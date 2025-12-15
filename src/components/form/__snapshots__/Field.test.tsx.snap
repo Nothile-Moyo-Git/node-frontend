@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Field component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="field "
+    >
+      <div>
+        children
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Field component Positions the field at the bottom 1`] = `
+<body>
+  <div>
+    <div
+      class="field field__bottom"
+    >
+      <div>
+        children
+      </div>
+    </div>
+  </div>
+</body>
+`;

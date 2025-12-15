@@ -23,6 +23,7 @@ interface ComponentProps {
   children: ReactNode;
   isFormValid?: boolean;
   onSubmit: (_event: FormEvent) => void;
+  testId: string;
 }
 
 /**
@@ -33,8 +34,9 @@ interface ComponentProps {
  * @param children : ReactNode
  * @param isFormValid ?: boolean
  * @param onSubmit : (event: FormEvent) => void
+ * @param testId : string
  */
-const Form: FC<ComponentProps> = ({ size, children, isFormValid, onSubmit }) => {
+const Form: FC<ComponentProps> = ({ size, children, isFormValid, onSubmit, testId }) => {
   // Set the size of the form
   let formStyles = "";
 
@@ -48,7 +50,11 @@ const Form: FC<ComponentProps> = ({ size, children, isFormValid, onSubmit }) => 
   }
 
   return (
-    <form className={`form ${formStyles} ${isFormValid === false && "form__error"}`} onSubmit={onSubmit}>
+    <form
+      className={`form ${formStyles} ${isFormValid === false && "form__error"}`}
+      onSubmit={onSubmit}
+      data-testid={testId}
+    >
       {children}
     </form>
   );

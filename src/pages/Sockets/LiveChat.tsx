@@ -273,7 +273,7 @@ const LiveChat: FC = () => {
           </div>
         );
       })}
-      <Form size="full" onSubmit={onSubmit}>
+      <Form size="full" onSubmit={onSubmit} testId="test-id-livechat-form">
         <Field position="bottom">
           <TextArea
             ariaLabelledBy="contentLabel"

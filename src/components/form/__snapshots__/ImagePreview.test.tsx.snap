@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImagePreview Component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="imagePreview"
+      style="background-image: url(image.png); background-size: contain; background-position: bottom;"
+    />
+  </div>
+</body>
+`;
+
+exports[`ImagePreview Component Renders the default parameters 1`] = `
+<body>
+  <div>
+    <div
+      class="imagePreview"
+      style="background-image: url(image.png); background-size: cover; background-position: center;"
+    />
+  </div>
+</body>
+`;
