@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input Component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <input
+      class="input  false"
+      data-testid="test-id-test-input"
+      name="test"
+      type="textarea"
+      value=""
+    />
+  </div>
+</body>
+`;
