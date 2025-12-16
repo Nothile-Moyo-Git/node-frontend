@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Label Component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <label
+      class="label undefined"
+      data-testid="test-id-input-label"
+      for="test-label"
+      id="test-label"
+    >
+      <div>
+        Children
+      </div>
+    </label>
+  </div>
+</body>
+`;

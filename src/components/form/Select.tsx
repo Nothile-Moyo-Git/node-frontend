@@ -19,7 +19,6 @@ interface ComponentProps {
   pages?: number[] | undefined;
   variant: string;
   options?: string[];
-  ref: React.RefObject<HTMLSelectElement>;
   required?: boolean;
 }
 
@@ -34,7 +33,6 @@ interface ComponentProps {
  * @param pages ?: number[] | undefined
  * @param variant : string
  * @param options ?: string[]
- * @param ref : React.RefObject<HTMLSelectElement>
  * @param required ?: boolean
  */
 export const Select = forwardRef<HTMLSelectElement, ComponentProps>(function SelectComponent(props, ref) {
@@ -69,7 +67,7 @@ export const Select = forwardRef<HTMLSelectElement, ComponentProps>(function Sel
 
   return (
     <select
-      aria-labelledby={props?.labelledBy}
+      aria-labelledby={props.labelledBy}
       className={classNames}
       id={props.id}
       name={props.name}
@@ -77,6 +75,7 @@ export const Select = forwardRef<HTMLSelectElement, ComponentProps>(function Sel
       ref={ref}
       required={props.required}
       value={value}
+      data-testid={props.id}
     >
       {props.pages &&
         props.pages.length > 0 &&

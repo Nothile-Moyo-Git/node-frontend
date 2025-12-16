@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Select Component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <select
+      class="select"
+      data-testid="test-id-select"
+      id="test-id-select"
+      name="name-select"
+    />
+  </div>
+</body>
+`;
+
+exports[`Select Component Matches the snapshot 2`] = `
+<body>
+  <div>
+    <select
+      aria-labelledby="test-input"
+      class="select select--pagination"
+      data-testid="test-id-select"
+      id="test-id-select"
+      name="name-select"
+      required=""
+    />
+  </div>
+</body>
+`;

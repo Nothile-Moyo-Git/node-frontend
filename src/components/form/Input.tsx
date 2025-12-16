@@ -9,7 +9,6 @@
  */
 
 import "./Input.scss";
-
 import React, { ReactNode, forwardRef } from "react";
 
 interface ComponentProps {
