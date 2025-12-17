@@ -4,7 +4,6 @@
  * Author: Nothile Moyo
  *
  * Description: Input for the field component
- * These tests really arent necessary, they're just good for coverage
  */
 
 import React from "react";

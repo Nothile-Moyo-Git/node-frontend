@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Textarea Component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <textarea
+      aria-labelledby="test-textarea-label"
+      class="textarea  false"
+      data-testid="test-id-text-area"
+      name="textarea"
+      placeholder="Placeholder"
+      required=""
+      rows="1"
+    />
+  </div>
+</body>
+`;
+
+exports[`Textarea Component Renders an error 1`] = `
+<body>
+  <div>
+    <textarea
+      aria-labelledby="test-textarea-label"
+      class="textarea textarea__square textarea__error"
+      data-testid="test-id-text-area"
+      name="textarea"
+      placeholder="Placeholder"
+      required=""
+      rows="3"
+    >
+      Initial value
+    </textarea>
+  </div>
+</body>
+`;

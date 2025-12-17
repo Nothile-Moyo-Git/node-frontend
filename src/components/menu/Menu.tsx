@@ -119,7 +119,12 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
       </nav>
 
       {!isMenuOpen && (
-        <div className="toggle-menu-button" id="show_menu" onClick={handleToggleMenu}>
+        <div
+          className="toggle-menu-button"
+          id="show_menu"
+          data-testid="test-id-show-menu-button"
+          onClick={handleToggleMenu}
+        >
           <svg viewBox="0 0 100 80" width="25" height="30">
             <rect width="100" height="10" fill="#FFFFFF"></rect>
             <rect y="30" width="100" height="10" fill="#FFFFFF"></rect>
@@ -129,7 +134,12 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
       )}
 
       {isMenuOpen && (
-        <div className="toggle-menu-button toggle-menu-button__show" id="hide_menu" onClick={handleToggleMenu}>
+        <div
+          className="toggle-menu-button toggle-menu-button__show"
+          data-testid="test-id-hide-menu-button"
+          id="hide_menu"
+          onClick={handleToggleMenu}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="#000000"

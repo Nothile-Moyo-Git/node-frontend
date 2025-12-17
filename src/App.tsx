@@ -16,6 +16,8 @@ import useUserDetails from "./hooks/useUserDetails";
 
 const App: FC = () => {
   const navigate = useNavigate();
+
+  // Handle user authentication from the backend
   const { isLoading, error, user, sessionCreated, sessionExpires } = useUserDetails();
 
   const appContextInstance = useContext(AppContext);

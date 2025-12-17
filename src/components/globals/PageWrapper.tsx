@@ -14,7 +14,8 @@ import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import Menu from "../menu/Menu";
 import "./PageWrapper.scss";
-import { BASENAME, doesUserExist } from "../../util/util";
+import { BASENAME } from "../../util/util";
+import useUserDetails from "../../hooks/useUserDetails";
 
 interface ComponentProps {
   children?: ReactNode;
@@ -25,6 +26,8 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
+  const { isLoading } = useUserDetails();
+
   // Get the method from the backend to query
   const appContextInstance = useContext(AppContext);
   const location = useLocation();
@@ -32,36 +35,16 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
   // Query the backend to see if we're logged in
   useEffect(() => {
     const fetchAuthentication = async () => {
-      try {
-        appContextInstance?.validateAuthentication();
-        setIsLoggedIn(appContextInstance?.token !== "");
-
-        // If we've validated that a user is logged in, then we check if the user exists, if not, we log them out and end their session
-        if (appContextInstance?.userId && appContextInstance.baseUrl && appContextInstance.token) {
-          const userExists = await doesUserExist(
-            appContextInstance.userId,
-            appContextInstance.baseUrl,
-            appContextInstance.token,
-          );
-
-          // If we're logged in but the user doesn't exist, get rid of them
-          if (!userExists) {
-            appContextInstance?.logoutUser();
-            // Redirect to the login page
-            navigate(`${BASENAME}/login`);
-          }
-
-          console.log("Does the user exist?");
-          console.log(userExists);
-        }
-      } catch (error) {
-        console.log("Request failed");
-        console.log(error);
+      if (!isLoading && !appContextInstance.userAuthenticated) {
+        appContextInstance.logoutUser();
+        navigate(`${BASENAME}/login`);
+      } else {
+        setIsLoggedIn(true);
       }
     };
 
     fetchAuthentication();
-  }, [appContextInstance, navigate]);
+  }, [appContextInstance, navigate, isLoading]);
 
   // Set our menuInfo object, we don't need state here as we don't need this to trigger a re-render
   const menuInfo = { isMenuOpen: isMenuOpen, isLoggedIn: isLoggedIn };
