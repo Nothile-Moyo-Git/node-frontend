@@ -36,6 +36,7 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
   useEffect(() => {
     const fetchAuthentication = async () => {
       if (!isLoading && !appContextInstance.userAuthenticated) {
+        setIsLoggedIn(false);
         appContextInstance.logoutUser();
         navigate(`${BASENAME}/login`);
       } else {
@@ -65,10 +66,6 @@ const PageWrapper: FC<ComponentProps> = ({ children }) => {
       break;
 
     case !menuInfo.isMenuOpen && !menuInfo.isLoggedIn:
-      menuStyle = "menu-closed menu-closed__logged-out";
-      break;
-
-    default:
       menuStyle = "menu-closed menu-closed__logged-out";
       break;
   }

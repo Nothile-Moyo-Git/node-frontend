@@ -17,6 +17,7 @@ import { generateUploadDate } from "../../util/util";
 import PageWrapper from "./PageWrapper";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { ContextProps } from "../../context/AppContext";
 
 // ---- Test Setup Values ----
 const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
@@ -86,4 +87,40 @@ describe("Textarea Component", () => {
     expect(showMenuButton).toBeVisible();
     userEvent.click(showMenuButton);
   });
+
+  it("Not authenticated", async () => {
+    // Handle authentication on the page
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockExpiryDate,
+            sessionExpires: mockCreationDate,
+            user: mockUser,
+            success: true,
+          },
+        },
+      }),
+    );
+
+    // Inauthenticated user context to pass through
+    const inauthenticatedContext: ContextProps = {
+      ...mockContext,
+      userAuthenticated: false,
+    };
+
+    // Render our element so we can compare it to the snapshot
+    const { baseElement } = await act(() => renderWithoutRouting(<PageWrapper></PageWrapper>, inauthenticatedContext));
+
+    const hideMenuButton = screen.getByTestId("test-id-hide-menu-button");
+    expect(hideMenuButton).toBeVisible();
+    userEvent.click(hideMenuButton);
+
+    // Matches the snapshot
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  /* it("", async () => {
+
+  }); */
 });
