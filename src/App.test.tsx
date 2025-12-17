@@ -53,7 +53,6 @@ afterEach(() => {
 // Our main tests, these tests cover key functionality
 describe("App Component Tests", () => {
   it("Renders successfully", () => {
-    console.log("Current test: Renders successfully");
     renderWithRouter(<App />);
     expect(screen.getByTestId("test-id-app-component")).toBeDefined();
   });
@@ -68,7 +67,6 @@ describe("App Component Tests", () => {
   });
 
   it("Shows error modal when backend returns success: false", async () => {
-    console.log("Current test: Shows error modal when backend returns success: false");
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
@@ -83,7 +81,6 @@ describe("App Component Tests", () => {
   });
 
   it("Displays user details after successful authentication", async () => {
-    console.log("Current test: Displays user details after successful authentication");
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
@@ -112,7 +109,6 @@ describe("App Component Tests", () => {
   });
 
   it("Redirects to login if user is not authenticated", async () => {
-    console.log("Current test: Redirects to login if user is not authenticated");
     renderWithContext(<App />, { route: "/" }, { ...mockContext, userAuthenticated: false });
 
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
@@ -142,8 +138,6 @@ describe("App Component Tests", () => {
 // I do not recommend aiming for 100% coverage, but instead, enough coverage to cover key functionality
 describe("App Component - Edge Case Coverage", () => {
   it("Does NOT call checkSessionValidation if token is undefined", async () => {
-    console.log("Current test: Does NOT call checkSessionValidation if token is undefined");
-
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {

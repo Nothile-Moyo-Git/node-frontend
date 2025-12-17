@@ -4,7 +4,6 @@
  * Author: Nothile Moyo
  *
  * Description: Select for the field component
- * These tests really arent necessary, they're just good for coverage
  */
 
 import { mockContext } from "../../test-utils/mocks/objects";
