@@ -38,7 +38,7 @@ afterEach(() => {
   clearAuthStorage();
 });
 
-describe("Textarea Component", () => {
+describe("PageWrapper Component", () => {
   it("Matches the snapshot", async () => {
     // Handle authentication on the page
     global.fetch = jest.fn().mockResolvedValue(

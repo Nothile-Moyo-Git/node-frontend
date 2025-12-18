@@ -36,7 +36,7 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
 
   const handleLogoutUser = async () => {
     // Perform the logout request
-    await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
+    await fetch(`${appContextInstance.baseUrl}/graphql/auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,12 +52,12 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
                     }
                 `,
         variables: {
-          _id: appContextInstance?.userId,
+          _id: appContextInstance.userId,
         },
       }),
     });
 
-    appContextInstance?.logoutUser();
+    appContextInstance.logoutUser();
 
     // Redirect to the login page
     navigate(`${BASENAME}/login`);
@@ -65,7 +65,7 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
 
   // Check authentication when component mounts
   useEffect(() => {
-    appContextInstance?.validateAuthentication();
+    appContextInstance.validateAuthentication();
   }, [appContextInstance]);
 
   return (
@@ -78,7 +78,7 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
             </Link>
           </li>
 
-          {appContextInstance?.userAuthenticated === false && (
+          {appContextInstance.userAuthenticated === false && (
             <>
               <li className="menu__item">
                 <Link to={BASENAME + "/login"} className="menu__link">
@@ -94,7 +94,7 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
             </>
           )}
 
-          {appContextInstance?.userAuthenticated === true && (
+          {appContextInstance.userAuthenticated === true && (
             <>
               <li className="menu__item">
                 <Link to={BASENAME + "/posts"} className="menu__link">
