@@ -11,7 +11,7 @@ import { mockContext } from "../../test-utils/mocks/objects";
 import { renderWithoutRouting } from "../../test-utils/testRouter";
 import Title from "./Title";
 
-describe("Textarea Component", () => {
+describe("Title Component", () => {
   it("Matches the snapshot", async () => {
     renderWithoutRouting(<Title isFormValid>{"children"}</Title>, mockContext);
   });
