@@ -26,6 +26,10 @@ beforeEach(() => {
   global.fetch = mockFetch;
 });
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 describe("Carousel Component", () => {
   it("Renders the carousel component", async () => {
     // Get the images from the backend

@@ -29,6 +29,7 @@ beforeEach(() => {
 // Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
+  jest.clearAllMocks();
 });
 
 describe("Edit Post Component", () => {
