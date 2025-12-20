@@ -48,6 +48,7 @@ beforeEach(() => {
 
 afterEach(() => {
   clearAuthStorage();
+  jest.clearAllMocks();
 });
 
 // Our main tests, these tests cover key functionality

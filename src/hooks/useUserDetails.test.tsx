@@ -49,7 +49,7 @@ const wrapper = ({ children }: { children: ReactNode }) => {
 };
 
 describe("useUserSession Hook", () => {
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 

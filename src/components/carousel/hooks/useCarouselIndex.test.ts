@@ -16,8 +16,11 @@ describe("useCarouselIndex hook", () => {
     // Instantiate our hook
     const { result } = renderHook(() => useCarouselIndex());
 
+    // We mock our swiper naturally updating by passing the realIndex as SwiperCore
+    // This is for the method onRealIndexChange
     const swiperMock = { realIndex: 2 } as SwiperCore;
 
+    // Mock updating the index naturally
     act(() => {
       result.current.updateIndex(swiperMock);
     });

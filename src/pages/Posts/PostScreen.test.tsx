@@ -21,6 +21,7 @@ beforeEach(() => {
 // Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
+  jest.clearAllMocks();
 });
 
 describe("Post Screen Component", () => {
