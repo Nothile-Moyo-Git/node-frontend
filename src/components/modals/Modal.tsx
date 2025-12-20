@@ -12,7 +12,7 @@ import { FC, ReactNode } from "react";
 import "./Modal.scss";
 
 interface ModalProps {
-  backdrop: boolean;
+  backdrop?: boolean;
   children?: ReactNode;
   testId: string;
   variant?: string;

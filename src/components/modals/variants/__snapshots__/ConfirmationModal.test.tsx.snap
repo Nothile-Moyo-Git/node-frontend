@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Confirmation Modal Component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <section
+      class="modal modal__backdrop"
+      data-testid="test-id-confirmation-modal"
+    >
+      <div
+        class="modal__component"
+      >
+        <div
+          class="modal__confirmation"
+        >
+          <h2>
+            Are you sure?
+          </h2>
+          <p>
+            If you wish to complete this action, click on the confirm button. If you'd like to cancel, click on cancel
+          </p>
+          <p>
+            Please know that this action is NOT REVERSIBLE.
+          </p>
+          <div
+            class="modal__confirmation-buttons"
+          >
+            <button
+              class="button button__primary"
+              data-testid="test-id-confirmation-modal-confirm-button"
+              type="submit"
+            >
+              Confirm
+            </button>
+            <button
+              class="button button__delete"
+              data-testid="test-id-confirmation-modal-cancel-button"
+              type="submit"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+`;
+
+exports[`Confirmation Modal Component Triggers performAction 1`] = `
+<body>
+  <div>
+    <section
+      class="modal modal__backdrop"
+      data-testid="test-id-confirmation-modal"
+    >
+      <div
+        class="modal__component"
+      >
+        <div
+          class="modal__confirmation"
+        >
+          <h2>
+            Are you sure?
+          </h2>
+          <p>
+            If you wish to complete this action, click on the confirm button. If you'd like to cancel, click on cancel
+          </p>
+          <p>
+            Please know that this action is NOT REVERSIBLE.
+          </p>
+          <div
+            class="modal__confirmation-buttons"
+          >
+            <button
+              class="button button__primary"
+              data-testid="test-id-confirmation-modal-confirm-button"
+              type="submit"
+            >
+              Confirm
+            </button>
+            <button
+              class="button button__delete"
+              data-testid="test-id-confirmation-modal-cancel-button"
+              type="submit"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+`;
+
+exports[`Confirmation Modal Component Triggers toggleConfirmationModal 1`] = `
+<body>
+  <div>
+    <section
+      class="modal modal__backdrop"
+      data-testid="test-id-confirmation-modal"
+    >
+      <div
+        class="modal__component"
+      >
+        <div
+          class="modal__confirmation"
+        >
+          <h2>
+            Are you sure?
+          </h2>
+          <p>
+            If you wish to complete this action, click on the confirm button. If you'd like to cancel, click on cancel
+          </p>
+          <p>
+            Please know that this action is NOT REVERSIBLE.
+          </p>
+          <div
+            class="modal__confirmation-buttons"
+          >
+            <button
+              class="button button__primary"
+              data-testid="test-id-confirmation-modal-confirm-button"
+              type="submit"
+            >
+              Confirm
+            </button>
+            <button
+              class="button button__delete"
+              data-testid="test-id-confirmation-modal-cancel-button"
+              type="submit"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+`;
