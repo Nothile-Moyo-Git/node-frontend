@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal Component Doesn't render the backdrop 1`] = `
+<body>
+  <div>
+    <section
+      class="modal false"
+      data-testid="test-id-modal-backdrop"
+    >
+      <div
+        class="modal__component"
+      >
+        children
+      </div>
+    </section>
+  </div>
+</body>
+`;
+
+exports[`Modal Component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <section
+      class="modal modal__backdrop"
+      data-testid="test-id-modal-backdrop"
+    >
+      <div
+        class="modal__component"
+      >
+        children
+      </div>
+    </section>
+  </div>
+</body>
+`;
+
+exports[`Modal Component Renders the default bakdrop 1`] = `
+<body>
+  <div>
+    <section
+      class="modal false"
+      data-testid="test-id-modal-backdrop"
+    >
+      <div
+        class="modal__component"
+      >
+        children
+      </div>
+    </section>
+  </div>
+</body>
+`;

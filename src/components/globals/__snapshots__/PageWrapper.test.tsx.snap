@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Textarea Component Matches the snapshot 1`] = `
+exports[`PageWrapper Component Matches the snapshot 1`] = `
 <body>
   <div>
     <header
@@ -112,7 +112,7 @@ exports[`Textarea Component Matches the snapshot 1`] = `
 </body>
 `;
 
-exports[`Textarea Component Not authenticated 1`] = `
+exports[`PageWrapper Component Not authenticated 1`] = `
 <body>
   <div>
     <header
