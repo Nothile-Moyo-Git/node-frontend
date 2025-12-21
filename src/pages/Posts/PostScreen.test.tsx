@@ -18,13 +18,12 @@ beforeEach(() => {
   setMockAuthStorage();
 });
 
-// Cleanup mocks and environment
-afterEach(() => {
-  clearAuthStorage();
-  jest.clearAllMocks();
-});
-
 describe("Post Screen Component", () => {
+  // Cleanup mocks and environment
+  afterEach(() => {
+    clearAuthStorage();
+    jest.clearAllMocks();
+  });
   it("Matches the screenshot", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,

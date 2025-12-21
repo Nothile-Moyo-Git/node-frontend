@@ -14,7 +14,7 @@ import { BASENAME } from "../../util/util";
 import { Select } from "../form/Select";
 interface ComponentProps {
   numberOfPages: number;
-  currentPage: number;
+  currentPage?: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -119,10 +119,19 @@ export const Paginator: FC<ComponentProps> = ({ numberOfPages, currentPage = 1, 
             pages={pagesArray}
             variant="pagination"
           />
-          <button className="paginator__button paginator__button--current-select">Go</button>
+          <button
+            className="paginator__button paginator__button--current-select"
+            data-testid="test-id-pagination-update-button"
+          >
+            Go
+          </button>
         </form>
       ) : (
-        <button disabled className="paginator__button paginator__button--current-normal">
+        <button
+          disabled
+          className="paginator__button paginator__button--current-normal"
+          data-testid="test-id-pagination-disabled-button"
+        >
           {currentPage}
         </button>
       )}
