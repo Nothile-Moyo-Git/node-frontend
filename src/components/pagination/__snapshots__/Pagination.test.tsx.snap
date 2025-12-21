@@ -1,0 +1,154 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Pagination component Matches the snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="paginator"
+    >
+      <a
+        class="paginator__button"
+        data-testid="test-id-pagination-page-1"
+        href="/posts/1"
+      >
+        1
+      </a>
+      <a
+        class="paginator__button"
+        data-testid="test-id-pagination-page-2"
+        href="/posts/2"
+      >
+        2
+      </a>
+      <button
+        class="paginator__button paginator__button--current-normal"
+        data-testid="test-id-pagination-disabled-button"
+        disabled=""
+      >
+        3
+      </button>
+      <a
+        class="paginator__button"
+        data-testid="test-id-pagination-page-4"
+        href="/posts/4"
+      >
+        4
+      </a>
+      <a
+        class="paginator__button"
+        data-testid="test-id-pagination-page-5"
+        href="/posts/5"
+      >
+        5
+      </a>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Pagination component Renders the default page 1`] = `
+<body>
+  <div>
+    <div
+      class="paginator"
+    >
+      <form
+        class="paginator__select-wrapper"
+        data-testid="test-id-pagination-form"
+      >
+        <select
+          class="select select--pagination"
+          data-testid="pagination-select-component"
+          id="pagination-select-component"
+          name="pagination-dropdown"
+        >
+          <option
+            class="option"
+            value="1"
+          >
+            1
+          </option>
+          <option
+            class="option"
+            value="2"
+          >
+            2
+          </option>
+          <option
+            class="option"
+            value="3"
+          >
+            3
+          </option>
+          <option
+            class="option"
+            value="4"
+          >
+            4
+          </option>
+          <option
+            class="option"
+            value="5"
+          >
+            5
+          </option>
+          <option
+            class="option"
+            value="6"
+          >
+            6
+          </option>
+          <option
+            class="option"
+            value="7"
+          >
+            7
+          </option>
+          <option
+            class="option"
+            value="8"
+          >
+            8
+          </option>
+        </select>
+        <button
+          class="paginator__button paginator__button--current-select"
+          data-testid="test-id-pagination-update-button"
+        >
+          Go
+        </button>
+      </form>
+      <a
+        class="paginator__button"
+        data-testid="test-id-pagination-page-2"
+        href="/posts/2"
+      >
+        2
+      </a>
+      <a
+        class="paginator__button"
+        data-testid="test-id-pagination-page-3"
+        href="/posts/3"
+      >
+        3
+      </a>
+      <div
+        class="paginator__min-max-wrapper"
+      >
+        <p
+          class="paginator__min-max-text"
+        >
+          ...
+        </p>
+        <a
+          class="paginator__button"
+          data-testid="test-id-pagination-page-8"
+          href="/posts/8"
+        >
+          8
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+`;
