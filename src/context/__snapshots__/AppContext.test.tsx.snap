@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppContext Renders the default context 1`] = `
+<body>
+  <div>
+    <section>
+      <div>
+        <p>
+          Token: 
+          fake-token
+        </p>
+      </div>
+      <div>
+        <button
+          data-testid="test-id-validate-button"
+        >
+          Validate Authentication
+        </button>
+        <button
+          data-testid="test-id-check-button"
+        >
+          Check Authentication
+        </button>
+        <button
+          data-testid="test-id-logout-button"
+        >
+          Logout
+        </button>
+      </div>
+    </section>
+  </div>
+</body>
+`;

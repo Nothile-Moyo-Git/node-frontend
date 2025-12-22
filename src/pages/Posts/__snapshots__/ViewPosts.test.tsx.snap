@@ -134,6 +134,7 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
     </a>
     <button
       class="paginator__button paginator__button--current-normal"
+      data-testid="test-id-pagination-disabled-button"
       disabled=""
     >
       2
@@ -330,6 +331,7 @@ exports[`View Posts component Renders the page with pagination and goes to the n
     </a>
     <button
       class="paginator__button paginator__button--current-normal"
+      data-testid="test-id-pagination-disabled-button"
       disabled=""
     >
       2
@@ -519,6 +521,7 @@ exports[`View Posts component Should match snapshot 1`] = `
   >
     <button
       class="paginator__button paginator__button--current-normal"
+      data-testid="test-id-pagination-disabled-button"
       disabled=""
     >
       1
