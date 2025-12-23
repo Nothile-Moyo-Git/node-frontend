@@ -1,13 +1,69 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AppContext Calls the checkAuthentication method passed through 1`] = `
+<body>
+  <div>
+    <section>
+      <div>
+        <p
+          data-testid="test-id-token-value"
+        >
+          Token: 
+        </p>
+        <p
+          data-testid="test-id-userid-value"
+        >
+          UserId: 
+        </p>
+        <p
+          data-testid="test-id-authentication-value"
+        >
+          Authenticated: 
+        </p>
+      </div>
+      <div>
+        <button
+          data-testid="test-id-validate-button"
+        >
+          Validate Authentication
+        </button>
+        <button
+          data-testid="test-id-check-button"
+        >
+          Check Authentication
+        </button>
+        <button
+          data-testid="test-id-logout-button"
+        >
+          Logout
+        </button>
+      </div>
+    </section>
+  </div>
+</body>
+`;
+
 exports[`AppContext Renders the default context 1`] = `
 <body>
   <div>
     <section>
       <div>
-        <p>
+        <p
+          data-testid="test-id-token-value"
+        >
           Token: 
           fake-token
+        </p>
+        <p
+          data-testid="test-id-userid-value"
+        >
+          UserId: 
+          12345-nothile-id
+        </p>
+        <p
+          data-testid="test-id-authentication-value"
+        >
+          Authenticated: 
         </p>
       </div>
       <div>
