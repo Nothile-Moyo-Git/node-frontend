@@ -6,7 +6,7 @@
  * Description: Test for the appContext
  */
 
-import { act, useContext } from "react";
+import { useContext } from "react";
 import AppContextProvider, { AppContext, ContextProps } from "./AppContext";
 import { render } from "@testing-library/react";
 import { mockContext } from "../test-utils/mocks/objects";
@@ -14,21 +14,24 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { clearAuthStorage, setMockAuthStorage } from "../test-utils/authStorage";
 
+// Create a copy of our original process.env so we can update it test by test
+const originalEnv = process.env;
+
 beforeEach(() => {
   setMockAuthStorage();
+  // Reset our modules so we can set onew environment variables
+  jest.resetModules();
+  // Create a new copy of process.env so we an update it
+  process.env = { ...originalEnv };
 });
 
 afterEach(() => {
   clearAuthStorage();
   jest.clearAllMocks();
+  process.env = originalEnv;
 });
 
 describe("AppContext", () => {
-  /* const checkAuthenticationMock = jest.fn(() => true);
-  const failedCheckAuthenticationMock = jest.fn(() => false);
-  const validateAuthenticationMock = jest.fn(() => {});
-  const logoutUserMock = jest.fn(() => {}); */
-
   // Instantiate our context and create a child to pass it through, that way, we can test everything
   const Children = () => {
     const appContextInstance: ContextProps = useContext(AppContext);
@@ -85,16 +88,36 @@ describe("AppContext", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  /* it("Calls validateAuthentication with an environment of dev", () => {
+  it("Calls validateAuthentication with an environment of dev", () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+      REACT_APP_API_DEV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+      REACT_APP_API_PROD: {
+        value: "production",
+        writable: true,
+        configurable: true,
+      },
+    });
+
     // Render an empty component
     const { baseElement } = render(<AppContextProvider>{<Children />}</AppContextProvider>);
 
     // Check to make sure we see the buttons
     const validateButton = screen.getByTestId("test-id-validate-button");
-
-    userEvent.click(checkAuthenticationButton);
+    userEvent.click(validateButton);
 
     // Check if it matches the snapshot
     expect(baseElement).toMatchSnapshot();
-  }); */
+  });
 });
