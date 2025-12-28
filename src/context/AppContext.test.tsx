@@ -6,7 +6,7 @@
  * Description: Test for the appContext
  */
 
-import { useContext } from "react";
+import React, { act, useContext } from "react";
 import AppContextProvider, { AppContext, ContextProps } from "./AppContext";
 import { render } from "@testing-library/react";
 import { mockContext } from "../test-utils/mocks/objects";
@@ -14,49 +14,55 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { clearAuthStorage, setMockAuthStorage } from "../test-utils/authStorage";
 
-// Create a copy of our original process.env so we can update it test by test
-const originalEnv = process.env;
+const Children = () => {
+  const appContextInstance: ContextProps = useContext(AppContext);
+  const [checkResult, setCheckResult] = React.useState<boolean | undefined>(undefined);
 
-beforeEach(() => {
-  setMockAuthStorage();
-  // Reset our modules so we can set onew environment variables
-  jest.resetModules();
-  // Create a new copy of process.env so we an update it
-  process.env = { ...originalEnv };
-});
+  const handleCheckAuthentication = () => {
+    const result = appContextInstance.checkAuthentication();
+    setCheckResult(result);
+  };
 
-afterEach(() => {
-  clearAuthStorage();
-  jest.clearAllMocks();
-  process.env = originalEnv;
-});
+  return (
+    <section>
+      <div>
+        <p data-testid="test-id-token-value">Token: {appContextInstance.token}</p>
+        <p data-testid="test-id-userid-value">UserId: {appContextInstance.userId}</p>
+        <p data-testid="test-id-authentication-value">{`Authenticated: ${appContextInstance.userAuthenticated}`}</p>
+        <p data-testid="test-id-check-result">{`Check Result: ${checkResult !== undefined ? checkResult : "not checked"}`}</p>
+      </div>
+      <div>
+        <button data-testid="test-id-validate-button" onClick={appContextInstance.validateAuthentication}>
+          Validate Authentication
+        </button>
+        <button data-testid="test-id-check-button" onClick={handleCheckAuthentication}>
+          Check Authentication
+        </button>
+        <button data-testid="test-id-logout-button" onClick={appContextInstance.logoutUser}>
+          Logout
+        </button>
+      </div>
+    </section>
+  );
+};
 
 describe("AppContext", () => {
-  // Instantiate our context and create a child to pass it through, that way, we can test everything
-  const Children = () => {
-    const appContextInstance: ContextProps = useContext(AppContext);
+  // Create a copy of our original process.env so we can update it test by test
+  const originalEnv = process.env;
 
-    return (
-      <section>
-        <div>
-          <p data-testid="test-id-token-value">Token: {appContextInstance.token}</p>
-          <p data-testid="test-id-userid-value">UserId: {appContextInstance.userId}</p>
-          <p data-testid="test-id-authentication-value">Authenticated: {appContextInstance.userAuthenticated}</p>
-        </div>
-        <div>
-          <button data-testid="test-id-validate-button" onClick={appContextInstance.validateAuthentication}>
-            Validate Authentication
-          </button>
-          <button data-testid="test-id-check-button" onClick={appContextInstance.checkAuthentication}>
-            Check Authentication
-          </button>
-          <button data-testid="test-id-logout-button" onClick={appContextInstance.logoutUser}>
-            Logout
-          </button>
-        </div>
-      </section>
-    );
-  };
+  beforeEach(() => {
+    setMockAuthStorage();
+    // Reset our modules so we can set onew environment variables
+    jest.resetModules();
+    // Create a new copy of process.env so we an update it
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    clearAuthStorage();
+    jest.clearAllMocks();
+    process.env = originalEnv;
+  });
 
   it("Renders the default context", () => {
     // Render an empty component
@@ -80,9 +86,9 @@ describe("AppContext", () => {
 
     // Check to make sure we see the buttons
     const checkAuthenticationButton = screen.getByTestId("test-id-check-button");
-
-    // Click on the checkAuthentication button
-    userEvent.click(checkAuthenticationButton);
+    await act(async () => {
+      userEvent.click(checkAuthenticationButton);
+    });
 
     // Check if it matches the snapshot
     expect(baseElement).toMatchSnapshot();
@@ -117,7 +123,100 @@ describe("AppContext", () => {
     const validateButton = screen.getByTestId("test-id-validate-button");
     userEvent.click(validateButton);
 
+    // Ensure that the user is validated
+    const authenticatedText = screen.getByTestId("test-id-authentication-value");
+    expect(authenticatedText).toHaveTextContent("Authenticated: true");
+
     // Check if it matches the snapshot
     expect(baseElement).toMatchSnapshot();
+  });
+});
+
+describe("AppContext expired", () => {
+  // Create a copy of our original process.env so we can update it test by test
+  const originalEnv = process.env;
+
+  beforeEach(() => {
+    // Here, we set the expired date to the current date so it's expired
+    setMockAuthStorage({ token: "mock-token", userId: "mock-user-id", expiresIn: new Date(Date.now()).toISOString() });
+    // Reset our modules so we can set onew environment variables
+    jest.resetModules();
+    // Create a new copy of process.env so we an update it
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    clearAuthStorage();
+    jest.clearAllMocks();
+    process.env = originalEnv;
+  });
+
+  it("Validates expired user", async () => {
+    // Render an empty component
+
+    const { baseElement } = render(<AppContextProvider>{<Children />}</AppContextProvider>);
+    const validateButton = screen.getByTestId("test-id-validate-button");
+    await act(async () => {
+      userEvent.click(validateButton);
+    });
+
+    // Ensure that the user isn't validated
+    const authenticatedText = screen.getByTestId("test-id-authentication-value");
+    expect(authenticatedText).toHaveTextContent("Authenticated: false");
+
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("Checks for an expired user", async () => {
+    render(<AppContextProvider>{<Children />}</AppContextProvider>);
+
+    const checkAuthenticationButton = screen.getByTestId("test-id-check-button");
+    await act(async () => {
+      userEvent.click(checkAuthenticationButton);
+    });
+
+    const checkResult = screen.getByTestId("test-id-check-result");
+    expect(checkResult).toHaveTextContent("Check Result: false");
+  });
+});
+
+describe("AppContext localStorage is empty", () => {
+  // Create a copy of our original process.env so we can update it test by test
+  const originalEnv = process.env;
+
+  beforeEach(() => {
+    // Here, we set the expired date to the current date so it's expired
+    setMockAuthStorage({ token: undefined, userId: undefined, expiresIn: undefined });
+    // Reset our modules so we can set onew environment variables
+    jest.resetModules();
+    // Create a new copy of process.env so we an update it
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    clearAuthStorage();
+    jest.clearAllMocks();
+    process.env = originalEnv;
+  });
+
+  it("Returns false when authentication data is missing from localStorage", () => {
+    // Clear all auth storage to simulate missing data
+    clearAuthStorage();
+
+    let contextValue: ContextProps | null = null;
+
+    const TestComponent = () => {
+      contextValue = useContext(AppContext);
+      return null;
+    };
+
+    render(
+      <AppContextProvider>
+        <TestComponent />
+      </AppContextProvider>,
+    );
+
+    const result = contextValue!.checkAuthentication();
+    expect(result).toBe(false);
   });
 });

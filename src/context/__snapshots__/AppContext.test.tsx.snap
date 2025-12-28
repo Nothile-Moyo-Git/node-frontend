@@ -18,7 +18,12 @@ exports[`AppContext Calls the checkAuthentication method passed through 1`] = `
         <p
           data-testid="test-id-authentication-value"
         >
-          Authenticated: 
+          Authenticated: false
+        </p>
+        <p
+          data-testid="test-id-check-result"
+        >
+          Check Result: true
         </p>
       </div>
       <div>
@@ -63,7 +68,12 @@ exports[`AppContext Calls validateAuthentication with an environment of dev 1`] 
         <p
           data-testid="test-id-authentication-value"
         >
-          Authenticated: 
+          Authenticated: true
+        </p>
+        <p
+          data-testid="test-id-check-result"
+        >
+          Check Result: not checked
         </p>
       </div>
       <div>
@@ -108,7 +118,62 @@ exports[`AppContext Renders the default context 1`] = `
         <p
           data-testid="test-id-authentication-value"
         >
-          Authenticated: 
+          Authenticated: true
+        </p>
+        <p
+          data-testid="test-id-check-result"
+        >
+          Check Result: not checked
+        </p>
+      </div>
+      <div>
+        <button
+          data-testid="test-id-validate-button"
+        >
+          Validate Authentication
+        </button>
+        <button
+          data-testid="test-id-check-button"
+        >
+          Check Authentication
+        </button>
+        <button
+          data-testid="test-id-logout-button"
+        >
+          Logout
+        </button>
+      </div>
+    </section>
+  </div>
+</body>
+`;
+
+exports[`AppContext expired Validates expired user 1`] = `
+<body>
+  <div>
+    <section>
+      <div>
+        <p
+          data-testid="test-id-token-value"
+        >
+          Token: 
+          mock-token
+        </p>
+        <p
+          data-testid="test-id-userid-value"
+        >
+          UserId: 
+          mock-user-id
+        </p>
+        <p
+          data-testid="test-id-authentication-value"
+        >
+          Authenticated: false
+        </p>
+        <p
+          data-testid="test-id-check-result"
+        >
+          Check Result: not checked
         </p>
       </div>
       <div>
