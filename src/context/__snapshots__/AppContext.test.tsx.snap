@@ -157,13 +157,11 @@ exports[`AppContext expired Validates expired user 1`] = `
           data-testid="test-id-token-value"
         >
           Token: 
-          mock-token
         </p>
         <p
           data-testid="test-id-userid-value"
         >
           UserId: 
-          mock-user-id
         </p>
         <p
           data-testid="test-id-authentication-value"
@@ -173,7 +171,7 @@ exports[`AppContext expired Validates expired user 1`] = `
         <p
           data-testid="test-id-check-result"
         >
-          Check Result: not checked
+          Check Result: false
         </p>
       </div>
       <div>

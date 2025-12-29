@@ -18,6 +18,7 @@ const Children = () => {
   const appContextInstance: ContextProps = useContext(AppContext);
   const [checkResult, setCheckResult] = React.useState<boolean | undefined>(undefined);
 
+  // Allow us to test the response of the request
   const handleCheckAuthentication = () => {
     const result = appContextInstance.checkAuthentication();
     setCheckResult(result);
@@ -130,6 +131,28 @@ describe("AppContext", () => {
     // Check if it matches the snapshot
     expect(baseElement).toMatchSnapshot();
   });
+
+  it("Logs out the user", async () => {
+    // Render an empty component
+    render(<AppContextProvider>{<Children />}</AppContextProvider>);
+
+    // Check to make sure we see the buttons
+    const logoutButton = screen.getByTestId("test-id-logout-button");
+    await act(async () => {
+      userEvent.click(logoutButton);
+    });
+
+    // Make sure we no longer have anything in localStorage
+    const tokenText = screen.getByTestId("test-id-token-value");
+    const userIdText = screen.getByTestId("test-id-userid-value");
+    const authenticatedText = screen.getByTestId("test-id-authentication-value");
+    const checkResult = screen.getByTestId("test-id-check-result");
+
+    expect(tokenText).toHaveTextContent("Token:");
+    expect(userIdText).toHaveTextContent("UserId:");
+    expect(authenticatedText).toHaveTextContent("Authenticated: false");
+    expect(checkResult).toHaveTextContent("Check Result: not checked");
+  });
 });
 
 describe("AppContext expired", () => {
@@ -153,16 +176,27 @@ describe("AppContext expired", () => {
 
   it("Validates expired user", async () => {
     // Render an empty component
-
     const { baseElement } = render(<AppContextProvider>{<Children />}</AppContextProvider>);
+
+    // Running the default functions since we're not passing parameters through
     const validateButton = screen.getByTestId("test-id-validate-button");
+    const checkUserButton = screen.getByTestId("test-id-check-button");
+    const logoutUserButton = screen.getByTestId("test-id-logout-button");
+
     await act(async () => {
       userEvent.click(validateButton);
+      userEvent.click(checkUserButton);
+      userEvent.click(logoutUserButton);
     });
 
     // Ensure that the user isn't validated
     const authenticatedText = screen.getByTestId("test-id-authentication-value");
+    const token = screen.getByTestId("test-id-token-value");
+    const userId = screen.getByTestId("test-id-userid-value");
+
     expect(authenticatedText).toHaveTextContent("Authenticated: false");
+    expect(token).toHaveTextContent("Token:");
+    expect(userId).toHaveTextContent("UserId:");
 
     expect(baseElement).toMatchSnapshot();
   });
@@ -176,6 +210,32 @@ describe("AppContext expired", () => {
     });
 
     const checkResult = screen.getByTestId("test-id-check-result");
+    expect(checkResult).toHaveTextContent("Check Result: false");
+  });
+
+  it("Uses default context methods when no provider is present", () => {
+    // Render Children without AppContextProvider wrapper
+    render(<Children />);
+
+    // Get the buttons
+    const validateButton = screen.getByTestId("test-id-validate-button");
+    const checkAuthenticationButton = screen.getByTestId("test-id-check-button");
+    const logoutButton = screen.getByTestId("test-id-logout-button");
+
+    // Click all buttons - these will call the default empty methods
+    userEvent.click(validateButton);
+    userEvent.click(checkAuthenticationButton);
+    userEvent.click(logoutButton);
+
+    // Verify the default values are shown
+    const tokenText = screen.getByTestId("test-id-token-value");
+    const userIdText = screen.getByTestId("test-id-userid-value");
+    const authenticatedText = screen.getByTestId("test-id-authentication-value");
+    const checkResult = screen.getByTestId("test-id-check-result");
+
+    expect(tokenText).toHaveTextContent("Token:");
+    expect(userIdText).toHaveTextContent("UserId:");
+    expect(authenticatedText).toHaveTextContent("Authenticated: undefined");
     expect(checkResult).toHaveTextContent("Check Result: false");
   });
 });
