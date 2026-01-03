@@ -53,7 +53,7 @@ describe("AppContext", () => {
 
   beforeEach(() => {
     setMockAuthStorage();
-    // Reset our modules so we can set onew environment variables
+    // Reset our modules so we can set new environment variables
     jest.resetModules();
     // Create a new copy of process.env so we an update it
     process.env = { ...originalEnv };

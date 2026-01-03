@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login with empty local storage Matches the snapshot 1`] = `
+<body>
+  <div>
+    <section
+      class="login"
+    >
+      <form
+        class="form  false"
+        data-testid="test-id-login-form"
+      >
+        <h2
+          class="title false"
+        >
+          Login
+        </h2>
+        <div
+          class="field "
+        >
+          <label
+            class="label false"
+            data-testid="test-id-login-email-label"
+            for="email"
+            id="emailLabel"
+          >
+            Email*
+          </label>
+          <input
+            aria-labelledby="emailLabel"
+            class="input  false"
+            data-testid="test-id-login-email-input"
+            name="email"
+            placeholder="Please enter your email address"
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          class="field "
+        >
+          <label
+            class="label false"
+            data-testid="test-id-login-password-label"
+            for="password"
+            id="passwordLabel"
+          >
+            Password*
+          </label>
+          <input
+            aria-labelledby="passwordLabel"
+            class="input  false"
+            data-testid="test-id-login-password-input"
+            name="password"
+            placeholder="Please enter your password"
+            type="password"
+            value=""
+          />
+        </div>
+        <button
+          class="button button__primary"
+          data-testid="test-id-login-button"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </section>
+  </div>
+</body>
+`;
+
+exports[`Login with empty local storage Successfully navigates the user if they log in successfully 1`] = `
+<body>
+  <div>
+    <section
+      class="login"
+    >
+      <form
+        class="form  false"
+        data-testid="test-id-login-form"
+      >
+        <h2
+          class="title false"
+        >
+          Login
+        </h2>
+        <div
+          class="field "
+        >
+          <label
+            class="label false"
+            data-testid="test-id-login-email-label"
+            for="email"
+            id="emailLabel"
+          >
+            Email*
+          </label>
+          <input
+            aria-labelledby="emailLabel"
+            class="input  false"
+            data-testid="test-id-login-email-input"
+            name="email"
+            placeholder="Please enter your email address"
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          class="field "
+        >
+          <label
+            class="label false"
+            data-testid="test-id-login-password-label"
+            for="password"
+            id="passwordLabel"
+          >
+            Password*
+          </label>
+          <input
+            aria-labelledby="passwordLabel"
+            class="input  false"
+            data-testid="test-id-login-password-input"
+            name="password"
+            placeholder="Please enter your password"
+            type="password"
+            value=""
+          />
+        </div>
+        <button
+          class="button button__primary"
+          data-testid="test-id-login-button"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </section>
+  </div>
+</body>
+`;
