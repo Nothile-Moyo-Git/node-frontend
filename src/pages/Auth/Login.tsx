@@ -53,7 +53,7 @@ export const LoginPage: FC = () => {
     // Perform the login request to the backend
     try {
       // Perform the signup request
-      const result = await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
+      const result = await fetch(`${appContextInstance.baseUrl}/graphql/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,16 +108,16 @@ export const LoginPage: FC = () => {
       }
     } catch (error) {
       console.log("There was an error loading this page");
-      console.log(error);
+      console.error(error);
     }
   };
 
   // Check authentication when component mounts
   useEffect(() => {
-    appContextInstance?.validateAuthentication();
+    appContextInstance.validateAuthentication();
 
     // If the user is authenticated, redirect this route to the previous page
-    if (appContextInstance?.userAuthenticated) {
+    if (appContextInstance.userAuthenticated) {
       navigate(-1);
     }
   }, [appContextInstance, navigate]);
