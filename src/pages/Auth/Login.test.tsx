@@ -30,7 +30,7 @@ jest.mock("react-router-dom", () => ({
 // Get the mocked version of useNavigate
 let mockNavigate: jest.Mock;
 
-describe("Login with empty local storage", () => {
+describe("Login", () => {
   beforeEach(() => {
     setMockAuthStorage({});
     // Reset our modules so we can set new environment variables
@@ -236,5 +236,39 @@ describe("Login with empty local storage", () => {
     // Show the error
     const emailLabel = screen.getByTestId("test-id-login-password-label");
     expect(emailLabel).toHaveTextContent("Error: The password is invalid");
+  });
+});
+
+describe("Login - Expired Session", () => {
+  //
+  beforeEach(() => {
+    setMockAuthStorage({
+      token: "mock-token",
+      userId: "mock-user-id",
+      expiresIn: new Date(Date.now()).toISOString(),
+    });
+    // Reset our modules so we can set new environment variables
+    jest.resetModules();
+    // Create a new copy of process.env so we an update it
+    mockNavigate = jest.fn();
+    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+
+    mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
+    global.fetch = mockFetch;
+  });
+
+  afterEach(() => {
+    clearAuthStorage();
+    jest.clearAllMocks();
+  });
+
+  it("Redirect to the previous page", async () => {
+    // Render the login page and perform the act so we can get the state update
+    await act(async () => {
+      renderWithContext(<LoginPage />, { route: "/login" }, mockContext);
+    });
+
+    // Make sure that we're navigated back to our previous page and it's called
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith(-1));
   });
 });

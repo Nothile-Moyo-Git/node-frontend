@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Login with empty local storage Matches the snapshot 1`] = `
+exports[`Login Matches the snapshot 1`] = `
 <body>
   <div>
     <section
@@ -70,7 +70,7 @@ exports[`Login with empty local storage Matches the snapshot 1`] = `
 </body>
 `;
 
-exports[`Login with empty local storage Successfully navigates the user if they log in successfully 1`] = `
+exports[`Login Successfully navigates the user if they log in successfully 1`] = `
 <body>
   <div>
     <section
