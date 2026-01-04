@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Signup Matches the snapshot 1`] = `
+<body>
+  <div>
+    <section
+      class="signup"
+    >
+      <form
+        class="form  false"
+        data-testid="test-id-signup-form"
+      >
+        <h2
+          class="title false"
+        >
+          Signup
+        </h2>
+        <div
+          class="field "
+        >
+          <label
+            class="label false"
+            data-testid="test-id-signup-name-label"
+            for="name"
+            id="nameLabel"
+          >
+            Name*
+          </label>
+          <input
+            aria-labelledby="nameLabel"
+            class="input  false"
+            data-testid="test-id-signup-name-input"
+            name="name"
+            placeholder="Please enter your name"
+            required=""
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          class="field "
+        >
+          <label
+            class="label false"
+            data-testid="test-id-signup-email-label"
+            for="emailAddress"
+            id="emailLabel"
+          >
+            Email*
+          </label>
+          <input
+            aria-labelledby="emailLabel"
+            class="input  false"
+            data-testid="test-id-signup-email-input"
+            name="emailAddress"
+            placeholder="Please enter your email"
+            required=""
+            type="email"
+            value=""
+          />
+        </div>
+        <div
+          class="field "
+        >
+          <label
+            class="label false"
+            data-testid="test-id-signup-password-label"
+            for="firstPassword"
+            id="passwordLabel"
+          >
+            Password*
+          </label>
+          <input
+            aria-labelledby="firstPassword"
+            class="input  false"
+            data-testid="test-id-signup-password-input"
+            name="firstPassword"
+            placeholder="Please enter your password"
+            required=""
+            type="password"
+            value=""
+          />
+        </div>
+        <div
+          class="field "
+        >
+          <label
+            class="label false"
+            data-testid="test-id-signup-password-confirm-label"
+            for="confirmPassword"
+            id="confirmPasswordLabel"
+          >
+            Confirm Password*
+          </label>
+          <input
+            aria-labelledby="confirmPassword"
+            class="input  false"
+            data-testid="test-id-signup-password-confirm-input"
+            name="confirmPassword"
+            placeholder="Please confirm your password"
+            required=""
+            type="password"
+            value=""
+          />
+        </div>
+        <button
+          class="button button__primary"
+          data-testid="test-id-signup-button"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </section>
+  </div>
+</body>
+`;

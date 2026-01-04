@@ -69,7 +69,7 @@ export const SignupPage: FC = () => {
     // Perform the signup request to the backend
     try {
       // Perform the signup request
-      const result = await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
+      const result = await fetch(`${appContextInstance.baseUrl}/graphql/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,10 +98,6 @@ export const SignupPage: FC = () => {
       });
 
       const response = await result.json();
-
-      console.log("\n\n");
-      console.log("Response");
-      console.log(response);
 
       const data = response.data.signupUserResponse;
 
@@ -139,10 +135,10 @@ export const SignupPage: FC = () => {
 
   // Check authentication when component mounts
   useEffect(() => {
-    appContextInstance?.validateAuthentication();
+    appContextInstance.validateAuthentication();
 
     // If the user is authenticated, redirect this route to the previous page
-    if (appContextInstance?.userAuthenticated) {
+    if (appContextInstance.userAuthenticated) {
       navigate(-1);
     }
   }, [appContextInstance, navigate]);

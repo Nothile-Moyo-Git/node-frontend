@@ -145,6 +145,7 @@ export const LoginPage: FC = () => {
             placeholder="Please enter your email address"
             testId="test-id-login-email-input"
             type="text"
+            required
           />
         </Field>
 
@@ -166,6 +167,7 @@ export const LoginPage: FC = () => {
             testId="test-id-login-password-input"
             type="password"
             ref={passwordRef}
+            required
           />
         </Field>
 
