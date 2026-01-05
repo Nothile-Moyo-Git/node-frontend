@@ -109,4 +109,133 @@ describe("Signup", () => {
       expect(mockNavigate).toHaveBeenCalledWith("/login");
     });
   });
+
+  it("Responds with an error because a user already exists", async () => {
+    // Mock the api response of a successful signup
+    mockFetch.mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          signupUserResponse: {
+            isNameValid: true,
+            isEmailValid: true,
+            isPasswordValid: true,
+            doPasswordsMatch: true,
+            userExists: true,
+            userCreated: false,
+          },
+        },
+      }),
+    );
+
+    // Generate the snapshot from rendering the component
+    renderWithContext(<SignupPage />, { route: "/signup" }, mockContext);
+
+    // Enter the user details
+    const nameInput = screen.getByTestId("test-id-signup-name-input");
+    const emailInput = screen.getByTestId("test-id-signup-email-input");
+    const passwordInput = screen.getByTestId("test-id-signup-password-input");
+    const confirmPasswordInput = screen.getByTestId("test-id-signup-password-confirm-input");
+
+    userEvent.type(nameInput, "Name");
+    userEvent.type(emailInput, "Email");
+    userEvent.type(passwordInput, "Password");
+    userEvent.type(confirmPasswordInput, "Password");
+
+    // Perform the request
+    const submitButton = screen.getByTestId("test-id-signup-button");
+    await act(async () => {
+      userEvent.click(submitButton);
+    });
+
+    const emailLabel = screen.getByTestId("test-id-signup-email-label");
+    await waitFor(() => {
+      expect(emailLabel).toHaveTextContent("Error: User already exists with this email");
+    });
+  });
+
+  it("Responds with an error because the name is invalid", async () => {
+    // Mock the api response of a successful signup
+    mockFetch.mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          signupUserResponse: {
+            isNameValid: false,
+            isEmailValid: true,
+            isPasswordValid: true,
+            doPasswordsMatch: true,
+            userExists: false,
+            userCreated: false,
+          },
+        },
+      }),
+    );
+
+    // Generate the snapshot from rendering the component
+    renderWithContext(<SignupPage />, { route: "/signup" }, mockContext);
+
+    // Enter the user details
+    const nameInput = screen.getByTestId("test-id-signup-name-input");
+    const emailInput = screen.getByTestId("test-id-signup-email-input");
+    const passwordInput = screen.getByTestId("test-id-signup-password-input");
+    const confirmPasswordInput = screen.getByTestId("test-id-signup-password-confirm-input");
+
+    userEvent.type(nameInput, "Name");
+    userEvent.type(emailInput, "Email");
+    userEvent.type(passwordInput, "Password");
+    userEvent.type(confirmPasswordInput, "Password");
+
+    // Perform the request
+    const submitButton = screen.getByTestId("test-id-signup-button");
+    await act(async () => {
+      userEvent.click(submitButton);
+    });
+
+    const nameLabel = screen.getByTestId("test-id-signup-name-label");
+    await waitFor(() => {
+      expect(nameLabel).toHaveTextContent("Error: Name must be at least 6 characters");
+    });
+  });
+
+  it("Responds with an error because the email is invalid", async () => {
+    // Mock the api response of a successful signup
+    mockFetch.mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          signupUserResponse: {
+            isNameValid: true,
+            isEmailValid: false,
+            isPasswordValid: true,
+            doPasswordsMatch: true,
+            userExists: false,
+            userCreated: false,
+          },
+        },
+      }),
+    );
+
+    // Generate the snapshot from rendering the component
+    renderWithContext(<SignupPage />, { route: "/signup" }, mockContext);
+
+    // Enter the user details
+    const nameInput = screen.getByTestId("test-id-signup-name-input");
+    const emailInput = screen.getByTestId("test-id-signup-email-input");
+    const passwordInput = screen.getByTestId("test-id-signup-password-input");
+    const confirmPasswordInput = screen.getByTestId("test-id-signup-password-confirm-input");
+
+    userEvent.type(nameInput, "Name");
+    userEvent.type(emailInput, "Email");
+    userEvent.type(passwordInput, "Password");
+    userEvent.type(confirmPasswordInput, "Password");
+
+    // Perform the request
+    const submitButton = screen.getByTestId("test-id-signup-button");
+    await act(async () => {
+      userEvent.click(submitButton);
+    });
+
+    const emailLabel = screen.getByTestId("test-id-signup-email-label");
+    await waitFor(() => {
+      expect(emailLabel).toHaveTextContent("Error: Email address isn't valid");
+    });
+  });
 });
