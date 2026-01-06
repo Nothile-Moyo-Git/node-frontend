@@ -33,9 +33,7 @@ let mockNavigate: jest.Mock;
 describe("Signup", () => {
   beforeEach(() => {
     setMockAuthStorage();
-    // Reset our modules so we can set new environment variables
-    jest.resetModules();
-    // Create a new copy of process.env so we an update it
+    // Mock the result, and then mock the behavior that occurs if useNavigate is called
     mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
@@ -237,5 +235,34 @@ describe("Signup", () => {
     await waitFor(() => {
       expect(emailLabel).toHaveTextContent("Error: Email address isn't valid");
     });
+  });
+
+  it("Triggers the catch block by throwing an error", async () => {
+    // Mock the request returning an error
+    mockFetch.mockRejectedValueOnce(new Error("Network failed"));
+
+    // Generate the snapshot from rendering the component
+    renderWithContext(<SignupPage />, { route: "/signup" }, mockContext);
+
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => console.log("Error"));
+
+    // Enter the user details
+    const nameInput = screen.getByTestId("test-id-signup-name-input");
+    const emailInput = screen.getByTestId("test-id-signup-email-input");
+    const passwordInput = screen.getByTestId("test-id-signup-password-input");
+    const confirmPasswordInput = screen.getByTestId("test-id-signup-password-confirm-input");
+
+    userEvent.type(nameInput, "Name");
+    userEvent.type(emailInput, "Email");
+    userEvent.type(passwordInput, "Password");
+    userEvent.type(confirmPasswordInput, "Password");
+
+    // Perform the request
+    const submitButton = screen.getByTestId("test-id-signup-button");
+    await act(async () => {
+      userEvent.click(submitButton);
+    });
+
+    await waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
   });
 });

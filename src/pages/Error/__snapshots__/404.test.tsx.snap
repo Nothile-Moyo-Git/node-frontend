@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`App Component Tests Displays user details after successful authentication 1`] = `
+exports[`Signup Matches the snapshot 1`] = `
 <body>
   <div>
     <div
@@ -27,12 +27,12 @@ exports[`App Component Tests Displays user details after successful authenticati
         <p
           class="app__text"
         >
-          Session created : 2026/01/06 21:09:18
+          Session created : 2026/01/06 22:17:40
         </p>
         <p
           class="app__text"
         >
-          Session expires : 2026/01/20 21:09:18
+          Session expires : 2026/01/20 22:17:40
         </p>
       </div>
     </div>

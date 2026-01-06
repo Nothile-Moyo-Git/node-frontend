@@ -32,6 +32,7 @@ exports[`Login Matches the snapshot 1`] = `
             data-testid="test-id-login-email-input"
             name="email"
             placeholder="Please enter your email address"
+            required=""
             type="text"
             value=""
           />
@@ -53,6 +54,7 @@ exports[`Login Matches the snapshot 1`] = `
             data-testid="test-id-login-password-input"
             name="password"
             placeholder="Please enter your password"
+            required=""
             type="password"
             value=""
           />
@@ -102,6 +104,7 @@ exports[`Login Successfully navigates the user if they log in successfully 1`] =
             data-testid="test-id-login-email-input"
             name="email"
             placeholder="Please enter your email address"
+            required=""
             type="text"
             value=""
           />
@@ -123,6 +126,7 @@ exports[`Login Successfully navigates the user if they log in successfully 1`] =
             data-testid="test-id-login-password-input"
             name="password"
             placeholder="Please enter your password"
+            required=""
             type="password"
             value=""
           />
