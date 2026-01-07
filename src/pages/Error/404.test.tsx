@@ -7,12 +7,13 @@
  */
 
 import { useNavigate } from "react-router-dom";
-import { renderWithContext } from "../../test-utils/testRouter";
+import { renderWithoutRouting } from "../../test-utils/testRouter";
 import { ErrorPage } from "./404";
 import { mockContext, mockUser } from "../../test-utils/mocks/objects";
 import { act } from "react";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import { generateUploadDate } from "../../util/util";
+import { screen } from "@testing-library/react";
 
 // ---- Module Mocks ----
 jest.mock("react-router-dom", () => ({
@@ -52,12 +53,33 @@ describe("Signup", () => {
       }),
     );
     // Render the error page in order to generate a snapshot
-    const { baseElement } = await act(() => renderWithContext(<ErrorPage />, {}, mockContext));
+    const { baseElement } = await act(() => renderWithoutRouting(<ErrorPage />, mockContext));
 
     expect(baseElement).toMatchSnapshot();
   });
 
-  /* it("Handles the back link being clicked on", () => {
-    renderWithContext(<ErrorPage />, {}, mockContext);
-  }); */
+  it("Handles the back link being clicked on", async () => {
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostUserDetailsResponse: {
+            sessionCreated: mockCreationDate,
+            sessionExpires: mockExpiryDate,
+            user: mockUser,
+            success: true,
+          },
+        },
+      }),
+    );
+    // Render the error page in order to generate a snapshot
+    await act(() => renderWithoutRouting(<ErrorPage />, mockContext));
+
+    // Get the back button
+    const backButton = screen.getByTestId("test-id-error-back-link");
+
+    await act(async () => {
+      backButton.click();
+      expect(mockNavigate).toHaveBeenCalledTimes(1);
+    });
+  });
 });

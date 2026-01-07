@@ -32,6 +32,10 @@ export const CreatePostComponent: FC = () => {
 
   const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
+  console.log("Is development");
+  console.log(isDevelopment);
+  console.log("\n\n");
+
   // Instantiate the navigation object
   const navigate = useNavigate();
 
@@ -53,10 +57,10 @@ export const CreatePostComponent: FC = () => {
 
   // Check authentication when component mounts
   useEffect(() => {
-    appContextInstance?.validateAuthentication();
+    appContextInstance.validateAuthentication();
 
     // If the user isn't authenticated, redirect this route to the previous page
-    if (!appContextInstance?.userAuthenticated) {
+    if (!appContextInstance.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
   }, [appContextInstance, navigate]);
@@ -112,7 +116,7 @@ export const CreatePostComponent: FC = () => {
           if (uploadFile) {
             fileData = await fileUploadHandler(
               uploadFile,
-              appContextInstance?.baseUrl ? appContextInstance?.baseUrl : "",
+              appContextInstance.baseUrl ? appContextInstance.baseUrl : "",
             );
           }
         }
@@ -158,7 +162,7 @@ export const CreatePostComponent: FC = () => {
                       `;
 
         // Perform the API request to the backend
-        const createPostResponse = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+        const createPostResponse = await fetch(`${appContextInstance.baseUrl}/graphql/posts`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -291,7 +295,12 @@ export const CreatePostComponent: FC = () => {
 
         {showImagePreview && (
           <Field>
-            <ImagePreview encodedImage={imagePreview} imageSize="contain" imagePosition="left" />
+            <ImagePreview
+              encodedImage={imagePreview}
+              imageSize="contain"
+              imagePosition="left"
+              testId="test-id-create-post-image-preview"
+            />
           </Field>
         )}
 

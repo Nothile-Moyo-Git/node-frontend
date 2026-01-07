@@ -17,11 +17,13 @@ interface ComponentProps {
   encodedImage: unknown | null;
   imageSize?: string;
   imagePosition?: string;
+  testId?: string;
 }
 
-const ImagePreview: FC<ComponentProps> = ({ encodedImage, imageSize, imagePosition }) => {
+const ImagePreview: FC<ComponentProps> = ({ encodedImage, imageSize, imagePosition, testId }) => {
   return (
     <div
+      data-testid={testId}
       className="imagePreview"
       style={{
         backgroundImage: `url('${encodedImage}')`,

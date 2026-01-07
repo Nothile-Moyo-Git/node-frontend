@@ -13,18 +13,30 @@ import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStora
 import { mockContext, mockFiles, mockPost, mockUser } from "../../test-utils/mocks/objects";
 import { CreatePostComponent } from "./CreatePost";
 import { renderWithContext } from "../../test-utils/testRouter";
-import { screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import userEvent from "@testing-library/user-event";
+import { generateBase64FromImage } from "../../util/file";
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
+// Create a copy of our original process.env so we can update it test by test
+const originalEnv = process.env;
+
+jest.mock("../../util/file", () => ({
+  fileUploadHandler: jest.fn(),
+  generateBase64FromImage: jest.fn(() => Promise.resolve("data:image/png;base64,mockBase64String")),
+}));
+
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
+  // Mock storage
   setMockAuthStorage();
+  // Type cast mock to work as a regular fetch but using jest instead
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
+  // Mock our API requests between tests
   jest.clearAllMocks();
 
   Object.defineProperty(window, "location", {
@@ -34,12 +46,18 @@ beforeEach(() => {
     },
     writable: true,
   });
+
+  jest.resetModules();
+  // Create a new copy of process.env so we an update it
+  process.env = { ...originalEnv };
 });
 
 // Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
   jest.clearAllMocks();
+  // Reset our process variable
+  process.env = originalEnv;
 });
 
 describe("Create Post Component", () => {
@@ -254,6 +272,48 @@ describe("Create Post Component", () => {
       expect(contentLabel).toHaveTextContent(
         "Error: Content must be longer than 6 characters and less than 600 characters",
       );
+    });
+  });
+
+  it("Should emulate file upload simulating a dev environment", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Mock the api request for the carousel
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetFilePathsResponse: {
+            status: 200,
+            files: mockFiles,
+          },
+        },
+      }),
+    );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const fileInput = screen.getByTestId("test-id-create-post-file-upload-input");
+
+    // Create a mock file that we'll attach to the input
+    const file = new File(["dummy content"], "test-image-png", { type: "image/png" });
+
+    // Simulate file selection
+    fireEvent.change(fileInput, {
+      target: { files: [file] },
+    });
+
+    await waitFor(() => {
+      expect(generateBase64FromImage).toHaveBeenCalledWith(file);
     });
   });
 });
