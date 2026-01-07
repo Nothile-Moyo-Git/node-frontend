@@ -129,7 +129,7 @@ export const SignupPage: FC = () => {
       }
     } catch (error) {
       console.log("Request to /signup has failed");
-      console.log(error);
+      console.error(error);
     }
   };
 

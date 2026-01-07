@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Signup Matches the snapshot 1`] = `
+<body>
+  <div>
+    <header
+      class="menu menu__open"
+    >
+      <nav>
+        <ul
+          class="menu__list"
+        >
+          <li
+            class="menu__item"
+          >
+            <a
+              class="menu__link"
+              href="/"
+            >
+              Home
+            </a>
+          </li>
+          <li
+            class="menu__item"
+          >
+            <a
+              class="menu__link"
+              href="/posts"
+            >
+              Posts
+            </a>
+          </li>
+          <li
+            class="menu__item"
+          >
+            <a
+              class="menu__link"
+              href="/post/create"
+            >
+              Create Post
+            </a>
+          </li>
+          <li
+            class="menu__item"
+          >
+            <button
+              class="button button__menu"
+              data-testid="test-id-logout-button"
+              type="submit"
+            >
+              Logout
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <div
+        class="toggle-menu-button toggle-menu-button__show"
+        data-testid="test-id-hide-menu-button"
+        id="hide_menu"
+      >
+        <svg
+          fill="#000000"
+          height="25px"
+          id="Capa_1"
+          version="1.1"
+          viewBox="0 0 490 490"
+          width="25px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polygon
+            points="456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490   489.292,457.678 277.331,245.004 489.292,32.337 "
+          />
+        </svg>
+      </div>
+    </header>
+    <main
+      class="menu-open menu-open__logged-in"
+    >
+      <section
+        class="error"
+      >
+        <h1>
+          Error: 404 Page not found
+        </h1>
+        <p>
+          Go to the 
+          <a
+            href="/"
+          >
+            home
+          </a>
+           page
+        </p>
+        <p>
+          Go
+           
+          <a
+            data-testid="test-id-error-back-link"
+            href="/"
+          >
+            back
+          </a>
+           
+          to the previous page
+        </p>
+      </section>
+      <a
+        class="footer"
+        href="/livechat"
+      >
+        <svg
+          fill="none"
+          height="50px"
+          viewBox="0 0 24 24"
+          width="50px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 10.5H16"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="1.5"
+          />
+          <path
+            d="M8 14H13.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="1.5"
+          />
+          <path
+            d="M17 3.33782C15.5291 2.48697 13.8214 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22C17.5228 22 22 17.5228 22 12C22 10.1786 21.513 8.47087 20.6622 7"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="1.5"
+          />
+        </svg>
+      </a>
+    </main>
+  </div>
+</body>
+`;

@@ -26,7 +26,7 @@ export const ErrorPage: FC = () => {
         </p>
         <p>
           Go{" "}
-          <Link onClick={() => navigate(-1)} to="">
+          <Link onClick={() => navigate(-1)} to="" data-testid="test-id-error-back-link">
             back
           </Link>{" "}
           to the previous page
