@@ -316,4 +316,106 @@ describe("Create Post Component", () => {
       expect(generateBase64FromImage).toHaveBeenCalledWith(file);
     });
   });
+
+  it("Should fail at emulating a file upload due to file size", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Mock the api request for the carousel
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetFilePathsResponse: {
+            status: 200,
+            files: mockFiles,
+          },
+        },
+      }),
+    );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const fileInput = screen.getByTestId("test-id-create-post-file-upload-input");
+
+    // Create a file larger than 5MB
+    const largeFile = new File(["x".repeat(5000001)], "large-image.png", { type: "image/png" });
+
+    // Simulate file selection
+    fireEvent.change(fileInput, {
+      target: { files: [largeFile] },
+    });
+
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith("Please upload a file smaller than 5MB");
+    });
+
+    expect(fileInput).toHaveValue("");
+  });
+
+  it("Should perform the API request with no carousel image", async () => {
+    // Mock the api request for the carousel
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: null,
+              user: mockUser,
+              status: 421,
+              success: false,
+              message: "Post creation unsuccessful",
+              isContentValid: false,
+              isTitleValid: false,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
+    expect(chooseImageButton).toBeVisible();
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+
+    // Check our base values, then try to submit so we get an error
+    expect(titleInput).toHaveTextContent("");
+    expect(contentInput).toHaveTextContent("");
+
+    userEvent.type(titleInput, "abcdef");
+    userEvent.type(contentInput, "abcdefghijkl");
+
+    const saveButton = screen.getByTestId("test-id-create-post-button");
+    userEvent.click(saveButton);
+  });
 });

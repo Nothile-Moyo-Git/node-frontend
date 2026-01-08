@@ -32,10 +32,6 @@ export const CreatePostComponent: FC = () => {
 
   const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
-  console.log("Is development");
-  console.log(isDevelopment);
-  console.log("\n\n");
-
   // Instantiate the navigation object
   const navigate = useNavigate();
 
@@ -97,7 +93,7 @@ export const CreatePostComponent: FC = () => {
 
     if (validateFields() === true) {
       try {
-        const userId = appContextInstance?.userId;
+        const userId = appContextInstance.userId;
 
         let title = "";
         let content = "";
