@@ -32,10 +32,6 @@ export const CreatePostComponent: FC = () => {
 
   const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
-  console.log("Is development");
-  console.log(isDevelopment);
-  console.log("\n\n");
-
   // Instantiate the navigation object
   const navigate = useNavigate();
 
@@ -48,6 +44,7 @@ export const CreatePostComponent: FC = () => {
   const [isContentValid, setIsContentValid] = useState<boolean>(true);
   const [isFormValid, setIsFormValid] = useState<boolean>(true);
   const [isFileValid, setIsFileValid] = useState<boolean>(true);
+  const [isCarouselImageValid, setIsCarouselImageValid] = useState<boolean>(true);
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>(null);
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
@@ -88,6 +85,14 @@ export const CreatePostComponent: FC = () => {
       setIsContentValid(true);
     }
 
+    if (!carouselImage) {
+      setIsFormValid(false);
+      setIsCarouselImageValid(false);
+      inputsValid = false;
+    } else {
+      setIsCarouselImageValid(true);
+    }
+
     return inputsValid;
   };
 
@@ -97,7 +102,7 @@ export const CreatePostComponent: FC = () => {
 
     if (validateFields() === true) {
       try {
-        const userId = appContextInstance?.userId;
+        const userId = appContextInstance.userId;
 
         let title = "";
         let content = "";
@@ -265,7 +270,7 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        {isDevelopment ? (
+        {!isDevelopment ? (
           <Field>
             <Label
               htmlFor="imageUrl"
@@ -289,7 +294,7 @@ export const CreatePostComponent: FC = () => {
           </Field>
         ) : (
           <Field>
-            <Carousel setCarouselImage={setCarouselImage} />
+            <Carousel setCarouselImage={setCarouselImage} error={!isCarouselImageValid} />
           </Field>
         )}
 

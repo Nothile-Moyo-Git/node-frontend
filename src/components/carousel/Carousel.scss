@@ -19,12 +19,22 @@
         grid-column-gap: 1rem;
         align-items: center;
     }
+
+    &__error-text {
+        color: pink;
+    }
 }
 
 .swiper {
 
     width: 100%;
     margin: auto;
+    transition: animations.$quick_transition;
+
+    &__error {
+        outline: 2px solid red;
+        border-radius: 3px;
+    }
 
     &__image { 
         max-height: 500px;
@@ -33,7 +43,7 @@
         object-fit: cover;
         cursor: pointer;
         user-select: none;
-        transition: animations.$quick_transition;
+        transition: inherit;
 
         &--chosen {
             outline: 2px solid branding.$brand_color_three;
