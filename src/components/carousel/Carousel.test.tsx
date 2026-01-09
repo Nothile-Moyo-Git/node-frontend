@@ -46,7 +46,7 @@ describe("Carousel Component", () => {
 
     // Render and update our component so we can see it being rendered
     const { baseElement } = await act(async () => {
-      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
+      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} error={false} />, mockContext);
     });
 
     // Render our carousel component
@@ -73,7 +73,7 @@ describe("Carousel Component", () => {
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
     const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
-    renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
+    renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} error={false} />, mockContext);
 
     // Wait for the component to attempt image loading and hit the catch block
     await waitFor(() => {
@@ -100,7 +100,7 @@ describe("Carousel Component", () => {
 
     // Render and update our component so we can see it being rendered
     const { baseElement } = await act(async () => {
-      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
+      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} error={false} />, mockContext);
     });
 
     // Choose an image and select it
@@ -130,7 +130,7 @@ describe("Carousel Component", () => {
 
     // Render and update our component so we can see it being rendered
     const { baseElement } = await act(async () => {
-      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
+      return renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} error={false} />, mockContext);
     });
 
     expect(baseElement).toMatchSnapshot();
@@ -143,7 +143,7 @@ describe("Carousel Component", () => {
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
     const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
-    renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} />, mockContext);
+    renderWithoutRouting(<Carousel setCarouselImage={jest.fn()} error={false} />, mockContext);
 
     await waitFor(() => {
       expect(warnSpy).toHaveBeenCalledWith("GetFilePathsResponse query failed, view error below");

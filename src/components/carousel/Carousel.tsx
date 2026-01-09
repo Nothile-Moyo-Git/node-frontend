@@ -23,6 +23,7 @@ import type { Swiper as SwiperCore } from "swiper";
 import { useCarouselIndex } from "./hooks/useCarouselIndex";
 
 interface ComponentProps {
+  error: boolean;
   setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>;
 }
 
@@ -33,7 +34,7 @@ interface ComponentProps {
  *
  * @param setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>
  */
-const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
+const Carousel: FC<ComponentProps> = ({ setCarouselImage, error }) => {
   // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
@@ -129,6 +130,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
         </p>
       </div>
       {/* Main carousel */}
+      {error && <p className="carousel__error-text">Error: Please choose an image</p>}
       <Swiper
         autoplay={{
           delay: 5000,
@@ -145,6 +147,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage }) => {
         }}
         slidesPerView={1}
         thumbs={{ swiper: thumbsSwiper }}
+        className={error && "swiper__error"}
       >
         {images.map((image, index) => (
           <SwiperSlide key={files[index].fileName}>

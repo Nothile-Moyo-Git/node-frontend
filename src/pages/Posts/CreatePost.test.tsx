@@ -9,6 +9,7 @@
  */
 
 import "@testing-library/jest-dom";
+import { act } from "react";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 import { mockContext, mockFiles, mockPost, mockUser } from "../../test-utils/mocks/objects";
 import { CreatePostComponent } from "./CreatePost";
@@ -416,6 +417,8 @@ describe("Create Post Component", () => {
     userEvent.type(contentInput, "abcdefghijkl");
 
     const saveButton = screen.getByTestId("test-id-create-post-button");
-    userEvent.click(saveButton);
+    await act(async () => {
+      userEvent.click(saveButton);
+    });
   });
 });

@@ -44,6 +44,7 @@ export const CreatePostComponent: FC = () => {
   const [isContentValid, setIsContentValid] = useState<boolean>(true);
   const [isFormValid, setIsFormValid] = useState<boolean>(true);
   const [isFileValid, setIsFileValid] = useState<boolean>(true);
+  const [isCarouselImageValid, setIsCarouselImageValid] = useState<boolean>(true);
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>(null);
   const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
@@ -82,6 +83,14 @@ export const CreatePostComponent: FC = () => {
       inputsValid = false;
     } else {
       setIsContentValid(true);
+    }
+
+    if (!carouselImage) {
+      setIsFormValid(false);
+      setIsCarouselImageValid(false);
+      inputsValid = false;
+    } else {
+      setIsCarouselImageValid(true);
     }
 
     return inputsValid;
@@ -261,7 +270,7 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        {isDevelopment ? (
+        {!isDevelopment ? (
           <Field>
             <Label
               htmlFor="imageUrl"
@@ -285,7 +294,7 @@ export const CreatePostComponent: FC = () => {
           </Field>
         ) : (
           <Field>
-            <Carousel setCarouselImage={setCarouselImage} />
+            <Carousel setCarouselImage={setCarouselImage} error={!isCarouselImageValid} />
           </Field>
         )}
 

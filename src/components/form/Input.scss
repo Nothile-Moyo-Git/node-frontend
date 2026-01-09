@@ -41,7 +41,7 @@
     }
 
     &__error{
-        border-color: red;
+        outline-color: red;
         background-color:pink;
 
         @include mixins.visible(){

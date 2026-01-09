@@ -54,6 +54,7 @@ export const EditPost: FC = () => {
   const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
   const [isContentValid, setIsContentValid] = useState<boolean>(true);
   const [isFileValid, setIsFileValid] = useState<boolean>(true);
+  const [isCarouselImageValid, setIsCarouselImageValid] = useState<boolean>(true);
   const [isPostCreatorValid, setIsPostCreatorValid] = useState<boolean>(true);
   const [uploadFile, setUploadFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<unknown | null>(null);
@@ -90,6 +91,14 @@ export const EditPost: FC = () => {
       inputsValid = false;
     } else {
       setIsContentValid(true);
+    }
+
+    if (!carouselImage) {
+      setIsFormValid(false);
+      setIsCarouselImageValid(false);
+      inputsValid = false;
+    } else {
+      setIsCarouselImageValid(true);
     }
 
     return inputsValid;
@@ -446,7 +455,7 @@ export const EditPost: FC = () => {
             </Field>
           ) : (
             <Field>
-              <Carousel setCarouselImage={setCarouselImage} />
+              <Carousel setCarouselImage={setCarouselImage} error={isCarouselImageValid} />
             </Field>
           )}
 
