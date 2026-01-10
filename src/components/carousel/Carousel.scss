@@ -13,6 +13,11 @@
     grid-row-gap: 0.5rem;
     margin: auto;
 
+    p {
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
     &__chosen-image{
         display: flex;
         flex-direction: row;
@@ -29,6 +34,7 @@
 
     width: 100%;
     margin: auto;
+    max-height: 500px;
     transition: animations.$quick_transition;
 
     &__error {
