@@ -23,8 +23,9 @@ import type { Swiper as SwiperCore } from "swiper";
 import { useCarouselIndex } from "./hooks/useCarouselIndex";
 
 interface ComponentProps {
-  error: boolean;
+  isValid: boolean;
   setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>;
+  setIsValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 /**
@@ -34,7 +35,7 @@ interface ComponentProps {
  *
  * @param setCarouselImage: Dispatch<SetStateAction<FileData | undefined>>
  */
-const Carousel: FC<ComponentProps> = ({ setCarouselImage, error }) => {
+const Carousel: FC<ComponentProps> = ({ setCarouselImage, isValid, setIsValid }) => {
   // Image and thumb state for the swiper to work effectively
   const [files, setFiles] = useState<FileData[]>([]);
   const [images, setImages] = useState<string[]>([]);
@@ -115,6 +116,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage, error }) => {
   const setChosenImageHandler = (event: React.MouseEvent) => {
     event.preventDefault();
     const chosenFile = chooseImage();
+    setIsValid(true);
     setCarouselImage(files[chosenFile]);
   };
 
@@ -130,7 +132,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage, error }) => {
         </p>
       </div>
       {/* Main carousel */}
-      {error && <p className="carousel__error-text">Error: Please choose an image</p>}
+      {!isValid && <p className="carousel__error-text">Error: Please choose an image</p>}
       <Swiper
         autoplay={{
           delay: 5000,
@@ -147,7 +149,7 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage, error }) => {
         }}
         slidesPerView={1}
         thumbs={{ swiper: thumbsSwiper }}
-        className={error && "swiper__error"}
+        className={!isValid && "swiper__error"}
       >
         {images.map((image, index) => (
           <SwiperSlide key={files[index].fileName}>

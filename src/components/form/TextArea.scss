@@ -9,17 +9,11 @@
     color : rgba(0, 0, 0, 0.9);
     border-right: 1px solid branding.$brand_color_six;
     outline-offset : -2px;
-
-    @include mixins.visible(){
-        outline: 2px solid branding.$brand_color_six;
-    }
+    outline: 2px solid branding.$brand_color_six;
 
     &__error{
         background-color: pink;
-
-        @include mixins.visible(){
-            outline-color: red;
-        }
+        outline-color: red;  
     }
 
     &__square {

@@ -294,7 +294,11 @@ export const CreatePostComponent: FC = () => {
           </Field>
         ) : (
           <Field>
-            <Carousel setCarouselImage={setCarouselImage} error={!isCarouselImageValid} />
+            <Carousel
+              setCarouselImage={setCarouselImage}
+              isValid={isCarouselImageValid}
+              setIsValid={setIsCarouselImageValid}
+            />
           </Field>
         )}
 
