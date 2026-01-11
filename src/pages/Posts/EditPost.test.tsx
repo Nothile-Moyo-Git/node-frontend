@@ -307,6 +307,7 @@ describe("Edit Post Component", () => {
 
     const titleInput = screen.getByTestId("test-id-edit-post-title-input");
     const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
 
     expect(titleInput).toHaveValue(mockPost.title);
     expect(contentInput).toHaveValue(mockPost.content);
@@ -318,6 +319,7 @@ describe("Edit Post Component", () => {
     userEvent.clear(contentInput);
     userEvent.type(titleInput, updatedMockPost.title);
     userEvent.type(contentInput, updatedMockPost.content);
+    userEvent.click(chooseImageButton);
 
     expect(titleInput).toHaveValue(updatedMockPost.title);
     expect(contentInput).toHaveValue(updatedMockPost.content);

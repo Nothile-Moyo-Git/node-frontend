@@ -85,12 +85,22 @@ export const CreatePostComponent: FC = () => {
       setIsContentValid(true);
     }
 
-    if (!carouselImage) {
-      setIsFormValid(false);
-      setIsCarouselImageValid(false);
-      inputsValid = false;
+    // Error handling for image selection based on environment
+    // Development checks file uploads
+    // Production checks the carousel
+    if (!isDevelopment) {
+      if (!carouselImage) {
+        setIsFormValid(false);
+        setIsCarouselImageValid(false);
+        inputsValid = false;
+      } else {
+        setIsCarouselImageValid(true);
+      }
     } else {
-      setIsCarouselImageValid(true);
+      if (!uploadFile) {
+        setIsFormValid(false);
+        inputsValid = false;
+      }
     }
 
     return inputsValid;
@@ -119,10 +129,7 @@ export const CreatePostComponent: FC = () => {
 
         if (isDevelopment) {
           if (uploadFile) {
-            fileData = await fileUploadHandler(
-              uploadFile,
-              appContextInstance.baseUrl ? appContextInstance.baseUrl : "",
-            );
+            fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl);
           }
         }
 
@@ -180,7 +187,7 @@ export const CreatePostComponent: FC = () => {
               content: content,
               userId: userId,
               fileData: fileData,
-              carouselFileData: carouselImage ? carouselImage : null,
+              carouselFileData: carouselImage,
             },
           }),
         });
@@ -218,8 +225,8 @@ export const CreatePostComponent: FC = () => {
           window.location.href = `${BASENAME}/posts`;
         }
       } catch (error) {
-        console.warn("Error");
-        console.warn(error);
+        console.error("Error");
+        console.error(error);
       }
     }
   };
@@ -270,7 +277,7 @@ export const CreatePostComponent: FC = () => {
           />
         </Field>
 
-        {!isDevelopment ? (
+        {isDevelopment ? (
           <Field>
             <Label
               htmlFor="imageUrl"
