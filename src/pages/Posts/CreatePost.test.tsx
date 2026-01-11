@@ -26,7 +26,16 @@ let mockFetch: jest.MockedFunction<typeof fetch>;
 const originalEnv = process.env;
 
 jest.mock("../../util/file", () => ({
-  fileUploadHandler: jest.fn(),
+  fileUploadHandler: jest.fn(() =>
+    Promise.resolve({
+      fileName: "test-image.png",
+      imageUrl: "/uploads/2024/01/test-image.png",
+      isFileValid: true,
+      isFileSizeValid: true,
+      isFileTypeValid: true,
+      isImageUrlValid: true,
+    }),
+  ),
   generateBase64FromImage: jest.fn(() => Promise.resolve("data:image/png;base64,mockBase64String")),
 }));
 
@@ -362,10 +371,8 @@ describe("Create Post Component", () => {
     expect(fileInput).toHaveValue("");
   });
 
-  it("Should perform the API request with no carousel image", async () => {
-    // Mock the api request for the carousel
-    global.fetch = jest
-      .fn()
+  it("Fails the request to create a post and triggers the catch block", async () => {
+    mockFetch
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
@@ -376,24 +383,9 @@ describe("Create Post Component", () => {
           },
         }),
       )
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            PostCreatePostResponse: {
-              post: null,
-              user: mockUser,
-              status: 421,
-              success: false,
-              message: "Post creation unsuccessful",
-              isContentValid: false,
-              isTitleValid: false,
-              isFileValid: true,
-              isFileTypeValid: true,
-              isFileSizeValid: true,
-            },
-          },
-        }),
-      );
+      .mockRejectedValueOnce(new Error("Network failed"));
+
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => console.log("Error"));
 
     // Render our component with routing and the context so we have authentication
     renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
@@ -415,10 +407,86 @@ describe("Create Post Component", () => {
 
     userEvent.type(titleInput, "abcdef");
     userEvent.type(contentInput, "abcdefghijkl");
+    userEvent.click(chooseImageButton);
 
     const saveButton = screen.getByTestId("test-id-create-post-button");
     await act(async () => {
       userEvent.click(saveButton);
+    });
+
+    await waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(2));
+  });
+
+  it("Simulates file uploads in a development environment with the API", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Mock the api request for the carousel
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 201,
+              success: true,
+              message: "Post created successfully",
+              isContentValid: true,
+              isTitleValid: true,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(createFetchResponse({}));
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+    const fileInput = screen.getByTestId("test-id-create-post-file-upload-input");
+
+    // Create a mock file that we'll attach to the input
+    const file = new File(["dummy content"], "test-image-png", { type: "image/png" });
+
+    // Simulate file selection
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: { files: [file] },
+      });
+    });
+
+    await waitFor(() => {
+      const imagePreview = screen.queryByTestId("test-id-create-post-image-preview");
+      expect(imagePreview).toBeInTheDocument();
+    });
+
+    // Now fill in the form
+    await act(async () => {
+      userEvent.type(titleInput, "Valid Test Title");
+      userEvent.type(contentInput, "Valid test content that is long enough");
+    });
+
+    const saveButton = screen.getByTestId("test-id-create-post-button");
+    await act(async () => {
+      userEvent.click(saveButton);
+    });
+
+    // Give these time to run as they don't by default
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Post successfully submitted"));
     });
   });
 });
