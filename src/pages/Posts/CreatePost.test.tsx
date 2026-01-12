@@ -18,12 +18,22 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import userEvent from "@testing-library/user-event";
 import { generateBase64FromImage } from "../../util/file";
+import { useNavigate } from "react-router-dom";
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
 // Create a copy of our original process.env so we can update it test by test
 const originalEnv = process.env;
+
+// ---- Module Mocks ----
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: jest.fn(),
+}));
+
+// Get the mocked version of useNavigate
+let mockNavigate: jest.Mock;
 
 jest.mock("../../util/file", () => ({
   fileUploadHandler: jest.fn(() =>
@@ -48,6 +58,10 @@ beforeEach(() => {
   global.fetch = mockFetch;
   // Mock our API requests between tests
   jest.clearAllMocks();
+
+  // Mock the result, and then mock the behavior that occurs if useNavigate is called
+  mockNavigate = jest.fn();
+  (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
   Object.defineProperty(window, "location", {
     value: {
@@ -487,6 +501,70 @@ describe("Create Post Component", () => {
     // Give these time to run as they don't by default
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Post successfully submitted"));
+    });
+  });
+
+  it("Simulates the user not being authenticated and the page redirecting to login", async () => {
+    // Set user authenticated to false so we can redirect to the login page
+    const mockFailedContext = {
+      ...mockContext,
+      userAuthenticated: false,
+    };
+
+    // Mock the api request for the carousel
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 201,
+              success: true,
+              message: "Post created successfully",
+              isContentValid: true,
+              isTitleValid: true,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(createFetchResponse({}));
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockFailedContext);
+
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
+
+    // Now fill in the form
+    await act(async () => {
+      userEvent.type(titleInput, "Valid Test Title");
+      userEvent.type(contentInput, "Valid test content that is long enough");
+      userEvent.click(chooseImageButton);
+    });
+
+    // Check that alert and navigate have been called
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/login");
     });
   });
 });
