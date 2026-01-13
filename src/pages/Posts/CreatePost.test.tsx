@@ -567,4 +567,116 @@ describe("Create Post Component", () => {
       expect(mockNavigate).toHaveBeenCalledWith("/login");
     });
   });
+
+  it("Render an error on the page ", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Mock the api request for the carousel
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 201,
+              success: true,
+              message: "Post created successfully",
+              isContentValid: true,
+              isTitleValid: true,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(createFetchResponse({}));
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+
+    const imageLabel = screen.getByTestId("test-id-create-post-image-label");
+    const saveButton = screen.getByTestId("test-id-create-post-button");
+
+    await act(async () => {
+      userEvent.type(titleInput, "Valid Test Title");
+      userEvent.type(contentInput, "Valid test content that is long enough");
+      userEvent.click(saveButton);
+    });
+
+    await waitFor(() => {
+      expect(imageLabel).toHaveTextContent("Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)");
+    });
+  });
+
+  it("Handle updating the inputs for the title and the content on the page", async () => {
+    // Mock the api request for the carousel
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 201,
+              success: true,
+              message: "Post created successfully",
+              isContentValid: true,
+              isTitleValid: true,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(createFetchResponse({}));
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+
+    // Check inputs
+    expect(titleInput).toHaveValue("");
+    expect(titleInput).toHaveTextContent("");
+    expect(contentInput).toHaveValue("");
+    expect(contentInput).toHaveTextContent("");
+
+    await act(async () => {
+      userEvent.type(titleInput, "Valid Test Title");
+      userEvent.type(contentInput, "Valid test content that is long enough");
+    });
+
+    await waitFor(() => {
+      expect(titleInput).toHaveValue("Valid Test Title");
+      expect(titleInput).toHaveTextContent("Valid Test Title");
+      expect(contentInput).toHaveValue("Valid test content that is long enough");
+      expect(contentInput).toHaveTextContent("Valid test content that is long enough");
+    });
+  });
 });

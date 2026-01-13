@@ -99,6 +99,7 @@ export const CreatePostComponent: FC = () => {
     } else {
       if (!uploadFile) {
         setIsFormValid(false);
+        setIsFileValid(false);
         inputsValid = false;
       }
     }
