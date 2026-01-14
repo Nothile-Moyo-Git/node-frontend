@@ -656,27 +656,53 @@ describe("Create Post Component", () => {
       .mockResolvedValueOnce(createFetchResponse({}));
 
     // Render our component with routing and the context so we have authentication
-    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+    const { baseElement } = renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
 
     const titleInput = screen.getByTestId("test-id-create-post-title-input");
     const contentInput = screen.getByTestId("test-id-create-post-content-input");
+    const saveButton = screen.getByTestId("test-id-create-post-button");
 
     // Check inputs
     expect(titleInput).toHaveValue("");
-    expect(titleInput).toHaveTextContent("");
     expect(contentInput).toHaveValue("");
-    expect(contentInput).toHaveTextContent("");
 
     await act(async () => {
       userEvent.type(titleInput, "Valid Test Title");
       userEvent.type(contentInput, "Valid test content that is long enough");
+      userEvent.click(saveButton);
     });
 
     await waitFor(() => {
       expect(titleInput).toHaveValue("Valid Test Title");
-      expect(titleInput).toHaveTextContent("Valid Test Title");
       expect(contentInput).toHaveValue("Valid test content that is long enough");
-      expect(contentInput).toHaveTextContent("Valid test content that is long enough");
     });
+
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("Should handle fileUploadEvent with an empty FileList", async () => {
+    // Mock the environment variables for development
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const fileInput = screen.getByTestId("test-id-create-post-file-upload-input");
+
+    // Simulate change event with an empty FileList
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: { files: [] },
+      });
+    });
+
+    // Verify that no image preview appeared
+    const imagePreview = screen.queryByTestId("test-id-create-post-image-preview");
+    expect(imagePreview).not.toBeInTheDocument();
   });
 });
