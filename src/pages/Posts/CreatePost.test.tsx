@@ -18,12 +18,22 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import userEvent from "@testing-library/user-event";
 import { generateBase64FromImage } from "../../util/file";
+import { useNavigate } from "react-router-dom";
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
 // Create a copy of our original process.env so we can update it test by test
 const originalEnv = process.env;
+
+// ---- Module Mocks ----
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: jest.fn(),
+}));
+
+// Get the mocked version of useNavigate
+let mockNavigate: jest.Mock;
 
 jest.mock("../../util/file", () => ({
   fileUploadHandler: jest.fn(() =>
@@ -48,6 +58,10 @@ beforeEach(() => {
   global.fetch = mockFetch;
   // Mock our API requests between tests
   jest.clearAllMocks();
+
+  // Mock the result, and then mock the behavior that occurs if useNavigate is called
+  mockNavigate = jest.fn();
+  (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
   Object.defineProperty(window, "location", {
     value: {
@@ -488,5 +502,207 @@ describe("Create Post Component", () => {
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Post successfully submitted"));
     });
+  });
+
+  it("Simulates the user not being authenticated and the page redirecting to login", async () => {
+    // Set user authenticated to false so we can redirect to the login page
+    const mockFailedContext = {
+      ...mockContext,
+      userAuthenticated: false,
+    };
+
+    // Mock the api request for the carousel
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 201,
+              success: true,
+              message: "Post created successfully",
+              isContentValid: true,
+              isTitleValid: true,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(createFetchResponse({}));
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockFailedContext);
+
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+    const chooseImageButton = screen.getByTestId("test-id-carousel-choose-button");
+
+    // Now fill in the form
+    await act(async () => {
+      userEvent.type(titleInput, "Valid Test Title");
+      userEvent.type(contentInput, "Valid test content that is long enough");
+      userEvent.click(chooseImageButton);
+    });
+
+    // Check that alert and navigate have been called
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/login");
+    });
+  });
+
+  it("Render an error on the page ", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Mock the api request for the carousel
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 201,
+              success: true,
+              message: "Post created successfully",
+              isContentValid: true,
+              isTitleValid: true,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(createFetchResponse({}));
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+
+    const imageLabel = screen.getByTestId("test-id-create-post-image-label");
+    const saveButton = screen.getByTestId("test-id-create-post-button");
+
+    await act(async () => {
+      userEvent.type(titleInput, "Valid Test Title");
+      userEvent.type(contentInput, "Valid test content that is long enough");
+      userEvent.click(saveButton);
+    });
+
+    await waitFor(() => {
+      expect(imageLabel).toHaveTextContent("Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)");
+    });
+  });
+
+  it("Handle updating the inputs for the title and the content on the page", async () => {
+    // Mock the api request for the carousel
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostCreatePostResponse: {
+              post: mockPost,
+              user: mockUser,
+              status: 201,
+              success: true,
+              message: "Post created successfully",
+              isContentValid: true,
+              isTitleValid: true,
+              isFileValid: true,
+              isFileTypeValid: true,
+              isFileSizeValid: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(createFetchResponse({}));
+
+    // Render our component with routing and the context so we have authentication
+    const { baseElement } = renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const titleInput = screen.getByTestId("test-id-create-post-title-input");
+    const contentInput = screen.getByTestId("test-id-create-post-content-input");
+    const saveButton = screen.getByTestId("test-id-create-post-button");
+
+    // Check inputs
+    expect(titleInput).toHaveValue("");
+    expect(contentInput).toHaveValue("");
+
+    await act(async () => {
+      userEvent.type(titleInput, "Valid Test Title");
+      userEvent.type(contentInput, "Valid test content that is long enough");
+      userEvent.click(saveButton);
+    });
+
+    await waitFor(() => {
+      expect(titleInput).toHaveValue("Valid Test Title");
+      expect(contentInput).toHaveValue("Valid test content that is long enough");
+    });
+
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("Should handle fileUploadEvent with an empty FileList", async () => {
+    // Mock the environment variables for development
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const fileInput = screen.getByTestId("test-id-create-post-file-upload-input");
+
+    // Simulate change event with an empty FileList
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: { files: [] },
+      });
+    });
+
+    // Verify that no image preview appeared
+    const imagePreview = screen.queryByTestId("test-id-create-post-image-preview");
+    expect(imagePreview).not.toBeInTheDocument();
   });
 });

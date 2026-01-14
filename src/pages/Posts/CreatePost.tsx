@@ -64,8 +64,16 @@ export const CreatePostComponent: FC = () => {
 
   // Validate the before submission so we can either render errors or perform the request
   const validateFields = () => {
-    const title = titleRef.current?.value || "";
-    const content = contentRef.current?.value || "";
+    let title = "";
+    let content = "";
+
+    if (titleRef.current) {
+      title = titleRef.current.value;
+    }
+
+    if (contentRef.current) {
+      content = contentRef.current.value;
+    }
 
     let inputsValid = true;
 
@@ -99,6 +107,7 @@ export const CreatePostComponent: FC = () => {
     } else {
       if (!uploadFile) {
         setIsFormValid(false);
+        setIsFileValid(false);
         inputsValid = false;
       }
     }
@@ -127,10 +136,8 @@ export const CreatePostComponent: FC = () => {
 
         let fileData = {};
 
-        if (isDevelopment) {
-          if (uploadFile) {
-            fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl);
-          }
+        if (isDevelopment && uploadFile) {
+          fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl);
         }
 
         // Writing our mutations for both production and development, we choose based on the feature flag
@@ -234,7 +241,7 @@ export const CreatePostComponent: FC = () => {
   // File upload handler, this is done so we can encode the file in a b64 format which allows us to send it to the backend
   const fileUploadEvent = async (event: React.ChangeEvent<HTMLInputElement>) => {
     // Set the file so that it's ready for upload
-    if (event.target.files) {
+    if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
 
       // Raise and error and empty the input, otherwise, set the state to sent to the backend
