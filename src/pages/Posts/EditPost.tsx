@@ -111,7 +111,7 @@ export const EditPost: FC = () => {
       fields.append("userId", userId);
 
       // Query to GraphQL
-      const response = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+      const response = await fetch(`${appContextInstance.baseUrl}/graphql/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -188,17 +188,22 @@ export const EditPost: FC = () => {
   // This method runs the get method and then formats the results
   const handlePostDataQuery = useCallback(
     async (userId: string) => {
-      const data = await getPostData(userId);
+      try {
+        const data = await getPostData(userId);
 
-      if (data.isUserValidated === false) {
-        navigate(`${BASENAME}/posts`);
-      }
+        if (data.isUserValidated === false) {
+          navigate(`${BASENAME}/posts`);
+        }
 
-      const success = data.success ? data.success : false;
+        const success = data.success ? data.success : false;
 
-      if (success === true) {
-        setPostData(data.post);
-        formatPreviousPostImage(data.post);
+        if (success === true) {
+          setPostData(data.post);
+          formatPreviousPostImage(data.post);
+        }
+      } catch (error) {
+        console.log("handlePostDataQuery error");
+        console.error(error);
       }
     },
     [getPostData, navigate],
@@ -218,19 +223,15 @@ export const EditPost: FC = () => {
   useEffect(() => {
     // Toggle the loading spinner until the request ends
     setIsLoading(true);
-    appContextInstance?.validateAuthentication();
+    appContextInstance.validateAuthentication();
 
-    try {
-      if (appContextInstance?.userAuthenticated === true) {
-        if (appContextInstance?.token !== "") {
-          handlePostDataQuery(appContextInstance?.userId ? appContextInstance.userId : "");
-        }
+    if (appContextInstance.userAuthenticated === true) {
+      if (appContextInstance.token !== "") {
+        handlePostDataQuery(appContextInstance.userId ? appContextInstance.userId : "");
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
 
     // If the user isn't authenticated, redirect this route to the previous page
     if (!appContextInstance?.userAuthenticated) {

@@ -130,6 +130,30 @@ describe("Edit Post Component", () => {
     expect(editPostComponent).toMatchSnapshot();
   });
 
+  it("Fails the request with a 500 response", async () => {
+    mockFetch.mockRejectedValueOnce(new Error("Network failed")).mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetFilePathsResponse: {
+            status: 200,
+            files: mockFiles,
+          },
+        },
+      }),
+    );
+
+    // Mock the error
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => console.log("Error"));
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+
+    // Wait for the API request to complete, and then find the error modal on the page
+    await waitFor(() => {
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   it("Completely loads the page", async () => {
     // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
     global.fetch = jest
