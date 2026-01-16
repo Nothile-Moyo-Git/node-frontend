@@ -18,18 +18,27 @@ import userEvent from "@testing-library/user-event";
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
+// Create a copy of our original process.env so we can update it test by test
+const originalEnv = process.env;
+
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
   setMockAuthStorage();
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
   jest.clearAllMocks();
+
+  // Create a new copy of process.env so we an update it
+  process.env = { ...originalEnv };
 });
 
 // Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
   jest.clearAllMocks();
+
+  // Reset our process variable
+  process.env = originalEnv;
 });
 
 describe("Edit Post Component", () => {
@@ -355,5 +364,68 @@ describe("Edit Post Component", () => {
       expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Success, Post"));
       expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it("Renders an error if you don't upload an image", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+
+    const editPostComponent = screen.getByTestId("test-id-edit-post");
+    expect(editPostComponent).toBeVisible();
+
+    // Make sure we have our edit post
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    const titleInput = screen.getByTestId("test-id-edit-post-title-input");
+    const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+    const imageLabel = screen.getByTestId("test-id-edit-post-file-upload-label");
+    const saveButton = screen.getByTestId("test-id-edit-post-submit-button");
+
+    await waitFor(() => {
+      userEvent.type(titleInput, "abc");
+      userEvent.type(contentInput, "abcdefgh");
+      userEvent.click(saveButton);
+    });
+
+    expect(imageLabel).toHaveTextContent("Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)");
   });
 });

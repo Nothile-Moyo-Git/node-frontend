@@ -73,8 +73,17 @@ export const EditPost: FC = () => {
 
   // Validate the before submission so we can either render errors or perform the request
   const validateFields = () => {
-    const title = titleRef.current?.value || "";
-    const content = contentRef.current?.value || "";
+    let title = "";
+    let content = "";
+
+    // Extract inputs
+    if (titleRef.current) {
+      title = titleRef.current.value;
+    }
+    if (contentRef.current) {
+      content = contentRef.current.value;
+    }
+
     let inputsValid = true;
 
     if (title.length < 3 || title.length > 100) {
@@ -93,12 +102,20 @@ export const EditPost: FC = () => {
       setIsContentValid(true);
     }
 
-    if (!carouselImage) {
-      setIsFormValid(false);
-      setIsCarouselImageValid(false);
-      inputsValid = false;
+    if (!isDevelopment) {
+      if (!carouselImage) {
+        setIsFormValid(false);
+        setIsCarouselImageValid(false);
+        inputsValid = false;
+      } else {
+        setIsCarouselImageValid(true);
+      }
     } else {
-      setIsCarouselImageValid(true);
+      if (!uploadFile) {
+        setIsFormValid(false);
+        setIsFileValid(false);
+        inputsValid = false;
+      }
     }
 
     return inputsValid;
@@ -479,6 +496,7 @@ export const EditPost: FC = () => {
                 encodedImage={showImagePreview ? imagePreview : previousImageUrl}
                 imageSize="contain"
                 imagePosition="left"
+                testId="edit-post-image-preview"
               />
             </Field>
           )}
