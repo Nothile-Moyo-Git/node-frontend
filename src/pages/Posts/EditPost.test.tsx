@@ -7,6 +7,7 @@
  */
 
 import "@testing-library/jest-dom";
+import { act } from "react";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import { mockContext, mockPost, mockFiles, updatedMockPost } from "../../test-utils/mocks/objects";
@@ -427,5 +428,83 @@ describe("Edit Post Component", () => {
     });
 
     expect(imageLabel).toHaveTextContent("Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)");
+  });
+
+  it("Matches the snapshot when in development", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    const { baseElement } = await act(() => {
+      return renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+    });
+
+    const editPostComponent = screen.getByTestId("test-id-edit-post");
+    expect(editPostComponent).toBeVisible();
+
+    // Make sure we have our edit post
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    const titleInput = screen.getByTestId("test-id-edit-post-title-input");
+    const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+
+    await waitFor(() => {
+      userEvent.type(titleInput, "abc");
+      userEvent.type(contentInput, "abcdefgh");
+    });
+
+    const imagePreview = screen.getByTestId("edit-post-image-preview");
+    expect(imagePreview).toHaveStyle("background-image: url(2B.png)");
+
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("Handles a file upload when in development", () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
   });
 });

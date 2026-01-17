@@ -102,15 +102,7 @@ export const EditPost: FC = () => {
       setIsContentValid(true);
     }
 
-    if (!isDevelopment) {
-      if (!carouselImage) {
-        setIsFormValid(false);
-        setIsCarouselImageValid(false);
-        inputsValid = false;
-      } else {
-        setIsCarouselImageValid(true);
-      }
-    } else {
+    if (isDevelopment) {
       if (!uploadFile) {
         setIsFormValid(false);
         setIsFileValid(false);
