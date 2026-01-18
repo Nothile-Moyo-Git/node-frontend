@@ -13,7 +13,7 @@ import { createFetchResponse } from "../../test-utils/methods/methods";
 import { mockContext, mockPost, mockFiles, updatedMockPost } from "../../test-utils/mocks/objects";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { EditPost } from "./EditPost";
-import { screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
@@ -495,7 +495,7 @@ describe("Edit Post Component", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  it("Handles a file upload when in development", () => {
+  it("Handles a file upload when in development", async () => {
     // Mock the environment variables
     // This is so we can test dev and prod environment variables in the context
     // This allows us to update read-only properties
@@ -505,6 +505,52 @@ describe("Edit Post Component", () => {
         writable: true,
         configurable: true,
       },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    await act(() => {
+      return renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+    });
+
+    // Create a mock file that we'll attach to the input
+    const file = new File(["dummy content"], "test-image-png", { type: "image/png" });
+
+    const fileInput = screen.getByTestId("test-id-edit-post-file-upload-input");
+
+    // Simulate file selection
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: { files: [file] },
+      });
+    });
+
+    await waitFor(() => {
+      const imagePreview = screen.getByTestId("edit-post-image-preview");
+      expect(imagePreview).toHaveStyle("background-image: url(data:image/png;base64,ZHVtbXkgY29udGVudA==)");
     });
   });
 });

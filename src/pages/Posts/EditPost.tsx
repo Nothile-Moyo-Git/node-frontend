@@ -179,11 +179,11 @@ export const EditPost: FC = () => {
   const formatPreviousPostImage = async (post: Post) => {
     try {
       // Only fetch the file if we have a filename
-      if (post?.fileName) {
+      if (post.fileName) {
         // Fetch the image, if it fails, reload the component
         setPreviousImageUrl(
           await require(
-            `../../images${post?.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post?.fileName}`,
+            `../../images${post.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post.fileName}`,
           ),
         );
       }
@@ -243,7 +243,7 @@ export const EditPost: FC = () => {
     setIsLoading(false);
 
     // If the user isn't authenticated, redirect this route to the previous page
-    if (!appContextInstance?.userAuthenticated) {
+    if (!appContextInstance.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
   }, [postId, appContextInstance, isPostCreatorValid, handlePostDataQuery, navigate]);
@@ -255,17 +255,17 @@ export const EditPost: FC = () => {
     if (validateFields() === true) {
       try {
         // Get values
-        const userId = appContextInstance?.userId ?? "";
+        const userId = appContextInstance.userId;
         const title = titleRef.current?.value || "";
         const content = contentRef.current?.value || "";
 
         let fileData = {};
         if (isDevelopment && uploadFile) {
-          fileData = await fileUploadHandler(uploadFile, appContextInstance?.baseUrl ? appContextInstance.baseUrl : "");
+          fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
         }
 
         // Perform the API request to the backend
-        const editPostResponse = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+        const editPostResponse = await fetch(`${appContextInstance.baseUrl}/graphql/posts`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
