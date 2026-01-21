@@ -159,7 +159,9 @@ export const EditPost: FC = () => {
       const dataResponse = await response.json();
 
       // Get the data from the json
-      const data = dataResponse.data.GetAndValidatePostResponse;
+      const {
+        data: { GetAndValidatePostResponse: data },
+      } = dataResponse;
 
       // Show the error modal if the request fails
       if (data.status === 400) {
