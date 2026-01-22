@@ -28,6 +28,7 @@ import ImagePreview from "../../components/form/ImagePreview";
 import TextArea from "../../components/form/TextArea";
 import { MdKeyboardBackspace } from "react-icons/md";
 import Carousel from "../../components/carousel/Carousel";
+import useEditPostDetails from "./hooks/useEditPostDetails";
 
 /**
  * @Name EditPost
@@ -70,6 +71,9 @@ export const EditPost: FC = () => {
 
   // Check which environment we're on for feature flag purposes
   const isDevelopment = process.env.NODE_ENV.trim() === "development";
+
+  // Handle user authentication from the backend
+  const { status, post } = useEditPostDetails({ userId: "", postId: postId ?? "" });
 
   // Validate the before submission so we can either render errors or perform the request
   const validateFields = () => {
