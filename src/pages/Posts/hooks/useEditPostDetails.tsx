@@ -9,7 +9,7 @@
  *
  */
 
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 import { AppContext } from "../../../context/AppContext";
 import { Post } from "../../../@types";
 
@@ -19,9 +19,11 @@ interface EditPostDetailsProps {
 }
 
 type EditPostDetails = {
-  status: number;
   isLoading: boolean;
+  isUserValidated: boolean;
   post: Post | null;
+  status: number;
+  success: boolean;
 };
 
 const useEditPostDetails = ({ userId, postId }: EditPostDetailsProps) => {
@@ -32,8 +34,10 @@ const useEditPostDetails = ({ userId, postId }: EditPostDetailsProps) => {
   const [contentFetched, setContextFetched] = useState<boolean>(false);
   const [editPostDetails, setEditPostDetails] = useState<EditPostDetails>({
     isLoading: true,
+    isUserValidated: true,
     post: null,
     status: 100,
+    success: false,
   });
 
   // We do this here because we need the state in our context to update first before we execute the api requests
@@ -92,12 +96,12 @@ const useEditPostDetails = ({ userId, postId }: EditPostDetailsProps) => {
     return GetAndValidatePostResponse;
   };
 
-  const handleRequest = async () => {
+  const handleRequest = useCallback(async () => {
     try {
-      const { status, post } = await getPostData();
+      const { status, post, isUserValidated, success } = await getPostData();
 
       setEditPostDetails((previousState) => {
-        return { ...previousState, status, post };
+        return { ...previousState, status, post, isUserValidated, success };
       });
     } catch (error) {
       console.log("Error");
@@ -107,7 +111,7 @@ const useEditPostDetails = ({ userId, postId }: EditPostDetailsProps) => {
         return { ...previousState, isLoading: false };
       });
     }
-  };
+  }, [getPostData]);
 
   useEffect(() => {
     // Make sure we're validated first

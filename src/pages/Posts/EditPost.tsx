@@ -49,7 +49,6 @@ export const EditPost: FC = () => {
 
   // State for the page
   const [postData, setPostData] = useState<Post>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showErrorText, setShowErrorText] = useState<boolean>(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(true);
   const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
@@ -73,7 +72,10 @@ export const EditPost: FC = () => {
   const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
   // Handle user authentication from the backend
-  const { status, post } = useEditPostDetails({ userId: "", postId: postId ?? "" });
+  const { isLoading, status, post, isUserValidated, success } = useEditPostDetails({
+    userId: appContextInstance.userId ?? "",
+    postId: postId ?? "",
+  });
 
   // Validate the before submission so we can either render errors or perform the request
   const validateFields = () => {
@@ -117,70 +119,6 @@ export const EditPost: FC = () => {
     return inputsValid;
   };
 
-  const getPostData = useCallback(
-    async (userId: string) => {
-      // Create the fields
-      const fields = new FormData();
-      fields.append("userId", userId);
-
-      // Query to GraphQL
-      const response = await fetch(`${appContextInstance.baseUrl}/graphql/posts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-                    query GetAndValidatePostResponse($postId : String!, $userId : String!){
-                        GetAndValidatePostResponse(postId : $postId, userId : $userId){
-                            success
-                            message
-                            post {
-                                _id
-                                fileLastUpdated
-                                fileName
-                                title
-                                imageUrl
-                                content
-                                creator
-                                createdAt
-                                updatedAt
-                            }
-                            isUserValidated
-                            status
-                        }
-                    }
-                `,
-          variables: {
-            postId: postId,
-            userId: userId,
-          },
-        }),
-      });
-
-      // Get the json from the backend
-      const dataResponse = await response.json();
-
-      // Get the data from the json
-      const {
-        data: { GetAndValidatePostResponse: data },
-      } = dataResponse;
-
-      // Show the error modal if the request fails
-      if (data.status === 400) {
-        setShowErrorText(true);
-      }
-
-      if (data.status === 500) {
-        setRenderErrorModal(true);
-      }
-
-      return data;
-    },
-    [postId, appContextInstance.baseUrl],
-  );
-
   // Set the preview of the file when the api request concludes so we can view it on the page immediately
   const formatPreviousPostImage = async (post: Post) => {
     try {
@@ -201,28 +139,16 @@ export const EditPost: FC = () => {
   };
 
   // This method runs the get method and then formats the results
-  const handlePostDataQuery = useCallback(
-    async (userId: string) => {
-      try {
-        const data = await getPostData(userId);
+  const handlePostDataQuery = useCallback(async () => {
+    if (isUserValidated === false) {
+      navigate(`${BASENAME}/posts`);
+    }
 
-        if (data.isUserValidated === false) {
-          navigate(`${BASENAME}/posts`);
-        }
-
-        const success = data.success ? data.success : false;
-
-        if (success === true) {
-          setPostData(data.post);
-          formatPreviousPostImage(data.post);
-        }
-      } catch (error) {
-        console.log("handlePostDataQuery error");
-        console.error(error);
-      }
-    },
-    [getPostData, navigate],
-  );
+    if (success === true && post) {
+      setPostData(post);
+      formatPreviousPostImage(post);
+    }
+  }, [navigate, post, isUserValidated, success]);
 
   // Back handler
   const backToPreviousPage = (event: React.MouseEvent) => {
@@ -236,17 +162,24 @@ export const EditPost: FC = () => {
   };
 
   useEffect(() => {
-    // Toggle the loading spinner until the request ends
-    setIsLoading(true);
-    appContextInstance.validateAuthentication();
+    if (isLoading === false) {
+      if (status === 400) {
+        setShowErrorText(true);
+      }
 
-    if (appContextInstance.userAuthenticated === true) {
-      if (appContextInstance.token !== "") {
-        handlePostDataQuery(appContextInstance.userId ? appContextInstance.userId : "");
+      if (status === 500) {
+        setRenderErrorModal(true);
       }
     }
+  }, [status, isLoading]);
 
-    setIsLoading(false);
+  useEffect(() => {
+    // Toggle the loading spinner until the request ends
+    appContextInstance.validateAuthentication();
+
+    if (appContextInstance.userAuthenticated === true && appContextInstance.token !== "") {
+      handlePostDataQuery();
+    }
 
     // If the user isn't authenticated, redirect this route to the previous page
     if (!appContextInstance.userAuthenticated) {
