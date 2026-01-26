@@ -28,7 +28,7 @@ import ImagePreview from "../../components/form/ImagePreview";
 import TextArea from "../../components/form/TextArea";
 import { MdKeyboardBackspace } from "react-icons/md";
 import Carousel from "../../components/carousel/Carousel";
-import useEditPostDetails from "./hooks/useEditPostDetails";
+import useEditPostDetails from "./hooks/useEditPostDetailsHook";
 
 /**
  * @Name EditPost
