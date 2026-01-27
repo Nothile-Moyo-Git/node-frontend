@@ -34,6 +34,8 @@ const useUpdatePostDetails = () => {
     status: 100,
   });
 
+  
+
   // We do this here because we need the state in our context to update first before we execute the api requests
   useEffect(() => {
     context.validateAuthentication();
