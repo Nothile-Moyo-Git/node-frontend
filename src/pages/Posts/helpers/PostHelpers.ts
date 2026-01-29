@@ -7,42 +7,39 @@
  * Description: A helper file for Dealing with post validation
  */
 
-type FormFieldItem = {
+export type FormFieldItem = {
   name: string;
   value: string;
 };
-type FormFieldItems = {
+
+export type FormFieldItems = {
   fields: FormFieldItem[];
 };
 
-interface ValidateFieldsProps {
+export interface FormFields {
   form: FormFieldItems;
-  isDevelopment: boolean;
 }
 
-const validateFields = ({ form, isDevelopment }: ValidateFieldsProps) => {
-  const title = form.fields.filter((field) => field.name === "title");
-  const content = form.fields.filter((field) => field.name === "content");
-  const image = form.fields.filter((field) => field.name === "image");
+const validateFields = ({ form }: FormFields) => {
+  const fields = form.fields;
+
+  const title = fields.find((field) => field.name === "title");
+  const content = fields.find((field) => field.name === "content");
 
   let titleValid,
     contentValid = true;
 
-  if (title.length < 3 || title.length > 100) {
+  if (title && (title.value.length < 3 || title.value.length > 100)) {
     titleValid = false;
   }
 
-  if (content.length < 6 || content.length > 600) {
+  if (content && (content.value.length < 6 || content.value.length > 600)) {
     contentValid = false;
   }
 
-  if (isDevelopment) {
-    if (!uploadFile) {
-      setIsFormValid(false);
-      setIsFileValid(false);
-      inputsValid = false;
-    }
-  }
+  const formValid = titleValid && contentValid;
 
-  return inputsValid;
+  return { isFormValid: formValid, titleValid, contentValid };
 };
+
+export default validateFields;

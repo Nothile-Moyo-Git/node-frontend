@@ -29,6 +29,7 @@ import TextArea from "../../components/form/TextArea";
 import { MdKeyboardBackspace } from "react-icons/md";
 import Carousel from "../../components/carousel/Carousel";
 import useEditPostDetails from "./hooks/useEditPostDetailsHook";
+import { FormFieldItems } from "./helpers/PostHelpers";
 
 /**
  * @Name EditPost
@@ -108,14 +109,6 @@ export const EditPost: FC = () => {
       setIsContentValid(true);
     }
 
-    if (isDevelopment) {
-      if (!uploadFile) {
-        setIsFormValid(false);
-        setIsFileValid(false);
-        inputsValid = false;
-      }
-    }
-
     return inputsValid;
   };
 
@@ -190,6 +183,17 @@ export const EditPost: FC = () => {
   // Update the post data, and return an error if required
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
+
+    const form: FormFieldItems = {
+      fields: [],
+    };
+
+    if (titleRef.current) {
+      form.fields.push({
+        name: "Title",
+        value: titleRef.current.value,
+      });
+    }
 
     if (validateFields() === true) {
       try {
