@@ -16,18 +16,12 @@ export type FormFieldItems = {
   fields: FormFieldItem[];
 };
 
-export interface FormFields {
-  form: FormFieldItems;
-}
-
-const validateFields = ({ form }: FormFields) => {
-  const fields = form.fields;
-
+const validateFields = ({ fields }: FormFieldItems) => {
   const title = fields.find((field) => field.name === "title");
   const content = fields.find((field) => field.name === "content");
 
-  let titleValid,
-    contentValid = true;
+  let titleValid = true;
+  let contentValid = true;
 
   if (title && (title.value.length < 3 || title.value.length > 100)) {
     titleValid = false;
@@ -37,9 +31,9 @@ const validateFields = ({ form }: FormFields) => {
     contentValid = false;
   }
 
-  const formValid = titleValid && contentValid;
+  const isFormValid = titleValid && contentValid;
 
-  return { isFormValid: formValid, titleValid, contentValid };
+  return { isFormValid, titleValid, contentValid };
 };
 
 export default validateFields;

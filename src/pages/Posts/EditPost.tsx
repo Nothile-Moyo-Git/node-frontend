@@ -30,6 +30,7 @@ import { MdKeyboardBackspace } from "react-icons/md";
 import Carousel from "../../components/carousel/Carousel";
 import useEditPostDetails from "./hooks/useEditPostDetailsHook";
 import { FormFieldItems } from "./helpers/PostHelpers";
+import validateFields from "./helpers/PostHelpers";
 
 /**
  * @Name EditPost
@@ -77,40 +78,6 @@ export const EditPost: FC = () => {
     userId: appContextInstance.userId ?? "",
     postId: postId ?? "",
   });
-
-  // Validate the before submission so we can either render errors or perform the request
-  const validateFields = () => {
-    let title = "";
-    let content = "";
-
-    // Extract inputs
-    if (titleRef.current) {
-      title = titleRef.current.value;
-    }
-    if (contentRef.current) {
-      content = contentRef.current.value;
-    }
-
-    let inputsValid = true;
-
-    if (title.length < 3 || title.length > 100) {
-      setIsFormValid(false);
-      setIsTitleValid(false);
-      inputsValid = false;
-    } else {
-      setIsTitleValid(true);
-    }
-
-    if (content.length < 6 || content.length > 600) {
-      setIsFormValid(false);
-      setIsContentValid(false);
-      inputsValid = false;
-    } else {
-      setIsContentValid(true);
-    }
-
-    return inputsValid;
-  };
 
   // Set the preview of the file when the api request concludes so we can view it on the page immediately
   const formatPreviousPostImage = async (post: Post) => {
@@ -188,19 +155,26 @@ export const EditPost: FC = () => {
       fields: [],
     };
 
-    if (titleRef.current) {
-      form.fields.push({
-        name: "Title",
-        value: titleRef.current.value,
-      });
-    }
+    const title = titleRef.current?.value || "";
+    const content = contentRef.current?.value || "";
 
-    if (validateFields() === true) {
+    form.fields.push(
+      {
+        name: "title",
+        value: title,
+      },
+      {
+        name: "content",
+        value: content,
+      },
+    );
+
+    const validityCheck = validateFields(form);
+
+    if (validityCheck.isFormValid === true) {
       try {
         // Get values
         const userId = appContextInstance.userId;
-        const title = titleRef.current?.value || "";
-        const content = contentRef.current?.value || "";
 
         let fileData = {};
         if (isDevelopment && uploadFile) {
