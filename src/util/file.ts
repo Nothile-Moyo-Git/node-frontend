@@ -7,6 +7,8 @@
  * It handles functionality such as deleting files when a product is deleted, and replacing it when it gets updated
  */
 
+import { FileRequestData } from "../../src/@types/index";
+
 /**
  * @name generateBase64FromImage
  *
@@ -90,7 +92,7 @@ export const fileUploadHandler = async (uploadFile: File, baseUrl: string) => {
 
   // Get the file data we need to send to the api request
   const fileUploadData = await fileUploadResponse.json();
-  const fileData = {
+  const fileData: FileRequestData = {
     fileName: fileUploadData.fileName,
     imageUrl: fileUploadData.imageUrl,
     isFileValid: fileUploadData.isFileValid,

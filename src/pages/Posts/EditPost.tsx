@@ -158,20 +158,18 @@ export const EditPost: FC = () => {
     const title = titleRef.current?.value || "";
     const content = contentRef.current?.value || "";
 
-    form.fields.push({
-      name: "title",
-      value: title,
-    });
-
-    form.fields.push({
-      name: "content",
-      value: content,
-    });
+    form.fields.push(
+      {
+        name: "title",
+        value: title,
+      },
+      {
+        name: "content",
+        value: content,
+      },
+    );
 
     const validityCheck = validateFields(form);
-
-    console.log("Validity check");
-    console.log(validityCheck);
 
     if (validityCheck.isFormValid === true) {
       try {

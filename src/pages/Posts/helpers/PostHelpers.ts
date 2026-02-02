@@ -20,12 +20,6 @@ const validateFields = ({ fields }: FormFieldItems) => {
   const title = fields.find((field) => field.name === "title");
   const content = fields.find((field) => field.name === "content");
 
-  console.log("Title");
-  console.log(title);
-  console.log("Content");
-  console.log(content);
-  console.log("\n\n");
-
   let titleValid = true;
   let contentValid = true;
 

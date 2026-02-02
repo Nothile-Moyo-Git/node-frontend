@@ -55,4 +55,13 @@ export interface FileData {
   imageUrl: string;
 }
 
+export interface FileRequestData {
+  fileName: string;
+  imageUrl: string;
+  isFileValid: string;
+  isFileSizeValid: string;
+  isFileTypeValid: string;
+  isImageUrlValid: string;
+}
+
 export type ButtonType = "button" | "submit" | "reset" | undefined;
