@@ -10,16 +10,9 @@
  *
  */
 
-import { useContext, useState, useEffect, useCallback } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../../../context/AppContext";
-import { Post } from "../../../@types";
-
-type UpdatePostResult = {
-  isUserValidated: boolean;
-  post: Post | null;
-  success: boolean;
-  status: number;
-};
+import { FileData, FileRequestData, Post } from "../../../@types";
 
 interface UpdatePostDetailsProps {
   title: string;
@@ -27,20 +20,40 @@ interface UpdatePostDetailsProps {
   postId: string;
 }
 
+type UpdatePostResult = {
+  isUserValidated: boolean;
+  post: Post | null;
+  success: boolean;
+  status: number;
+  message: string;
+  isContentValid: boolean;
+  isTitleValid: boolean;
+  isPostCreator: boolean;
+};
+
+type updatePostQueryProps = {
+  fileData: FileRequestData;
+  userId: string;
+  carouselImage: FileData;
+};
+
 const useUpdatePostDetails = async ({ title, content, postId }: UpdatePostDetailsProps) => {
   // Create context
   const context = useContext(AppContext);
 
   // Setting the state
-  const [contentFetched, setContextFetched] = useState<boolean>(false);
   const [updatePostResponse, setUpdatePostResponse] = useState<UpdatePostResult>({
     isUserValidated: true,
     post: null,
     success: false,
     status: 100,
+    message: "Awaiting request",
+    isContentValid: true,
+    isTitleValid: true,
+    isPostCreator: true,
   });
 
-  const handleUpdatePostQuery = async ({}) => {
+  const handleUpdatePostQuery = async ({ fileData, userId, carouselImage }: updatePostQueryProps) => {
     // Perform the API request to the backend
     const editPostResponse = await fetch(`${context.baseUrl}/graphql/posts`, {
       method: "POST",
@@ -108,15 +121,13 @@ const useUpdatePostDetails = async ({ title, content, postId }: UpdatePostDetail
     // Get the result of the API request
     const data = await editPostResponse.json();
     const response = data.data.PostEditPostResponse;
+    setUpdatePostResponse(response);
   };
 
-  // We do this here because we need the state in our context to update first before we execute the api requests
-  useEffect(() => {
-    context.validateAuthentication();
-    setContextFetched(true);
-  }, [context]);
-
-  return updatePostResponse;
+  return {
+    updatePostResponse,
+    handleUpdatePostQuery,
+  };
 };
 
 export default useUpdatePostDetails;
