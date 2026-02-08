@@ -46,7 +46,7 @@ const useEditPostDetails = ({ userId, postId }: EditPostDetailsProps) => {
     setContextFetched(true);
   }, [context]);
 
-  const getPostData = async () => {
+  const getPostData = useCallback(async () => {
     // Create the fields
     const fields = new FormData();
     fields.append("userId", userId);
@@ -94,7 +94,7 @@ const useEditPostDetails = ({ userId, postId }: EditPostDetailsProps) => {
     } = responseInJSON;
 
     return GetAndValidatePostResponse;
-  };
+  }, [userId, postId, context.baseUrl]);
 
   const handleRequest = useCallback(async () => {
     try {
@@ -118,7 +118,7 @@ const useEditPostDetails = ({ userId, postId }: EditPostDetailsProps) => {
     if (contentFetched === true) {
       handleRequest();
     }
-  }, [contentFetched]);
+  }, [contentFetched, handleRequest]);
 
   return editPostDetails;
 };
