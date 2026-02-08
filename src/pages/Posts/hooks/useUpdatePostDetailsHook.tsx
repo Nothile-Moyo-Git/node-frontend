@@ -10,50 +10,28 @@
  *
  */
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AppContext } from "../../../context/AppContext";
-import { FileData, FileRequestData, Post } from "../../../@types";
+import { FileData, FileRequestData } from "../../../@types";
 
 interface UpdatePostDetailsProps {
-  title: string;
-  content: string;
   postId: string;
 }
 
-type UpdatePostResult = {
-  isUserValidated: boolean;
-  post: Post | null;
-  success: boolean;
-  status: number;
-  message: string;
-  isContentValid: boolean;
-  isTitleValid: boolean;
-  isPostCreator: boolean;
-};
-
 type updatePostQueryProps = {
-  fileData: FileRequestData;
+  fileData: FileRequestData | unknown;
   userId: string;
-  carouselImage: FileData;
+  carouselImage: FileData | undefined;
+  title: string;
+  content: string;
 };
 
-const useUpdatePostDetails = async ({ title, content, postId }: UpdatePostDetailsProps) => {
+const useUpdatePostDetails = ({ postId }: UpdatePostDetailsProps) => {
   // Create context
   const context = useContext(AppContext);
 
   // Setting the state
-  const [updatePostResponse, setUpdatePostResponse] = useState<UpdatePostResult>({
-    isUserValidated: true,
-    post: null,
-    success: false,
-    status: 100,
-    message: "Awaiting request",
-    isContentValid: true,
-    isTitleValid: true,
-    isPostCreator: true,
-  });
-
-  const handleUpdatePostQuery = async ({ fileData, userId, carouselImage }: updatePostQueryProps) => {
+  const handleUpdatePostQuery = async ({ fileData, userId, carouselImage, title, content }: updatePostQueryProps) => {
     // Perform the API request to the backend
     const editPostResponse = await fetch(`${context.baseUrl}/graphql/posts`, {
       method: "POST",
@@ -121,11 +99,10 @@ const useUpdatePostDetails = async ({ title, content, postId }: UpdatePostDetail
     // Get the result of the API request
     const data = await editPostResponse.json();
     const response = data.data.PostEditPostResponse;
-    setUpdatePostResponse(response);
+    return response;
   };
 
   return {
-    updatePostResponse,
     handleUpdatePostQuery,
   };
 };

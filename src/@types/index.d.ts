@@ -58,10 +58,10 @@ export interface FileData {
 export interface FileRequestData {
   fileName: string;
   imageUrl: string;
-  isFileValid: string;
-  isFileSizeValid: string;
-  isFileTypeValid: string;
-  isImageUrlValid: string;
+  isFileValid: boolean;
+  isFileSizeValid: boolean;
+  isFileTypeValid: boolean;
+  isImageUrlValid: boolean;
 }
 
 export type ButtonType = "button" | "submit" | "reset" | undefined;

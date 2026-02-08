@@ -31,6 +31,7 @@ import Carousel from "../../components/carousel/Carousel";
 import useEditPostDetails from "./hooks/useEditPostDetailsHook";
 import { FormFieldItems } from "./helpers/PostHelpers";
 import validateFields from "./helpers/PostHelpers";
+import useUpdatePostDetails from "./hooks/useUpdatePostDetailsHook";
 
 /**
  * @Name EditPost
@@ -74,8 +75,13 @@ export const EditPost: FC = () => {
   const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
   // Handle user authentication from the backend
+  // We declare our hooks here
   const { isLoading, status, post, isUserValidated, success } = useEditPostDetails({
     userId: appContextInstance.userId ?? "",
+    postId: postId ?? "",
+  });
+
+  const { handleUpdatePostQuery } = useUpdatePostDetails({
     postId: postId ?? "",
   });
 
@@ -181,74 +187,15 @@ export const EditPost: FC = () => {
           fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
         }
 
-        // Perform the API request to the backend
-        const editPostResponse = await fetch(`${appContextInstance.baseUrl}/graphql/posts`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query: `
-                          mutation PostEditPostResponse(
-                            $title : String!, 
-                            $content : String!, 
-                            $userId : String!, 
-                            $fileData : FileInput, 
-                            $postId : String!,
-                            $carouselFileData: CarouselFileData
-                          ){
-                              PostEditPostResponse(
-                                title : $title, 
-                                content : $content, 
-                                userId : $userId, 
-                                fileData : $fileData, 
-                                postId : $postId,
-                                carouselFileData : $carouselFileData
-                              ){
-                                  post {
-                                      _id
-                                      fileLastUpdated
-                                      fileName
-                                      title
-                                      imageUrl
-                                      content
-                                      creator
-                                      createdAt
-                                      updatedAt
-                                  }
-                                  status
-                                  success
-                                  message
-                                  fileValidProps {
-                                      fileName
-                                      imageUrl
-                                      isImageUrlValid
-                                      isFileSizeValid
-                                      isFileTypeValid
-                                      isFileValid
-                                  }
-                                  isContentValid
-                                  isTitleValid
-                                  isPostCreator
-                              }
-                          }
-                      `,
-            variables: {
-              title: title,
-              content: content,
-              userId: userId,
-              fileData: fileData,
-              carouselFileData: carouselImage ? carouselImage : null,
-              postId: postId,
-            },
-          }),
+        const response = await handleUpdatePostQuery({
+          fileData,
+          userId: userId || "",
+          carouselImage,
+          title,
+          content,
         });
 
         // Get the result of the API request
-        const data = await editPostResponse.json();
-        const response = data.data.PostEditPostResponse;
-
         const isFileValid =
           response.fileValidProps.isFileSizeValid &&
           response.fileValidProps.isFileTypeValid &&
