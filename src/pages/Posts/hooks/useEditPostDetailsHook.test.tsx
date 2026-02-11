@@ -10,13 +10,9 @@ import { ReactNode } from "react";
 import { ContextProps } from "../../../context/AppContext";
 import { mockContext, mockPost, mockUser } from "../../../test-utils/mocks/objects";
 import { AppContext } from "../../../context/AppContext";
-import { renderHook } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 import useEditPostDetails from "./useEditPostDetailsHook";
 import { createFetchResponse } from "../../../test-utils/methods/methods";
-import { generateUploadDate } from "../../../util/util";
-
-const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
-const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 
 // Mock checkSessionValidation
 jest.mock("../../../util/util", () => ({
@@ -52,15 +48,17 @@ describe("useEditPostDetails Hook", () => {
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
-          PostUserDetailsResponse: {
-            sessionCreated: mockCreationDate,
-            sessionExpires: mockExpiryDate,
-            user: mockUser,
+          GetAndValidatePostResponse: {
             success: true,
+            message: "Request successful",
+            post: mockPost,
+            isUserValidated: true,
+            status: 100,
           },
         },
       }),
     );
+
     const { result } = renderHook(
       () =>
         useEditPostDetails({
@@ -69,5 +67,15 @@ describe("useEditPostDetails Hook", () => {
         }),
       { wrapper },
     );
+
+    expect(result.current.isLoading).toBe(true);
+    expect(result.current.post).toBe(null);
+    expect(result.current.isUserValidated).toBe(true);
+    expect(result.current.status).toBe(100);
+
+    // Wait for the async operations to complete
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
   });
 });

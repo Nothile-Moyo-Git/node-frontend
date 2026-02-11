@@ -76,7 +76,7 @@ export const EditPost: FC = () => {
 
   // Handle user authentication from the backend
   // We declare our hooks here
-  const { isLoading, status, post, isUserValidated, success } = useEditPostDetails({
+  const { isLoading, status, post, success } = useEditPostDetails({
     userId: appContextInstance.userId ?? "",
     postId: postId ?? "",
   });
@@ -106,7 +106,7 @@ export const EditPost: FC = () => {
 
   // This method runs the get method and then formats the results
   const handlePostDataQuery = useCallback(async () => {
-    if (isUserValidated === false) {
+    if (appContextInstance.userAuthenticated === false) {
       navigate(`${BASENAME}/posts`);
     }
 
@@ -114,7 +114,7 @@ export const EditPost: FC = () => {
       setPostData(post);
       formatPreviousPostImage(post);
     }
-  }, [navigate, post, isUserValidated, success]);
+  }, [navigate, post, appContextInstance, success]);
 
   // Back handler
   const backToPreviousPage = (event: React.MouseEvent) => {
