@@ -10,13 +10,25 @@
  *
  */
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../../../context/AppContext";
-import { FileData, FileRequestData } from "../../../@types";
+import { FileData, FileRequestData, Post } from "../../../@types";
+import { mockFileProps } from "../../../test-utils/mocks/objects";
 
 interface UpdatePostDetailsProps {
   postId: string;
 }
+
+type UpdatePostResponseProps = {
+  post: Post | null;
+  status: number;
+  success: boolean;
+  message: string;
+  fileValidProps: FileRequestData;
+  isContentValid: boolean;
+  isTitleValid: boolean;
+  isPostCreator: boolean;
+};
 
 type updatePostQueryProps = {
   fileData: FileRequestData | unknown;
@@ -29,6 +41,18 @@ type updatePostQueryProps = {
 const useUpdatePostDetails = ({ postId }: UpdatePostDetailsProps) => {
   // Create context
   const context = useContext(AppContext);
+
+  // Store our hook data that we can return here
+  const [updatePostDetails, setUpdatePostDetails] = useState<UpdatePostResponseProps>({
+    post: null,
+    status: 100,
+    success: true,
+    message: "Update pending",
+    fileValidProps: mockFileProps,
+    isContentValid: true,
+    isTitleValid: true,
+    isPostCreator: true,
+  });
 
   // Setting the state
   const handleUpdatePostQuery = async ({ fileData, userId, carouselImage, title, content }: updatePostQueryProps) => {

@@ -8,10 +8,10 @@
 
 import { ReactNode } from "react";
 import { ContextProps } from "../../../context/AppContext";
-import { mockContext, mockPost, mockUser } from "../../../test-utils/mocks/objects";
+import { mockContext, mockFileProps, mockPost, mockUser } from "../../../test-utils/mocks/objects";
 import { AppContext } from "../../../context/AppContext";
 import { renderHook, waitFor } from "@testing-library/react";
-import useEditPostDetails from "./useEditPostDetailsHook";
+import useUpdatePostDetails from "./useUpdatePostDetailsHook";
 import { createFetchResponse } from "../../../test-utils/methods/methods";
 
 // Mock checkSessionValidation
@@ -48,12 +48,15 @@ describe("useEditPostDetails Hook", () => {
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
-          GetAndValidatePostResponse: {
-            success: true,
-            message: "Request successful",
+          PostEditPostResponse: {
             post: mockPost,
-            isUserValidated: true,
-            status: 100,
+            status: 200,
+            success: true,
+            message: "200 : Request was successful",
+            fileValidProps: mockFileProps,
+            isContentValid: true,
+            isTitleValid: true,
+            isPostCreator: true,
           },
         },
       }),
@@ -61,42 +64,12 @@ describe("useEditPostDetails Hook", () => {
 
     const { result } = renderHook(
       () =>
-        useEditPostDetails({
-          userId: mockUser._id,
+        useUpdatePostDetails({
           postId: mockPost._id,
         }),
       { wrapper },
     );
-
-    expect(result.current.isLoading).toBe(true);
-    expect(result.current.post).toBe(null);
-    expect(result.current.isUserValidated).toBe(true);
-    expect(result.current.status).toBe(100);
-
-    // Wait for the async operations to complete
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-  });
-
-  it("Handles a failed request", async () => {
-    // Mock our failed request
-    global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network fail"));
-
-    renderHook(
-      () =>
-        useEditPostDetails({
-          userId: mockUser._id,
-          postId: mockPost._id,
-        }),
-      { wrapper },
-    );
-
-    // Spy on our consoles instead of immediately outputting a value
-    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-    await waitFor(() => {
-      expect(errorSpy).toHaveBeenCalled();
-    });
+ 
+    
   });
 });

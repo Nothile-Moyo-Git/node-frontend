@@ -1,4 +1,4 @@
-import { FileData, User } from "../../@types";
+import { FileData, FileRequestData, User } from "../../@types";
 import { ContextProps } from "../../context/AppContext";
 import { Post } from "../../@types";
 
@@ -178,3 +178,13 @@ export const mockFiles: FileData[] = [
     imageUrl: "../../images/Tiefling.jpg",
   },
 ];
+
+// Mocking file props
+export const mockFileProps: FileRequestData = {
+  fileName: mockFiles[0].fileName,
+  imageUrl: mockFiles[0].imageUrl,
+  isFileValid: true,
+  isFileTypeValid: true,
+  isImageUrlValid: true,
+  isFileSizeValid: true,
+};
