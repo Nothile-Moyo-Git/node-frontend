@@ -123,10 +123,11 @@ const useUpdatePostDetails = ({ postId }: UpdatePostDetailsProps) => {
     // Get the result of the API request
     const data = await editPostResponse.json();
     const response = data.data.PostEditPostResponse;
-    return response;
+    setUpdatePostDetails(response);
   };
 
   return {
+    updatePostDetails,
     handleUpdatePostQuery,
   };
 };
