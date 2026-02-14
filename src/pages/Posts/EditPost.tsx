@@ -127,8 +127,11 @@ export const EditPost: FC = () => {
     }
   };
 
-  console.log("Update post details");
-  console.log(updatePostDetails);
+  useEffect(() => {
+    console.log("Update post details");
+    console.log(updatePostDetails);
+    console.log("\n\n");
+  }, [updatePostDetails]);
 
   useEffect(() => {
     if (isLoading === false) {
@@ -254,25 +257,31 @@ export const EditPost: FC = () => {
     if (event.target.files) {
       const file = event.target.files[0];
 
-      console.log("File");
-      console.log(file);
-      console.log("\n\n");
-
       let isValidFileType = true;
-      const isValidFileSize = true;
-      const errorText = "";
+      let isValidFileSize = true;
+      let errorText = "Error: ";
 
-      const fileType = file.type;
-      const fileSize = file.size;
+      const { type: fileType, size: fileSize } = file;
 
-      if (fileType === "image/png" && fileType === "image/jpg" && fileType === "image/jpeg") {
-        isValidFileType = true;
+      if (
+        fileType !== "image/png" &&
+        fileType !== "image/jpg" &&
+        fileType !== "image/jpeg" &&
+        fileType !== "image/webp"
+      ) {
+        isValidFileType = false;
+        errorText += "Please upload a PNG, JPEG or JPG. ";
+      }
+
+      if (fileSize > 5000000) {
+        isValidFileSize = false;
+        errorText += "Please upload a file smaller than 5MB. ";
       }
 
       // Raise and error and empty the input, otherwise, set the state to sent to the backend
       // Note: This is for UX purposes, file uploads are also verified in the backend
-      if (file.size > 5000000) {
-        alert("Please upload a file smaller than 5MB");
+      if (!isValidFileSize || !isValidFileType) {
+        alert(errorText);
         event.target.value = "";
       } else {
         setUploadFile(file);
