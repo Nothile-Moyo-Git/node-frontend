@@ -1,0 +1,102 @@
+/**
+ * Date created: 09/02/2026
+ *
+ * Author: Nothile Moyo
+ *
+ * Description: The hook for getting the post details
+ */
+
+import { ReactNode } from "react";
+import { ContextProps } from "../../../context/AppContext";
+import { mockContext, mockPost, mockUser } from "../../../test-utils/mocks/objects";
+import { AppContext } from "../../../context/AppContext";
+import { renderHook, waitFor } from "@testing-library/react";
+import useEditPostDetails from "./useEditPostDetailsHook";
+import { createFetchResponse } from "../../../test-utils/methods/methods";
+
+// Mock checkSessionValidation
+jest.mock("../../../util/util", () => ({
+  ...jest.requireActual("../../../util/util"),
+  checkSessionValidation: jest.fn(),
+}));
+
+// Mock fetch globally
+global.fetch = jest.fn();
+
+// Variations of mockContext for testing
+const validatedMockContext: ContextProps = {
+  ...mockContext,
+  validateAuthentication: jest.fn(() => {
+    mockContext.token = "fake-token";
+    mockContext.userAuthenticated = true;
+    mockContext.userId = "12345-nothile-id";
+  }),
+};
+
+// Mock our content wrapper since we'll pass the child elements inside of it
+const wrapper = ({ children }: { children: ReactNode }) => {
+  return <AppContext.Provider value={validatedMockContext}>{children}</AppContext.Provider>;
+};
+
+describe("useEditPostDetails Hook", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("Handles the loading spinner successfully", async () => {
+    // Mock our request for predictable values
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          GetAndValidatePostResponse: {
+            success: true,
+            message: "Request successful",
+            post: mockPost,
+            isUserValidated: true,
+            status: 100,
+          },
+        },
+      }),
+    );
+
+    const { result } = renderHook(
+      () =>
+        useEditPostDetails({
+          userId: mockUser._id,
+          postId: mockPost._id,
+        }),
+      { wrapper },
+    );
+
+    expect(result.current.isLoading).toBe(true);
+    expect(result.current.post).toBe(null);
+    expect(result.current.isUserValidated).toBe(true);
+    expect(result.current.status).toBe(100);
+
+    // Wait for the async operations to complete
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+
+  it("Handles a failed request", async () => {
+    // Mock our failed request
+    global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network fail"));
+
+    renderHook(
+      () =>
+        useEditPostDetails({
+          userId: mockUser._id,
+          postId: mockPost._id,
+        }),
+      { wrapper },
+    );
+
+    // Spy on our consoles instead of immediately outputting a value
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    await waitFor(() => {
+      expect(errorSpy).toHaveBeenCalled();
+    });
+  });
+});

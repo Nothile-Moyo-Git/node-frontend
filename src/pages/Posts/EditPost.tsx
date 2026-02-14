@@ -76,12 +76,12 @@ export const EditPost: FC = () => {
 
   // Handle user authentication from the backend
   // We declare our hooks here
-  const { isLoading, status, post, isUserValidated, success } = useEditPostDetails({
+  const { isLoading, status, post, success } = useEditPostDetails({
     userId: appContextInstance.userId ?? "",
     postId: postId ?? "",
   });
 
-  const { handleUpdatePostQuery } = useUpdatePostDetails({
+  const { handleUpdatePostQuery, updatePostDetails } = useUpdatePostDetails({
     postId: postId ?? "",
   });
 
@@ -106,7 +106,7 @@ export const EditPost: FC = () => {
 
   // This method runs the get method and then formats the results
   const handlePostDataQuery = useCallback(async () => {
-    if (isUserValidated === false) {
+    if (appContextInstance.userAuthenticated === false) {
       navigate(`${BASENAME}/posts`);
     }
 
@@ -114,7 +114,7 @@ export const EditPost: FC = () => {
       setPostData(post);
       formatPreviousPostImage(post);
     }
-  }, [navigate, post, isUserValidated, success]);
+  }, [navigate, post, appContextInstance, success]);
 
   // Back handler
   const backToPreviousPage = (event: React.MouseEvent) => {
@@ -126,6 +126,12 @@ export const EditPost: FC = () => {
       navigate(-1);
     }
   };
+
+  useEffect(() => {
+    console.log("Update post details");
+    console.log(updatePostDetails);
+    console.log("\n\n");
+  }, [updatePostDetails]);
 
   useEffect(() => {
     if (isLoading === false) {
@@ -175,19 +181,23 @@ export const EditPost: FC = () => {
       },
     );
 
-    const validityCheck = validateFields(form);
+    const validityCheckResults = validateFields(form);
 
-    if (validityCheck.isFormValid === true) {
+    let fileData = {};
+    if (isDevelopment && uploadFile) {
+      fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
+    }
+
+    console.log("File data");
+    console.log(fileData);
+    console.log("\n\n");
+
+    if (validityCheckResults.isFormValid === true) {
       try {
         // Get values
         const userId = appContextInstance.userId;
 
-        let fileData = {};
-        if (isDevelopment && uploadFile) {
-          fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
-        }
-
-        const response = await handleUpdatePostQuery({
+        await handleUpdatePostQuery({
           fileData,
           userId: userId || "",
           carouselImage,
@@ -197,24 +207,24 @@ export const EditPost: FC = () => {
 
         // Get the result of the API request
         const isFileValid =
-          response.fileValidProps.isFileSizeValid &&
-          response.fileValidProps.isFileTypeValid &&
-          response.fileValidProps.isFileValid &&
-          response.fileValidProps.isImageUrlValid;
+          updatePostDetails.fileValidProps.isFileSizeValid &&
+          updatePostDetails.fileValidProps.isFileTypeValid &&
+          updatePostDetails.fileValidProps.isFileValid &&
+          updatePostDetails.fileValidProps.isImageUrlValid;
 
         // Apply validation on the fields so we can show errors if needed
         if (uploadFile) {
           setIsFileValid(isFileValid);
         }
-        setIsFormValid(response.success);
-        setIsTitleValid(response.isTitleValid);
-        setIsContentValid(response.isContentValid);
-        setIsPostCreatorValid(response.isPostCreator);
+        setIsFormValid(updatePostDetails.success);
+        setIsTitleValid(updatePostDetails.isTitleValid);
+        setIsContentValid(updatePostDetails.isContentValid);
+        setIsPostCreatorValid(updatePostDetails.isPostCreator);
 
-        if (response.success === true) {
+        if (updatePostDetails.success === true) {
           // Reload the page if we were successful so we can query the updated results
           alert(`Success, Post ${postId} updated`);
-          window.location.reload();
+          // window.location.reload();
         }
 
         // Remove the image preview / file if it isn't valid so the user can upload a new one
@@ -230,6 +240,14 @@ export const EditPost: FC = () => {
         console.log("Request failed");
         console.error(error);
       }
+    } else {
+      if (validityCheckResults.titleValid === false) {
+        setIsTitleValid(false);
+      }
+
+      if (validityCheckResults.contentValid === false) {
+        setIsContentValid(false);
+      }
     }
   };
 
@@ -239,10 +257,31 @@ export const EditPost: FC = () => {
     if (event.target.files) {
       const file = event.target.files[0];
 
+      let isValidFileType = true;
+      let isValidFileSize = true;
+      let errorText = "Error: ";
+
+      const { type: fileType, size: fileSize } = file;
+
+      if (
+        fileType !== "image/png" &&
+        fileType !== "image/jpg" &&
+        fileType !== "image/jpeg" &&
+        fileType !== "image/webp"
+      ) {
+        isValidFileType = false;
+        errorText += "Please upload a PNG, JPEG or JPG. ";
+      }
+
+      if (fileSize > 5000000) {
+        isValidFileSize = false;
+        errorText += "Please upload a file smaller than 5MB. ";
+      }
+
       // Raise and error and empty the input, otherwise, set the state to sent to the backend
       // Note: This is for UX purposes, file uploads are also verified in the backend
-      if (file.size > 5000000) {
-        alert("Please upload a file smaller than 5MB");
+      if (!isValidFileSize || !isValidFileType) {
+        alert(errorText);
         event.target.value = "";
       } else {
         setUploadFile(file);
