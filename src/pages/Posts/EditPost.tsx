@@ -12,7 +12,7 @@
 import React, { FC, FormEvent, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./EditPost.scss";
-import { FileData, Post } from "../../@types";
+import { FileData, FileRequestData, Post } from "../../@types";
 import { AppContext } from "../../context/AppContext";
 import { BASENAME } from "../../util/util";
 import LoadingSpinner from "../../components/loader/LoadingSpinner";
@@ -182,17 +182,13 @@ export const EditPost: FC = () => {
     );
 
     const validityCheckResults = validateFields(form);
+    let fileData: FileRequestData | null = null;
 
-    let fileData = {};
     if (isDevelopment && uploadFile) {
       fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
     }
 
-    console.log("File data");
-    console.log(fileData);
-    console.log("\n\n");
-
-    if (validityCheckResults.isFormValid === true) {
+    if (validityCheckResults.isFormValid === true && fileData && fileData.isFileValid) {
       try {
         // Get values
         const userId = appContextInstance.userId;
@@ -248,6 +244,10 @@ export const EditPost: FC = () => {
       if (validityCheckResults.contentValid === false) {
         setIsContentValid(false);
       }
+
+      if (fileData && !fileData.isFileValid) {
+        setIsFileValid(false);
+      }
     }
   };
 
@@ -263,12 +263,7 @@ export const EditPost: FC = () => {
 
       const { type: fileType, size: fileSize } = file;
 
-      if (
-        fileType !== "image/png" &&
-        fileType !== "image/jpg" &&
-        fileType !== "image/jpeg" &&
-        fileType !== "image/webp"
-      ) {
+      if (fileType !== "image/png" && fileType !== "image/jpg" && fileType !== "image/jpeg") {
         isValidFileType = false;
         errorText += "Please upload a PNG, JPEG or JPG. ";
       }
@@ -304,6 +299,18 @@ export const EditPost: FC = () => {
     </div>
   );
 
+  const handleFileUpload = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    let fileData = {};
+    if (isDevelopment && uploadFile) {
+      fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
+    }
+
+    console.log("File data");
+    console.log(fileData);
+    console.log("\n\n");
+  };
+
   return (
     <section className="editPost" data-testid="test-id-edit-post">
       {isLoading && <LoadingSpinner />}
@@ -319,6 +326,12 @@ export const EditPost: FC = () => {
             <Button type="button" variant="back" onClick={backToPreviousPage} testId="test-id-edit-post-back-button">
               <MdKeyboardBackspace />
               Go back
+            </Button>
+          )}
+
+          {isDevelopment && (
+            <Button type="button" variant="primary" onClick={handleFileUpload} testId="test-id-test-file-upload">
+              Test file upload
             </Button>
           )}
 
