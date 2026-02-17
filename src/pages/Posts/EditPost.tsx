@@ -32,7 +32,6 @@ import useEditPostDetails from "./hooks/useEditPostDetailsHook";
 import { FormFieldItems } from "./helpers/PostHelpers";
 import validateFields from "./helpers/PostHelpers";
 import useUpdatePostDetails from "./hooks/useUpdatePostDetailsHook";
-import { mockFileProps } from "../../test-utils/mocks/objects";
 
 /**
  * @Name EditPost
@@ -178,7 +177,19 @@ export const EditPost: FC = () => {
     );
 
     const validityCheckResults = validateFields(form);
-    let fileData: FileRequestData = mockFileProps;
+    let fileData: FileRequestData = {
+      fileName: "",
+      imageUrl: "",
+      isFileValid: true,
+      isFileSizeValid: true,
+      isFileTypeValid: true,
+      isImageUrlValid: true,
+    };
+
+    if (post) {
+      fileData.fileName = post.fileName;
+      fileData.imageUrl = post.imageUrl;
+    }
 
     if (isDevelopment && uploadFile) {
       fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
