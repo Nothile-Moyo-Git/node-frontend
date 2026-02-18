@@ -92,8 +92,10 @@ export const fileUploadHandler = async (uploadFile: File, baseUrl: string) => {
 
   // Get the file data we need to send to the api request
   const fileUploadData = await fileUploadResponse.json();
+
   const fileData: FileRequestData = {
     fileName: fileUploadData.fileName,
+    fileLastUpdated: fileUploadData.fileLastUpdated,
     imageUrl: fileUploadData.imageUrl,
     isFileValid: fileUploadData.isFileValid,
     isFileSizeValid: fileUploadData.isFileSizeValid,

@@ -183,6 +183,7 @@ export const mockFiles: FileData[] = [
 export const mockFileProps: FileRequestData = {
   fileName: mockFiles[0].fileName,
   imageUrl: mockFiles[0].imageUrl,
+  fileLastUpdated: mockPosts[0].fileLastUpdated,
   isFileValid: true,
   isFileTypeValid: true,
   isImageUrlValid: true,

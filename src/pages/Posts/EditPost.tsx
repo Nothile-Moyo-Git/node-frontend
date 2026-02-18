@@ -180,6 +180,7 @@ export const EditPost: FC = () => {
     let fileData: FileRequestData = {
       fileName: "",
       imageUrl: "",
+      fileLastUpdated: "",
       isFileValid: true,
       isFileSizeValid: true,
       isFileTypeValid: true,
