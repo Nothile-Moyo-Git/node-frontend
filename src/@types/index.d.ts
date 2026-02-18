@@ -57,6 +57,7 @@ export interface FileData {
 
 export interface FileRequestData {
   fileName: string;
+  fileLastUpdated: string;
   imageUrl: string;
   isFileValid: boolean;
   isFileSizeValid: boolean;

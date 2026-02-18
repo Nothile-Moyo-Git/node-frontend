@@ -128,12 +128,6 @@ export const EditPost: FC = () => {
   };
 
   useEffect(() => {
-    console.log("Update post details");
-    console.log(updatePostDetails);
-    console.log("\n\n");
-  }, [updatePostDetails]);
-
-  useEffect(() => {
     if (isLoading === false) {
       if (status === 400) {
         setShowErrorText(true);
@@ -169,6 +163,7 @@ export const EditPost: FC = () => {
 
     const title = titleRef.current?.value || "";
     const content = contentRef.current?.value || "";
+    let isFileUploadValid = true;
 
     form.fields.push(
       {
@@ -182,13 +177,27 @@ export const EditPost: FC = () => {
     );
 
     const validityCheckResults = validateFields(form);
-    let fileData: FileRequestData | null = null;
+    let fileData: FileRequestData = {
+      fileName: "",
+      imageUrl: "",
+      fileLastUpdated: "",
+      isFileValid: true,
+      isFileSizeValid: true,
+      isFileTypeValid: true,
+      isImageUrlValid: true,
+    };
+
+    if (post) {
+      fileData.fileName = post.fileName;
+      fileData.imageUrl = post.imageUrl;
+    }
 
     if (isDevelopment && uploadFile) {
       fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
+      isFileUploadValid = fileData.isFileValid;
     }
 
-    if (validityCheckResults.isFormValid === true && fileData && fileData.isFileValid) {
+    if (validityCheckResults.isFormValid === true && isFileUploadValid && isCarouselImageValid) {
       try {
         // Get values
         const userId = appContextInstance.userId;

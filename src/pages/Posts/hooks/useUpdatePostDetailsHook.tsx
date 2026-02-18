@@ -46,13 +46,17 @@ const useUpdatePostDetails = ({ postId }: UpdatePostDetailsProps) => {
   const [updatePostDetails, setUpdatePostDetails] = useState<UpdatePostResponseProps>({
     post: null,
     status: 100,
-    success: true,
+    success: false,
     message: "Update pending",
     fileValidProps: mockFileProps,
     isContentValid: true,
     isTitleValid: true,
     isPostCreator: true,
   });
+
+  console.log("UpdatePostDetails");
+  console.log(updatePostDetails);
+  console.log("\n\n");
 
   // Setting the state
   const handleUpdatePostQuery = async ({ fileData, userId, carouselImage, title, content }: updatePostQueryProps) => {
