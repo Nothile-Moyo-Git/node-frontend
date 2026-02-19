@@ -54,10 +54,6 @@ const useUpdatePostDetails = ({ postId }: UpdatePostDetailsProps) => {
     isPostCreator: true,
   });
 
-  console.log("UpdatePostDetails");
-  console.log(updatePostDetails);
-  console.log("\n\n");
-
   // Setting the state
   const handleUpdatePostQuery = async ({ fileData, userId, carouselImage, title, content }: updatePostQueryProps) => {
     // Perform the API request to the backend
@@ -128,6 +124,7 @@ const useUpdatePostDetails = ({ postId }: UpdatePostDetailsProps) => {
     const data = await editPostResponse.json();
     const response = data.data.PostEditPostResponse;
     setUpdatePostDetails(response);
+    return response;
   };
 
   return {

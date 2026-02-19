@@ -202,7 +202,7 @@ export const EditPost: FC = () => {
         // Get values
         const userId = appContextInstance.userId;
 
-        await handleUpdatePostQuery({
+        const response = await handleUpdatePostQuery({
           fileData,
           userId: userId || "",
           carouselImage,
@@ -221,12 +221,13 @@ export const EditPost: FC = () => {
         if (uploadFile) {
           setIsFileValid(isFileValid);
         }
-        setIsFormValid(updatePostDetails.success);
-        setIsTitleValid(updatePostDetails.isTitleValid);
-        setIsContentValid(updatePostDetails.isContentValid);
-        setIsPostCreatorValid(updatePostDetails.isPostCreator);
 
-        if (updatePostDetails.success === true) {
+        setIsFormValid(response.success);
+        setIsTitleValid(response.isTitleValid);
+        setIsContentValid(response.isContentValid);
+        setIsPostCreatorValid(response.isPostCreator);
+
+        if (response.success === true) {
           // Reload the page if we were successful so we can query the updated results
           alert(`Success, Post ${postId} updated`);
           // window.location.reload();
