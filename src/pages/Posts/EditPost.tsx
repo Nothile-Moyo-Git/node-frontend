@@ -311,14 +311,9 @@ export const EditPost: FC = () => {
 
   const handleFileUpload = async (event: React.MouseEvent) => {
     event.preventDefault();
-    let fileData = {};
     if (isDevelopment && uploadFile) {
-      fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
+      await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
     }
-
-    console.log("File data");
-    console.log(fileData);
-    console.log("\n\n");
   };
 
   return (
