@@ -53,7 +53,7 @@ describe("useEditPostDetails Hook", () => {
             message: "Request successful",
             post: mockPost,
             isUserValidated: true,
-            status: 100,
+            status: 200,
           },
         },
       }),
@@ -76,6 +76,8 @@ describe("useEditPostDetails Hook", () => {
     // Wait for the async operations to complete
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
+      expect(result.current.post).toBe(mockPost);
+      expect(result.current.status).toBe(200);
     });
   });
 

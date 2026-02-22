@@ -6,11 +6,11 @@
  * Description: The hook for getting the post details
  */
 
-import { ReactNode } from "react";
+import { act, ReactNode } from "react";
 import { ContextProps } from "../../../context/AppContext";
-import { mockContext, mockFileProps, mockPost, mockUser } from "../../../test-utils/mocks/objects";
+import { mockContext, mockFileProps, mockPost } from "../../../test-utils/mocks/objects";
 import { AppContext } from "../../../context/AppContext";
-import { renderHook, waitFor } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import useUpdatePostDetails from "./useUpdatePostDetailsHook";
 import { createFetchResponse } from "../../../test-utils/methods/methods";
 
@@ -38,13 +38,14 @@ const wrapper = ({ children }: { children: ReactNode }) => {
   return <AppContext.Provider value={validatedMockContext}>{children}</AppContext.Provider>;
 };
 
-describe("useEditPostDetails Hook", () => {
+describe("useUpdatePostDetails Hook", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("Handles the loading spinner successfully", async () => {
+  it("Handles updating the post", async () => {
     // Mock our request for predictable values
+    // We only mock the requests we perform specifically in the hook
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
@@ -62,6 +63,7 @@ describe("useEditPostDetails Hook", () => {
       }),
     );
 
+    // Result is what we return from the hook, we render it with our wrapper to test the functionality
     const { result } = renderHook(
       () =>
         useUpdatePostDetails({
@@ -69,7 +71,22 @@ describe("useEditPostDetails Hook", () => {
         }),
       { wrapper },
     );
- 
-    
+
+    // Trigger the query
+    await act(async () => {
+      await result.current.handleUpdatePostQuery({
+        fileData: null,
+        userId: validatedMockContext.userId ?? "",
+        carouselImage: undefined,
+        title: "Test title",
+        content: "Test content",
+      });
+    });
+
+    // Now check updated values
+    expect(result.current.updatePostDetails.success).toBe(true);
+    expect(result.current.updatePostDetails.status).toBe(200);
+    expect(result.current.updatePostDetails.message).toBe("200 : Request was successful");
+    expect(result.current.updatePostDetails.post).toBe(mockPost);
   });
 });
