@@ -14,6 +14,9 @@ import { renderHook } from "@testing-library/react";
 import useUpdatePostDetails from "./useUpdatePostDetailsHook";
 import { createFetchResponse } from "../../../test-utils/methods/methods";
 
+// Create a copy of our original process.env so we can update it test by test
+const originalEnv = process.env;
+
 // Mock checkSessionValidation
 jest.mock("../../../util/util", () => ({
   ...jest.requireActual("../../../util/util"),
@@ -39,8 +42,18 @@ const wrapper = ({ children }: { children: ReactNode }) => {
 };
 
 describe("useUpdatePostDetails Hook", () => {
+  beforeEach(() => {
+    jest.resetModules();
+
+    // Create a new copy of process.env so we an update it
+    process.env = { ...originalEnv };
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
+
+    // Create a new copy of process.env so we an update it
+    process.env = { ...originalEnv };
   });
 
   it("Handles updating the post", async () => {
@@ -75,9 +88,67 @@ describe("useUpdatePostDetails Hook", () => {
     // Trigger the query
     await act(async () => {
       await result.current.handleUpdatePostQuery({
-        fileData: null,
+        fileData: mockFileProps,
         userId: validatedMockContext.userId ?? "",
         carouselImage: undefined,
+        title: "Test title",
+        content: "Test content",
+      });
+    });
+
+    // Now check updated values
+    expect(result.current.updatePostDetails.success).toBe(true);
+    expect(result.current.updatePostDetails.status).toBe(200);
+    expect(result.current.updatePostDetails.message).toBe("200 : Request was successful");
+    expect(result.current.updatePostDetails.post).toBe(mockPost);
+  });
+
+  it("Handles updating the post", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Mock our request for predictable values
+    // We only mock the requests we perform specifically in the hook
+    global.fetch = jest.fn().mockResolvedValue(
+      createFetchResponse({
+        data: {
+          PostEditPostResponse: {
+            post: mockPost,
+            status: 200,
+            success: true,
+            message: "200 : Request was successful",
+            fileValidProps: mockFileProps,
+            isContentValid: true,
+            isTitleValid: true,
+            isPostCreator: true,
+          },
+        },
+      }),
+    );
+
+    // Result is what we return from the hook, we render it with our wrapper to test the functionality
+    const { result } = renderHook(
+      () =>
+        useUpdatePostDetails({
+          postId: mockPost._id,
+        }),
+      { wrapper },
+    );
+
+    // Trigger the query
+    await act(async () => {
+      await result.current.handleUpdatePostQuery({
+        fileData: mockFileProps,
+        userId: validatedMockContext.userId ?? "",
+        carouselImage: mockFileProps,
         title: "Test title",
         content: "Test content",
       });
