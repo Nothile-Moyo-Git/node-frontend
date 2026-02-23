@@ -31,7 +31,7 @@ type UpdatePostResponseProps = {
 };
 
 type updatePostQueryProps = {
-  fileData: FileRequestData | unknown;
+  fileData: FileRequestData;
   userId: string;
   carouselImage: FileData | undefined;
   title: string;

@@ -236,6 +236,13 @@ exports[`Edit Post Component Matches the snapshot when in development 1`] = `
         >
           Edit Post : 2B
         </h2>
+        <button
+          class="button button__primary"
+          data-testid="test-id-test-file-upload"
+          type="button"
+        >
+          Test file upload
+        </button>
         <div
           class="field "
         >
