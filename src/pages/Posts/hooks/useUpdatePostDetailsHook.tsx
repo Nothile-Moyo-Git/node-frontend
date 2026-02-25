@@ -33,7 +33,7 @@ type UpdatePostResponseProps = {
 type updatePostQueryProps = {
   fileData: FileRequestData;
   userId: string;
-  carouselImage: FileData | undefined;
+  carouselImage: FileData | null;
   title: string;
   content: string;
 };
@@ -114,7 +114,7 @@ const useUpdatePostDetails = ({ postId }: UpdatePostDetailsProps) => {
           content: content,
           userId: userId,
           fileData: fileData,
-          carouselFileData: carouselImage ? carouselImage : null,
+          carouselFileData: carouselImage,
           postId: postId,
         },
       }),
