@@ -90,7 +90,7 @@ describe("useUpdatePostDetails Hook", () => {
       await result.current.handleUpdatePostQuery({
         fileData: mockFileProps,
         userId: validatedMockContext.userId ?? "",
-        carouselImage: undefined,
+        carouselImage: null,
         title: "Test title",
         content: "Test content",
       });
@@ -103,7 +103,7 @@ describe("useUpdatePostDetails Hook", () => {
     expect(result.current.updatePostDetails.post).toBe(mockPost);
   });
 
-  it("Handles updating the post", async () => {
+  it("Handles updating the post in development", async () => {
     // Mock the environment variables
     // This is so we can test dev and prod environment variables in the context
     // This allows us to update read-only properties

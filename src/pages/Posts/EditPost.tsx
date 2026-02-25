@@ -205,7 +205,7 @@ export const EditPost: FC = () => {
         const response = await handleUpdatePostQuery({
           fileData,
           userId: userId || "",
-          carouselImage,
+          carouselImage: carouselImage ?? null,
           title,
           content,
         });
@@ -230,7 +230,7 @@ export const EditPost: FC = () => {
         if (response.success === true) {
           // Reload the page if we were successful so we can query the updated results
           alert(`Success, Post ${postId} updated`);
-          // window.location.reload();
+          window.location.reload();
         }
 
         // Remove the image preview / file if it isn't valid so the user can upload a new one
