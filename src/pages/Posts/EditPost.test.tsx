@@ -16,12 +16,21 @@ import { EditPost } from "./EditPost";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ContextProps } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
+
+// ---- Module Mocks ----
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: jest.fn(),
+}));
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
 // Create a copy of our original process.env so we can update it test by test
 const originalEnv = process.env;
+
+let mockNavigate = jest.fn();
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
@@ -32,6 +41,9 @@ beforeEach(() => {
 
   // Create a new copy of process.env so we an update it
   process.env = { ...originalEnv };
+
+  mockNavigate = jest.fn();
+  (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 });
 
 // Cleanup mocks and environment
@@ -63,6 +75,46 @@ describe("Edit Post Component", () => {
 
     const loadingIndicator = await screen.findByTestId("test-id-loading-spinner");
     expect(loadingIndicator).toBeVisible();
+  });
+
+  it("Redirects if the user isn't validated", async () => {
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    // Update the context so the user isn't validated
+    const unAuthorisedMockContext: ContextProps = {
+      ...mockContext,
+      userAuthenticated: false,
+    };
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, unAuthorisedMockContext);
+
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledTimes(1));
   });
 
   it("Renders the error modal as the API request fails", async () => {
@@ -598,5 +650,58 @@ describe("Edit Post Component", () => {
       expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Success, Post"));
       expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it("Handles an error when loading the previous post image", async () => {
+    // Mock a post with a fileName that will cause require() to fail
+    const mockPostWithInvalidImage = {
+      ...mockPost,
+      fileName: "non-existent-image.png",
+      fileLastUpdated: "2024-01-01",
+    };
+
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPostWithInvalidImage,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    // Spy on console.log to verify the catch block is hit
+    const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      // Verify the catch block's console.log calls were made
+      expect(consoleLogSpy).toHaveBeenCalledWith("\n\n");
+      expect(consoleLogSpy).toHaveBeenCalledWith("Error loading image");
+    });
+
+    consoleLogSpy.mockRestore();
   });
 });

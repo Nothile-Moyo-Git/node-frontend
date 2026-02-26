@@ -106,10 +106,6 @@ export const EditPost: FC = () => {
 
   // This method runs the get method and then formats the results
   const handlePostDataQuery = useCallback(async () => {
-    if (appContextInstance.userAuthenticated === false) {
-      navigate(`${BASENAME}/posts`);
-    }
-
     if (success === true && post) {
       setPostData(post);
       formatPreviousPostImage(post);
