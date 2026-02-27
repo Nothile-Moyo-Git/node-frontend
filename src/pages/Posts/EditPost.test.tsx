@@ -16,12 +16,13 @@ import { EditPost } from "./EditPost";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ContextProps } from "../../context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // ---- Module Mocks ----
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: jest.fn(),
+  useLocation: jest.fn(),
 }));
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
@@ -42,8 +43,18 @@ beforeEach(() => {
   // Create a new copy of process.env so we an update it
   process.env = { ...originalEnv };
 
+  // Update our mockRouterDOM values
   mockNavigate = jest.fn();
   (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+
+  // Mock the useLocation
+  (useLocation as jest.Mock).mockReturnValue({
+    key: "edit/page",
+    pathname: `/post/edit/${mockPost._id}`,
+    search: "",
+    hash: "",
+    state: null,
+  });
 });
 
 // Cleanup mocks and environment
@@ -703,5 +714,43 @@ describe("Edit Post Component", () => {
     });
 
     consoleLogSpy.mockRestore();
+  });
+
+  it("Goes back to the previous page", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+
+      const goBackButton = screen.getByTestId("test-id-edit-post-back-button");
+      userEvent.click(goBackButton);
+    });
   });
 });

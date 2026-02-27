@@ -312,6 +312,10 @@ export const EditPost: FC = () => {
     }
   };
 
+  console.log("Location");
+  console.log(location);
+  console.log("\n\n");
+
   return (
     <section className="editPost" data-testid="test-id-edit-post">
       {isLoading && <LoadingSpinner />}

@@ -14,6 +14,30 @@ exports[`Edit Post Component Completely loads the page 1`] = `
     >
       Edit Post : 2B
     </h2>
+    <button
+      class="button button__back"
+      data-testid="test-id-edit-post-back-button"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        stroke="currentColor"
+        stroke-width="0"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+        <path
+          d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"
+        />
+      </svg>
+      Go back
+    </button>
     <div
       class="field "
     >
@@ -124,6 +148,30 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
     >
       Edit Post : 2B
     </h2>
+    <button
+      class="button button__back"
+      data-testid="test-id-edit-post-back-button"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        stroke="currentColor"
+        stroke-width="0"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+        <path
+          d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"
+        />
+      </svg>
+      Go back
+    </button>
     <div
       class="field "
     >
@@ -236,6 +284,30 @@ exports[`Edit Post Component Matches the snapshot when in development 1`] = `
         >
           Edit Post : 2B
         </h2>
+        <button
+          class="button button__back"
+          data-testid="test-id-edit-post-back-button"
+          type="button"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            stroke="currentColor"
+            stroke-width="0"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0 0h24v24H0z"
+              fill="none"
+            />
+            <path
+              d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"
+            />
+          </svg>
+          Go back
+        </button>
         <button
           class="button button__primary"
           data-testid="test-id-test-file-upload"
