@@ -748,9 +748,120 @@ describe("Edit Post Component", () => {
     await waitFor(() => {
       const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
       expect(loadingSpinner).not.toBeInTheDocument();
-
-      const goBackButton = screen.getByTestId("test-id-edit-post-back-button");
-      userEvent.click(goBackButton);
     });
+
+    const goBackButton = screen.getByTestId("test-id-edit-post-back-button");
+    userEvent.click(goBackButton);
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith(-1);
+    });
+  });
+
+  it("Handles the wrong user being on the page and allows them to go back", async () => {
+    // We're ignoring the console in this test as we don't need the output here, but is useful for dev / prod
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: false,
+              message: "400: Request unauthorized",
+              post: null,
+              isUserValidated: false,
+              status: 400,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 500,
+              files: [],
+            },
+          },
+        }),
+      );
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+
+    // Wait for the API request to complete, and then find the error modal on the page
+    await waitFor(() => {
+      const backbutton = screen.getByTestId("test-id-edit-post-back-button");
+      const unauthorizedText = screen.getByText("Sorry, but you are not authorised to edit this post");
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+
+      expect(backbutton).toBeVisible();
+      expect(unauthorizedText).toBeVisible();
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it("Upload a file that's too big", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: mockPost,
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetFilePathsResponse: {
+              status: 200,
+              files: mockFiles,
+            },
+          },
+        }),
+      );
+
+    await act(() => {
+      return renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+    });
+
+    // Create a mock file that we'll attach to the input
+    // Create a file larger than 5MB
+    const largeFile = new File(["x".repeat(5000001)], "large-image.png", { type: "image/png" });
+
+    const fileInput = screen.getByTestId("test-id-edit-post-file-upload-input");
+
+    // Simulate file selection
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: { files: [largeFile] },
+      });
+    });
+
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Please upload a file smaller than 5MB"));
+    });
+
+    expect(fileInput).toHaveValue("");
   });
 });
