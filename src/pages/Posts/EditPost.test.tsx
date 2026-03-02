@@ -545,11 +545,52 @@ describe("Edit Post Component", () => {
             },
           },
         }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            fileName: mockPost.fileName,
+            fileLastUpdated: mockPost.fileLastUpdated,
+            imageUrl: mockPost.imageUrl,
+            isFileValid: true,
+            isFileSizeValid: true,
+            isFileTypeValid: true,
+            isImageUrlValid: true,
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostEditPostResponse: {
+              post: updatedMockPost,
+              status: 200,
+              success: true,
+              message: "200 : Request was successful",
+              fileValidProps: {
+                fileName: mockFiles[0].fileName,
+                imageUrl: mockFiles[0].imageUrl,
+                fileLastUpdated: updatedMockPost.fileLastUpdated,
+                isFileValid: true,
+                isFileTypeValid: true,
+                isImageUrlValid: true,
+                isFileSizeValid: true,
+              },
+              isContentValid: true,
+              isTitleValid: true,
+              isPostCreator: true,
+            },
+          },
+        }),
       );
 
     await act(() => {
       return renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
     });
+
+    const titleInput = screen.getByTestId("test-id-edit-post-title-input");
+    const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+    const saveButton = screen.getByTestId("test-id-edit-post-submit-button");
 
     // Create a mock file that we'll attach to the input
     const file = new File(["dummy content"], "test-image-png", { type: "image/png" });
@@ -564,8 +605,15 @@ describe("Edit Post Component", () => {
     });
 
     await waitFor(() => {
+      expect(titleInput).toHaveValue(mockPost.title);
+      expect(contentInput).toHaveValue(mockPost.content);
       const imagePreview = screen.getByTestId("edit-post-image-preview");
       expect(imagePreview).toHaveStyle("background-image: url(data:image/png;base64,ZHVtbXkgY29udGVudA==)");
+    });
+
+    await waitFor(() => {
+      userEvent.click(saveButton);
+      expect(mockFetch).toHaveBeenCalledTimes(4);
     });
   });
 

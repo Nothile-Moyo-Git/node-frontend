@@ -157,8 +157,14 @@ export const EditPost: FC = () => {
       fields: [],
     };
 
-    const title = titleRef.current?.value || "";
-    const content = contentRef.current?.value || "";
+    let title = "";
+    let content = "";
+
+    if (titleRef.current && contentRef.current) {
+      title = titleRef.current.value;
+      content = contentRef.current.value;
+    }
+
     let isFileUploadValid = true;
 
     form.fields.push(
@@ -189,7 +195,7 @@ export const EditPost: FC = () => {
     }
 
     if (isDevelopment && uploadFile) {
-      fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
+      fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl);
       isFileUploadValid = fileData.isFileValid;
     }
 
