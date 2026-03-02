@@ -110,7 +110,7 @@ export const EditPost: FC = () => {
       setPostData(post);
       formatPreviousPostImage(post);
     }
-  }, [navigate, post, appContextInstance, success]);
+  }, [post, success]);
 
   // Back handler
   const backToPreviousPage = (event: React.MouseEvent) => {
