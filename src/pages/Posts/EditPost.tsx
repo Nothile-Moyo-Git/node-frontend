@@ -106,15 +106,11 @@ export const EditPost: FC = () => {
 
   // This method runs the get method and then formats the results
   const handlePostDataQuery = useCallback(async () => {
-    if (appContextInstance.userAuthenticated === false) {
-      navigate(`${BASENAME}/posts`);
-    }
-
     if (success === true && post) {
       setPostData(post);
       formatPreviousPostImage(post);
     }
-  }, [navigate, post, appContextInstance, success]);
+  }, [post, success]);
 
   // Back handler
   const backToPreviousPage = (event: React.MouseEvent) => {
@@ -161,8 +157,14 @@ export const EditPost: FC = () => {
       fields: [],
     };
 
-    const title = titleRef.current?.value || "";
-    const content = contentRef.current?.value || "";
+    let title = "";
+    let content = "";
+
+    if (titleRef.current && contentRef.current) {
+      title = titleRef.current.value;
+      content = contentRef.current.value;
+    }
+
     let isFileUploadValid = true;
 
     form.fields.push(
@@ -193,7 +195,7 @@ export const EditPost: FC = () => {
     }
 
     if (isDevelopment && uploadFile) {
-      fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
+      fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl);
       isFileUploadValid = fileData.isFileValid;
     }
 
