@@ -196,8 +196,20 @@ export const EditPost: FC = () => {
 
     if (isDevelopment && uploadFile) {
       fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl);
+      console.log("File Data");
+      console.log(fileData);
       isFileUploadValid = fileData.isFileValid;
     }
+
+    console.log("Upload file");
+    console.log(uploadFile);
+
+    console.log("File upload valid");
+    console.log(isFileUploadValid);
+
+    console.log("Is Carousel Image Valid");
+    console.log(isCarouselImageValid);
+    console.log("\n\n");
 
     if (validityCheckResults.isFormValid === true && isFileUploadValid && isCarouselImageValid) {
       try {
