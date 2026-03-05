@@ -510,7 +510,7 @@ describe("Edit Post Component", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  it.only("Handles a file upload when in development", async () => {
+  it("Handles a file upload when in development successfully", async () => {
     // Mock the environment variables
     // This is so we can test dev and prod environment variables in the context
     // This allows us to update read-only properties
@@ -529,7 +529,7 @@ describe("Edit Post Component", () => {
             GetAndValidatePostResponse: {
               success: true,
               message: "200: Request successful",
-              post: mockPost,
+              post: { ...mockPost, title: "ABC" },
               isUserValidated: true,
               status: 200,
             },
@@ -590,7 +590,7 @@ describe("Edit Post Component", () => {
     userEvent.upload(fileInput, file);
 
     await waitFor(() => {
-      expect(titleInput).toHaveValue(mockPost.title);
+      expect(titleInput).toHaveValue("ABC");
       expect(contentInput).toHaveValue(mockPost.content);
       const imagePreview = screen.getByTestId("edit-post-image-preview");
       expect(imagePreview).toHaveStyle("background-image: url(data:image/png;base64,ZHVtbXkgY29udGVudA==)");
@@ -601,11 +601,109 @@ describe("Edit Post Component", () => {
     });
 
     await waitFor(() => {
-      console.log(
+      /* console.log(
         "All fetch calls:",
         mockFetch.mock.calls.map((call) => call[0]?.toString()),
+      ); */
+
+      expect(mockFetch).toHaveBeenCalledTimes(3);
+    });
+  });
+
+  it("Fails the backend validation of the file upload and handles the error", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: { ...mockPost, title: "ABC" },
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          fileName: mockPost.fileName,
+          fileLastUpdated: mockPost.fileLastUpdated,
+          imageUrl: mockPost.imageUrl,
+          isFileValid: true,
+          isFileSizeValid: true,
+          isFileTypeValid: true,
+          isImageUrlValid: true,
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostEditPostResponse: {
+              post: updatedMockPost,
+              status: 200,
+              success: false,
+              message: "400 : Request was unsuccessful",
+              fileValidProps: {
+                fileName: mockFiles[0].fileName,
+                imageUrl: mockFiles[0].imageUrl,
+                fileLastUpdated: updatedMockPost.fileLastUpdated,
+                isFileValid: false,
+                isFileTypeValid: true,
+                isImageUrlValid: true,
+                isFileSizeValid: true,
+              },
+              isContentValid: true,
+              isTitleValid: true,
+              isPostCreator: true,
+            },
+          },
+        }),
       );
-      expect(mockFetch).toHaveBeenCalledTimes(2);
+
+    await act(() => {
+      return renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+    });
+
+    const titleInput = screen.getByTestId("test-id-edit-post-title-input");
+    const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+    const saveButton = screen.getByTestId("test-id-edit-post-submit-button");
+
+    // Create a mock file that we'll attach to the input
+    const file = new File(["dummy content"], "test-image-png", { type: "image/png" });
+
+    const fileInput = screen.getByTestId("test-id-edit-post-file-upload-input");
+    expect(fileInput).toBeVisible();
+
+    // Simulate uploading a file using userEvent
+    userEvent.upload(fileInput, file);
+
+    const imagePreview = screen.getByTestId("edit-post-image-preview");
+
+    await waitFor(() => {
+      expect(titleInput).toHaveValue("ABC");
+      expect(contentInput).toHaveValue(mockPost.content);
+      expect(imagePreview).toHaveStyle("background-image: url(data:image/png;base64,ZHVtbXkgY29udGVudA==)");
+    });
+
+    await act(async () => {
+      userEvent.click(saveButton);
+    });
+
+    await waitFor(() => {
+      expect(imagePreview).not.toHaveStyle("background-image: url(data:image/png;base64,ZHVtbXkgY29udGVudA==)");
+      expect(mockFetch).toHaveBeenCalledTimes(3);
     });
   });
 

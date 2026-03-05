@@ -179,6 +179,10 @@ export const EditPost: FC = () => {
     );
 
     const validityCheckResults = validateFields(form);
+
+    console.log("Validity check results");
+    console.log(validityCheckResults);
+
     let fileData: FileRequestData = {
       fileName: "",
       imageUrl: "",
@@ -209,12 +213,14 @@ export const EditPost: FC = () => {
 
     console.log("Is Carousel Image Valid");
     console.log(isCarouselImageValid);
-    console.log("\n\n");
 
     if (validityCheckResults.isFormValid === true && isFileUploadValid && isCarouselImageValid) {
       try {
         // Get values
         const userId = appContextInstance.userId;
+
+        console.log("Method called");
+        console.log("\n\n");
 
         const response = await handleUpdatePostQuery({
           fileData,
