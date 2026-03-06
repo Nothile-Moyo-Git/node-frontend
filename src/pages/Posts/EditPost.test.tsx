@@ -697,13 +697,86 @@ describe("Edit Post Component", () => {
       expect(imagePreview).toHaveStyle("background-image: url(data:image/png;base64,ZHVtbXkgY29udGVudA==)");
     });
 
-    await act(async () => {
-      userEvent.click(saveButton);
-    });
+    userEvent.click(saveButton);
 
     await waitFor(() => {
       expect(imagePreview).not.toHaveStyle("background-image: url(data:image/png;base64,ZHVtbXkgY29udGVudA==)");
       expect(mockFetch).toHaveBeenCalledTimes(3);
+    });
+  });
+
+  it("Fails the request and trigger the catch block", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: { ...mockPost, title: "ABC" },
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          fileName: mockPost.fileName,
+          fileLastUpdated: mockPost.fileLastUpdated,
+          imageUrl: mockPost.imageUrl,
+          isFileValid: true,
+          isFileSizeValid: true,
+          isFileTypeValid: true,
+          isImageUrlValid: true,
+        }),
+      )
+      .mockRejectedValueOnce(new Error("Network failed"));
+
+    // Mock the error
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => console.log("Error"));
+
+    await act(() => {
+      return renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+    });
+
+    const titleInput = screen.getByTestId("test-id-edit-post-title-input");
+    const contentInput = screen.getByTestId("test-id-edit-post-content-input");
+    const saveButton = screen.getByTestId("test-id-edit-post-submit-button");
+
+    // Create a mock file that we'll attach to the input
+    const file = new File(["dummy content"], "test-image-png", { type: "image/png" });
+
+    const fileInput = screen.getByTestId("test-id-edit-post-file-upload-input");
+    expect(fileInput).toBeVisible();
+
+    // Simulate uploading a file using userEvent
+    userEvent.upload(fileInput, file);
+
+    const imagePreview = screen.getByTestId("edit-post-image-preview");
+
+    await waitFor(() => {
+      expect(titleInput).toHaveValue("ABC");
+      expect(contentInput).toHaveValue(mockPost.content);
+      expect(imagePreview).toHaveStyle("background-image: url(data:image/png;base64,ZHVtbXkgY29udGVudA==)");
+    });
+
+    userEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledTimes(3);
+      expect(errorSpy).toHaveBeenCalledTimes(1);
     });
   });
 
