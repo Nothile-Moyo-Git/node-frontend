@@ -787,6 +787,67 @@ describe("Edit Post Component", () => {
     });
   });
 
+  it("Triggers the handle file upload event", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetAndValidatePostResponse: {
+              success: true,
+              message: "200: Request successful",
+              post: { ...mockPost, title: "ABC" },
+              isUserValidated: true,
+              status: 200,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          fileName: mockPost.fileName,
+          fileLastUpdated: mockPost.fileLastUpdated,
+          imageUrl: mockPost.imageUrl,
+          isFileValid: true,
+          isFileSizeValid: true,
+          isFileTypeValid: true,
+          isImageUrlValid: true,
+        }),
+      );
+
+    await act(() => {
+      return renderWithContext(<EditPost />, { route: `/post/edit/${mockPost._id}` }, mockContext);
+    });
+
+    // Create a mock file that we'll attach to the input
+    const file = new File(["dummy content"], "test-image-png", { type: "image/png" });
+
+    const fileUploadButton = screen.getByTestId("test-id-test-file-upload");
+    const fileInput = screen.getByTestId("test-id-edit-post-file-upload-input");
+
+    // Simulate file selection
+    userEvent.upload(fileInput, file);
+
+    // Now click the test upload button which triggers handleFileUpload
+    await act(async () => {
+      userEvent.click(fileUploadButton);
+    });
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+  });
+
   it("Fails the request and trigger the catch block", async () => {
     // Mock the environment variables
     // This is so we can test dev and prod environment variables in the context
