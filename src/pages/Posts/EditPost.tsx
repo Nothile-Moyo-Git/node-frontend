@@ -81,7 +81,7 @@ export const EditPost: FC = () => {
     postId: postId ?? "",
   });
 
-  const { handleUpdatePostQuery, updatePostDetails } = useUpdatePostDetails({
+  const { handleUpdatePostQuery } = useUpdatePostDetails({
     postId: postId ?? "",
   });
 
@@ -180,9 +180,6 @@ export const EditPost: FC = () => {
 
     const validityCheckResults = validateFields(form);
 
-    console.log("Validity check results");
-    console.log(validityCheckResults);
-
     let fileData: FileRequestData = {
       fileName: "",
       imageUrl: "",
@@ -205,14 +202,11 @@ export const EditPost: FC = () => {
       isFileUploadValid = fileData.isFileValid;
     }
 
-    console.log("Upload file");
-    console.log(uploadFile);
+    console.log("Validity check results");
+    console.log(validityCheckResults);
 
     console.log("File upload valid");
     console.log(isFileUploadValid);
-
-    console.log("Is Carousel Image Valid");
-    console.log(isCarouselImageValid);
 
     if (validityCheckResults.isFormValid === true && isFileUploadValid && isCarouselImageValid) {
       try {
@@ -232,10 +226,10 @@ export const EditPost: FC = () => {
 
         // Get the result of the API request
         const isFileValid =
-          updatePostDetails.fileValidProps.isFileSizeValid &&
-          updatePostDetails.fileValidProps.isFileTypeValid &&
-          updatePostDetails.fileValidProps.isFileValid &&
-          updatePostDetails.fileValidProps.isImageUrlValid;
+          response.fileValidProps.isFileSizeValid &&
+          response.fileValidProps.isFileTypeValid &&
+          response.fileValidProps.isFileValid &&
+          response.fileValidProps.isImageUrlValid;
 
         // Apply validation on the fields so we can show errors if needed
         if (uploadFile) {
