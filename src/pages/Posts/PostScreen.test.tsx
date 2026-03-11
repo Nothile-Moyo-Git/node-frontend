@@ -24,6 +24,7 @@ describe("Post Screen Component", () => {
     clearAuthStorage();
     jest.clearAllMocks();
   });
+
   it("Matches the screenshot", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
