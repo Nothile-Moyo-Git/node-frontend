@@ -39,7 +39,7 @@ const PostScreen: FC = () => {
     // Get posts method, we define it here so we can call it asynchronously
     const getPostData = async () => {
       // Requesting the post from GraphQL using the postID, it's a post request
-      const response = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+      const response = await fetch(`${appContextInstance.baseUrl}/graphql/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,12 +84,12 @@ const PostScreen: FC = () => {
     // Run our logic and query the post data from the backend
     const loadContent = async () => {
       // Toggle the loading spinner util the request ends
-      appContextInstance?.validateAuthentication();
+      appContextInstance.validateAuthentication();
       setIsQuerying(true);
 
       // Attempt to pull post data, returns an error if the request fails and renders the error modal
       try {
-        if (appContextInstance?.userAuthenticated === true && appContextInstance?.token !== "") {
+        if (appContextInstance.userAuthenticated === true && appContextInstance.token !== "") {
           // Method defined here to allow async calls in a useEffect hook
           const result = await getPostData();
 
@@ -109,7 +109,7 @@ const PostScreen: FC = () => {
       }
 
       // If the user isn't authenticated, redirect this route to the previous page
-      if (!appContextInstance?.userAuthenticated) {
+      if (!appContextInstance.userAuthenticated) {
         navigate(`${BASENAME}/login`);
       }
     };
@@ -124,7 +124,7 @@ const PostScreen: FC = () => {
           // Fetch the image, if it fails, reload the component
           setImage(
             await require(
-              `../../images${postData?.fileLastUpdated !== "" ? `/${postData.fileLastUpdated}` : ""}/${postData?.fileName}`,
+              `../../images${postData.fileLastUpdated !== "" ? `/${postData.fileLastUpdated}` : ""}/${postData?.fileName}`,
             ),
           );
         }

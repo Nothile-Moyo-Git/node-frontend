@@ -89,14 +89,10 @@ export const EditPost: FC = () => {
   const formatPreviousPostImage = async (post: Post) => {
     try {
       // Only fetch the file if we have a filename
-      if (post.fileName) {
-        // Fetch the image, if it fails, reload the component
-        setPreviousImageUrl(
-          await require(
-            `../../images${post.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post.fileName}`,
-          ),
-        );
-      }
+      // Fetch the image, if it fails, reload the component
+      setPreviousImageUrl(
+        await require(`../../images${post.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post.fileName}`),
+      );
     } catch (error) {
       console.log("\n\n");
       console.log("Error loading image");
@@ -197,16 +193,8 @@ export const EditPost: FC = () => {
 
     if (isDevelopment && uploadFile) {
       fileData = await fileUploadHandler(uploadFile, appContextInstance.baseUrl);
-      console.log("File Data");
-      console.log(fileData);
       isFileUploadValid = fileData.isFileValid;
     }
-
-    console.log("Validity check results");
-    console.log(validityCheckResults);
-
-    console.log("File upload valid");
-    console.log(isFileUploadValid);
 
     if (validityCheckResults.isFormValid === true && isFileUploadValid && isCarouselImageValid) {
       try {
@@ -323,13 +311,6 @@ export const EditPost: FC = () => {
     </div>
   );
 
-  const handleFileUpload = async (event: React.MouseEvent) => {
-    event.preventDefault();
-    if (isDevelopment && uploadFile) {
-      await fileUploadHandler(uploadFile, appContextInstance.baseUrl ? appContextInstance.baseUrl : "");
-    }
-  };
-
   return (
     <section className="editPost" data-testid="test-id-edit-post">
       {isLoading && <LoadingSpinner />}
@@ -345,12 +326,6 @@ export const EditPost: FC = () => {
             <Button type="button" variant="back" onClick={backToPreviousPage} testId="test-id-edit-post-back-button">
               <MdKeyboardBackspace />
               Go back
-            </Button>
-          )}
-
-          {isDevelopment && (
-            <Button type="button" variant="primary" onClick={handleFileUpload} testId="test-id-test-file-upload">
-              Test file upload
             </Button>
           )}
 
@@ -410,14 +385,14 @@ export const EditPost: FC = () => {
 
           {(showImagePreview || previousImageUrl) && (
             <Field>
-              {!showImagePreview && previousImageUrl && (
+              {!showImagePreview && previousImageUrl && postData && (
                 <Label
                   testId="test-id-edit-post-preview-image-label"
                   id="imageUrlLabel"
                   htmlFor="imageUrl"
                   error={false}
                   errorText="Error: Please upload a PNG, JPEG or JPG (max size: 5Mb)"
-                >{`Previous image: ${postData?.fileName}`}</Label>
+                >{`Previous image: ${postData.fileName}`}</Label>
               )}
               <ImagePreview
                 encodedImage={showImagePreview ? imagePreview : previousImageUrl}
