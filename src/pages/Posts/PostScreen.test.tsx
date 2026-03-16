@@ -38,9 +38,11 @@ describe("Post Screen Component", () => {
     global.fetch = jest.fn().mockResolvedValueOnce(
       createFetchResponse({
         data: {
-          message: "Request successful",
-          post: mockPost,
-          success: true,
+          GetPostResponse: {
+            success: true,
+            post: mockPost,
+            message: "Request successful",
+          },
         },
       }),
     );
@@ -68,14 +70,16 @@ describe("Post Screen Component", () => {
     expect(loadingIndicator).toBeVisible();
   });
 
-  it.only("Shows post information on the page", async () => {
+  it("Shows post information on the page", async () => {
     // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
     global.fetch = jest.fn().mockResolvedValueOnce(
       createFetchResponse({
         data: {
-          message: "Request successful",
-          post: mockPost,
-          success: true,
+          GetPostResponse: {
+            success: true,
+            post: mockPost,
+            message: "Request successful",
+          },
         },
       }),
     );

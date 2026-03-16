@@ -71,16 +71,18 @@ const PostScreen: FC = () => {
         }),
       });
 
-      const { data: data } = await response.json();
+      const {
+        data: { GetPostResponse },
+      } = await response.json();
 
       // Show the error if the request failed
-      if (data.success === true) {
+      if (GetPostResponse.success === true) {
         setShowErrorModal(false);
       } else {
         setShowErrorModal(true);
       }
 
-      return response;
+      return GetPostResponse;
     };
 
     // Run our logic and query the post data from the backend
@@ -95,14 +97,8 @@ const PostScreen: FC = () => {
           // Method defined here to allow async calls in a useEffect hook
           const result = await getPostData();
 
-          const json = await result.json();
-
-          console.log("Json");
-          console.log(json.data);
-          console.log("\n\n");
-
-          if (json.data.success === true) {
-            setPostData(json.data.post);
+          if (result.success === true) {
+            setPostData(result.post);
           }
         }
       } catch (error) {
