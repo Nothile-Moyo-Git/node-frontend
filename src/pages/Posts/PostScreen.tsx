@@ -71,14 +71,18 @@ const PostScreen: FC = () => {
         }),
       });
 
+      const {
+        data: { GetPostResponse },
+      } = await response.json();
+
       // Show the error if the request failed
-      if (response.status === 200) {
+      if (GetPostResponse.success === true) {
         setShowErrorModal(false);
       } else {
         setShowErrorModal(true);
       }
 
-      return response;
+      return GetPostResponse;
     };
 
     // Run our logic and query the post data from the backend
@@ -93,12 +97,8 @@ const PostScreen: FC = () => {
           // Method defined here to allow async calls in a useEffect hook
           const result = await getPostData();
 
-          const json = await result.json();
-
-          const statusCode = result.status;
-
-          if (statusCode === 200) {
-            setPostData(json.data.GetPostResponse.post);
+          if (result.success === true) {
+            setPostData(result.post);
           }
         }
       } catch (error) {
@@ -138,7 +138,7 @@ const PostScreen: FC = () => {
   }, [postData]);
 
   // Get an upload date so we can show when the post was uploaded
-  const uploadDate = generateUploadDate(postData?.createdAt ? postData?.createdAt : "");
+  const uploadDate = generateUploadDate(postData?.createdAt ? postData.createdAt : "");
 
   // Back handler
   const backToPreviousPage = () => {
@@ -152,9 +152,9 @@ const PostScreen: FC = () => {
     <section className="post" data-testid="test-id-post-screen">
       {isQuerying && <LoadingSpinner />}
 
-      {!isQuerying && !showErrorModal && (
+      {!isQuerying && !showErrorModal && postData && (
         <>
-          <h1 className="post__title">{postData?.title}</h1>
+          <h1 className="post__title">{postData.title}</h1>
           {location.key !== "default" && (
             <Button variant="back" onClick={backToPreviousPage} testId="test-id-post-back-button">
               <MdKeyboardBackspace />
@@ -162,8 +162,8 @@ const PostScreen: FC = () => {
             </Button>
           )}
           <p className="post__date">{`Uploaded: ${uploadDate}`}</p>
-          <img src={image} alt={postData?.title} className="post__image" />
-          <p>{postData?.content}</p>
+          <img src={image} alt={postData.title} className="post__image" />
+          <p>{postData.content}</p>
         </>
       )}
 

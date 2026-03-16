@@ -8,14 +8,22 @@
 
 import "@testing-library/jest-dom";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
-import { act, screen } from "@testing-library/react";
+import { act, screen, waitFor } from "@testing-library/react";
 import { renderWithContext } from "../../test-utils/testRouter";
 import PostScreen from "./PostScreen";
 import { mockContext, mockPost } from "../../test-utils/mocks/objects";
+import { createFetchResponse } from "../../test-utils/methods/methods";
+
+// Mock key jest functionality here, this covers fetch, alert, and window.reload
+let mockFetch: jest.MockedFunction<typeof fetch>;
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
   setMockAuthStorage();
+
+  // Reset our mocked function for each test
+  mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
+  global.fetch = mockFetch;
 });
 
 describe("Post Screen Component", () => {
@@ -26,20 +34,18 @@ describe("Post Screen Component", () => {
   });
 
   it("Matches the screenshot", async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: () =>
-        Promise.resolve({
-          data: {
-            GetPostResponse: {
-              message: "Request successful",
-              post: mockPost,
-              success: true,
-            },
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostResponse: {
+            success: true,
+            post: mockPost,
+            message: "Request successful",
           },
-        }),
-    });
+        },
+      }),
+    );
 
     // Render the post screen
     await act(async () => {
@@ -65,30 +71,50 @@ describe("Post Screen Component", () => {
   });
 
   it("Shows post information on the page", async () => {
-    // Mock the request so we can get post data
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: () =>
-        Promise.resolve({
-          data: {
-            GetPostResponse: {
-              message: "Request successful",
-              post: mockPost,
-              success: true,
-            },
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostResponse: {
+            success: true,
+            post: mockPost,
+            message: "Request successful",
           },
-        }),
-    });
+        },
+      }),
+    );
 
     // Render the post screen
     renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
 
-    // Find post information
-    const postTitle = await screen.findByText(mockPost.title);
-    expect(postTitle).toBeVisible();
+    await waitFor(async () => {
+      // Find post information
+      const postTitle = screen.getByText(mockPost.title);
+      expect(postTitle).toBeVisible();
 
-    const postDescription = await screen.findByText(mockPost.content);
-    expect(postDescription).toBeVisible();
+      const postDescription = screen.getByText(mockPost.content);
+      expect(postDescription).toBeVisible();
+    });
+  });
+
+  it("Show the error modal", async () => {
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          message: "Request successful",
+          post: mockPost,
+          success: false,
+        },
+      }),
+    );
+
+    // Render the post screen
+    renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
+
+    await waitFor(() => {
+      const errorModal = screen.getByTestId("test-id-error-modal");
+      expect(errorModal).toBeVisible();
+    });
   });
 });
