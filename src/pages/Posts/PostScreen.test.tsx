@@ -97,14 +97,39 @@ describe("Post Screen Component", () => {
     });
   });
 
+  it("Attemps to fetch a post but fails due to no id", async () => {
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostResponse: {
+            success: false,
+            message: "Request successful",
+            post: null,
+          },
+        },
+      }),
+    );
+
+    // Render the post screen
+    renderWithContext(<PostScreen />, { route: `/post/` }, mockContext);
+
+    await waitFor(() => {
+      const errorModal = screen.getByTestId("test-id-error-modal");
+      expect(errorModal).toBeVisible();
+    });
+  });
+
   it("Show the error modal", async () => {
     // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
     global.fetch = jest.fn().mockResolvedValueOnce(
       createFetchResponse({
         data: {
-          message: "Request successful",
-          post: mockPost,
-          success: false,
+          GetPostResponse: {
+            message: "Request successful",
+            post: mockPost,
+            success: false,
+          },
         },
       }),
     );
@@ -116,5 +141,18 @@ describe("Post Screen Component", () => {
       const errorModal = screen.getByTestId("test-id-error-modal");
       expect(errorModal).toBeVisible();
     });
+  });
+
+  it("Trigger the catch block in the response", async () => {
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network failed"));
+
+    // We're ignoring the console in this test as we don't need the output here, but is useful for dev / prod
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => console.log("Error"));
+
+    // Render the post screen
+    renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
+
+    await waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
   });
 });
