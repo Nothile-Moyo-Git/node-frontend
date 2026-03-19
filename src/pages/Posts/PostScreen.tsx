@@ -120,13 +120,9 @@ const PostScreen: FC = () => {
   useEffect(() => {
     const getImage = async () => {
       try {
-        if (postData?.fileName) {
+        if (postData) {
           // Fetch the image, if it fails, reload the component
-          setImage(
-            await require(
-              `../../images${postData.fileLastUpdated !== "" ? `/${postData.fileLastUpdated}` : ""}/${postData?.fileName}`,
-            ),
-          );
+          setImage(await require(`../../images/${postData.fileLastUpdated}/${postData.fileName}`));
         }
       } catch (error) {
         console.log("Post screen image error");

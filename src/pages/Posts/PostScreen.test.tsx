@@ -13,9 +13,21 @@ import { renderWithContext } from "../../test-utils/testRouter";
 import PostScreen from "./PostScreen";
 import { mockContext, mockPost } from "../../test-utils/mocks/objects";
 import { createFetchResponse } from "../../test-utils/methods/methods";
+import { ContextProps } from "../../context/AppContext";
+import { useNavigate, useLocation } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
+
+// ---- Module Mocks ----
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: jest.fn(),
+  useLocation: jest.fn(),
+}));
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
+
+let mockNavigate = jest.fn();
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
@@ -24,6 +36,19 @@ beforeEach(() => {
   // Reset our mocked function for each test
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
+
+  // Update our mockRouterDOM values
+  mockNavigate = jest.fn();
+  (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+
+  // Mock the useLocation, override our key so it doesn't use default so we can see the back button
+  (useLocation as jest.Mock).mockReturnValue({
+    key: `/post/${mockPost._id}`,
+    pathname: `/post/${mockPost._id}`,
+    search: "",
+    hash: "",
+    state: null,
+  });
 });
 
 describe("Post Screen Component", () => {
@@ -154,5 +179,94 @@ describe("Post Screen Component", () => {
     renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
 
     await waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
+  });
+
+  it("Redirects to the login page", async () => {
+    // Pass an inauthenticated context to the mock
+    const inauthenticatedContext: ContextProps = {
+      ...mockContext,
+      userAuthenticated: false,
+    };
+
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostResponse: {
+            success: true,
+            post: mockPost,
+            message: "Request successful",
+          },
+        },
+      }),
+    );
+
+    // Render the post screen
+    renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, inauthenticatedContext);
+
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledTimes(1));
+  });
+
+  it("Triggers the catch block for image loading", async () => {
+    const mockPostWithBadImage = {
+      ...mockPost,
+      fileName: "non-existent-image.jpg",
+      fileLastUpdated: "invalid-folder",
+    };
+
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostResponse: {
+            success: true,
+            post: mockPostWithBadImage,
+            message: "Request successful",
+          },
+        },
+      }),
+    );
+
+    const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+
+    renderWithContext(<PostScreen />, { route: `/post/${mockPostWithBadImage._id}` }, mockContext);
+
+    await waitFor(() => expect(logSpy).toHaveBeenCalledWith("Post screen image error"));
+
+    logSpy.mockRestore();
+  });
+
+  it("Presses the go back button", async () => {
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostResponse: {
+            success: true,
+            post: mockPost,
+            message: "Request successful",
+          },
+        },
+      }),
+    );
+
+    // Render the post screen
+    await act(async () => {
+      renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
+    });
+
+    // Wait for the API request to complete, and then find the error modal on the page
+    await waitFor(() => {
+      const loadingSpinner = screen.queryByTestId("test-id-loading-spinner");
+      expect(loadingSpinner).not.toBeInTheDocument();
+    });
+
+    const backButton = screen.getByTestId("test-id-post-back-button");
+    expect(backButton).toBeVisible();
+
+    userEvent.click(backButton);
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith(-1);
+    });
   });
 });

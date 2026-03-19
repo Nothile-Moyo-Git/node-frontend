@@ -10,6 +10,30 @@ exports[`Post Screen Component Matches the screenshot 1`] = `
   >
     2B
   </h1>
+  <button
+    class="button button__back"
+    data-testid="test-id-post-back-button"
+    type="submit"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      stroke="currentColor"
+      stroke-width="0"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 0h24v24H0z"
+        fill="none"
+      />
+      <path
+        d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"
+      />
+    </svg>
+    Go back
+  </button>
   <p
     class="post__date"
   >
