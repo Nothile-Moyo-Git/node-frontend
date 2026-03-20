@@ -46,7 +46,7 @@ export const ViewPosts: FC = () => {
   // Get posts method, we define it here so we can call it asynchronously
   const getPosts = useCallback(async () => {
     // Perform the signup request
-    const response = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+    const response = await fetch(`${appContextInstance.baseUrl}/graphql/posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,14 +79,18 @@ export const ViewPosts: FC = () => {
       }),
     });
 
+    const {
+      data: { GetPostsResponse },
+    } = await response.json();
+
     // Show the error if the request failed
-    if (response.status === 200) {
+    if (GetPostsResponse.success === true) {
       setShowErrorText(false);
     } else {
       setShowErrorText(true);
     }
 
-    return response;
+    return GetPostsResponse;
   }, [params.page, appContextInstance]);
 
   // Method defined here to allow async calls in a useEffect hook
@@ -95,15 +99,13 @@ export const ViewPosts: FC = () => {
 
     try {
       const result = await getPosts();
-      const dataJSON = await result.json();
 
       // Convert the response to JSON based on the response received from GraphQL
-      const data = dataJSON.data.GetPostsResponse;
-      const success = data.success ? data.success : false;
+      const success = result.success ? result.success : false;
 
       if (success === true) {
-        setPosts(data.posts);
-        setNumberOfPages(data.numberOfPages);
+        setPosts(result.posts);
+        setNumberOfPages(result.numberOfPages);
       } else {
         setShowErrorText(true);
       }
