@@ -33,6 +33,7 @@ export const ViewPosts: FC = () => {
   // Instantiate values
   const appContextInstance = useContext(AppContext);
   const navigate = useNavigate();
+  const { validateAuthentication, userAuthenticated, token, baseUrl, userId } = appContextInstance;
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState<number>(initialPage);
@@ -46,7 +47,7 @@ export const ViewPosts: FC = () => {
   // Get posts method, we define it here so we can call it asynchronously
   const getPosts = useCallback(async () => {
     // Perform the signup request
-    const response = await fetch(`${appContextInstance.baseUrl}/graphql/posts`, {
+    const response = await fetch(`${baseUrl}/graphql/posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -91,12 +92,11 @@ export const ViewPosts: FC = () => {
     }
 
     return GetPostsResponse;
-  }, [params.page, appContextInstance]);
+  }, [params.page, baseUrl]);
 
   // Method defined here to allow async calls in a useEffect hook
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
-
     try {
       const result = await getPosts();
 
@@ -145,12 +145,11 @@ export const ViewPosts: FC = () => {
   // Handle the deletion of a post
   const deletePost = async () => {
     // Get values
-    const userId = appContextInstance?.userId ?? "";
     const postId = deleteId;
 
     try {
       // Perform the signup request
-      const response = await fetch(`${appContextInstance?.baseUrl}/graphql/posts`, {
+      const response = await fetch(`${baseUrl}/graphql/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -185,7 +184,7 @@ export const ViewPosts: FC = () => {
       fields.append("highestPageNumber", result.highestPageNumber);
 
       // Trigger a modal which informs users that the post has been deleted
-      await fetch(`${appContextInstance?.baseUrl}/rest/socket/emit/post-deleted`, {
+      await fetch(`${baseUrl}/rest/socket/emit/post-deleted`, {
         method: "POST",
         body: fields,
       });
@@ -245,24 +244,18 @@ export const ViewPosts: FC = () => {
   }, [fetchPosts, refreshPosts, liveChatEndpoint, port]);
 
   useEffect(() => {
-    // Toggle the loading spinner util the request ends
-    appContextInstance?.validateAuthentication();
+    validateAuthentication();
 
-    try {
-      if (appContextInstance?.userAuthenticated === true) {
-        if (appContextInstance?.token !== "") {
-          fetchPosts();
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    // If the user isn't authenticated, redirect this route to the previous page
-    if (!appContextInstance?.userAuthenticated) {
+    if (!userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-  }, [page, appContextInstance, fetchPosts, navigate]);
+
+    // If the user is validated, load the posts, otherwise, redirect to the login page
+    if (token !== "") {
+      console.log("Fetch posts");
+      fetchPosts();
+    }
+  }, [validateAuthentication, userAuthenticated, token, fetchPosts, navigate]);
 
   return (
     <section className="viewPosts" data-testid="test-id-view-posts">
