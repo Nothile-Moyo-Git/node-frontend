@@ -11,7 +11,7 @@
  * @returns AppContext : ReactContext
  */
 
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useCallback } from "react";
 
 // Typing for everything related to state management
 export interface ContextProps {
@@ -49,7 +49,7 @@ const AppContextProvider = ({ children }: ComponentProps) => {
 
   // Check whether the user is authenticated and return a result
   // This avoids a bad state update whilst trying to render a component
-  const checkAuthentication = () => {
+  const checkAuthentication = useCallback(() => {
     // Get local data
     const storageToken: string | null = localStorage.getItem("token");
     const storageUserId: string | null = localStorage.getItem("userId");
@@ -68,10 +68,10 @@ const AppContextProvider = ({ children }: ComponentProps) => {
         return false;
       }
     }
-  };
+  }, []);
 
   // Update the state of the provider if
-  const validateAuthentication = () => {
+  const validateAuthentication = useCallback(() => {
     // Get local data
     const storageToken: string | null = localStorage.getItem("token");
     const storageUserId: string | null = localStorage.getItem("userId");
@@ -105,10 +105,10 @@ const AppContextProvider = ({ children }: ComponentProps) => {
         localStorage.removeItem("expiresIn");
       }
     }
-  };
+  }, []);
 
   // Log the user out intentionally
-  const logoutUser = () => {
+  const logoutUser = useCallback(() => {
     // Remove all the items from local storage
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
@@ -119,7 +119,7 @@ const AppContextProvider = ({ children }: ComponentProps) => {
     setUserId("");
     setExpiresIn("");
     setUserAuthenticated(false);
-  };
+  }, []);
 
   return (
     <AppContext.Provider
