@@ -243,19 +243,24 @@ export const ViewPosts: FC = () => {
     };
   }, [fetchPosts, refreshPosts, liveChatEndpoint, port]);
 
+  // Fetch the posts once, once everything is defined
+  useEffect(() => {
+    // If the user is validated, load the posts
+    if (token !== "") {
+      console.log("Token: ", token);
+      console.log("Fetch posts");
+      fetchPosts();
+    }
+  }, [token, fetchPosts]);
+
+  // Make sure the user is validated, if not, don't log them in
   useEffect(() => {
     validateAuthentication();
 
     if (!userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
-
-    // If the user is validated, load the posts, otherwise, redirect to the login page
-    if (token !== "") {
-      console.log("Fetch posts");
-      fetchPosts();
-    }
-  }, [validateAuthentication, userAuthenticated, token, fetchPosts, navigate]);
+  }, [validateAuthentication, userAuthenticated, navigate]);
 
   return (
     <section className="viewPosts" data-testid="test-id-view-posts">
