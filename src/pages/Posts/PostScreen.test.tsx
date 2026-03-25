@@ -235,6 +235,38 @@ describe("Post Screen Component", () => {
     logSpy.mockRestore();
   });
 
+  it("Loads the image if there is no fileLastUpdated", async () => {
+    const mockPostWithNoFileUploaded = {
+      ...mockPost,
+      fileLastUpdated: "",
+    };
+
+    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostResponse: {
+            success: true,
+            post: mockPostWithNoFileUploaded,
+            message: "Request successful",
+          },
+        },
+      }),
+    );
+
+    // Render the post screen
+    renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
+
+    await waitFor(async () => {
+      // Find post information
+      const postTitle = screen.getByText(mockPost.title);
+      expect(postTitle).toBeVisible();
+
+      const postDescription = screen.getByText(mockPost.content);
+      expect(postDescription).toBeVisible();
+    });
+  });
+
   it("Presses the go back button", async () => {
     // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
     global.fetch = jest.fn().mockResolvedValueOnce(

@@ -8,7 +8,7 @@
  * This is the main menu which will render at the top of every page which has the menu
  */
 
-import React, { FC, ReactNode, useContext, useEffect } from "react";
+import React, { FC, ReactNode, useContext } from "react";
 import Button from "../button/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
@@ -62,11 +62,6 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
     // Redirect to the login page
     navigate(`${BASENAME}/login`);
   };
-
-  // Check authentication when component mounts
-  useEffect(() => {
-    appContextInstance.validateAuthentication();
-  }, [appContextInstance]);
 
   return (
     <header className={`menu ${isMenuOpen ? "menu__open" : "menu__closed"}`}>

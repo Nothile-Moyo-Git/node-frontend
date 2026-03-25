@@ -121,8 +121,9 @@ const PostScreen: FC = () => {
     const getImage = async () => {
       try {
         if (postData) {
+          const fileUpdated = postData.fileLastUpdated ? `/${postData.fileLastUpdated}` : "";
           // Fetch the image, if it fails, reload the component
-          setImage(await require(`../../images/${postData.fileLastUpdated}/${postData.fileName}`));
+          setImage(await require(`../../images${fileUpdated}/${postData.fileName}`));
         }
       } catch (error) {
         console.log("Post screen image error");

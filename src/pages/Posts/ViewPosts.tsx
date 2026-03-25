@@ -14,7 +14,7 @@ import { Post } from "../../@types/index";
 import { AppContext } from "../../context/AppContext";
 import { PostCard } from "../../components/card/PostCard";
 import { FC, useState, useEffect, useContext, useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { BASENAME } from "../../util/util";
 import { Paginator } from "../../components/pagination/Paginator";
 import LoadingSpinner from "../../components/loader/LoadingSpinner";
@@ -32,8 +32,7 @@ export const ViewPosts: FC = () => {
 
   // Instantiate values
   const appContextInstance = useContext(AppContext);
-  const navigate = useNavigate();
-  const { validateAuthentication, userAuthenticated, token, baseUrl, userId } = appContextInstance;
+  const { token, baseUrl, userId } = appContextInstance;
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState<number>(initialPage);
@@ -247,20 +246,10 @@ export const ViewPosts: FC = () => {
   useEffect(() => {
     // If the user is validated, load the posts
     if (token !== "") {
-      console.log("Token: ", token);
-      console.log("Fetch posts");
+      console.log("Fetch posts: ");
       fetchPosts();
     }
   }, [token, fetchPosts]);
-
-  // Make sure the user is validated, if not, don't log them in
-  useEffect(() => {
-    validateAuthentication();
-
-    if (!userAuthenticated) {
-      navigate(`${BASENAME}/login`);
-    }
-  }, [validateAuthentication, userAuthenticated, navigate]);
 
   return (
     <section className="viewPosts" data-testid="test-id-view-posts">
