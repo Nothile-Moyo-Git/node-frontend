@@ -188,6 +188,10 @@ export const ViewPosts: FC = () => {
         body: fields,
       });
 
+      console.log("Result: ");
+      console.log(result);
+      console.log("\n\n");
+
       fetchPosts();
       setShowConfirmationModal(false);
 
@@ -201,7 +205,7 @@ export const ViewPosts: FC = () => {
   };
 
   const liveChatEndpoint =
-    process.env.NODE_ENV.trim() === "development" ? process.env.API_URL_DEV : process.env.API_URL_PROD;
+    process.env.NODE_ENV.trim() === "development" ? process.env.REACT_APP_API_DEV : process.env.REACT_APP_API_PROD;
 
   // Get the correct port based on the environment
   const port =
@@ -233,12 +237,14 @@ export const ViewPosts: FC = () => {
 
     // Update the posts and update the page properly if needed
     client.on("post deleted", (response) => {
+      console.log("Post deleted");
       refreshPosts(response.highestPageNumber);
     });
 
     return () => {
       // Remove unncessary event handlers
       client.removeAllListeners();
+      client.disconnect();
     };
   }, [fetchPosts, refreshPosts, liveChatEndpoint, port]);
 
@@ -246,7 +252,6 @@ export const ViewPosts: FC = () => {
   useEffect(() => {
     // If the user is validated, load the posts
     if (token !== "") {
-      console.log("Fetch posts: ");
       fetchPosts();
     }
   }, [token, fetchPosts]);

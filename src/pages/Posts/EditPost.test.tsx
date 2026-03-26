@@ -67,7 +67,7 @@ afterEach(() => {
 });
 
 const mockContextWithoutId: ContextProps = {
-  baseUrl: process.env.API_URL_DEV ?? "http://localhost:4000",
+  baseUrl: process.env.REACT_APP_API_DEV ?? "http://localhost:4000",
   checkAuthentication: () => true,
   logoutUser: () => {},
   token: "fake-token",
