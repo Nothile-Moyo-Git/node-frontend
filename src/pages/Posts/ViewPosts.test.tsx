@@ -160,18 +160,6 @@ describe("View Posts component", () => {
             },
           },
         }),
-      )
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts.slice(3, 6),
-              message: "OK",
-            },
-          },
-        }),
       );
 
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
@@ -227,18 +215,6 @@ describe("View Posts component", () => {
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts.slice(3, 6),
-              message: "OK",
-            },
-          },
-        }),
-      )
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
             PostDeletePostResponse: {
               highestPageNumber: 2,
               numberOfPosts: 5,
@@ -248,18 +224,7 @@ describe("View Posts component", () => {
           },
         }),
       )
-      .mockResolvedValueOnce(
-        createFetchResponse({
-          data: {
-            GetPostsResponse: {
-              success: true,
-              numberOfPages: 2,
-              posts: mockPosts.slice(3, 5),
-              message: "OK",
-            },
-          },
-        }),
-      )
+      .mockResolvedValueOnce(createFetchResponse({ success: true }))
       .mockResolvedValueOnce(
         createFetchResponse({
           data: {

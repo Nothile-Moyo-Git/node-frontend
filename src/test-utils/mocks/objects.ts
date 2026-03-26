@@ -19,7 +19,7 @@ export const mockUser: User = {
 };
 
 export const mockContext: ContextProps = {
-  baseUrl: process.env.API_URL_DEV ?? "http://localhost:4000",
+  baseUrl: process.env.REACT_APP_API_DEV ?? "http://localhost:4000",
   checkAuthentication: () => true,
   logoutUser: () => {},
   token: "fake-token",
@@ -29,7 +29,7 @@ export const mockContext: ContextProps = {
 };
 
 export const mockFailedContext: ContextProps = {
-  baseUrl: process.env.API_URL_DEV ?? "http://localhost:4000",
+  baseUrl: process.env.REACT_APP_API_DEV ?? "http://localhost:4000",
   checkAuthentication: () => true,
   expiresIn: "2025-11-28T23:12:15.895Z",
   logoutUser: () => {},
