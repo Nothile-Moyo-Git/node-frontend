@@ -125,6 +125,7 @@ export const ViewPosts: FC = () => {
 
       // Update the page number if we won't have any posts on the page
       if (currentPage > maxPages) {
+        console.log("Redirecting");
         window.location.href = `${BASENAME}/posts/${maxPages}`;
       }
 
