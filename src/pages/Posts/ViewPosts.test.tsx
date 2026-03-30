@@ -7,6 +7,7 @@
  */
 
 import "@testing-library/jest-dom";
+import React from "react";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 
 import { renderWithAct, renderWithContext } from "../../test-utils/testRouter";
@@ -18,17 +19,39 @@ import { createFetchResponse } from "../../test-utils/methods/methods";
 
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
+const socketEventHandlers: Record<string, (_data: unknown) => void> = {};
+
+// Create a copy of our original process.env so we can update it test by test
+const originalEnv = process.env;
+
+// We need to mock our client as we have to use it for a successful redirect
+jest.mock("socket.io-client", () => ({
+  io: jest.fn(() => ({
+    on: jest.fn((event: string, handler: (_data: unknown) => void) => {
+      socketEventHandlers[event] = handler;
+    }),
+    disconnect: jest.fn(),
+    removeAllListeners: jest.fn(),
+  })),
+}));
+
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
   setMockAuthStorage();
+
+  // Create a new copy of process.env so we an update it
+  process.env = { ...originalEnv };
 });
 
 // Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
   jest.clearAllMocks();
+
+  // Reset our process variable
+  process.env = originalEnv;
 });
 
 describe("View Posts component", () => {
@@ -268,5 +291,211 @@ describe("View Posts component", () => {
     const appComponent = await screen.findByTestId("test-id-view-posts");
     expect(appComponent).toBeInTheDocument();
     expect(appComponent).toMatchSnapshot();
+  });
+
+  it("Returns an error with success false", async () => {
+    mockFetch.mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetPostsResponse: {
+            success: false,
+            numberOfPages: 2,
+            posts: mockPosts.slice(0, 3),
+            message: "OK",
+          },
+        },
+      }),
+    );
+
+    await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
+
+    await waitFor(() => {
+      const toastModal = screen.getByTestId("test-id-error-modal");
+      expect(toastModal).toBeVisible();
+    });
+  });
+
+  it("Redirects to last available page when current page exceeds max pages after deletion", async () => {
+    // Set the page so it can be mocked
+    Object.defineProperty(window, "location", {
+      value: {
+        ...window.location,
+        href: "http://localhost/posts/2",
+      },
+      writable: true,
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 4),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostDeletePostResponse: {
+              highestPageNumber: 1,
+              numberOfPosts: 3,
+              status: 200,
+              success: true,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(createFetchResponse({ success: true }))
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 1,
+              posts: mockPosts.slice(0, 3),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 1,
+              posts: mockPosts.slice(0, 3),
+              message: "OK",
+            },
+          },
+        }),
+      );
+
+    await renderWithAct(<ViewPosts />, { route: "/posts/2" }, mockContext);
+
+    // Delete the post naturally via the UI
+    const deleteBtn = await screen.findByTestId(`test-id-delete-${mockPosts[3]._id}`);
+    await act(async () => userEvent.click(deleteBtn));
+
+    const confirm = await screen.findByTestId("test-id-confirmation-modal-confirm-button");
+    await act(async () => userEvent.click(confirm));
+
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith(
+        expect.stringContaining(`Post ${mockPosts[3]._id} has successfully been deleted`),
+      );
+    });
+
+    // Now fire the socket event to trigger refreshPosts which contains the redirect logic
+    await act(async () => {
+      socketEventHandlers["post deleted"]({ highestPageNumber: 1 });
+    });
+
+    await waitFor(() => {
+      expect(window.location.href).toContain("/posts/1");
+    });
+  });
+
+  it("Triggers the catch block when trying to emit post deletion", async () => {
+    // Set the page so it can be mocked
+    Object.defineProperty(window, "location", {
+      value: {
+        ...window.location,
+        href: "http://localhost/posts/2",
+      },
+      writable: true,
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(3, 4),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockRejectedValueOnce(new Error("Network failed"));
+
+    await renderWithAct(<ViewPosts />, { route: "/posts/2" }, mockContext);
+
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => console.log("Error"));
+
+    // Delete the post naturally via the UI
+    const deleteBtn = await screen.findByTestId(`test-id-delete-${mockPosts[3]._id}`);
+    await act(async () => userEvent.click(deleteBtn));
+
+    const confirm = await screen.findByTestId("test-id-confirmation-modal-confirm-button");
+    await act(async () => userEvent.click(confirm));
+
+    await waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
+  });
+
+  it("Triggers the post added toast", async () => {
+    // Mock ExpiryWrapper to render children directly, bypassing the setTimeout dismissal
+    jest.useFakeTimers();
+
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(0, 3),
+              message: "OK",
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            GetPostsResponse: {
+              success: true,
+              numberOfPages: 2,
+              posts: mockPosts.slice(0, 3),
+              message: "OK",
+            },
+          },
+        }),
+      );
+
+    await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
+
+    // Fire the "post added" socket event with a mock post payload
+    await act(async () => {
+      socketEventHandlers["post added"]({
+        post: {
+          _id: mockPosts[0]._id,
+          title: mockPosts[0].title,
+        },
+      });
+    });
+
+    // The toast modal should now be visible with the post title
+    await waitFor(() => {
+      const toast = screen.getByText(`Success : Post ${mockPosts[0].title} added!`);
+      expect(toast).toBeVisible();
+    });
+
+    jest.useRealTimers();
   });
 });

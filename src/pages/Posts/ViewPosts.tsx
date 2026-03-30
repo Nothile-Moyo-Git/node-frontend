@@ -125,6 +125,7 @@ export const ViewPosts: FC = () => {
 
       // Update the page number if we won't have any posts on the page
       if (currentPage > maxPages) {
+        console.log("Redirecting");
         window.location.href = `${BASENAME}/posts/${maxPages}`;
       }
 
@@ -188,10 +189,6 @@ export const ViewPosts: FC = () => {
         body: fields,
       });
 
-      console.log("Result: ");
-      console.log(result);
-      console.log("\n\n");
-
       fetchPosts();
       setShowConfirmationModal(false);
 
@@ -200,7 +197,7 @@ export const ViewPosts: FC = () => {
       }
     } catch (error: unknown) {
       console.log("Delete post error");
-      console.log(error);
+      console.error(error);
     }
   };
 
