@@ -7,7 +7,6 @@
  */
 
 import "@testing-library/jest-dom";
-import React from "react";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 
 import { renderWithAct, renderWithContext } from "../../test-utils/testRouter";
@@ -441,9 +440,9 @@ describe("View Posts component", () => {
   });
 
   it("Triggers the post added toast", async () => {
-    // Mock ExpiryWrapper to render children directly, bypassing the setTimeout dismissal
     jest.useFakeTimers();
 
+    // Mock the environment to be development
     Object.defineProperties(process.env, {
       NODE_ENV: {
         value: "development",
@@ -495,6 +494,13 @@ describe("View Posts component", () => {
       const toast = screen.getByText(`Success : Post ${mockPosts[0].title} added!`);
       expect(toast).toBeVisible();
     });
+
+    // Ensure that it disappears after 5 seconds
+    await act(async () => {
+      jest.advanceTimersByTime(5001);
+    });
+
+    expect(screen.queryByText(`Success : Post ${mockPosts[0].title} added!`)).not.toBeInTheDocument();
 
     jest.useRealTimers();
   });

@@ -51,9 +51,6 @@ const LiveChat: FC = () => {
   useEffect(() => {
     const client = io(String(liveChatEndpoint), { port: port });
 
-    console.log("Connection");
-    console.log(client);
-
     // Add a message to the chat
     client.on("message sent", (message) => {
       setChatMessages((previousMessages) => {
@@ -80,7 +77,7 @@ const LiveChat: FC = () => {
   // Get user details if the user is authenticated from the backend
   const getUserDetails = useCallback(
     async (userId: string) => {
-      const response = await fetch(`${appContextInstance?.baseUrl}/graphql/auth`, {
+      const response = await fetch(`${appContextInstance.baseUrl}/graphql/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +100,7 @@ const LiveChat: FC = () => {
                 }`,
           variables: {
             _id: userId,
-            token: appContextInstance?.token ?? "",
+            token: appContextInstance.token ?? "",
           },
         }),
       });
@@ -123,7 +120,7 @@ const LiveChat: FC = () => {
   const getChatMessages = useCallback(
     async (userId: string, recipientId: string) => {
       // Perform the signup request
-      const response = await fetch(`${appContextInstance?.baseUrl}/graphql/chat`, {
+      const response = await fetch(`${appContextInstance.baseUrl}/graphql/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -187,17 +184,17 @@ const LiveChat: FC = () => {
   );
   // Get the user details from the backend for the chat
   useEffect(() => {
-    appContextInstance?.validateAuthentication();
+    appContextInstance.validateAuthentication();
 
     try {
       // Get the user information so we can share it in the post
-      if (appContextInstance?.userId) {
+      if (appContextInstance.userId) {
         getUserDetails(appContextInstance.userId);
       }
 
       const recipientId = "6656382efb54b1949e66bae2";
 
-      if (appContextInstance?.userId) {
+      if (appContextInstance.userId) {
         getChatMessages(appContextInstance.userId, recipientId);
       }
     } catch (error) {
@@ -205,7 +202,7 @@ const LiveChat: FC = () => {
     }
 
     // If the user isn't authenticated, redirect this route to the previous page
-    if (!appContextInstance?.userAuthenticated) {
+    if (!appContextInstance.userAuthenticated) {
       navigate(`${BASENAME}/login`);
     }
   }, [appContextInstance, getChatMessages, getUserDetails, navigate]);
@@ -218,7 +215,7 @@ const LiveChat: FC = () => {
     // If we have an input, send a message to the socket
     if (contentRef.current) {
       // We assign Formdata here so we can use this with cors in the backend
-      const userId = appContextInstance?.userId ? appContextInstance.userId : "";
+      const userId = appContextInstance.userId ? appContextInstance.userId : "";
       const recipientId = "6656382efb54b1949e66bae2";
 
       // Add the message and sender to a JSON object so that we can we return the sender
@@ -243,7 +240,7 @@ const LiveChat: FC = () => {
       fields.append("messages", JSON.stringify(chatMessages));
       fields.append("newMessage", contentRef.current.value);
 
-      await fetch(`${appContextInstance?.baseUrl}/chat/send-message/${userId}`, {
+      await fetch(`${appContextInstance.baseUrl}/chat/send-message/${userId}`, {
         method: "POST",
         body: fields,
       });
