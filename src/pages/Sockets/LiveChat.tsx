@@ -192,6 +192,7 @@ const LiveChat: FC = () => {
         getUserDetails(appContextInstance.userId);
       }
 
+      // The socket.io client connection id
       const recipientId = "6656382efb54b1949e66bae2";
 
       if (appContextInstance.userId) {

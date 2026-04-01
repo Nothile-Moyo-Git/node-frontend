@@ -3,6 +3,8 @@ import { ContextProps } from "../../context/AppContext";
 import { Post } from "../../@types";
 
 // Define a user here which should have their details rendered on the main App page
+// We define a second user here in case we need an array of them (which we currently do)
+// The properties defined here are for dummy purposes
 export const mockUser: User = {
   _id: "12345-nothile-id",
   name: "Nothile Moyo",
@@ -17,6 +19,24 @@ export const mockUser: User = {
     "67843561d02db477bac4843b",
   ],
 };
+
+export const mockSecondUser: User = {
+  _id: "12345-molly-id",
+  name: "Molly Dunham",
+  email: "nothile1@gmail.com",
+  password: "test",
+  status: "active",
+  posts: [
+    "662423764e8c8b1633534be8",
+    "662423884e8c8b1633534bf0",
+    "662e7bcdd94fde36bf4bb554",
+    "662e7c6ad94fde36bf4bb55c",
+    "67843561d02db477bac4843b",
+  ],
+};
+
+// Get a list of users
+export const mockUsers: User[] = [mockUser, mockUser];
 
 export const mockContext: ContextProps = {
   baseUrl: process.env.REACT_APP_API_DEV ?? "http://localhost:4000",
@@ -189,3 +209,10 @@ export const mockFileProps: FileRequestData = {
   isImageUrlValid: true,
   isFileSizeValid: true,
 };
+
+// Messages
+/* 
+export const messages: Messages = [{
+  
+}];
+ */
