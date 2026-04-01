@@ -2,6 +2,9 @@
  * Date created : 16/04/2024
  *
  * Author : Nothile Moyo
+ *
+ * Description: This is where we define important types for key features
+ * Types for global state are defined here too
  */
 
 declare module "*.svg" {
@@ -63,6 +66,20 @@ export interface FileRequestData {
   isFileSizeValid: boolean;
   isFileTypeValid: boolean;
   isImageUrlValid: boolean;
+}
+
+export interface Message {
+  _id: string;
+  message: string;
+  dateSent: string;
+  senderId: string;
+  sender: string;
+}
+
+export interface Messages {
+  _id: string;
+  userIds: string[];
+  messages: Message[];
 }
 
 export type ButtonType = "button" | "submit" | "reset" | undefined;
