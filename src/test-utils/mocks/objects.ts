@@ -1,6 +1,5 @@
-import { FileData, FileRequestData, User } from "../../@types";
+import { FileData, FileRequestData, User, Messages, Post } from "../../@types";
 import { ContextProps } from "../../context/AppContext";
-import { Post } from "../../@types";
 
 // Define a user here which should have their details rendered on the main App page
 // We define a second user here in case we need an array of them (which we currently do)
@@ -211,8 +210,37 @@ export const mockFileProps: FileRequestData = {
 };
 
 // Messages
-/* 
-export const messages: Messages = [{
-  
-}];
- */
+export const messages: Messages = {
+  _id: "nothile-test-id-12345",
+  userIds: [mockUser._id, mockSecondUser._id],
+  messages: [
+    {
+      _id: "message-test-id-1",
+      message: "First",
+      dateSent: "2024-06-20 20:47:53",
+      sender: mockUser.name,
+      senderId: mockUser._id,
+    },
+    {
+      _id: "message-test-id-2",
+      message: "Second",
+      dateSent: "2024-06-20 20:51:13",
+      sender: mockUser.name,
+      senderId: mockUser._id,
+    },
+    {
+      _id: "message-test-id-3",
+      message: "Third",
+      dateSent: "2024-07-08 19:42:56",
+      sender: mockSecondUser.name,
+      senderId: mockSecondUser._id,
+    },
+    {
+      _id: "message-test-id-4",
+      message: "Fourth",
+      dateSent: "2025-09-24 16:11:25",
+      sender: mockSecondUser.name,
+      senderId: mockSecondUser._id,
+    },
+  ],
+};

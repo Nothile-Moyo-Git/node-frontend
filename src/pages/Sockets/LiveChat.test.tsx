@@ -6,9 +6,13 @@
  * This is to mock the live chat functionality with websockets
  */
 
+import "@testing-library/jest-dom";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
-/* import { createFetchResponse } from "../../test-utils/methods/methods";
-import { mockPosts, mockUser, mockUsers } from "../../test-utils/mocks/objects"; */
+import { createFetchResponse } from "../../test-utils/methods/methods";
+import { messages, mockContext, mockPosts, mockUser, mockUsers } from "../../test-utils/mocks/objects";
+import { act, screen } from "@testing-library/react";
+import { renderWithContext } from "../../test-utils/testRouter";
+import LiveChat from "./LiveChat";
 
 // Assign values so we can mock key functionality in jest instead of actually using components of performing requests
 // We mock out fetch so we can hijack the default fetch functionality and replace it with Jest's mocking functionality
@@ -50,7 +54,8 @@ describe("Live Chat component", () => {
   it("Should match snapshot", async () => {
     // Mock our requests here, looks like we have a request to get user details and the chat in the component
     // So we're going to mock both of them here
-    /*  mockFetch.mockResolvedValueOnce(
+    mockFetch
+      .mockResolvedValueOnce(
         createFetchResponse({
           data: {
             PostUserDetailsResponse: {
@@ -66,14 +71,80 @@ describe("Live Chat component", () => {
             },
           },
         }),
-      ).createFetchResponse({
-        data: {
-          chatMessagesResponse: {
-            userIds: mockUsers,
-            messages: [],
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            chatMessagesResponse: {
+              userIds: mockUsers,
+              messages: messages,
+            },
           },
-        }
+        }),
+      );
+
+    // We render our component with the mocked requests
+    await act(async () => {
+      renderWithContext(<LiveChat />, { route: "/livechat" }, mockContext);
+    });
+
+    // Check if the view posts component is rendered and we navigate to it successfully
+    const appComponent = await screen.findByTestId("test-id-livechat-form");
+    expect(appComponent).toBeInTheDocument();
+    expect(appComponent).toMatchSnapshot();
+  });
+
+  // Should establish a connection and send a message
+  it("Should send a message from the live socket", async () => {
+    // We'll set the environment to development here
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostUserDetailsResponse: {
+              user: {
+                _id: mockUser._id,
+                name: mockUser.name,
+                email: mockUser.email,
+                password: mockUser.password,
+                confirmPassword: mockUser.password,
+                status: true,
+                posts: mockPosts[0],
+              },
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            chatMessagesResponse: {
+              userIds: mockUsers,
+              messages: messages,
+            },
+          },
+        }),
+      );
+
+    // Fire the "post added" socket event with a mock post payload
+    await act(async () => {
+      socketEventHandlers["message sent"]({
+        message: {
+          _id: "message-test-id-5",
+          message: "Fifth",
+          dateSent: "2026-04-06 22:10:53",
+          sender: mockUser.name,
+          senderId: mockUser._id,
+        },
       });
-    */
+    });
   });
 });
