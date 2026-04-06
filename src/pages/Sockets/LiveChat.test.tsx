@@ -93,4 +93,58 @@ describe("Live Chat component", () => {
     expect(appComponent).toBeInTheDocument();
     expect(appComponent).toMatchSnapshot();
   });
+
+  // Should establish a connection and send a message
+  it("Should send a message from the live socket", async () => {
+    // We'll set the environment to development here
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostUserDetailsResponse: {
+              user: {
+                _id: mockUser._id,
+                name: mockUser.name,
+                email: mockUser.email,
+                password: mockUser.password,
+                confirmPassword: mockUser.password,
+                status: true,
+                posts: mockPosts[0],
+              },
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            chatMessagesResponse: {
+              userIds: mockUsers,
+              messages: messages,
+            },
+          },
+        }),
+      );
+
+    // Fire the "post added" socket event with a mock post payload
+    await act(async () => {
+      socketEventHandlers["message sent"]({
+        message: {
+          _id: "message-test-id-5",
+          message: "Fifth",
+          dateSent: "2026-04-06 22:10:53",
+          sender: mockUser.name,
+          senderId: mockUser._id,
+        },
+      });
+    });
+  });
 });
