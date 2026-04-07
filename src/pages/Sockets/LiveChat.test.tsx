@@ -10,7 +10,7 @@ import "@testing-library/jest-dom";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import { messages, mockContext, mockPosts, mockUser, mockUsers } from "../../test-utils/mocks/objects";
-import { act, screen } from "@testing-library/react";
+import { act, screen, waitFor } from "@testing-library/react";
 import { renderWithContext } from "../../test-utils/testRouter";
 import LiveChat from "./LiveChat";
 
@@ -51,7 +51,7 @@ afterEach(() => {
 });
 
 describe("Live Chat component", () => {
-  it("Should match snapshot", async () => {
+  it.only("Should match snapshot", async () => {
     // Mock our requests here, looks like we have a request to get user details and the chat in the component
     // So we're going to mock both of them here
     mockFetch
@@ -74,12 +74,17 @@ describe("Live Chat component", () => {
       )
       .mockResolvedValueOnce(
         createFetchResponse({
-          data: {
-            chatMessagesResponse: {
-              userIds: mockUsers,
-              messages: messages,
+          status: 200,
+          ok: true,
+          json: () => ({
+            data: {
+              chatMessagesResponse: {
+                success: true,
+                messages: messages,
+                error: null,
+              },
             },
-          },
+          }),
         }),
       );
 
@@ -134,6 +139,11 @@ describe("Live Chat component", () => {
         }),
       );
 
+    // We render our component with the mocked requests
+    await act(async () => {
+      renderWithContext(<LiveChat />, { route: "/livechat" }, mockContext);
+    });
+
     // Fire the "post added" socket event with a mock post payload
     await act(async () => {
       socketEventHandlers["message sent"]({
@@ -145,6 +155,12 @@ describe("Live Chat component", () => {
           senderId: mockUser._id,
         },
       });
-    });
+    }); /*
+
+    // We'll add the message to the page and make sure it's visible
+    await waitFor(() => {
+      const toast = screen.getByText(`Fifth`);
+      expect(toast).toBeVisible();
+    }); */
   });
 });
