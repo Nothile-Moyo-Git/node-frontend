@@ -74,17 +74,13 @@ describe("Live Chat component", () => {
       )
       .mockResolvedValueOnce(
         createFetchResponse({
-          status: 200,
-          ok: true,
-          json: () => ({
-            data: {
-              chatMessagesResponse: {
-                success: true,
-                messages: messages,
-                error: null,
-              },
+          data: {
+            chatMessagesResponse: {
+              success: true,
+              messages: messages,
+              error: null,
             },
-          }),
+          },
         }),
       );
 
