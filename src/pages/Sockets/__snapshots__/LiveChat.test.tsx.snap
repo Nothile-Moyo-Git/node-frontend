@@ -1,29 +1,113 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Live Chat component Should match snapshot 1`] = `
-<form
-  class="form form__full false"
-  data-testid="test-id-livechat-form"
+<section
+  class="liveChat"
+  data-testid="test-id-livechat-page"
 >
-  <div
-    class="field field__bottom"
+  <h1
+    class="liveChat__title"
   >
-    <textarea
-      aria-labelledby="contentLabel"
-      class="textarea textarea__square false"
-      data-testid="test-id-livechat-content-input"
-      name="content"
-      placeholder="Please post your message in the chat"
-      required=""
-      rows="3"
-    />
-    <button
-      class="button button__square"
-      data-testid="test-id-send-message-button"
-      type="submit"
+    Live Chat
+  </h1>
+  <div
+    class="liveChat__message"
+    data-testid="message-test-id-1"
+  >
+    <p
+      class="liveChat__description liveChat__description--align-right"
     >
-      Send
-    </button>
+      <span
+        class="liveChat__icon"
+      >
+        N
+      </span>
+      <span>
+        Nothile Moyo
+      </span>
+      <span
+        class="liveChat__date"
+      >
+         2024-06-20 20:47:53
+      </span>
+    </p>
+    <p
+      class="liveChat__content liveChat__content--align-left"
+    >
+      First
+    </p>
   </div>
-</form>
+  <div
+    class="liveChat__message"
+    data-testid="message-test-id-2"
+  >
+    <p
+      class="liveChat__content liveChat__content--align-left"
+    >
+      Second
+    </p>
+  </div>
+  <div
+    class="liveChat__message"
+    data-testid="message-test-id-3"
+  >
+    <p
+      class="liveChat__description liveChat__description--align-right"
+    >
+      <span
+        class="liveChat__icon"
+      >
+        M
+      </span>
+      <span>
+        Molly Dunham
+      </span>
+      <span
+        class="liveChat__date"
+      >
+         2024-07-08 19:42:56
+      </span>
+    </p>
+    <p
+      class="liveChat__content liveChat__content--align-right"
+    >
+      Third
+    </p>
+  </div>
+  <div
+    class="liveChat__message"
+    data-testid="message-test-id-4"
+  >
+    <p
+      class="liveChat__content liveChat__content--align-right"
+    >
+      Fourth
+    </p>
+  </div>
+  <form
+    class="form form__full false"
+    data-testid="test-id-livechat-form"
+  >
+    <div
+      class="field field__bottom"
+    >
+      <textarea
+        aria-labelledby="contentLabel"
+        class="textarea textarea__square false"
+        data-testid="test-id-livechat-content-input"
+        name="content"
+        placeholder="Please post your message in the chat"
+        required=""
+        rows="3"
+      />
+      <button
+        class="button button__square"
+        data-testid="test-id-send-message-button"
+        type="submit"
+      >
+        Send
+      </button>
+    </div>
+  </form>
+</section>
 `;

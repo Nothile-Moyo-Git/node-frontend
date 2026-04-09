@@ -21,6 +21,7 @@ import { BASENAME } from "../../util/util";
 import TextArea from "../../components/form/TextArea";
 
 interface chatMessage {
+  _id: string;
   message: string;
   dateSent: string;
   senderId: string;
@@ -164,34 +165,20 @@ const LiveChat: FC = () => {
 
         const { messages, success } = data.data.chatMessagesResponse;
 
-        // Generate the styles for the chat so that they go either way
-        const generateChatStyles = () => {
-          // Iterate through the messages and set the styling based on the user
-          const generatedStyles = messages.messages.map((message: chatMessage) => {
-            if (message.senderId === userIds[1]) {
-              return "liveChat__content--align-right";
-            }
-
-            return "liveChat__content--align-left";
-          });
-
-          setChatStyles(generatedStyles);
-        };
-
         // Set the messages from the backend if we have them
         if (messages.length !== 0 && success) {
           // Here we set it to the messages object in messages since we have properties like userId etc...
           setUserIds(messages.userIds);
           setChatMessages(messages.messages);
-          generateChatStyles();
         }
       } catch (error) {
         console.error("Error");
         console.error(error);
       }
     },
-    [appContextInstance.baseUrl, userIds],
+    [appContextInstance.baseUrl],
   );
+
   // Get the user details from the backend for the chat
   useEffect(() => {
     appContextInstance.validateAuthentication();
@@ -213,6 +200,27 @@ const LiveChat: FC = () => {
       navigate(`${BASENAME}/login`);
     }
   }, [appContextInstance, getChatMessages, getUserDetails, navigate]);
+
+  // Generate the chat styles, we do it here instead of the other useEffect to avoid multiple API requests
+  useEffect(() => {
+    // Generate the styles for the chat so that they go either way
+    const generateChatStyles = () => {
+      // Iterate through the messages and set the styling based on the user
+      const generatedStyles = chatMessages.map((message: chatMessage) => {
+        if (message.senderId === userIds[1]) {
+          return "liveChat__content--align-right";
+        }
+
+        return "liveChat__content--align-left";
+      });
+
+      setChatStyles(generatedStyles);
+    };
+
+    if (chatMessages.length > 0) {
+      generateChatStyles();
+    }
+  }, [userIds, chatMessages]);
 
   // Submit handler, this allows messages to be sent between clients
   const onSubmit = async (event: FormEvent) => {
@@ -257,12 +265,12 @@ const LiveChat: FC = () => {
   };
 
   return (
-    <section className="liveChat">
+    <section className="liveChat" data-testid="test-id-livechat-page">
       <h1 className="liveChat__title">Live Chat</h1>
 
       {chatMessages.map((message: chatMessage, index: number) => {
         return (
-          <div className="liveChat__message" key={`message-${index}`}>
+          <div className="liveChat__message" key={`message-${index}`} data-testid={message._id}>
             {(index === 0 || (index > 0 && chatMessages[index].senderId !== chatMessages[index - 1].senderId)) && (
               <p
                 className={`liveChat__description ${!isSender(userDetails?._id ?? "", message.senderId) && "liveChat__description--align-right"}`}

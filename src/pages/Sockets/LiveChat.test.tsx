@@ -9,8 +9,8 @@
 import "@testing-library/jest-dom";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 import { createFetchResponse } from "../../test-utils/methods/methods";
-import { messages, mockContext, mockPosts, mockUser, mockUsers } from "../../test-utils/mocks/objects";
-import { act, screen, waitFor } from "@testing-library/react";
+import { messages, mockContext, mockPosts, mockUser } from "../../test-utils/mocks/objects";
+import { act, screen } from "@testing-library/react";
 import { renderWithContext } from "../../test-utils/testRouter";
 import LiveChat from "./LiveChat";
 
@@ -51,7 +51,7 @@ afterEach(() => {
 });
 
 describe("Live Chat component", () => {
-  it.only("Should match snapshot", async () => {
+  it("Should match snapshot", async () => {
     // Mock our requests here, looks like we have a request to get user details and the chat in the component
     // So we're going to mock both of them here
     mockFetch
@@ -90,7 +90,10 @@ describe("Live Chat component", () => {
     });
 
     // Check if the view posts component is rendered and we navigate to it successfully
-    const appComponent = await screen.findByTestId("test-id-livechat-form");
+    const message = await screen.findByTestId(messages.messages[0]._id);
+    expect(message).toBeInTheDocument();
+
+    const appComponent = await screen.findByTestId("test-id-livechat-page");
     expect(appComponent).toBeInTheDocument();
     expect(appComponent).toMatchSnapshot();
   });
@@ -128,8 +131,9 @@ describe("Live Chat component", () => {
         createFetchResponse({
           data: {
             chatMessagesResponse: {
-              userIds: mockUsers,
+              success: true,
               messages: messages,
+              error: null,
             },
           },
         }),
@@ -140,7 +144,7 @@ describe("Live Chat component", () => {
       renderWithContext(<LiveChat />, { route: "/livechat" }, mockContext);
     });
 
-    // Fire the "post added" socket event with a mock post payload
+    /* // Fire the "post added" socket event with a mock post payload
     await act(async () => {
       socketEventHandlers["message sent"]({
         message: {
@@ -151,7 +155,7 @@ describe("Live Chat component", () => {
           senderId: mockUser._id,
         },
       });
-    }); /*
+    });
 
     // We'll add the message to the page and make sure it's visible
     await waitFor(() => {
