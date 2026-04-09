@@ -21,6 +21,7 @@ import { BASENAME } from "../../util/util";
 import TextArea from "../../components/form/TextArea";
 
 interface chatMessage {
+  _id: string;
   message: string;
   dateSent: string;
   senderId: string;
@@ -77,14 +78,15 @@ const LiveChat: FC = () => {
   // Get user details if the user is authenticated from the backend
   const getUserDetails = useCallback(
     async (userId: string) => {
-      const response = await fetch(`${appContextInstance.baseUrl}/graphql/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      try {
+        const response = await fetch(`${appContextInstance.baseUrl}/graphql/auth`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                 query PostUserDetailsResponse($_id : String!, $token : String!){
                     PostUserDetailsResponse(_id : $_id, token : $token){
                         user {
@@ -98,36 +100,42 @@ const LiveChat: FC = () => {
                         }
                     }
                 }`,
-          variables: {
-            _id: userId,
-            token: appContextInstance.token ?? "",
-          },
-        }),
-      });
+            variables: {
+              _id: userId,
+              token: appContextInstance.token ?? "",
+            },
+          }),
+        });
 
-      // Get the result from the endpoint
-      const {
-        data: { PostUserDetailsResponse: user },
-      } = await response.json();
+        // Get the result from the endpoint
+        // Extract the results from the request for the messages
+        const data = await response.json();
 
-      // Set the user details so
-      setUserDetails(user.user);
+        const { user } = data.data.PostUserDetailsResponse;
+
+        // Set the user details so
+        setUserDetails(user.user);
+      } catch (error) {
+        console.error("Error authorizing the user");
+        console.error(error);
+      }
     },
-    [appContextInstance],
+    [appContextInstance.baseUrl, appContextInstance.token],
   );
 
   // Get the chat messages async since we can't do it in our useEffect hook
   const getChatMessages = useCallback(
     async (userId: string, recipientId: string) => {
-      // Perform the signup request
-      const response = await fetch(`${appContextInstance.baseUrl}/graphql/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+      try {
+        // Perform the signup request
+        const response = await fetch(`${appContextInstance.baseUrl}/graphql/chat`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: `
                     query chatMessagesResponse($_id : String!, $recipientId : String){
                         chatMessagesResponse(_id : $_id, recipientId : $recipientId){
                             success
@@ -145,61 +153,46 @@ const LiveChat: FC = () => {
                         }
                     }
                 `,
-          variables: {
-            _id: userId,
-            recipientId: recipientId,
-          },
-        }),
-      });
-
-      const {
-        data: {
-          chatMessagesResponse: { success, messages },
-        },
-      } = await response.json();
-
-      // Generate the styles for the chat so that they go either way
-      const generateChatStyles = () => {
-        // Iterate through the messages and set the styling based on the user
-        const generatedStyles = messages.messages.map((message: chatMessage) => {
-          if (message.senderId === userIds[1]) {
-            return "liveChat__content--align-right";
-          }
-
-          return "liveChat__content--align-left";
+            variables: {
+              _id: userId,
+              recipientId: recipientId,
+            },
+          }),
         });
 
-        setChatStyles(generatedStyles);
-      };
+        // Extract the results from the request for the messages
+        const data = await response.json();
 
-      // Set the messages from the backend if we have them
-      if (messages.length !== 0 && success) {
-        // Here we set it to the messages object in messages since we have properties like userId etc...
-        setUserIds(messages.userIds);
-        setChatMessages(messages.messages);
-        generateChatStyles();
+        const { messages, success } = data.data.chatMessagesResponse;
+
+        // Set the messages from the backend if we have them
+        if (messages.length !== 0 && success) {
+          // Here we set it to the messages object in messages since we have properties like userId etc...
+          setUserIds(messages.userIds);
+          setChatMessages(messages.messages);
+        }
+      } catch (error) {
+        console.error("Error");
+        console.error(error);
       }
     },
-    [appContextInstance, userIds],
+    [appContextInstance.baseUrl],
   );
+
   // Get the user details from the backend for the chat
   useEffect(() => {
     appContextInstance.validateAuthentication();
 
-    try {
-      // Get the user information so we can share it in the post
-      if (appContextInstance.userId) {
-        getUserDetails(appContextInstance.userId);
-      }
+    // Get the user information so we can share it in the post
+    if (appContextInstance.userId) {
+      getUserDetails(appContextInstance.userId);
+    }
 
-      // The socket.io client connection id
-      const recipientId = "6656382efb54b1949e66bae2";
+    // The socket.io client connection id
+    const recipientId = "6656382efb54b1949e66bae2";
 
-      if (appContextInstance.userId) {
-        getChatMessages(appContextInstance.userId, recipientId);
-      }
-    } catch (error) {
-      console.error(error);
+    if (appContextInstance.userId) {
+      getChatMessages(appContextInstance.userId, recipientId);
     }
 
     // If the user isn't authenticated, redirect this route to the previous page
@@ -207,6 +200,27 @@ const LiveChat: FC = () => {
       navigate(`${BASENAME}/login`);
     }
   }, [appContextInstance, getChatMessages, getUserDetails, navigate]);
+
+  // Generate the chat styles, we do it here instead of the other useEffect to avoid multiple API requests
+  useEffect(() => {
+    // Generate the styles for the chat so that they go either way
+    const generateChatStyles = () => {
+      // Iterate through the messages and set the styling based on the user
+      const generatedStyles = chatMessages.map((message: chatMessage) => {
+        if (message.senderId === userIds[1]) {
+          return "liveChat__content--align-right";
+        }
+
+        return "liveChat__content--align-left";
+      });
+
+      setChatStyles(generatedStyles);
+    };
+
+    if (chatMessages.length > 0) {
+      generateChatStyles();
+    }
+  }, [userIds, chatMessages]);
 
   // Submit handler, this allows messages to be sent between clients
   const onSubmit = async (event: FormEvent) => {
@@ -251,12 +265,12 @@ const LiveChat: FC = () => {
   };
 
   return (
-    <section className="liveChat">
+    <section className="liveChat" data-testid="test-id-livechat-page">
       <h1 className="liveChat__title">Live Chat</h1>
 
       {chatMessages.map((message: chatMessage, index: number) => {
         return (
-          <div className="liveChat__message" key={`message-${index}`}>
+          <div className="liveChat__message" key={`message-${index}`} data-testid={message._id}>
             {(index === 0 || (index > 0 && chatMessages[index].senderId !== chatMessages[index - 1].senderId)) && (
               <p
                 className={`liveChat__description ${!isSender(userDetails?._id ?? "", message.senderId) && "liveChat__description--align-right"}`}
