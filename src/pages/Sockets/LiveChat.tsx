@@ -208,10 +208,10 @@ const LiveChat: FC = () => {
       // Iterate through the messages and set the styling based on the user
       const generatedStyles = chatMessages.map((message: chatMessage) => {
         if (message.senderId === userIds[1]) {
-          return "liveChat__content--align-right";
+          return "align-right";
         }
 
-        return "liveChat__content--align-left";
+        return "align-left";
       });
 
       setChatStyles(generatedStyles);
@@ -267,13 +267,12 @@ const LiveChat: FC = () => {
   return (
     <section className="liveChat" data-testid="test-id-livechat-page">
       <h1 className="liveChat__title">Live Chat</h1>
-
       {chatMessages.map((message: chatMessage, index: number) => {
         return (
           <div className="liveChat__message" key={`message-${index}`} data-testid={message._id}>
             {(index === 0 || (index > 0 && chatMessages[index].senderId !== chatMessages[index - 1].senderId)) && (
               <p
-                className={`liveChat__description ${!isSender(userDetails?._id ?? "", message.senderId) && "liveChat__description--align-right"}`}
+                className={`liveChat__description ${!isSender(userDetails?._id ?? "", message.senderId) && `liveChat__description--${chatStyles[index]}`}`}
               >
                 <span className="liveChat__icon">{message.sender[0]}</span>
                 <span>{message.sender}</span>
@@ -281,7 +280,7 @@ const LiveChat: FC = () => {
               </p>
             )}
 
-            <p className={`liveChat__content ${chatStyles[index]}`}>{message.message}</p>
+            <p className={`liveChat__content liveChat__content--${chatStyles[index]}`}>{message.message}</p>
           </div>
         );
       })}

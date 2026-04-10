@@ -10,7 +10,7 @@ import "@testing-library/jest-dom";
 import { clearAuthStorage, setMockAuthStorage } from "../../test-utils/authStorage";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import { messages, mockContext, mockPosts, mockUser } from "../../test-utils/mocks/objects";
-import { act, screen } from "@testing-library/react";
+import { act, screen, waitFor } from "@testing-library/react";
 import { renderWithContext } from "../../test-utils/testRouter";
 import LiveChat from "./LiveChat";
 
@@ -144,16 +144,15 @@ describe("Live Chat component", () => {
       renderWithContext(<LiveChat />, { route: "/livechat" }, mockContext);
     });
 
-    /* // Fire the "post added" socket event with a mock post payload
+    // Fire the "post added" socket event with a mock post payload
+    // Since we handle the object we get back directly, we need to make sure to fire it
     await act(async () => {
       socketEventHandlers["message sent"]({
-        message: {
-          _id: "message-test-id-5",
-          message: "Fifth",
-          dateSent: "2026-04-06 22:10:53",
-          sender: mockUser.name,
-          senderId: mockUser._id,
-        },
+        _id: "message-test-id-5",
+        message: "Fifth",
+        dateSent: "2026-04-06 22:10:53",
+        sender: mockUser.name,
+        senderId: mockUser._id,
       });
     });
 
@@ -161,6 +160,6 @@ describe("Live Chat component", () => {
     await waitFor(() => {
       const toast = screen.getByText(`Fifth`);
       expect(toast).toBeVisible();
-    }); */
+    });
   });
 });
