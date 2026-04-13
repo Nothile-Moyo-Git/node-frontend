@@ -13,7 +13,6 @@ import { renderWithContext } from "../../test-utils/testRouter";
 import PostScreen from "./PostScreen";
 import { mockContext, mockPost } from "../../test-utils/mocks/objects";
 import { createFetchResponse } from "../../test-utils/methods/methods";
-import { ContextProps } from "../../context/AppContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
@@ -26,7 +25,6 @@ jest.mock("react-router-dom", () => ({
 
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
-
 let mockNavigate = jest.fn();
 
 // Clear our tests and get mock our fetch so we get the correct ordering
@@ -179,32 +177,6 @@ describe("Post Screen Component", () => {
     renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, mockContext);
 
     await waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
-  });
-
-  it("Redirects to the login page", async () => {
-    // Pass an inauthenticated context to the mock
-    const inauthenticatedContext: ContextProps = {
-      ...mockContext,
-      userAuthenticated: false,
-    };
-
-    // Handle the api requests, we sent these requests since we're only mocking single implementations of requests
-    global.fetch = jest.fn().mockResolvedValueOnce(
-      createFetchResponse({
-        data: {
-          GetPostResponse: {
-            success: true,
-            post: mockPost,
-            message: "Request successful",
-          },
-        },
-      }),
-    );
-
-    // Render the post screen
-    renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, inauthenticatedContext);
-
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledTimes(1));
   });
 
   it("Triggers the catch block for image loading", async () => {

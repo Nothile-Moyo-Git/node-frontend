@@ -8,23 +8,15 @@
 import { FC, useContext } from "react";
 import { AppContext } from "./context/AppContext";
 import LoadingSpinner from "./components/loader/LoadingSpinner";
-import { BASENAME } from "./util/util";
 import "./App.scss";
-import { useNavigate } from "react-router-dom";
 import ErrorModal from "./components/modals/variants/ErrorModal";
 import useUserDetails from "./hooks/useUserDetails";
 
 const App: FC = () => {
-  const navigate = useNavigate();
-
   // Handle user authentication from the backend
   const { isLoading, error, user, sessionCreated, sessionExpires } = useUserDetails();
 
   const appContextInstance = useContext(AppContext);
-
-  if (!isLoading && !appContextInstance.userAuthenticated) {
-    navigate(`${BASENAME}/login`);
-  }
 
   return (
     <div data-testid="test-id-app-component">
