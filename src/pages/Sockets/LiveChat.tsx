@@ -16,8 +16,6 @@ import Field from "../../components/form/Field";
 import Button from "../../components/button/Button";
 import { AppContext } from "../../context/AppContext";
 import { User } from "../../@types";
-import { useNavigate } from "react-router-dom";
-import { BASENAME } from "../../util/util";
 import TextArea from "../../components/form/TextArea";
 
 interface chatMessage {
@@ -29,7 +27,6 @@ interface chatMessage {
 }
 
 const LiveChat: FC = () => {
-  const navigate = useNavigate();
   const appContextInstance = useContext(AppContext);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const [chatMessages, setChatMessages] = useState<chatMessage[]>([]);
@@ -114,7 +111,7 @@ const LiveChat: FC = () => {
         const { user } = data.data.PostUserDetailsResponse;
 
         // Set the user details so
-        setUserDetails(user.user);
+        setUserDetails(user);
       } catch (error) {
         console.error("Error authorizing the user");
         console.error(error);
@@ -194,12 +191,7 @@ const LiveChat: FC = () => {
     if (appContextInstance.userId) {
       getChatMessages(appContextInstance.userId, recipientId);
     }
-
-    // If the user isn't authenticated, redirect this route to the previous page
-    if (!appContextInstance.userAuthenticated) {
-      navigate(`${BASENAME}/login`);
-    }
-  }, [appContextInstance, getChatMessages, getUserDetails, navigate]);
+  }, [appContextInstance, getChatMessages, getUserDetails]);
 
   // Generate the chat styles, we do it here instead of the other useEffect to avoid multiple API requests
   useEffect(() => {

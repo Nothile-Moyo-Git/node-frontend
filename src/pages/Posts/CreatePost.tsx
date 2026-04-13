@@ -8,9 +8,8 @@
  * Only logged in users will be able to create posts in the backend
  */
 
-import React, { FC, FormEvent, useContext, useEffect, useState, useRef } from "react";
+import React, { FC, FormEvent, useContext, useState, useRef } from "react";
 import { AppContext } from "../../context/AppContext";
-import { useNavigate } from "react-router-dom";
 import { BASENAME } from "../../util/util";
 import Form from "../../components/form/Form";
 import Title from "../../components/form/Title";
@@ -32,9 +31,6 @@ export const CreatePostComponent: FC = () => {
 
   const isDevelopment = process.env.NODE_ENV.trim() === "development";
 
-  // Instantiate the navigation object
-  const navigate = useNavigate();
-
   // States and refs for our objects
   const titleRef = useRef<HTMLInputElement>(null);
   const imageUrlRef = useRef<HTMLInputElement>(null);
@@ -51,16 +47,6 @@ export const CreatePostComponent: FC = () => {
 
   // The carousel image data is for production, and we use it as an optional prop
   const [carouselImage, setCarouselImage] = useState<FileData>();
-
-  // Check authentication when component mounts
-  useEffect(() => {
-    appContextInstance.validateAuthentication();
-
-    // If the user isn't authenticated, redirect this route to the previous page
-    if (!appContextInstance.userAuthenticated) {
-      navigate(`${BASENAME}/login`);
-    }
-  }, [appContextInstance, navigate]);
 
   // Validate the before submission so we can either render errors or perform the request
   const validateFields = () => {

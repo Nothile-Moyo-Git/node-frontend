@@ -15,7 +15,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import "./PostScreen.scss";
 import { Post } from "../../@types";
-import { BASENAME, generateUploadDate } from "../../util/util";
+import { generateUploadDate } from "../../util/util";
 import { MdKeyboardBackspace } from "react-icons/md";
 import Button from "../../components/button/Button";
 import LoadingSpinner from "../../components/loader/LoadingSpinner";
@@ -107,15 +107,10 @@ const PostScreen: FC = () => {
       } finally {
         setIsQuerying(false);
       }
-
-      // If the user isn't authenticated, redirect this route to the previous page
-      if (!appContextInstance.userAuthenticated) {
-        navigate(`${BASENAME}/login`);
-      }
     };
 
     loadContent();
-  }, [appContextInstance, postId, navigate]);
+  }, [appContextInstance, postId]);
 
   useEffect(() => {
     const getImage = async () => {

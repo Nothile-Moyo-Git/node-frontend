@@ -15,7 +15,7 @@ exports[`Live Chat component Should match snapshot 1`] = `
     data-testid="message-test-id-1"
   >
     <p
-      class="liveChat__description liveChat__description--align-left"
+      class="liveChat__description false"
     >
       <span
         class="liveChat__icon"

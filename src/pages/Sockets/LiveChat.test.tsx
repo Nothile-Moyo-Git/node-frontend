@@ -12,11 +12,13 @@ import { createFetchResponse } from "../../test-utils/methods/methods";
 import { messages, mockContext, mockPosts, mockUser } from "../../test-utils/mocks/objects";
 import { act, screen, waitFor } from "@testing-library/react";
 import { renderWithContext } from "../../test-utils/testRouter";
+import { useNavigate } from "react-router-dom";
 import LiveChat from "./LiveChat";
 
 // Assign values so we can mock key functionality in jest instead of actually using components of performing requests
 // We mock out fetch so we can hijack the default fetch functionality and replace it with Jest's mocking functionality
 let mockFetch: jest.MockedFunction<typeof fetch>;
+let mockNavigate = jest.fn();
 const socketEventHandlers: Record<string, (_data: unknown) => void> = {};
 const originalEnv = process.env;
 
@@ -42,6 +44,10 @@ beforeEach(() => {
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
   setMockAuthStorage();
+
+  // Update our mockRouterDOM values
+  mockNavigate = jest.fn();
+  (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
   // Create a new copy of process.env so we an update it
   process.env = { ...originalEnv };
@@ -236,6 +242,36 @@ describe("Live Chat component", () => {
       expect(consoleErrorSpy).toHaveBeenCalledTimes(4);
     });
 
+    consoleErrorSpy.mockRestore();
+  });
+
+  it("Should render messages when user details fail but chat loads", async () => {
+    // We're ignoring the console in this test as we don't need the output here, but is useful for dev / prod
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    // We're going to mock failing to get the userDetails
+    mockFetch.mockRejectedValueOnce(new Error("Network failed")).mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          chatMessagesResponse: {
+            success: true,
+            messages: messages,
+            error: null,
+          },
+        },
+      }),
+    );
+
+    // We render our component with the mocked requests
+    await act(async () => {
+      renderWithContext(<LiveChat />, { route: "/livechat" }, mockContext);
+    });
+
+    // Check if the view posts component is rendered and we navigate to it successfully
+    const message = await screen.findByTestId(messages.messages[0]._id);
+    expect(message).toBeInTheDocument();
+
+    // Reset the mock
     consoleErrorSpy.mockRestore();
   });
 });

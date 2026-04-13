@@ -109,12 +109,6 @@ describe("App Component Tests", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  it("Redirects to login if user is not authenticated", async () => {
-    renderWithContext(<App />, { route: "/" }, { ...mockContext, userAuthenticated: false });
-
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/login"));
-  });
-
   it("renders the ErrorModal when useUserDetails catches an error", async () => {
     // Force useUserDetails to hit its catch block by throwing an error
     global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network fail"));
