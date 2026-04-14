@@ -14,6 +14,7 @@ import { act, screen, waitFor } from "@testing-library/react";
 import { renderWithContext } from "../../test-utils/testRouter";
 import { useNavigate } from "react-router-dom";
 import LiveChat from "./LiveChat";
+import userEvent from "@testing-library/user-event";
 
 // Assign values so we can mock key functionality in jest instead of actually using components of performing requests
 // We mock out fetch so we can hijack the default fetch functionality and replace it with Jest's mocking functionality
@@ -34,6 +35,7 @@ jest.mock("socket.io-client", () => ({
     on: jest.fn((event: string, handler: (_data: unknown) => void) => {
       socketEventHandlers[event] = handler;
     }),
+    emit: jest.fn(),
     disconnect: jest.fn(),
     removeAllListeners: jest.fn(),
   })),
@@ -273,5 +275,91 @@ describe("Live Chat component", () => {
 
     // Reset the mock
     consoleErrorSpy.mockRestore();
+  });
+
+  it("Submits another message to the chat log", async () => {
+    // We need to mock the requests, the user details, and a new message being added
+    // Really, the user details should be stored in global state and not queried
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostUserDetailsResponse: {
+              user: {
+                _id: mockUser._id,
+                name: mockUser.name,
+                email: mockUser.email,
+                password: mockUser.password,
+                confirmPassword: mockUser.password,
+                status: true,
+                posts: mockPosts[0],
+              },
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            chatMessagesResponse: {
+              success: true,
+              messages: messages,
+              error: null,
+            },
+          },
+        }),
+      );
+
+    // We render our component with the mocked requests
+    await act(async () => {
+      renderWithContext(<LiveChat />, { route: "/livechat" }, mockContext);
+    });
+
+    // Fill in the form and fire off the chat message
+    const textarea = screen.getByTestId("test-id-livechat-content-input");
+    const submitButton = screen.getByTestId("test-id-send-message-button");
+
+    // Fire off the socket message
+    userEvent.type(textarea, "Fifth");
+    userEvent.click(submitButton);
+  });
+
+  it("Submits the form without the authentication details", async () => {
+    // We need to mock the requests, the user details, and a new message being added
+    // Really, the user details should be stored in global state and not queried
+    mockFetch
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostUserDetailsResponse: {
+              user: undefined,
+            },
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            chatMessagesResponse: {
+              success: true,
+              messages: messages,
+              error: null,
+            },
+          },
+        }),
+      );
+
+    // We render our component with the mocked requests
+    await act(async () => {
+      renderWithContext(<LiveChat />, { route: "/livechat" }, { ...mockContext, userId: undefined });
+    });
+
+    // Fill in the form and fire off the chat message
+    const textarea = screen.getByTestId("test-id-livechat-content-input");
+    const submitButton = screen.getByTestId("test-id-send-message-button");
+
+    // Fire off the socket message
+    userEvent.type(textarea, "Fifth");
+    userEvent.click(submitButton);
   });
 });
