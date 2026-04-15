@@ -273,4 +273,28 @@ describe("Post Screen Component", () => {
       expect(mockNavigate).toHaveBeenCalledWith(-1);
     });
   });
+
+  it("Does not fetch post data when user is not authenticated", async () => {
+    const unauthenticatedContext = {
+      ...mockContext,
+      userAuthenticated: false,
+      token: "",
+    };
+
+    mockFetch = jest.fn();
+    global.fetch = mockFetch;
+
+    await act(async () => {
+      renderWithContext(<PostScreen />, { route: `/post/${mockPost._id}` }, unauthenticatedContext);
+    });
+
+    // fetch should never have been called
+    expect(mockFetch).not.toHaveBeenCalled();
+
+    // Neither post content nor error modal should appear
+    await waitFor(() => {
+      expect(screen.queryByTestId("test-id-error-modal")).not.toBeInTheDocument();
+      expect(screen.queryByText(mockPost.title)).not.toBeInTheDocument();
+    });
+  });
 });
