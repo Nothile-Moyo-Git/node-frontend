@@ -221,8 +221,6 @@ const LiveChat: FC = () => {
 
     // If we have an input, send a message to the socket
     if (contentRef.current && appContextInstance.userId && userDetails && userDetails.name) {
-      console.log("Triggered");
-
       // We assign Formdata here so we can use this with cors in the backend
       const recipientId = "6656382efb54b1949e66bae2";
       const userId = appContextInstance.userId;
