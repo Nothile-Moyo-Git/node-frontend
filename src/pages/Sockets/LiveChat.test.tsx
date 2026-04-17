@@ -15,31 +15,19 @@ import { renderWithContext } from "../../test-utils/testRouter";
 import { useNavigate } from "react-router-dom";
 import LiveChat from "./LiveChat";
 import userEvent from "@testing-library/user-event";
+import { socketEventHandlers } from "../../test-utils/mockModules";
 import React from "react";
 
 // Assign values so we can mock key functionality in jest instead of actually using components of performing requests
 // We mock out fetch so we can hijack the default fetch functionality and replace it with Jest's mocking functionality
 let mockFetch: jest.MockedFunction<typeof fetch>;
 let mockNavigate = jest.fn();
-const socketEventHandlers: Record<string, (_data: unknown) => void> = {};
 const originalEnv = process.env;
 
 // ---- Module Mocks ----
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: jest.fn(),
-}));
-
-// We need to mock our client as we have to use it for a successful redirect
-jest.mock("socket.io-client", () => ({
-  io: jest.fn(() => ({
-    on: jest.fn((event: string, handler: (_data: unknown) => void) => {
-      socketEventHandlers[event] = handler;
-    }),
-    emit: jest.fn(),
-    disconnect: jest.fn(),
-    removeAllListeners: jest.fn(),
-  })),
 }));
 
 // Clear our tests and get mock our fetch so we get the correct ordering
