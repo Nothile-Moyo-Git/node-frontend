@@ -37,6 +37,8 @@ jest.mock("./util/util", () => ({
 const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 
+// ---- Mock values ----
+const originalEnv = process.env;
 let mockNavigate = jest.fn();
 
 beforeEach(() => {
@@ -49,6 +51,8 @@ beforeEach(() => {
 afterEach(() => {
   clearAuthStorage();
   jest.clearAllMocks();
+  // Reset our process.env after each test so we go back to our original values
+  process.env = { ...originalEnv };
 });
 
 // Our main tests, these tests cover key functionality
@@ -158,5 +162,25 @@ describe("App Component - Edge Case Coverage", () => {
     );
 
     await waitFor(() => expect(mockNavigate).not.toHaveBeenCalled());
+  });
+
+  it("Handles routing in development appropriately", async () => {
+    // Set the environment to development
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Reset our imports so we can do one in the development environment
+    jest.resetModules();
+
+    const { routes } = await import("./routes/Router");
+
+    // Check if it contains sandbox, which we can only see in development for the routing
+    const hasSandbox = routes.some((route) => route.path === "sandbox");
+    expect(hasSandbox).toBe(true);
   });
 });

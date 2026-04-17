@@ -220,14 +220,14 @@ const LiveChat: FC = () => {
     event.preventDefault();
 
     // If we have an input, send a message to the socket
-    if (contentRef.current) {
+    if (contentRef.current && appContextInstance.userId && userDetails && userDetails.name) {
       // We assign Formdata here so we can use this with cors in the backend
-      const userId = appContextInstance.userId ? appContextInstance.userId : "";
       const recipientId = "6656382efb54b1949e66bae2";
+      const userId = appContextInstance.userId;
 
       // Add the message and sender to a JSON object so that we can we return the sender
       const chatMessage = contentRef.current.value;
-      const sender = userDetails ? userDetails.name : "";
+      const sender = userDetails.name;
       const json = JSON.stringify({
         message: chatMessage,
         sender: sender,
@@ -242,7 +242,7 @@ const LiveChat: FC = () => {
       // Set the fields on the form
       const fields = new FormData();
       fields.append("senderId", userId);
-      fields.append("sender", userDetails ? userDetails.name : "");
+      fields.append("sender", userDetails.name);
       fields.append("recipientId", recipientId);
       fields.append("messages", JSON.stringify(chatMessages));
       fields.append("newMessage", contentRef.current.value);

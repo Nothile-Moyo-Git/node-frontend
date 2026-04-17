@@ -15,24 +15,12 @@ import { ViewPosts } from "./ViewPosts";
 import { mockContext, mockPosts } from "../../test-utils/mocks/objects";
 import userEvent from "@testing-library/user-event";
 import { createFetchResponse } from "../../test-utils/methods/methods";
+import { socketEventHandlers } from "../../test-utils/mockModules";
 
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
-const socketEventHandlers: Record<string, (_data: unknown) => void> = {};
-
 // Create a copy of our original process.env so we can update it test by test
 const originalEnv = process.env;
-
-// We need to mock our client as we have to use it for a successful redirect
-jest.mock("socket.io-client", () => ({
-  io: jest.fn(() => ({
-    on: jest.fn((event: string, handler: (_data: unknown) => void) => {
-      socketEventHandlers[event] = handler;
-    }),
-    disconnect: jest.fn(),
-    removeAllListeners: jest.fn(),
-  })),
-}));
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
