@@ -399,7 +399,7 @@ describe("Create Post Component", () => {
       )
       .mockRejectedValueOnce(new Error("Network failed"));
 
-    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => console.log("Error"));
+    const errorSpy = jest.spyOn(console, "error").mockImplementation((error) => console.log("Error: ", error));
 
     // Render our component with routing and the context so we have authentication
     renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
