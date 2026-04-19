@@ -21,12 +21,6 @@ import { useNavigate } from "react-router-dom";
 // Mock key jest functionality here, this covers fetch, alert, and window.reload
 let mockFetch: jest.MockedFunction<typeof fetch>;
 
-// ---- Module Mocks ----
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: jest.fn(),
-}));
-
 // Get the mocked version of useNavigate
 let mockNavigate: jest.Mock;
 

@@ -5,6 +5,7 @@ module.exports = {
   moduleNameMapper: {
     "^swiper/react$": "<rootDir>/src/test-utils/mockSwiperReact.tsx",
     "^swiper/modules$": "<rootDir>/src/test-utils/mockSwiperReact.tsx",
+    "^swiper$": "<rootDir>/src/test-utils/mockSwiperReact.tsx",
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
   modulePathIgnorePatterns: ["./src/mocks"],

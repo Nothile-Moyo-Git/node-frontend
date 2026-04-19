@@ -9,18 +9,43 @@
 
 import { ReactNode } from "react";
 
+interface SwiperProps {
+  children: ReactNode;
+  className?: string;
+  modules?: unknown;
+  navigation?: unknown;
+  pagination?: unknown;
+  autoplay?: unknown;
+  thumbs?: unknown;
+  loop?: unknown;
+  centeredSlides?: unknown;
+  slidesPerView?: unknown;
+  spaceBetween?: unknown;
+  watchSlidesProgress?: unknown;
+  breakpoints?: unknown;
+  onSwiper?: unknown;
+  onRealIndexChange?: unknown;
+  [key: string]: unknown;
+}
+
+// Convert the values to data attributes so we can send them through
+const toDataAttributes = (props: Omit<SwiperProps, "children" | "className">) =>
+  Object.fromEntries(Object.entries(props).map(([key, value]) => [`data-${key.toLowerCase()}`, JSON.stringify(value)]));
+
 // Mock swiper and swiper slide
-export const Swiper = ({ children, ...props }: { children: ReactNode }) => {
-  <div data-testid="swiper" {...props}>
-    {children}
-  </div>;
+export const Swiper = ({ children, className, ...rest }: SwiperProps) => {
+  return (
+    <div data-testid="swiper" className={className?.toString()} {...toDataAttributes(rest)}>
+      {children}
+    </div>
+  );
 };
 
-export const SwiperSlide = ({ children, ...props }: { children: ReactNode }) => {
+export const SwiperSlide = ({ children, ...props }: { children: ReactNode }) => (
   <div data-testid="swiper-slide" {...props}>
     {children}
-  </div>;
-};
+  </div>
+);
 
 export const Pagination = {};
 export const Navigation = {};

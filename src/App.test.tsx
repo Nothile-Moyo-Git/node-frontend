@@ -10,7 +10,6 @@ import "@testing-library/jest-dom";
 import { useNavigate } from "react-router-dom";
 
 // Test utilities
-import "./test-utils/setupTestMocks";
 import { clearAuthStorage, setMockAuthStorage } from "./test-utils/authStorage";
 import { mockContext, mockUser } from "./test-utils/mocks/objects";
 import { createFetchResponse } from "./test-utils/methods/methods";
@@ -21,12 +20,6 @@ import App from "./App";
 import { generateUploadDate } from "./util/util";
 import { AppContext } from "./context/AppContext";
 import { ReactNode } from "react";
-
-// ---- Module Mocks ----
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: jest.fn(),
-}));
 
 jest.mock("./util/util", () => ({
   ...jest.requireActual("./util/util"),
@@ -39,7 +32,7 @@ const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 
 // ---- Mock values ----
 const originalEnv = process.env;
-let mockNavigate = jest.fn();
+let mockNavigate: jest.Mock;
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -58,7 +51,7 @@ afterEach(() => {
 // Our main tests, these tests cover key functionality
 describe("App Component Tests", () => {
   it("Renders successfully", () => {
-    renderWithRouter(<App />);
+    renderWithRouter(<App />, undefined);
     expect(screen.getByTestId("test-id-app-component")).toBeDefined();
   });
 
@@ -66,7 +59,7 @@ describe("App Component Tests", () => {
     // Doesn't resolve the request in order to view the loading spinner
     global.fetch = jest.fn(() => new Promise(() => {}));
 
-    renderWithContext(<App />, { route: "/" }, mockContext);
+    renderWithContext(<App />, {}, mockContext);
 
     expect(screen.getByTestId("test-id-loading-spinner")).toBeInTheDocument();
   });
