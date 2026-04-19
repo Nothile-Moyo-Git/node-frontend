@@ -18,12 +18,14 @@ import PageWrapper from "./PageWrapper";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ContextProps } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 // ---- Test Setup Values ----
 const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
 
 let mockFetch: jest.MockedFunction<typeof fetch>;
+let mockNavigate: jest.Mock;
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
@@ -31,6 +33,9 @@ beforeEach(() => {
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
   jest.clearAllMocks();
+  // Mock navigate so we have the function definition here whether we call it or not
+  mockNavigate = jest.fn();
+  (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 });
 
 // Cleanup mocks and environment

@@ -15,14 +15,19 @@ import Menu from "./Menu";
 import userEvent from "@testing-library/user-event";
 import { createFetchResponse } from "../../test-utils/methods/methods";
 import { ContextProps } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 let mockFetch: jest.MockedFunction<typeof fetch>;
+let mockNavigate: jest.Mock;
 
 // Clear our tests and get mock our fetch so we get the correct ordering
 beforeEach(() => {
   setMockAuthStorage();
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
+  // Mock navigate so we have the function definition here whether we call it or not
+  mockNavigate = jest.fn();
+  (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 });
 
 // Cleanup mocks and environment

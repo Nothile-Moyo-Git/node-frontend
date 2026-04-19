@@ -25,3 +25,8 @@ jest.mock("socket.io-client", () => ({
     removeAllListeners: jest.fn(),
   })),
 }));
+
+jest.mock("react-router-dom", () => ({
+  ...(jest.requireActual("react-router-dom") as object),
+  useNavigate: jest.fn(),
+}));
