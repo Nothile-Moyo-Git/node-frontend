@@ -16,6 +16,7 @@ import Label from "../../components/form/Label";
 import Input from "../../components/form/Input";
 import Button from "../../components/button/Button";
 import Title from "../../components/form/Title";
+import LoadingSpinner from "../../components/loader/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
 export const LoginPage: FC = () => {
@@ -27,6 +28,7 @@ export const LoginPage: FC = () => {
   const [emailErrorText, setEmailErrorText] = useState<string>("");
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
   const [passwordErrorText, setPasswordErrorText] = useState<string>("");
+  const [isUserLoggingIn, setIsUserLoggingIn] = useState<boolean>(false);
 
   // Set up refs so we can reference our inputs. We use refs instead of state for performance optimizations
   const emailRef = useRef<HTMLInputElement>(null);
@@ -52,6 +54,9 @@ export const LoginPage: FC = () => {
 
     // Perform the login request to the backend
     try {
+      // Allow loading spinner
+      setIsUserLoggingIn(true);
+
       // Perform the signup request
       const result = await fetch(`${appContextInstance.baseUrl}/graphql/auth`, {
         method: "POST",
@@ -109,6 +114,8 @@ export const LoginPage: FC = () => {
     } catch (error) {
       console.log("There was an error loading this page");
       console.error(error);
+    } finally {
+      setIsUserLoggingIn(false);
     }
   };
 
@@ -124,57 +131,61 @@ export const LoginPage: FC = () => {
 
   return (
     <section className="login">
-      <Form onSubmit={submitHandler} testId="test-id-login-form">
-        <Title>Login</Title>
+      {isUserLoggingIn ? (
+        <LoadingSpinner />
+      ) : (
+        <Form onSubmit={submitHandler} testId="test-id-login-form">
+          <Title>Login</Title>
 
-        <Field>
-          <Label
-            htmlFor="email"
-            id="emailLabel"
-            error={!isEmailValid}
-            errorText={emailErrorText}
-            testId="test-id-login-email-label"
-          >
-            Email*
-          </Label>
-          <Input
-            ariaLabelledBy="emailLabel"
-            error={!isEmailValid}
-            ref={emailRef}
-            name="email"
-            placeholder="Please enter your email address"
-            testId="test-id-login-email-input"
-            type="text"
-            required
-          />
-        </Field>
+          <Field>
+            <Label
+              htmlFor="email"
+              id="emailLabel"
+              error={!isEmailValid}
+              errorText={emailErrorText}
+              testId="test-id-login-email-label"
+            >
+              Email*
+            </Label>
+            <Input
+              ariaLabelledBy="emailLabel"
+              error={!isEmailValid}
+              ref={emailRef}
+              name="email"
+              placeholder="Please enter your email address"
+              testId="test-id-login-email-input"
+              type="text"
+              required
+            />
+          </Field>
 
-        <Field>
-          <Label
-            htmlFor="password"
-            id="passwordLabel"
-            error={!isPasswordValid}
-            errorText={passwordErrorText}
-            testId="test-id-login-password-label"
-          >
-            Password*
-          </Label>
-          <Input
-            ariaLabelledBy="passwordLabel"
-            error={!isPasswordValid}
-            name="password"
-            placeholder="Please enter your password"
-            testId="test-id-login-password-input"
-            type="password"
-            ref={passwordRef}
-            required
-          />
-        </Field>
+          <Field>
+            <Label
+              htmlFor="password"
+              id="passwordLabel"
+              error={!isPasswordValid}
+              errorText={passwordErrorText}
+              testId="test-id-login-password-label"
+            >
+              Password*
+            </Label>
+            <Input
+              ariaLabelledBy="passwordLabel"
+              error={!isPasswordValid}
+              name="password"
+              placeholder="Please enter your password"
+              testId="test-id-login-password-input"
+              type="password"
+              ref={passwordRef}
+              required
+            />
+          </Field>
 
-        <Button variant="primary" testId="test-id-login-button">
-          Submit
-        </Button>
-      </Form>
+          <Button variant="primary" testId="test-id-login-button">
+            Submit
+          </Button>
+        </Form>
+      )}
     </section>
   );
 };
