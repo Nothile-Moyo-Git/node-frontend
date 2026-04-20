@@ -12,7 +12,6 @@ exports[`Post Card component Render the PostCard component 1`] = `
         class="article__image"
         data-testid="test-id-postcard-image"
         draggable="false"
-        src="2B.png"
       />
       <div
         class="article__content"
