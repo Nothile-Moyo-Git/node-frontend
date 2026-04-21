@@ -365,6 +365,10 @@ describe("Create Post Component", () => {
       }),
     );
 
+    // Reset our modules so we can import mockContext in a dev environment
+    jest.resetModules();
+    const { mockContext } = await import("../../test-utils/mocks/objects");
+
     // Render our component with routing and the context so we have authentication
     renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
 

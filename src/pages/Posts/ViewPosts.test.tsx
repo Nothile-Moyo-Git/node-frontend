@@ -431,9 +431,15 @@ describe("View Posts component", () => {
     jest.useFakeTimers();
 
     // Mock the environment to be development
+    // We change our environment variable for REACT_APP_API_DEV here so that we can use it when we import
     Object.defineProperties(process.env, {
       NODE_ENV: {
         value: "development",
+        writable: true,
+        configurable: true,
+      },
+      REACT_APP_API_DEV: {
+        value: "Fish",
         writable: true,
         configurable: true,
       },
@@ -464,6 +470,10 @@ describe("View Posts component", () => {
           },
         }),
       );
+
+    // Reset our imports as Jest caches them, then import our mockContext again
+    jest.resetModules();
+    const { mockContext } = await import("../../test-utils/mocks/objects");
 
     await renderWithAct(<ViewPosts />, { route: "/posts" }, mockContext);
 

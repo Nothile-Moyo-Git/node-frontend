@@ -1,5 +1,6 @@
 import { FileData, FileRequestData, User, Messages, Post } from "../../@types";
 import { ContextProps } from "../../context/AppContext";
+import { jest } from "@jest/globals";
 
 // Define a user here which should have their details rendered on the main App page
 // We define a second user here in case we need an array of them (which we currently do)
@@ -34,12 +35,9 @@ export const mockSecondUser: User = {
   ],
 };
 
-// Get a list of users
-export const mockUsers: User[] = [mockUser, mockUser];
-
 export const mockContext: ContextProps = {
   baseUrl: process.env.REACT_APP_API_DEV ?? "http://localhost:4000",
-  checkAuthentication: () => true,
+  checkAuthentication: jest.fn(),
   logoutUser: () => {},
   token: "fake-token",
   userId: "12345-nothile-id",
@@ -49,13 +47,13 @@ export const mockContext: ContextProps = {
 
 export const mockFailedContext: ContextProps = {
   baseUrl: process.env.REACT_APP_API_DEV ?? "http://localhost:4000",
-  checkAuthentication: () => true,
+  checkAuthentication: jest.fn(),
   expiresIn: "2025-11-28T23:12:15.895Z",
-  logoutUser: () => {},
+  logoutUser: jest.fn(),
   token: "",
   userId: "12345-nothile-id",
   userAuthenticated: false,
-  validateAuthentication: () => {},
+  validateAuthentication: jest.fn(),
 };
 
 // Mocking the individual post
