@@ -13,7 +13,6 @@
 import { useContext, useState } from "react";
 import { AppContext } from "../../../context/AppContext";
 import { FileData, FileRequestData, Post } from "../../../@types";
-import { mockFileProps } from "../../../test-utils/mocks/objects";
 
 interface UpdatePostDetailsProps {
   postId: string;
@@ -48,7 +47,15 @@ const useUpdatePostDetails = ({ postId }: UpdatePostDetailsProps) => {
     status: 100,
     success: false,
     message: "Update pending",
-    fileValidProps: mockFileProps,
+    fileValidProps: {
+      fileName: "",
+      imageUrl: "",
+      fileLastUpdated: "",
+      isFileValid: false,
+      isFileTypeValid: false,
+      isImageUrlValid: false,
+      isFileSizeValid: false,
+    },
     isContentValid: true,
     isTitleValid: true,
     isPostCreator: true,
