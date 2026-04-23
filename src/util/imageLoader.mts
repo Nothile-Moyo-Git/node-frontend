@@ -1,7 +1,7 @@
 /**
  * Date created: 23/04/2026
  *
- * Description: Image loading using vite's import meta glob
+ * Description: Image loading using vite's import meta glob. The file is mts to ensure that we're returning ESM and not commonjs
  *
  * Author: Nothile
  */

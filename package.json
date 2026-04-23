@@ -80,7 +80,6 @@
     "undici": "^7.11.0",
     "undici-types": "^7.12.0",
     "vite": "^4.5.5",
-    "vite-plugin-require-support": "^1.6.1",
     "webpack-cli": "^7.0.2"
   }
 }
