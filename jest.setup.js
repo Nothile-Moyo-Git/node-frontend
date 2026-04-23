@@ -7,6 +7,10 @@ const DOMException = require("domexception");
 import { jest } from "@jest/globals";
 import "./src/test-utils/mockModules";
 
+// jest.setup.js - add at the top
+process.env.REACT_APP_API_DEV = "http://localhost:4000";
+process.env.REACT_APP_API_PROD = "https://node-backend-k4sz.onrender.com";
+
 // Setting global values for Jest testing
 if (!String.prototype.toWellFormed) {
   String.prototype.toWellFormed = function () {
@@ -34,6 +38,21 @@ Object.defineProperties(globalThis, {
   Headers: { value: Headers },
   Request: { value: Request },
   Response: { value: Response },
+});
+
+// Mocking our import so we can also use import from vite
+Object.defineProperty(globalThis, "import", {
+  value: {
+    meta: {
+      glob: () => ({}),
+      env: {
+        MODE: "test",
+        REACT_APP_API_DEV: "http://localhost:4000",
+        REACT_APP_API_PROD: "https://node-backend-k4sz.onrender.com",
+      },
+    },
+  },
+  writable: true,
 });
 
 // Mock the View Transitions API so React Router won't crash

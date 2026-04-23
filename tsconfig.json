@@ -28,7 +28,7 @@
     "jsx": "react-jsx"
   },
   "exclude" : [
-    "./src/uploads"
+    "./src/uploads",
   ],
   "include": [
     "src", "./src/@types/index.d.ts"

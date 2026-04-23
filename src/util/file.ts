@@ -40,40 +40,6 @@ export const generateBase64FromImage = (imageFile: File) => {
 };
 
 /**
- * @name findImagePathFromPostData
- *
- * @params filename : string, uploadPath : string
- *
- * @description This method finds the upload folder and the appropriate month and year
- */
-export const findImagePathFromPostData = () => {
-  return "hello world";
-};
-
-/**
- * @name getCurrentMonthAndYear
- *
- * @description : This method gets the current month and year in a YYYY-MM format
- *
- * @returns string
- */
-export const getCurrentMonthAndYear = () => {
-  const date = new Date();
-
-  // Get current month and year and concatenate them in a string
-  const currentMonth = date.getMonth() + 1;
-  const currentYear = date.getFullYear();
-
-  // Format the month to work appropriately
-  let stringMonth = currentMonth.toString();
-  if (currentMonth < 10) {
-    stringMonth = "0" + currentMonth.toString();
-  }
-
-  return `${currentYear}/${stringMonth}`;
-};
-
-/**
  * @name fileUploadHandler
  *
  * @description Handles the fileupload for the frontend, calls the api request too and returns the appropriate response

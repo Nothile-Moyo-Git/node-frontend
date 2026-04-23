@@ -3,9 +3,9 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 // Set endpoints based on our .env configuration, the NODE_ENV is set in the package.json scripts
 const target =
-  process.env.NODE_ENV.trim() === "development"
-    ? process.env.REACT_APP_API_DEV
-    : process.env.REACT_APP_API_PROD;
+  import.meta.env.MODE.trim() === "development"
+    ? import.meta.env.VITE_API_DEV
+    : import.meta.env.VITE_API_PROD;
 
 module.exports = function (app) {
   // Handle GraphQL endpoints
