@@ -100,7 +100,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="2B.png"
               class="swiper__image"
               draggable="false"
-              src="2B.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -110,7 +110,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Kratos.png"
               class="swiper__image"
               draggable="false"
-              src="Kratos.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -120,7 +120,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Alfira-face.jpg"
               class="swiper__image"
               draggable="false"
-              src="Alfira-face.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -130,7 +130,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Shanalotte.jpg"
               class="swiper__image"
               draggable="false"
-              src="Shanalotte.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -140,7 +140,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Edelgard.jpg"
               class="swiper__image"
               draggable="false"
-              src="Edelgard.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -150,7 +150,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Tiefling.jpg"
               class="swiper__image"
               draggable="false"
-              src="Tiefling.jpg"
+              src="test-file-stub"
             />
           </div>
         </div>
@@ -169,7 +169,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="2B.png"
               class="swiper__thumbnail"
               draggable="false"
-              src="2B.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -179,7 +179,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Kratos.png"
               class="swiper__thumbnail"
               draggable="false"
-              src="Kratos.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -189,7 +189,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Alfira-face.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Alfira-face.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -199,7 +199,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Shanalotte.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Shanalotte.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -209,7 +209,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Edelgard.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Edelgard.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -219,7 +219,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
               alt="Tiefling.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Tiefling.jpg"
+              src="test-file-stub"
             />
           </div>
         </div>
@@ -239,7 +239,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
       <div
         class="imagePreview"
         data-testid="edit-post-image-preview"
-        style="background-image: url(2B.png); background-size: contain; background-position: left;"
+        style="background-image: url(test-file-stub); background-size: contain; background-position: left;"
       />
     </div>
     <div
@@ -376,7 +376,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="2B.png"
               class="swiper__image"
               draggable="false"
-              src="2B.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -386,7 +386,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Kratos.png"
               class="swiper__image"
               draggable="false"
-              src="Kratos.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -396,7 +396,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Alfira-face.jpg"
               class="swiper__image"
               draggable="false"
-              src="Alfira-face.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -406,7 +406,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Shanalotte.jpg"
               class="swiper__image"
               draggable="false"
-              src="Shanalotte.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -416,7 +416,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Edelgard.jpg"
               class="swiper__image"
               draggable="false"
-              src="Edelgard.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -426,7 +426,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Tiefling.jpg"
               class="swiper__image"
               draggable="false"
-              src="Tiefling.jpg"
+              src="test-file-stub"
             />
           </div>
         </div>
@@ -445,7 +445,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="2B.png"
               class="swiper__thumbnail"
               draggable="false"
-              src="2B.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -455,7 +455,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Kratos.png"
               class="swiper__thumbnail"
               draggable="false"
-              src="Kratos.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -465,7 +465,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Alfira-face.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Alfira-face.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -475,7 +475,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Shanalotte.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Shanalotte.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -485,7 +485,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Edelgard.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Edelgard.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -495,7 +495,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
               alt="Tiefling.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Tiefling.jpg"
+              src="test-file-stub"
             />
           </div>
         </div>
@@ -515,7 +515,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
       <div
         class="imagePreview"
         data-testid="edit-post-image-preview"
-        style="background-image: url(2B.png); background-size: contain; background-position: left;"
+        style="background-image: url(test-file-stub); background-size: contain; background-position: left;"
       />
     </div>
     <div
@@ -648,7 +648,7 @@ exports[`Edit Post Component Matches the snapshot when in development 1`] = `
           <div
             class="imagePreview"
             data-testid="edit-post-image-preview"
-            style="background-image: url(2B.png); background-size: contain; background-position: left;"
+            style="background-image: url(test-file-stub); background-size: contain; background-position: left;"
           />
         </div>
         <div

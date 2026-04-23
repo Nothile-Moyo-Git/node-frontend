@@ -20,6 +20,7 @@ import { MdKeyboardBackspace } from "react-icons/md";
 import Button from "../../components/button/Button";
 import LoadingSpinner from "../../components/loader/LoadingSpinner";
 import ErrorModal from "../../components/modals/variants/ErrorModal";
+import { loadImage } from "../../util/imageLoader.mjs";
 
 const PostScreen: FC = () => {
   const [isQuerying, setIsQuerying] = useState<boolean>(true);
@@ -116,9 +117,10 @@ const PostScreen: FC = () => {
     const getImage = async () => {
       try {
         if (postData) {
-          const fileUpdated = postData.fileLastUpdated ? `/${postData.fileLastUpdated}` : "";
+          const image = loadImage(postData.fileName, postData.fileLastUpdated);
+
           // Fetch the image, if it fails, reload the component
-          setImage(await require(`../../images${fileUpdated}/${postData.fileName}`));
+          setImage(image);
         }
       } catch (error) {
         console.log("Post screen image error");

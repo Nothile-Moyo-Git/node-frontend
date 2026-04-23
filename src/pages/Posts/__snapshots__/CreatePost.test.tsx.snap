@@ -83,7 +83,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="2B.png"
                   class="swiper__image"
                   draggable="false"
-                  src="2B.png"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -93,7 +93,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Kratos.png"
                   class="swiper__image"
                   draggable="false"
-                  src="Kratos.png"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -103,7 +103,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Alfira-face.jpg"
                   class="swiper__image"
                   draggable="false"
-                  src="Alfira-face.jpg"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -113,7 +113,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Shanalotte.jpg"
                   class="swiper__image"
                   draggable="false"
-                  src="Shanalotte.jpg"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -123,7 +123,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Edelgard.jpg"
                   class="swiper__image"
                   draggable="false"
-                  src="Edelgard.jpg"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -133,7 +133,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Tiefling.jpg"
                   class="swiper__image"
                   draggable="false"
-                  src="Tiefling.jpg"
+                  src="test-file-stub"
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="2B.png"
                   class="swiper__thumbnail"
                   draggable="false"
-                  src="2B.png"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -162,7 +162,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Kratos.png"
                   class="swiper__thumbnail"
                   draggable="false"
-                  src="Kratos.png"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -172,7 +172,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Alfira-face.jpg"
                   class="swiper__thumbnail"
                   draggable="false"
-                  src="Alfira-face.jpg"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -182,7 +182,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Shanalotte.jpg"
                   class="swiper__thumbnail"
                   draggable="false"
-                  src="Shanalotte.jpg"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -192,7 +192,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Edelgard.jpg"
                   class="swiper__thumbnail"
                   draggable="false"
-                  src="Edelgard.jpg"
+                  src="test-file-stub"
                 />
               </div>
               <div
@@ -202,7 +202,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
                   alt="Tiefling.jpg"
                   class="swiper__thumbnail"
                   draggable="false"
-                  src="Tiefling.jpg"
+                  src="test-file-stub"
                 />
               </div>
             </div>
@@ -318,7 +318,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="2B.png"
               class="swiper__image"
               draggable="false"
-              src="2B.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -328,7 +328,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Kratos.png"
               class="swiper__image"
               draggable="false"
-              src="Kratos.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -338,7 +338,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Alfira-face.jpg"
               class="swiper__image"
               draggable="false"
-              src="Alfira-face.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -348,7 +348,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Shanalotte.jpg"
               class="swiper__image"
               draggable="false"
-              src="Shanalotte.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -358,7 +358,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Edelgard.jpg"
               class="swiper__image"
               draggable="false"
-              src="Edelgard.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -368,7 +368,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Tiefling.jpg"
               class="swiper__image"
               draggable="false"
-              src="Tiefling.jpg"
+              src="test-file-stub"
             />
           </div>
         </div>
@@ -387,7 +387,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="2B.png"
               class="swiper__thumbnail"
               draggable="false"
-              src="2B.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -397,7 +397,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Kratos.png"
               class="swiper__thumbnail"
               draggable="false"
-              src="Kratos.png"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -407,7 +407,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Alfira-face.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Alfira-face.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -417,7 +417,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Shanalotte.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Shanalotte.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -427,7 +427,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Edelgard.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Edelgard.jpg"
+              src="test-file-stub"
             />
           </div>
           <div
@@ -437,7 +437,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
               alt="Tiefling.jpg"
               class="swiper__thumbnail"
               draggable="false"
-              src="Tiefling.jpg"
+              src="test-file-stub"
             />
           </div>
         </div>

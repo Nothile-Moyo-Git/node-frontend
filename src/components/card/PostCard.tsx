@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { BASENAME, generateUploadDate } from "../../util/util";
 import Button from "../button/Button";
 import { AppContext } from "../../context/AppContext";
+import { loadImage } from "../../util/imageLoader.mjs";
 
 interface ComponentProps {
   children?: ReactNode;
@@ -41,12 +42,11 @@ export const PostCard: FC<ComponentProps> = ({ post, toggleConfirmationModal }) 
       try {
         // Only fetch the file if we have a filename
         if (post.fileName) {
+          // Fetch the image via vite
+          const image = loadImage(post.fileName, post.fileLastUpdated);
+
           // Fetch the image, if it fails, reload the component
-          setImage(
-            await require(
-              `../../images${post.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post.fileName}`,
-            ),
-          );
+          setImage(image);
         }
       } catch (error) {
         console.error("Could not extract image");

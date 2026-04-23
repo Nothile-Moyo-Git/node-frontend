@@ -58,7 +58,7 @@ describe("Carousel Component", () => {
 
   it("Handle errors if the catch block is hit", async () => {
     // Mock failed files returned from the backend
-    const mockFiles: FileData[] = [{ fileName: "broken-image.png", imageUrl: "broken-image.png" }];
+    const mockFiles: FileData[] = [{ fileName: "invalid.jpg", imageUrl: "broken-image.png" }];
 
     // Mock the request for the files
     mockFetch.mockResolvedValueOnce(

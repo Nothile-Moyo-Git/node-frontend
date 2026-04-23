@@ -74,7 +74,7 @@ describe("Post Card component", () => {
   it("Triggers the error in the catch block for the image", async () => {
     const mockPostNoImage: Post = {
       ...mockPost,
-      fileName: "broken.png",
+      fileName: "invalid.jpg",
       fileLastUpdated: "",
     };
 

@@ -32,6 +32,7 @@ import useEditPostDetails from "./hooks/useEditPostDetailsHook";
 import { FormFieldItems } from "./helpers/PostHelpers";
 import validateFields from "./helpers/PostHelpers";
 import useUpdatePostDetails from "./hooks/useUpdatePostDetailsHook";
+import { loadImage } from "../../util/imageLoader.mjs";
 
 /**
  * @Name EditPost
@@ -90,9 +91,10 @@ export const EditPost: FC = () => {
     try {
       // Only fetch the file if we have a filename
       // Fetch the image, if it fails, reload the component
-      setPreviousImageUrl(
-        await require(`../../images${post.fileLastUpdated !== "" ? `/${post.fileLastUpdated}` : ""}/${post.fileName}`),
-      );
+      const image = loadImage(post.fileName, post.fileLastUpdated);
+
+      // Fetch the image, if it fails, reload the component
+      setPreviousImageUrl(image);
     } catch (error) {
       console.log("\n\n");
       console.log("Error loading image");
