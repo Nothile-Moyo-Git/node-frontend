@@ -182,7 +182,7 @@ describe("Post Screen Component", () => {
   it("Triggers the catch block for image loading", async () => {
     const mockPostWithBadImage = {
       ...mockPost,
-      fileName: "non-existent-image.jpg",
+      fileName: "invalid.jpg",
       fileLastUpdated: "invalid-folder",
     };
 

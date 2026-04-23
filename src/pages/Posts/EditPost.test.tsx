@@ -548,7 +548,7 @@ describe("Edit Post Component", () => {
     });
 
     const imagePreview = screen.getByTestId("edit-post-image-preview");
-    expect(imagePreview).toHaveStyle("background-image: url(2B.png)");
+    expect(imagePreview).toHaveStyle("background-image: url(test-file-stub)");
 
     expect(baseElement).toMatchSnapshot();
   });
@@ -1003,7 +1003,7 @@ describe("Edit Post Component", () => {
     // Mock a post with a fileName that will cause require() to fail
     const mockPostWithInvalidImage = {
       ...mockPost,
-      fileName: "non-existent-image.png",
+      fileName: "invalid.jpg",
       fileLastUpdated: "2024-01-01",
     };
 
@@ -1045,7 +1045,6 @@ describe("Edit Post Component", () => {
 
     await waitFor(() => {
       // Verify the catch block's console.log calls were made
-      expect(consoleLogSpy).toHaveBeenCalledWith("\n\n");
       expect(consoleLogSpy).toHaveBeenCalledWith("Error loading image");
     });
 

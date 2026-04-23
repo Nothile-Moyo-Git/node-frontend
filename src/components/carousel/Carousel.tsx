@@ -21,6 +21,7 @@ import Button from "../button/Button";
 // Types
 import type { Swiper as SwiperCore } from "swiper";
 import { useCarouselIndex } from "./hooks/useCarouselIndex";
+import { loadImage } from "../../util/imageLoader.mjs";
 
 interface ComponentProps {
   isValid: boolean;
@@ -98,7 +99,8 @@ const Carousel: FC<ComponentProps> = ({ setCarouselImage, isValid, setIsValid })
         if (files.length > 0) {
           const renderableImages = await Promise.all(
             files.map(async (file: FileData) => {
-              return await require(`../../images/${file.fileName}`);
+              const image = loadImage(file.fileName, "");
+              return image;
             }),
           );
 
