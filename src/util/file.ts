@@ -24,14 +24,12 @@ export const generateBase64FromImage = (imageFile: File) => {
   const reader = new FileReader();
 
   // Read the file and encode it in base 64
-  const promise = new Promise((resolve, reject) => {
+  const promise = new Promise((resolve) => {
     reader.onload = (event: ProgressEvent<FileReader>) => {
       if (event.target) {
         resolve(event.target.result);
       }
     };
-
-    reader.onerror = (err) => reject(err);
   });
 
   reader.readAsDataURL(imageFile);

@@ -56,8 +56,6 @@ beforeEach(() => {
   // Type cast mock to work as a regular fetch but using jest instead
   mockFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
   global.fetch = mockFetch;
-  // Mock our API requests between tests
-  jest.clearAllMocks();
 
   // Mock the result, and then mock the behavior that occurs if useNavigate is called
   mockNavigate = jest.fn();
@@ -71,7 +69,6 @@ beforeEach(() => {
     writable: true,
   });
 
-  jest.resetModules();
   // Create a new copy of process.env so we an update it
   process.env = { ...originalEnv };
 });
@@ -79,7 +76,6 @@ beforeEach(() => {
 // Cleanup mocks and environment
 afterEach(() => {
   clearAuthStorage();
-  jest.clearAllMocks();
   // Reset our process variable
   process.env = originalEnv;
 });

@@ -79,6 +79,7 @@ describe("App Component Tests", () => {
   });
 
   it("Displays user details after successful authentication", async () => {
+    // Set it to the dev environment so we get the different port
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
@@ -91,6 +92,21 @@ describe("App Component Tests", () => {
         },
       }),
     );
+
+    // Set the environment to development
+    Object.defineProperties(process.env, {
+      REACT_APP_API_DEV: {
+        value: undefined,
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Reset our imports so we can do one in the development environment
+    jest.resetModules();
+
+    // Import our mockContext again so we can use it with dev
+    const { mockContext } = await import("./test-utils/mocks/objects");
 
     const { baseElement } = renderWithContext(<App />, { route: "/" }, mockContext);
 
