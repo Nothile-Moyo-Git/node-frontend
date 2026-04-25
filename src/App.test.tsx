@@ -21,11 +21,6 @@ import { generateUploadDate } from "./util/util";
 import { AppContext } from "./context/AppContext";
 import { ReactNode } from "react";
 
-jest.mock("./util/util", () => ({
-  ...jest.requireActual("./util/util"),
-  checkSessionValidation: jest.fn(),
-}));
-
 // ---- Test Setup Values ----
 const mockExpiryDate = generateUploadDate(new Date(Date.now() + 12096e5).toISOString());
 const mockCreationDate = generateUploadDate(new Date(Date.now()).toISOString());
@@ -79,7 +74,6 @@ describe("App Component Tests", () => {
   });
 
   it("Displays user details after successful authentication", async () => {
-    // Set it to the dev environment so we get the different port
     global.fetch = jest.fn().mockResolvedValue(
       createFetchResponse({
         data: {
@@ -120,6 +114,37 @@ describe("App Component Tests", () => {
 
     // Generate our snapshot of our file when it loads successfully so we can see it
     expect(baseElement).toMatchSnapshot();
+  });
+
+  it("Fails checkSessionValidation and triggers catch block", async () => {
+    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    // Mock our API request and failed request to checkSessionValidation
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(
+        createFetchResponse({
+          data: {
+            PostUserDetailsResponse: {
+              sessionCreated: mockCreationDate,
+              sessionExpires: mockExpiryDate,
+              user: mockUser,
+              success: true,
+            },
+          },
+        }),
+      )
+      .mockRejectedValueOnce(new Error("Authentication failed"));
+
+    // Render the element
+    const { baseElement } = renderWithContext(<App />, { route: "/" }, mockContext);
+
+    expect(baseElement).toMatchSnapshot();
+
+    // Waitfor so the async code runs
+    await waitFor(() => {
+      expect(errorSpy).toHaveBeenCalled();
+    });
   });
 
   it("renders the ErrorModal when useUserDetails catches an error", async () => {
