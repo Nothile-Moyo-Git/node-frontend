@@ -6,7 +6,7 @@
 
 This is the front end documentation for the application. You can find more in depth information about the front end here. Please view the rest of the README below on information on the tech stack, and working with the codebase.
 
-Email [Me](mailto: nothile1@gmail.com) if you need a copy of the .env file for local use.
+Email [Me](mailto:nothile1@gmail.com) if you need a copy of the .env file for local use.
 
 -----
 
@@ -87,7 +87,7 @@ We also have a "userId" that we pass through that we retrieve from local storage
 
 This will be queried against the backend and if the request is authenticated, it will be approved.
 
-**Note: Please don't share your userId with anyone, sessions will expire after 2 weeks**
+**Note: Please don't share your userId with anyone, sessions will expire after 2 weeks.**
 
 ------
 
@@ -126,9 +126,10 @@ The current test coverage is **100%** of the entire projects across all differen
 
 The current coverage for the project is 100%. It's fully tested for all functionality. You can see the coverage report below.
 
+<img width="727" height="133" alt="image" src="https://github.com/user-attachments/assets/0d4b58a5-125b-4000-ae5e-aa2c63a5daef" />
+
 This projects has been fully tested except for a few configuration files. To test all the files. Execute the following command.
 ```npm run test:logs```
-
 
 When running a test with explicit logs, you'll want to run a variation of the following command.
 ```npm run test:logs``` -- ```test-file```
