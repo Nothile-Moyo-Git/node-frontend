@@ -31,5 +31,5 @@ module.exports = {
 
   // This determines the type of coverage we'll get in our report
   coverageReporters: ["text", "text-summary", "json", "lcov"],
-  collectCoverageFrom: ["**/*.{ts,tsx}"],
+  collectCoverageFrom: ["**/*.{ts,tsx}", "!./vite.config.ts"],
 };

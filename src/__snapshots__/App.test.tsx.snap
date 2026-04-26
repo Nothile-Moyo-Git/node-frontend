@@ -27,12 +27,36 @@ exports[`App Component Tests Displays user details after successful authenticati
         <p
           class="app__text"
         >
-          Session created : 2026/04/24 20:47:41
+          Session created : 2026/04/26 21:50:54
         </p>
         <p
           class="app__text"
         >
-          Session expires : 2026/05/08 20:47:41
+          Session expires : 2026/05/10 21:50:54
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`App Component Tests Fails checkSessionValidation and triggers catch block 1`] = `
+<body>
+  <div>
+    <div
+      data-testid="test-id-app-component"
+    >
+      <div
+        class="loadingWrapper"
+        data-testid="test-id-loading-spinner"
+      >
+        <span
+          class="loadingSpinner"
+        />
+        <p
+          class="loadingText"
+        >
+          Loading, please wait...
         </p>
       </div>
     </div>
