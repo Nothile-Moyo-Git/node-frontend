@@ -1,3 +1,12 @@
+/**
+ * Date created: 23/04/2026
+ *
+ * Description: Configuration for the vite bundler to run our local dev server
+ *
+ * Author: Nothile Moyo
+ *
+ */
+
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 

@@ -6,12 +6,17 @@
 
 This is the front end documentation for the application. You can find more in depth information about the front end here. Please view the rest of the README below on information on the tech stack, and working with the codebase.
 
+Email [Me](mailto: nothile1@gmail.com) if you need a copy of the .env file for local use.
+
 -----
 
 ### Tech Stack
 The current technology stack for the front end is:
 
 - React. React is used for the front end due to its increased interactivity with the end user, good performance and a strong ecosystem to support it. React also presents all the advantages of function based components.
+
+- Vite. Vite is a build tool to improve the development experience. It improves the build time, faster local server & more access to bundler options which aren't available to CRA. It uses implements ESM for the projects, with ```import``` keyword.
+> [Vite](https://vite.dev/)
 
 > [React](https://react.dev)
 > [React With TypeScript](https://react.dev/learn/typescript)
@@ -113,19 +118,26 @@ If the image exists, it is converted and rendered on the page. All image preview
 ------
 
 ### Testing
-Functional tests for this app are done using Jest and MSW. These tests will perform mock requests, and also handle functionality such as form and button submissions.
+Functional tests for this app are done using Jest. These tests will perform mock requests, and also handle functionality such as form and button submissions.
 
-You can find these tests with the extension ".tsx".
+You can find these tests with the extension *"test.tsx"*.
 
-The tests haven't been written yet but will be implemented, for the front end, these will be unit tests.
+The current test coverage is **100%** of the entire projects across all different factors. This also includes utility files, mocked requests, mocked modules and accounting for both *devopment* and *production*.
 
-When running a test with explicit logs, you'll want to run a variation of the following command
-```npm run test:logs-single``` -- <test-file> --collectCoverageFrom=<base-file>
+The current coverage for the project is 100%. It's fully tested for all functionality. You can see the coverage report below.
 
-*This will ensure that you get a full coverage report with a summary in your terminal*
+This projects has been fully tested except for a few configuration files. To test all the files. Execute the following command.
+```npm run test:logs```
 
-**This runs the code for your local file, and also the test file, with full coverage being generated**
-**Note: When doing this, check your lcov-report, then find the component/hook/method file mocked, and open it in your browser. The styling will show you the missing coverage**
+
+When running a test with explicit logs, you'll want to run a variation of the following command.
+```npm run test:logs``` -- ```test-file```
+
+*This will ensure that you get a full coverage report with a summary in your terminal.*
+
+**Note: You'll only receive coverage based on the tests that ran. If you want a full coverage report, run the tests for every file with the command**
+
+**Note: You can find your coverage files in lcov-report/coverage/<files>. Drag the file you're testing into your browser window to see it with styling for a better look at your coverage.**
 
 - Jest
 > [Learn about Jest](https://jestjs.io/)
@@ -191,17 +203,19 @@ _Prettier and ESLint share the same config file_, so if you wish to edit your pr
 
 The production environment for live can be found [Here](https://lively-hotteok-99e04d.netlify.app/).
 
+The devflow is to create a branch from ```develop```. Implement your work, and then create a PR against develop. Email [Me](mailto:nothile1@gmail.com) if you want your work reviewed and merged in
+
+When creating a pull request, you'll find that some pre merge checks will run. You should allow these to conclude and pass before a merge is attempted as they check for initial errors.
+
 Netlify handles CICD for us in this case, so all you need to do is create a PR, merge into master, and then a deployment automatically runs for you.
 
 **Note: Creating manual builds isn't necessary since the CICD process does that for you, but deployments will fail if there are any errors in the console**
 
 ------
 
+### Usage of AI
+
+------
+
 ### Overall throughts
-I think that the front end is pretty well built. There ended up being significantly more code than expected for a CRUD app but since there are Enterprise features the complexity was raised.
-
-I enjoyed it :)
-
-The styling itself looks great, I'm very happy with it.
-
-Building custom components & implementing patterns was very fun.
+It was a worthwhile project to build :). I did enjoy it. The entire point of this project
