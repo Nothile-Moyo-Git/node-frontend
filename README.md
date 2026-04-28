@@ -18,9 +18,13 @@ The current technology stack for the front end is:
 > [React With TypeScript](https://react.dev/learn/typescript)
 
 **NOTE:** You can install react by using the following script: 
-```npm install @types/react @types/react-dom```
+```
+npm install @types/react @types/react-dom
+```
 
-- Vite. Vite is a build tool to improve the development experience. It improves the build time, tuns a faster local server & more access to bundler options which aren't available to ```create-react-app```. It uses implements ESM for the projects, with ```import(<source>)``` keyword as opposed to ```require(<source>)```.
+- Vite. Vite is a build tool to improve the development experience. It speeds up the build time, runs a faster local server and offers more access to bundler options which aren't available to ```create-react-app```. It uses implements ESM for the projects, with ```import(<source>)``` keyword as opposed to ```require(<source>)```.
+
+This is vitally important for specific features (such as image imports) which use commonjs as the conventional solution, a
 > [Vite](https://vite.dev/)
 
 - Typescript. We use TypeScript as a transpiler because TypeScript allows us to write less buggy, more readable code. It significantly reduces errors by flagging them at write time instead of run time. This is far preferable from the user perspective.
@@ -40,7 +44,7 @@ The current technology stack for the front end is:
 ## Request handling
 The backend uses [multer](https://www.npmjs.com/package/multer) to parse file uploads in the local development environment. These use the type of _"file"_ from the input found on forms.
 
-For most requests, you'll be using GraphQL which will require you to write your query or mutation request on the front end, feel free to look at _"src/App.tsx"_ as an example.
+For most requests, you'll be using [GraphQL](https://graphql.org/) which will require you to write your query or mutation request on the front end, feel free to look at _"src/App.tsx"_ as an example.
 
 Some features (such as **livechats**) use [Rest](https://www.codecademy.com/article/what-is-rest) because it would cause more dependencies than necessary in order to replicate similar functionality, and assuming that the requests aren't over or under fetching, REST is used where appropriate.
 
@@ -69,7 +73,7 @@ The _"scss"_ folder contains partials which can be referenced in any other style
 ## State management
 I use Context in this application due to the reduced complexity of it, if however, this was to be a more scalable app, then Redux, RTK with caching would be my choice.
 
-There is the AppContext which can be found in _"./frontend/src/context/AppContext.tsx."_
+There is the AppContext which can be found in ```./frontend/src/context/AppContext.tsx.```
 
 The AppContext has a method which will validate whether the user has been authenticated or not, this should be used in pages where authentication is required.
 
@@ -84,9 +88,9 @@ If the user isn't authenticated, then you will be redirected to the login page.
 ## Validation
 Cors is activated in the backend so we can request our node backend.
 
-We also have a _"userId"_ that we pass to requests which we retrieve from local storage. We also have our token which stored our current session data. The session expires and deletes the data from localhost every 2 weeks for two way verification.
+We also have a ```userId``` that we pass to requests which we retrieve from local storage. We also have our token which stored our current session data. The session expires and deletes the data from localhost every 2 weeks for two way verification.
 
-The password entered is passed through to the backend and is validated using _"bcrypt"_, ensuring that any password you use to sign up or enter with is encrypted and unable to be deciphered in the front end.
+The password entered is passed through to the backend and is validated using ```bcrypt```, ensuring that any password you use to sign up or enter with is encrypted and unable to be deciphered in the front end.
 
 This will be queried against the backend and if the request is authenticated, it will be approved.
 
@@ -95,13 +99,13 @@ This will be queried against the backend and if the request is authenticated, it
 ------
 
 ## Routing
-The routing for the frontend is handled using _**react-router**_. The Browser router is used for this instead of hash routing as that presents issues when dealing with parameters.
+The routing for the frontend is handled using **react-router**. The Browser router is used for this instead of hash routing as that presents issues when dealing with parameters.
 
 Since the backend uses express, the routing for the frontend is purely for components.
 
 All routes use a basename. This is to make deployment of the front end work alongside other applications which may use a basename. The basename for this application is _""_.
 
-The sandbox route for testing features is available when running the app in the ```devlopment environment```.
+The sandbox route for testing features is available when running the app in **development**.
 
 The current "react-router" version is v6.23.1.
 
@@ -114,7 +118,7 @@ All files are uploaded to the _"./frontend/uploads"_.
 
 The files are arranged by year/month and then the file. They are formatted.
 
-You can find methods to help format files from _"./frontend/util/file.ts"_. This code is shared with the backend. These allow you to generate a formatted upload date to _YYYY:MM:DD : HH:II:SS_.
+You can find methods to help format files from _"./frontend/util/file.ts"_. This code is shared with the backend. These allow you to generate a formatted upload date to ```YYYY:MM:DD : HH:II:SS```.
 
 Images are rendered by requesting them using a try catch block in order to query them. **This is because the server will crash if the image request fails outside of a try catch**.
 
@@ -127,17 +131,20 @@ Functional tests for this app are done using Jest. These tests will perform mock
 
 You can find these tests with the extension _"test.tsx"_.
 
-The current test coverage is **100%** of the entire projects across all different factors. This also includes utility files, mocked requests, mocked modules and accounting for both _devopment_ and _production_.
+The current test coverage is **100%** of the entire projects across all different factors. This also includes utility files, mocked requests, mocked modules and accounting for both _development_ and _production_.
 
 The current coverage for the project is **100%**. It's fully tested for all functionality. You can see the coverage report below. I don't think it's worth reaching 100% as some of tests become pointless, but it's a good exercise in understanding how test coverage really works.
 
 <img width="727" height="133" alt="image" src="https://github.com/user-attachments/assets/0d4b58a5-125b-4000-ae5e-aa2c63a5daef" />
 
+
 This projects has been fully tested except for a few configuration files. To test all the files. Execute the following command.
-```npm run test:logs```
+```
+npm run test:logs
+```
 
 When running a test with explicit logs, you'll want to run a variation of the following command.
-```npm run test:logs``` -- ```test-file```
+```npm run test:logs -- testfile```
 
 *This will ensure that you get a full coverage report with a summary in your terminal.*
 
@@ -156,7 +163,7 @@ When running a test with explicit logs, you'll want to run a variation of the fo
 ### WebSockets
 Socket.IO is used on the frontend along with the backend. The package being used is _"socket-io.client."_
 
-The front end uses the client API for socket.IO along with React.js as the websocket solution for this project.
+The front end uses the client API for socket.IO along with React as the websocket solution for this project.
 
 You can find out more about how to use the client API [here](https://socket.io/docs/v4/client-api/).
 
@@ -203,7 +210,7 @@ _Prettier and ESLint share the same config file_, so if you wish to edit your pr
 
 ------
 
-### Deployments 
+## Deployments 
 
 The production environment for live can be found [Here](https://lively-hotteok-99e04d.netlify.app/).
 
@@ -217,7 +224,7 @@ Netlify handles CICD for us in this case, so all you need to do is create a PR, 
 
 ------
 
-### Usage of AI
+## Usage of AI
 
 Some usage of AI has been utilized in building this app. No IDE AI products were used, but AI browser models were consulted throughout various periods of building this project.
 
@@ -229,7 +236,7 @@ I found it useful, but as a tool, not as a replacement for the development proce
 
 ------
 
-### Overall throughts
+## Overall throughts
 It was a worthwhile project to build :). I did enjoy it. The entire point of this project was to practice scalable skills that would be used on the job.
 
 It was largely successful in that, and has served as the foundation for my understanding of front end. It's also helped me really build a truply de-coupled system which was a big win.
