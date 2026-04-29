@@ -27,12 +27,12 @@ exports[`App Component Tests Displays user details after successful authenticati
         <p
           class="app__text"
         >
-          Session created : 2026/04/26 21:50:54
+          Session created : 2026/04/29 21:38:13
         </p>
         <p
           class="app__text"
         >
-          Session expires : 2026/05/10 21:50:54
+          Session expires : 2026/05/13 21:38:13
         </p>
       </div>
     </div>
