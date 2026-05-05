@@ -106,7 +106,7 @@ exports[`Login Successfully navigates the user if they log in successfully 1`] =
             placeholder="Please enter your email address"
             required=""
             type="text"
-            value=""
+            value="test-email@gmail.com"
           />
         </div>
         <div
@@ -128,7 +128,7 @@ exports[`Login Successfully navigates the user if they log in successfully 1`] =
             placeholder="Please enter your password"
             required=""
             type="password"
-            value=""
+            value="test-id-login-password-input"
           />
         </div>
         <button

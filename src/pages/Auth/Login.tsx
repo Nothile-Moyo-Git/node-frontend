@@ -29,13 +29,15 @@ export const LoginPage: FC = () => {
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
   const [passwordErrorText, setPasswordErrorText] = useState<string>("");
   const [isUserLoggingIn, setIsUserLoggingIn] = useState<boolean>(false);
+  const [initialEmail, setInitialEmail] = useState<string>("");
+  const [initialPassword, setInitialPassword] = useState<string>("");
 
   // Set up refs so we can reference our inputs. We use refs instead of state for performance optimizations
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   // Check if the user is authenticated, if they are, then redirect to the previous page
-  const appContextInstance = useContext(AppContext);
+  const globalState = useContext(AppContext);
 
   const submitHandler = async (event: FormEvent) => {
     // Don't reload the page
@@ -54,11 +56,16 @@ export const LoginPage: FC = () => {
 
     // Perform the login request to the backend
     try {
+      // Set our initial values in case the request fails and we want our previous inputs
+      // The ref loses it's value if we unmount the input, but the loading spinner is better UX and prevents spammed submissions
+      setInitialEmail(emailAddress);
+      setInitialPassword(password);
+
       // Allow loading spinner
       setIsUserLoggingIn(true);
 
       // Perform the signup request
-      const result = await fetch(`${appContextInstance.baseUrl}/graphql/auth`, {
+      const result = await fetch(`${globalState.baseUrl}/graphql/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,13 +128,13 @@ export const LoginPage: FC = () => {
 
   // Check authentication when component mounts
   useEffect(() => {
-    appContextInstance.validateAuthentication();
+    globalState.validateAuthentication();
 
     // If the user is authenticated, redirect this route to the previous page
-    if (appContextInstance.userAuthenticated) {
+    if (globalState.userAuthenticated) {
       navigate(-1);
     }
-  }, [appContextInstance, navigate]);
+  }, [globalState, navigate]);
 
   return (
     <section className="login">
@@ -150,6 +157,7 @@ export const LoginPage: FC = () => {
             <Input
               ariaLabelledBy="emailLabel"
               error={!isEmailValid}
+              initialValue={initialEmail}
               ref={emailRef}
               name="email"
               placeholder="Please enter your email address"
@@ -172,6 +180,7 @@ export const LoginPage: FC = () => {
             <Input
               ariaLabelledBy="passwordLabel"
               error={!isPasswordValid}
+              initialValue={initialPassword}
               name="password"
               placeholder="Please enter your password"
               testId="test-id-login-password-input"
