@@ -379,7 +379,57 @@ describe("Create Post Component", () => {
     });
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith("Please upload a file smaller than 5MB");
+      expect(window.alert).toHaveBeenCalledWith(
+        expect.stringContaining("Error: Please upload a file smaller than 5MB."),
+      );
+    });
+
+    expect(fileInput).toHaveValue("");
+  });
+
+  it("Should fail at emulating a file upload due to file type", async () => {
+    // Mock the environment variables
+    // This is so we can test dev and prod environment variables in the context
+    // This allows us to update read-only properties
+    Object.defineProperties(process.env, {
+      NODE_ENV: {
+        value: "development",
+        writable: true,
+        configurable: true,
+      },
+    });
+
+    // Mock the api request for the carousel
+    global.fetch = jest.fn().mockResolvedValueOnce(
+      createFetchResponse({
+        data: {
+          GetFilePathsResponse: {
+            status: 200,
+            files: mockFiles,
+          },
+        },
+      }),
+    );
+
+    // Reset our modules so we can import mockContext in a dev environment
+    jest.resetModules();
+    const { mockContext } = await import("../../test-utils/mocks/objects");
+
+    // Render our component with routing and the context so we have authentication
+    renderWithContext(<CreatePostComponent />, { route: `/post/create` }, mockContext);
+
+    const fileInput = screen.getByTestId("test-id-create-post-file-upload-input");
+
+    // Create a file larger than 5MB
+    const wrongFileType = new File(["dummy file"], "wrong-type.webp", { type: "image/webp" });
+
+    // Simulate file selection
+    fireEvent.change(fileInput, {
+      target: { files: [wrongFileType] },
+    });
+
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Error: Please upload a PNG, JPEG or JPG."));
     });
 
     expect(fileInput).toHaveValue("");

@@ -247,10 +247,10 @@ I had a lot to cover from architecture to global state management, accessibility
 
 There are some improvements that could've been done but haven't due to time constraints (it's worth learning other things too :P).
 
-> Caching. More caching could've been used such as lazyloading or dynamic imports, memoization and the useCallback hook.
+**Caching. More caching could've been used such as lazyloading or dynamic imports, memoization and the useCallback hook.**
 
-> DRY. Some aspects of the code (such as module imports for tests) are reused when they're imported and cached once.
+**DRY. Some aspects of the code (such as module imports for tests) are reused when they're imported and cached once.**
 
-> Per user websockets. They work, and the livechat is functional, but it doesn't work per user and shares the livechat with me.
+**Per user websockets. They work, and the livechat is functional, but it doesn't work per user and shares the livechat with me.**
 
 Thank you for taking the time to check out my project 💜.
