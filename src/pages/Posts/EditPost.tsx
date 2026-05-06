@@ -191,6 +191,7 @@ export const EditPost: FC = () => {
     if (post) {
       fileData.fileName = post.fileName;
       fileData.imageUrl = post.imageUrl;
+      fileData.fileLastUpdated = post.fileLastUpdated;
     }
 
     if (isDevelopment && uploadFile) {
@@ -202,9 +203,6 @@ export const EditPost: FC = () => {
       try {
         // Get values
         const userId = appContextInstance.userId;
-
-        console.log("Method called");
-        console.log("\n\n");
 
         const response = await handleUpdatePostQuery({
           fileData,
