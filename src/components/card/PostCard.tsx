@@ -75,12 +75,12 @@ export const PostCard: FC<ComponentProps> = ({ post, toggleConfirmationModal }) 
         <p className="article__description">{post.content}</p>
         <p>{`Uploaded: ${uploadDate}`}</p>
         <div className="article__buttons">
-          <Link to={`${BASENAME}/post/${post._id}`} className="link__read-more">
+          <Link to={`${BASENAME}/post/${post._id}`} className="link link__read-more">
             Read more
           </Link>
 
           {isPostCreator && (
-            <Link to={`${BASENAME}/post/edit/${post._id}`} className="link__edit">
+            <Link to={`${BASENAME}/post/edit/${post._id}`} className="link link__edit">
               Edit
             </Link>
           )}

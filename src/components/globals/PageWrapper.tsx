@@ -23,7 +23,7 @@ interface ComponentProps {
 
 const PageWrapper: FC<ComponentProps> = ({ children }) => {
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(true);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const { isLoading } = useUserDetails();

@@ -1,6 +1,7 @@
 @use "../../scss/partials/branding" as branding;
 @use "../../scss/partials/mixins" as mixins;
 @use "../../scss/partials/animations" as animations;
+@use "../../scss/partials/responsive" as responsive;
 
 .button{
     overflow : hidden;
@@ -71,6 +72,8 @@
         border: 0;
         color: rgba(0,0,0,0.9);
         grid-gap: 0.5rem;
+        height: 2rem;
+        padding: 1rem;
 
         svg{
             width: 1rem;
@@ -112,13 +115,15 @@
 
 .link{
     display: flex;
+    flex-direction: row;
     align-items: center;
+    line-height: 1;
 
     &__read-more{
         background: branding.$brand_color_five__alt_1;
         color: white;
         width: max-content;
-        padding : 0.35rem 1rem 0.4rem 1rem;
+        padding : 0rem 1rem;
         border: none;
         border-radius: 4px;
         box-shadow: branding.$box-shadow;
@@ -132,7 +137,7 @@
         background: branding.$brand_color_one;
         color: white;
         width: max-content;
-        padding : 0.35rem 1rem 0.4rem 1rem;
+        padding : 0rem 1rem;
         border: none;
         border-radius: 4px;
         box-shadow: branding.$box-shadow;

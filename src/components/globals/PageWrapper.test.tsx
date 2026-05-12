@@ -85,13 +85,13 @@ describe("PageWrapper Component", () => {
     await act(() => renderWithoutRouting(<PageWrapper></PageWrapper>, mockContext));
 
     // Toggle the menu
-    const hideMenuButton = screen.getByTestId("test-id-hide-menu-button");
-    expect(hideMenuButton).toBeVisible();
-    userEvent.click(hideMenuButton);
-
     const showMenuButton = screen.getByTestId("test-id-show-menu-button");
     expect(showMenuButton).toBeVisible();
     userEvent.click(showMenuButton);
+
+    const hideMenuButton = screen.getByTestId("test-id-hide-menu-button");
+    expect(hideMenuButton).toBeVisible();
+    userEvent.click(hideMenuButton);
   });
 
   it("Not authenticated", async () => {
@@ -118,15 +118,11 @@ describe("PageWrapper Component", () => {
     // Render our element so we can compare it to the snapshot
     const { baseElement } = await act(() => renderWithoutRouting(<PageWrapper></PageWrapper>, inauthenticatedContext));
 
-    const hideMenuButton = screen.getByTestId("test-id-hide-menu-button");
-    expect(hideMenuButton).toBeVisible();
-    userEvent.click(hideMenuButton);
+    const showMenuButton = screen.getByTestId("test-id-show-menu-button");
+    expect(showMenuButton).toBeVisible();
+    userEvent.click(showMenuButton);
 
     // Matches the snapshot
     expect(baseElement).toMatchSnapshot();
   });
-
-  /* it("", async () => {
-
-  }); */
 });

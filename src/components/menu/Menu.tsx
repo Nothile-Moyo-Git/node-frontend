@@ -8,6 +8,7 @@
  * This is the main menu which will render at the top of every page which has the menu
  */
 
+import { LuMenu } from "react-icons/lu";
 import React, { FC, ReactNode, useContext } from "react";
 import Button from "../button/Button";
 import { Link, useNavigate } from "react-router-dom";
@@ -120,11 +121,7 @@ const Menu: FC<ComponentProps> = ({ isMenuOpen, toggleMenu }) => {
           data-testid="test-id-show-menu-button"
           onClick={handleToggleMenu}
         >
-          <svg viewBox="0 0 100 80" width="25" height="30">
-            <rect width="100" height="10" fill="#FFFFFF"></rect>
-            <rect y="30" width="100" height="10" fill="#FFFFFF"></rect>
-            <rect y="60" width="100" height="10" fill="#FFFFFF"></rect>
-          </svg>
+          <LuMenu />
         </div>
       )}
 
