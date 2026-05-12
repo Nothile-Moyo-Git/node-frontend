@@ -45,13 +45,13 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
             class="article__buttons"
           >
             <a
-              class="link__read-more"
+              class="link link__read-more"
               href="/post/662e7c6ad94fde36bf4bb55c"
             >
               Read more
             </a>
             <a
-              class="link__edit"
+              class="link link__edit"
               href="/post/edit/662e7c6ad94fde36bf4bb55c"
             >
               Edit
@@ -99,13 +99,13 @@ exports[`View Posts component Deletes a post on the posts page 1`] = `
             class="article__buttons"
           >
             <a
-              class="link__read-more"
+              class="link link__read-more"
               href="/post/67843561d02db477bac4843b"
             >
               Read more
             </a>
             <a
-              class="link__edit"
+              class="link link__edit"
               href="/post/edit/67843561d02db477bac4843b"
             >
               Edit
@@ -188,13 +188,13 @@ exports[`View Posts component Renders the page with pagination and goes to the n
             class="article__buttons"
           >
             <a
-              class="link__read-more"
+              class="link link__read-more"
               href="/post/662e7c6ad94fde36bf4bb55c"
             >
               Read more
             </a>
             <a
-              class="link__edit"
+              class="link link__edit"
               href="/post/edit/662e7c6ad94fde36bf4bb55c"
             >
               Edit
@@ -242,13 +242,13 @@ exports[`View Posts component Renders the page with pagination and goes to the n
             class="article__buttons"
           >
             <a
-              class="link__read-more"
+              class="link link__read-more"
               href="/post/67843561d02db477bac4843b"
             >
               Read more
             </a>
             <a
-              class="link__edit"
+              class="link link__edit"
               href="/post/edit/67843561d02db477bac4843b"
             >
               Edit
@@ -296,13 +296,13 @@ exports[`View Posts component Renders the page with pagination and goes to the n
             class="article__buttons"
           >
             <a
-              class="link__read-more"
+              class="link link__read-more"
               href="/post/68b0aac75d6f6df6ef698e7e"
             >
               Read more
             </a>
             <a
-              class="link__edit"
+              class="link link__edit"
               href="/post/edit/68b0aac75d6f6df6ef698e7e"
             >
               Edit
@@ -385,13 +385,13 @@ exports[`View Posts component Should match snapshot 1`] = `
             class="article__buttons"
           >
             <a
-              class="link__read-more"
+              class="link link__read-more"
               href="/post/662423764e8c8b1633534be8"
             >
               Read more
             </a>
             <a
-              class="link__edit"
+              class="link link__edit"
               href="/post/edit/662423764e8c8b1633534be8"
             >
               Edit
@@ -439,13 +439,13 @@ exports[`View Posts component Should match snapshot 1`] = `
             class="article__buttons"
           >
             <a
-              class="link__read-more"
+              class="link link__read-more"
               href="/post/662423884e8c8b1633534bf0"
             >
               Read more
             </a>
             <a
-              class="link__edit"
+              class="link link__edit"
               href="/post/edit/662423884e8c8b1633534bf0"
             >
               Edit
@@ -493,13 +493,13 @@ exports[`View Posts component Should match snapshot 1`] = `
             class="article__buttons"
           >
             <a
-              class="link__read-more"
+              class="link link__read-more"
               href="/post/662e7bcdd94fde36bf4bb554"
             >
               Read more
             </a>
             <a
-              class="link__edit"
+              class="link link__edit"
               href="/post/edit/662e7bcdd94fde36bf4bb554"
             >
               Edit

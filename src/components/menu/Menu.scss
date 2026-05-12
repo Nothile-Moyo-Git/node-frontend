@@ -147,6 +147,10 @@ nav{
     animation: fade-in 0.2s linear;
     cursor: pointer;
 
+    rect {
+        border-radius: 3px;
+    }
+
     @include responsive.breakpoint(tablet){
         display: block;
     }
@@ -155,14 +159,33 @@ nav{
 #show_menu{
     top: 20px;
     right: 20px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.2rem;
+    border-radius: 3px;
+    width: 1.5rem;
+    height: 2rem;
+    overflow: hidden;
+    box-shadow: branding.$card_box_shadow;
+    transition: animations.$standard_transition;
+
+    @include mixins.backgroundGradientEffect(){
+        background: branding.$gradient_color_three;
+    }
 
     svg{
-        @include mixins.state(){
-            rect{
-                transition: animations.$standard-transition;
-                fill : branding.$brand_color_three;
-            }
+        height: 1.5rem;
+        width: 1.5rem;
+
+        line{
+            color: rgba(0, 0, 0, 0.9);
         }
+    }
+
+    @include mixins.state(){
+        box-shadow: branding.$box_shadow_blue;
+        filter: brightness(1.2);
+        
     }
 
     @include responsive.breakpoint-min(tablet){

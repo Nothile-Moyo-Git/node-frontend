@@ -34,13 +34,13 @@ exports[`Post Card component Render the PostCard component 1`] = `
           class="article__buttons"
         >
           <a
-            class="link__read-more"
+            class="link link__read-more"
             href="/post/662423764e8c8b1633534be8"
           >
             Read more
           </a>
           <a
-            class="link__edit"
+            class="link link__edit"
             href="/post/edit/662423764e8c8b1633534be8"
           >
             Edit
@@ -93,13 +93,13 @@ exports[`Post Card component Render the PostCard component without optional valu
           class="article__buttons"
         >
           <a
-            class="link__read-more"
+            class="link link__read-more"
             href="/post/662423764e8c8b1633534be8"
           >
             Read more
           </a>
           <a
-            class="link__edit"
+            class="link link__edit"
             href="/post/edit/662423764e8c8b1633534be8"
           >
             Edit
@@ -151,13 +151,13 @@ exports[`Post Card component Triggers the error in the catch block for the image
           class="article__buttons"
         >
           <a
-            class="link__read-more"
+            class="link link__read-more"
             href="/post/662423764e8c8b1633534be8"
           >
             Read more
           </a>
           <a
-            class="link__edit"
+            class="link link__edit"
             href="/post/edit/662423764e8c8b1633534be8"
           >
             Edit
@@ -209,13 +209,13 @@ exports[`Post Card component Try to render an image without a fileName so we ski
           class="article__buttons"
         >
           <a
-            class="link__read-more"
+            class="link link__read-more"
             href="/post/662423764e8c8b1633534be8"
           >
             Read more
           </a>
           <a
-            class="link__edit"
+            class="link link__edit"
             href="/post/edit/662423764e8c8b1633534be8"
           >
             Edit
