@@ -1,11 +1,16 @@
 @use "../../scss/partials/branding" as branding;
 @use "../../scss/partials/mixins" as mixins;
+@use "../../scss/partials/responsive" as responsive;
 
 .modal {
     display: flex;
     align-items: center;
     width: calc(100% - 2rem);
     padding: 1rem;
+
+    @include responsive.breakpoint(mobile){
+        min-height: 95vh;
+    }
 
     &__confirmation {
         display: flex;
