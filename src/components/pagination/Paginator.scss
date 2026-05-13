@@ -7,6 +7,10 @@
 
     display: flex;
 
+    @include responsive.breakpoint(mobile){
+        padding-bottom: 1rem;
+    }
+
     &__button{
 
         background-color: transparent;
