@@ -1,5 +1,6 @@
 @use "./scss/partials/animations" as animations;
 @use "./scss/partials/branding" as branding;
+@use "./scss/partials/responsive" as responsive;
 @use "./scss/partials/typography";
 
 *{ 
@@ -40,5 +41,16 @@ body {
 
   &__text{
     margin: 0.5rem;
+  }
+
+  @include responsive.breakpoint(mobile){
+    &__component{
+      display: flex;
+      align-items: center;
+    }
+
+    &__content{
+      padding-top: 0rem;
+    }
   }
 }
