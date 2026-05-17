@@ -19,7 +19,7 @@ const App: FC = () => {
   const appContextInstance = useContext(AppContext);
 
   return (
-    <div data-testid="test-id-app-component">
+    <div data-testid="test-id-app-component" className="app__component">
       {isLoading && !user && !error && <LoadingSpinner />}
 
       {!isLoading && error && <ErrorModal testId="test-id-error-modal" />}
