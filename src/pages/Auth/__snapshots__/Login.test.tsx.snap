@@ -11,7 +11,7 @@ exports[`Login Matches the snapshot 1`] = `
         data-testid="test-id-login-form"
       >
         <h2
-          class="title false"
+          class="title false undefined"
         >
           Login
         </h2>
@@ -83,7 +83,7 @@ exports[`Login Successfully navigates the user if they log in successfully 1`] =
         data-testid="test-id-login-form"
       >
         <h2
-          class="title false"
+          class="title false undefined"
         >
           Login
         </h2>

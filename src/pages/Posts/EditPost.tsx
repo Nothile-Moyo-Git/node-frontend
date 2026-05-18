@@ -318,7 +318,7 @@ export const EditPost: FC = () => {
       {!isLoading && renderErrorModal && <ErrorModal testId="test-id-error-modal" />}
       {!isLoading && !showErrorText && !renderErrorModal && (
         <Form onSubmit={submitHandler} testId="test-id-edit-post-form">
-          <Title isFormValid={isFormValid}>
+          <Title isFormValid={isFormValid} className="editPost__title">
             {isFormValid ? `Edit Post : ${postData?.title}` : "Error: Please fix the errors below"}
           </Title>
 

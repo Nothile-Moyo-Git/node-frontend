@@ -4,6 +4,7 @@ exports[`App Component Tests Displays user details after successful authenticati
 <body>
   <div>
     <div
+      class="app__component"
       data-testid="test-id-app-component"
     >
       <div
@@ -27,12 +28,12 @@ exports[`App Component Tests Displays user details after successful authenticati
         <p
           class="app__text"
         >
-          Session created : 2026/05/12 22:02:34
+          Session created : 2026/05/18 23:34:20
         </p>
         <p
           class="app__text"
         >
-          Session expires : 2026/05/26 22:02:34
+          Session expires : 2026/06/01 23:34:20
         </p>
       </div>
     </div>
@@ -44,6 +45,7 @@ exports[`App Component Tests Fails checkSessionValidation and triggers catch blo
 <body>
   <div>
     <div
+      class="app__component"
       data-testid="test-id-app-component"
     >
       <div

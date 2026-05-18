@@ -3,4 +3,9 @@
 .createPost{
     animation: fade-in 0.2s linear;
     width: 100%;
+
+    &__title{
+        margin-top: 1rem;
+        font-size: 1.75rem;
+    }
 }

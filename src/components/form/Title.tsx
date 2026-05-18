@@ -14,10 +14,11 @@ import { FC, ReactNode } from "react";
 interface ComponentProps {
   isFormValid?: boolean;
   children: ReactNode;
+  className?: string;
 }
 
-const Title: FC<ComponentProps> = ({ isFormValid, children }) => {
-  return <h2 className={`title ${isFormValid === false && "title__error"}`}>{children}</h2>;
+const Title: FC<ComponentProps> = ({ isFormValid, children, className }) => {
+  return <h2 className={`title ${isFormValid === false && "title__error"} ${className}`}>{children}</h2>;
 };
 
 export default Title;
