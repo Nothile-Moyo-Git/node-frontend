@@ -12,7 +12,7 @@ exports[`Create Post Component Handle updating the inputs for the title and the 
         data-testid="test-id-create-post-form"
       >
         <h2
-          class="title title__error"
+          class="title title__error createPost__title"
         >
           Error: Please fix the errors below
         </h2>
@@ -252,7 +252,7 @@ exports[`Create Post Component Matches the snapshot 1`] = `
     data-testid="test-id-create-post-form"
   >
     <h2
-      class="title false"
+      class="title false createPost__title"
     >
       Create Post
     </h2>

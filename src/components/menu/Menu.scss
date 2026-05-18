@@ -88,7 +88,7 @@ nav{
 
     &__link{
 
-        font-size: 15px;
+        font-size: 1.25rem;
         transition: animations.$standard-transition;
         border-radius: 4px;
         padding : 0.4rem 0.85rem 0.45rem 0.85rem;
@@ -194,8 +194,8 @@ nav{
 }
 
 #hide_menu{
-    top: 3px;
-    right: 3px;
+    top: 6px;
+    right: 6px;
 
     @include responsive.breakpoint-min(tablet){
         display: none;

@@ -264,7 +264,9 @@ export const CreatePostComponent: FC = () => {
   return (
     <section className="createPost" data-testid="test-id-create-post">
       <Form onSubmit={submitHandler} testId="test-id-create-post-form">
-        <Title isFormValid={isFormValid}>{isFormValid ? "Create Post" : "Error: Please fix the errors below"}</Title>
+        <Title className="createPost__title" isFormValid={isFormValid}>
+          {isFormValid ? "Create Post" : "Error: Please fix the errors below"}
+        </Title>
         <Field>
           <Label
             error={!isTitleValid}

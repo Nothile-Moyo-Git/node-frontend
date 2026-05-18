@@ -10,7 +10,7 @@ exports[`Edit Post Component Completely loads the page 1`] = `
     data-testid="test-id-edit-post-form"
   >
     <h2
-      class="title false"
+      class="title false editPost__title"
     >
       Edit Post : 2B
     </h2>
@@ -286,7 +286,7 @@ exports[`Edit Post Component Matches the snapshot 1`] = `
     data-testid="test-id-edit-post-form"
   >
     <h2
-      class="title false"
+      class="title false editPost__title"
     >
       Edit Post : 2B
     </h2>
@@ -564,7 +564,7 @@ exports[`Edit Post Component Matches the snapshot when in development 1`] = `
         data-testid="test-id-edit-post-form"
       >
         <h2
-          class="title false"
+          class="title false editPost__title"
         >
           Edit Post : 2B
         </h2>

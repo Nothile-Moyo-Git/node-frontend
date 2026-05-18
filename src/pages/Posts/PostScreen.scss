@@ -13,6 +13,10 @@
 
     &__title{
         margin-bottom: 0.5rem;
+        text-align: left;
+        margin-top: 0;
+        font-size: 1.75rem;
+        line-height: 1;
     }
 
     &__image{
@@ -23,6 +27,12 @@
             width: 100%;
             object-fit: cover;
             max-height: 300px;
+        }
+    }
+
+    @include responsive.breakpoint(tablet){
+        &__title{
+            max-width: 90%;
         }
     }
 }

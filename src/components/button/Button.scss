@@ -93,7 +93,7 @@
     &__menu{
         color: rgba(0, 0, 0, 0.9);
         border: 0;
-        font-size: 15px;
+        font-size: 1.25rem;
         margin: auto 0;
 
         @include mixins.state(){

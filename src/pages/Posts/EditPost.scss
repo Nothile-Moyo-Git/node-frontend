@@ -1,4 +1,5 @@
 @use "../../scss/partials/animations" as animations;
+@use "../../scss/partials/responsive" as responsive;
 
 .editPost{
     animation: fade-in 0.2s linear;
@@ -6,6 +7,20 @@
     flex-direction: column;
     max-width: 800px;
     width: 100%;
-    margin-top: 2rem;
+    padding: 1rem 0;
+
+    &__title{
+        margin-top: 0;
+        font-size: 1.75rem;
+    }
+
+    @include responsive.breakpoint(tablet){
+        &__title{
+            text-align: left;
+            max-width: 90%;
+            width: 100%;
+            margin-right: auto;
+        }
+    }
 }
 

@@ -11,7 +11,7 @@ exports[`Signup Matches the snapshot 1`] = `
         data-testid="test-id-signup-form"
       >
         <h2
-          class="title false"
+          class="title false undefined"
         >
           Signup
         </h2>
